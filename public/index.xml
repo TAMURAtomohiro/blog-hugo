@@ -225,19 +225,5 @@ GithubPages などに push するのも一苦労です。
 </description>
     </item>
     
-    <item>
-      <title>静的サイトジェネレータのまとめ</title>
-      <link>http://tamura.goga.co.jp/staticSiteGenerator/</link>
-      <pubDate>Fri, 13 Nov 2015 18:17:59 +0900</pubDate>
-      
-      <guid>http://tamura.goga.co.jp/staticSiteGenerator/</guid>
-      <description>
-
-&lt;h1 id=&#34;静的サイトジェネレータとは:394884b88a3f0c48115b7c23d11eea30&#34;&gt;静的サイトジェネレータとは&lt;/h1&gt;
-
-&lt;p&gt;コンテンツとデザインを分離&lt;/p&gt;
-</description>
-    </item>
-    
   </channel>
 </rss>
