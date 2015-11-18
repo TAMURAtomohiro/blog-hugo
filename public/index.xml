@@ -6,24 +6,23 @@
     <description>Recent content on 嵐の小舟より</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <lastBuildDate>Tue, 17 Nov 2015 18:09:45 +0900</lastBuildDate>
+    <lastBuildDate>Wed, 18 Nov 2015 14:49:25 +0900</lastBuildDate>
     <atom:link href="http://tamura.goga.co.jp/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>静的サイトジェネレータの生成時間比較</title>
       <link>http://tamura.goga.co.jp/staticSiteGeneratorComparison/</link>
-      <pubDate>Tue, 17 Nov 2015 18:09:45 +0900</pubDate>
+      <pubDate>Wed, 18 Nov 2015 14:49:25 +0900</pubDate>
       
       <guid>http://tamura.goga.co.jp/staticSiteGeneratorComparison/</guid>
       <description>
 
 &lt;p&gt;どうもブログを作る目的で静的サイトジェネレータというものが世の中で使われている、
-という話を目にしたことがあったため、せっかくなので使ってみることにしました。&lt;/p&gt;
+と聞いたため、せっかくなので使ってみることにしました。&lt;/p&gt;
 
-&lt;p&gt;それで何を使えばいいの？
-と調べていく過程で&lt;a href=&#34;https://gohugo.io/overview/introduction/&#34;&gt;Hugo&lt;/a&gt;のサイトに
-「Hugoは速いよ！」という内容の動画を見つけましたが、
-他と比べてどれくらい速いのかが見当たらなかったため、ざっくり確認してみます。&lt;/p&gt;
+&lt;p&gt;調べていく過程で&lt;a href=&#34;https://gohugo.io/overview/introduction/&#34;&gt;Hugo&lt;/a&gt;のサイトに
+「Hugoは速いよ！」という内容の動画を見つけ、
+他と比べてどれくらい違うのかが気になったので、ざっくり確認してみます。&lt;/p&gt;
 
 &lt;h1 id=&#34;対象としたジェネレータについて:a3f1f0d65ed4ea09eb7c2931fc64911b&#34;&gt;対象としたジェネレータについて&lt;/h1&gt;
 
@@ -192,43 +191,36 @@
 CPU 時間も短いですが、Hugo はどこかで並列処理をしているらしくマルチコアを活用できていたため、
 実時間ではもう少し速くなるはずです。&lt;/p&gt;
 
-&lt;h1 id=&#34;そもそも生成時間が長いと何が困るの:a3f1f0d65ed4ea09eb7c2931fc64911b&#34;&gt;そもそも生成時間が長いと何が困るの？&lt;/h1&gt;
+&lt;h1 id=&#34;そもそも生成時間が長いと何が困るのか:a3f1f0d65ed4ea09eb7c2931fc64911b&#34;&gt;そもそも生成時間が長いと何が困るのか？&lt;/h1&gt;
 
 &lt;p&gt;編集→確認のループが長くなりイライラします。
-記事を保存してから LiveReload で再読み込みが完了するまでの待ち時間が苦痛になります。
-いくつかの「xxx から Hugo に移行した」という記事でも
+記事を保存してから LiveReload で再読み込みが完了するまでの待ち時間が苦痛です。
+「Hugo に移行した」系のブログ記事でも
 「元々使っていたジェネレータの遅さに耐えきれなくなった」という理由が散見されました。
 生成時間の長さは移行の原因となりえます。&lt;/p&gt;
 
 &lt;p&gt;というわけで生成時間の伸び方は静的サイトジェネレータを選ぶ際のひとつの尺度になるかと思います。&lt;/p&gt;
 
-&lt;p&gt;とはいえ記事数が少ないうちは問題にならないですし、ジェネレータも改善されていくでしょう。
+&lt;p&gt;とはいえ記事数が少ないうちは問題にならないですし、
 デザインの豊富さや情報の多さなども重要ですから、問題になってから移行を考えてもいいと思います。
-そもそも別のこと(Twitterのタイムラインを眺めるなど)で待てばいいという向きもあるでしょう。&lt;/p&gt;
+そもそも別のことをやって待てばいいという向きもあるでしょう。
+耐えきれるかどうか、一度適当に記事を増やして体感してみるのがおすすめです。&lt;/p&gt;
 
-&lt;!-- とはいえいつ耐えがたい待ち時間が訪れるかは --&gt;
-
-&lt;!-- 使用するデザインや計算機、記事を書くスピードによって変わりますし、 --&gt;
-
-&lt;!-- 別のこと(Twitterのタイムラインを眺めるなど)で待てばいいという向きもあるでしょう。 --&gt;
-
-&lt;!-- Hugo であっても 5000 記事ともなれば数秒待つ必要があり、 --&gt;
-
-&lt;!-- どのジェネレータも記事数に対して線形時間なのでいずれは破綻します。 --&gt;
-
-&lt;!-- 各自の環境で計測して体感的にどんなものなのか確認するのがいいと思います。 --&gt;
-
-&lt;h1 id=&#34;まとめ:a3f1f0d65ed4ea09eb7c2931fc64911b&#34;&gt;まとめ&lt;/h1&gt;
-
-&lt;p&gt;静的サイトジェネレータ移行の原因となりうる生成時間について比較しました。
-Hugo がとにかく速いです。とりあえず自分は Hugo を使ってみます。&lt;/p&gt;
+&lt;p&gt;とりあえず自分は Hugo を使ってみます。&lt;/p&gt;
 
 &lt;h1 id=&#34;余談:a3f1f0d65ed4ea09eb7c2931fc64911b&#34;&gt;余談&lt;/h1&gt;
 
-&lt;p&gt;10000 記事では Hugo のサーバが起動しませんでした。&lt;/p&gt;
+&lt;p&gt;octopress の時間は指数的に増えているように見えます。&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;ERROR: 2015/11/16 Error: listen tcp 127.0.0.1:1313: socket: too many open files in system
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://tamura.goga.co.jp/img/staticSiteGeneratorComparison-5000.png&#34; alt=&#34;静的サイトジェネレータの実行時間グラフ&#34; /&gt;&lt;/p&gt;
+
+&lt;!-- 10000 記事では Hugo のサーバが起動しませんでした。 --&gt;
+
+&lt;!-- ``` --&gt;
+
+&lt;!-- ERROR: 2015/11/16 Error: listen tcp 127.0.0.1:1313: socket: too many open files in system --&gt;
+
+&lt;!-- ``` --&gt;
 </description>
     </item>
     
