@@ -10,6 +10,7 @@ hugo -t hugo-zen # if using a theme, replace by `hugo -t <yourtheme>`
 cd public
 # Add changes to git.
 git add -A
+cd -
 
 # Commit changes.
 msg="rebuilding site `date`"
