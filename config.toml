@@ -1,0 +1,4 @@
+baseurl = "http://tamura.goga.co.jp/"
+languageCode = "ja-JP"
+title = "嵐の小舟より"
+#theme = "hugo-zen"
