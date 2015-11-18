@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.15-DEV" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="http://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<link rel="stylesheet" href="/css/normalize.css">
+<link rel="stylesheet" href="/css/skeleton.css">
+<link rel="stylesheet" href="/css/custom.css">
+<link rel="alternate" href="/index.xml" type="application/rss+xml" title="嵐の小舟より">
+<title>静的サイトジェネレータの生成時間比較 - 嵐の小舟より</title>
+</head>
+<body>
+
+<div class="container">
+
+	<header role="banner">
+		<div class="header-logo">
+			<a href="/"><img src="" width="60" height="60"></a>
+		</div>
+		
+	</header>
+
+
+	<main role="main">
+		<article itemscope itemtype="http://schema.org/BlogPosting">
+			<h1 class="entry-title" itemprop="headline">静的サイトジェネレータの生成時間比較</h1>
+			<span class="entry-meta"><time itemprop="datePublished" datetime="2015-11-17">November 17, 2015</time></span>
+			<section itemprop="entry-text">
+				
+
+<p>どうもブログを作る目的で静的サイトジェネレータというものが世の中で使われている、
+という話を目にしたことがあったため、せっかくなので使ってみることにしました。</p>
+
+<p>それで何を使えばいいの？
+と調べていく過程で<a href="https://gohugo.io/overview/introduction/">Hugo</a>のサイトに
+「Hugoは速いよ！」という内容の動画を見つけましたが、
+他と比べてどれくらい速いのかが見当たらなかったため、ざっくり確認してみます。</p>
+
+<h1 id="対象としたジェネレータについて:a3f1f0d65ed4ea09eb7c2931fc64911b">対象としたジェネレータについて</h1>
+
+<p><a href="https://www.staticgen.com/">StaticGen</a>のスター数が多いものから選びました。
+2015/11月の時点では Jekyll, GitBook, Octopress, Hexo, Hugo, Pelican の順です。</p>
+
+<h1 id="測定環境:a3f1f0d65ed4ea09eb7c2931fc64911b">測定環境</h1>
+
+<ul>
+<li>計算機</li>
+</ul>
+
+<table>
+<thead>
+<tr>
+<th>OS</th>
+<th>CPU</th>
+<th>Memory</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Mac OS X 10.10.5</td>
+<td>3.1 GHz デュアルコア Intel Core i7</td>
+<td>16GB</td>
+</tr>
+</tbody>
+</table>
+
+<ul>
+<li>処理系のバージョン</li>
+</ul>
+
+<table>
+<thead>
+<tr>
+<th>Node.js</th>
+<th>Python</th>
+<th>Ruby</th>
+<th>Go</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>5.0.0</td>
+<td>2.7.9</td>
+<td>2.2.1</td>
+<td>1.5.1</td>
+</tr>
+</tbody>
+</table>
+
+<ul>
+<li>ジェネレータのバージョン</li>
+</ul>
+
+<table>
+<thead>
+<tr>
+<th>Octopress</th>
+<th>Hexo</th>
+<th>Pelican</th>
+<th>GitBook</th>
+<th>Jekyll</th>
+<th>Hugo</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>3.0.11</td>
+<td>0.1.9</td>
+<td>3.6.3</td>
+<td>1.0.0</td>
+<td>3.0.0</td>
+<td>v0.15-DEV</td>
+</tr>
+</tbody>
+</table>
+
+<h1 id="測定方法:a3f1f0d65ed4ea09eb7c2931fc64911b">測定方法</h1>
+
+<p>以下の手順を繰り返し、5回計測して単純平均を取りました。</p>
+
+<ul>
+<li>出力先にある生成物を消しておく</li>
+<li>本文に&rdquo;あ&rdquo;を1000文字並べた md ファイルを必要な個数用意する
+
+<ul>
+<li>1,10,20,..,100,1000 という刻み</li>
+</ul></li>
+<li>各ジェネレータの実行時間を time コマンドの user + sys で測る
+
+<ul>
+<li>たとえば Hexo なら hexo generate を実行</li>
+</ul></li>
+</ul>
+
+<h1 id="生成時間測定結果:a3f1f0d65ed4ea09eb7c2931fc64911b">生成時間測定結果</h1>
+
+<ul>
+<li>静的サイトジェネレータの CPU 時間(秒)</li>
+</ul>
+
+<table>
+<thead>
+<tr>
+<th align="right">記事数</th>
+<th align="right">Octopress</th>
+<th align="right">Hexo</th>
+<th align="right">Pelican</th>
+<th align="right">Gitbook</th>
+<th align="right">Jekyll</th>
+<th align="right">Hugo</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="right">1</td>
+<td align="right">2.86</td>
+<td align="right">2.88</td>
+<td align="right">0.39</td>
+<td align="right">1.77</td>
+<td align="right">0.43</td>
+<td align="right">0.02</td>
+</tr>
+
+<tr>
+<td align="right">10</td>
+<td align="right">2.98</td>
+<td align="right">2.96</td>
+<td align="right">0.44</td>
+<td align="right">1.64</td>
+<td align="right">0.37</td>
+<td align="right">0.03</td>
+</tr>
+
+<tr>
+<td align="right">100</td>
+<td align="right">4.94</td>
+<td align="right">4.22</td>
+<td align="right">1.14</td>
+<td align="right">1.79</td>
+<td align="right">0.55</td>
+<td align="right">0.11</td>
+</tr>
+
+<tr>
+<td align="right">1000</td>
+<td align="right">25.02</td>
+<td align="right">14.61</td>
+<td align="right">6.02</td>
+<td align="right">3.34</td>
+<td align="right">1.88</td>
+<td align="right">0.82</td>
+</tr>
+</tbody>
+</table>
+
+<p><img src="/img/staticSiteGeneratorComparison.png" alt="静的サイトジェネレータの実行時間グラフ" /></p>
+
+<p>確かに Hugo が速いです。
+CPU 時間も短いですが、Hugo はどこかで並列処理をしているらしくマルチコアを活用できていたため、
+実時間ではもう少し速くなるはずです。</p>
+
+<h1 id="そもそも生成時間が長いと何が困るの:a3f1f0d65ed4ea09eb7c2931fc64911b">そもそも生成時間が長いと何が困るの？</h1>
+
+<p>編集→確認のループが長くなりイライラします。
+記事を保存してから LiveReload で再読み込みが完了するまでの待ち時間が苦痛になります。
+いくつかの「xxx から Hugo に移行した」という記事でも
+「元々使っていたジェネレータの遅さに耐えきれなくなった」という理由が散見されました。
+生成時間の長さは移行の原因となりえます。</p>
+
+<p>というわけで生成時間の伸び方は静的サイトジェネレータを選ぶ際のひとつの尺度になるかと思います。</p>
+
+<p>とはいえ記事数が少ないうちは問題にならないですし、ジェネレータも改善されていくでしょう。
+デザインの豊富さや情報の多さなども重要ですから、問題になってから移行を考えてもいいと思います。
+そもそも別のこと(Twitterのタイムラインを眺めるなど)で待てばいいという向きもあるでしょう。</p>
+
+<!-- とはいえいつ耐えがたい待ち時間が訪れるかは -->
+
+<!-- 使用するデザインや計算機、記事を書くスピードによって変わりますし、 -->
+
+<!-- 別のこと(Twitterのタイムラインを眺めるなど)で待てばいいという向きもあるでしょう。 -->
+
+<!-- Hugo であっても 5000 記事ともなれば数秒待つ必要があり、 -->
+
+<!-- どのジェネレータも記事数に対して線形時間なのでいずれは破綻します。 -->
+
+<!-- 各自の環境で計測して体感的にどんなものなのか確認するのがいいと思います。 -->
+
+<h1 id="まとめ:a3f1f0d65ed4ea09eb7c2931fc64911b">まとめ</h1>
+
+<p>静的サイトジェネレータ移行の原因となりうる生成時間について比較しました。
+Hugo がとにかく速いです。とりあえず自分は Hugo を使ってみます。</p>
+
+<h1 id="余談:a3f1f0d65ed4ea09eb7c2931fc64911b">余談</h1>
+
+<p>10000 記事では Hugo のサーバが起動しませんでした。</p>
+
+<pre><code>ERROR: 2015/11/16 Error: listen tcp 127.0.0.1:1313: socket: too many open files in system
+</code></pre>
+
+			</section>
+		</article>
+	</main>
+
+
+	<footer role="contentinfo">
+		<div class="hr"></div>
+		<div class="footer-link">
+			
+			
+			
+			
+		</div>
+		<div class="copyright">Copyright &copy; </div>
+	</footer>
+
+</div>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+</body>
+</html>

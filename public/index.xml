@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>嵐の小舟より</title>
+    <link>http://tamura.goga.co.jp/</link>
+    <description>Recent content on 嵐の小舟より</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja-JP</language>
+    <lastBuildDate>Tue, 17 Nov 2015 18:09:45 +0900</lastBuildDate>
+    <atom:link href="http://tamura.goga.co.jp/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>静的サイトジェネレータの生成時間比較</title>
+      <link>http://tamura.goga.co.jp/staticSiteGeneratorComparison/</link>
+      <pubDate>Tue, 17 Nov 2015 18:09:45 +0900</pubDate>
+      
+      <guid>http://tamura.goga.co.jp/staticSiteGeneratorComparison/</guid>
+      <description>
+
+&lt;p&gt;どうもブログを作る目的で静的サイトジェネレータというものが世の中で使われている、
+という話を目にしたことがあったため、せっかくなので使ってみることにしました。&lt;/p&gt;
+
+&lt;p&gt;それで何を使えばいいの？
+と調べていく過程で&lt;a href=&#34;https://gohugo.io/overview/introduction/&#34;&gt;Hugo&lt;/a&gt;のサイトに
+「Hugoは速いよ！」という内容の動画を見つけましたが、
+他と比べてどれくらい速いのかが見当たらなかったため、ざっくり確認してみます。&lt;/p&gt;
+
+&lt;h1 id=&#34;対象としたジェネレータについて:a3f1f0d65ed4ea09eb7c2931fc64911b&#34;&gt;対象としたジェネレータについて&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://www.staticgen.com/&#34;&gt;StaticGen&lt;/a&gt;のスター数が多いものから選びました。
+2015/11月の時点では Jekyll, GitBook, Octopress, Hexo, Hugo, Pelican の順です。&lt;/p&gt;
+
+&lt;h1 id=&#34;測定環境:a3f1f0d65ed4ea09eb7c2931fc64911b&#34;&gt;測定環境&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;計算機&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;OS&lt;/th&gt;
+&lt;th&gt;CPU&lt;/th&gt;
+&lt;th&gt;Memory&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Mac OS X 10.10.5&lt;/td&gt;
+&lt;td&gt;3.1 GHz デュアルコア Intel Core i7&lt;/td&gt;
+&lt;td&gt;16GB&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;ul&gt;
+&lt;li&gt;処理系のバージョン&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Node.js&lt;/th&gt;
+&lt;th&gt;Python&lt;/th&gt;
+&lt;th&gt;Ruby&lt;/th&gt;
+&lt;th&gt;Go&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;5.0.0&lt;/td&gt;
+&lt;td&gt;2.7.9&lt;/td&gt;
+&lt;td&gt;2.2.1&lt;/td&gt;
+&lt;td&gt;1.5.1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ジェネレータのバージョン&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Octopress&lt;/th&gt;
+&lt;th&gt;Hexo&lt;/th&gt;
+&lt;th&gt;Pelican&lt;/th&gt;
+&lt;th&gt;GitBook&lt;/th&gt;
+&lt;th&gt;Jekyll&lt;/th&gt;
+&lt;th&gt;Hugo&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;3.0.11&lt;/td&gt;
+&lt;td&gt;0.1.9&lt;/td&gt;
+&lt;td&gt;3.6.3&lt;/td&gt;
+&lt;td&gt;1.0.0&lt;/td&gt;
+&lt;td&gt;3.0.0&lt;/td&gt;
+&lt;td&gt;v0.15-DEV&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h1 id=&#34;測定方法:a3f1f0d65ed4ea09eb7c2931fc64911b&#34;&gt;測定方法&lt;/h1&gt;
+
+&lt;p&gt;以下の手順を繰り返し、5回計測して単純平均を取りました。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;出力先にある生成物を消しておく&lt;/li&gt;
+&lt;li&gt;本文に&amp;rdquo;あ&amp;rdquo;を1000文字並べた md ファイルを必要な個数用意する
+
+&lt;ul&gt;
+&lt;li&gt;1,10,20,..,100,1000 という刻み&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;各ジェネレータの実行時間を time コマンドの user + sys で測る
+
+&lt;ul&gt;
+&lt;li&gt;たとえば Hexo なら hexo generate を実行&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&#34;生成時間測定結果:a3f1f0d65ed4ea09eb7c2931fc64911b&#34;&gt;生成時間測定結果&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;静的サイトジェネレータの CPU 時間(秒)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&#34;right&#34;&gt;記事数&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;Octopress&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;Hexo&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;Pelican&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;Gitbook&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;Jekyll&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;Hugo&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&#34;right&#34;&gt;1&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;2.86&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;2.88&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.39&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;1.77&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.43&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.02&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;right&#34;&gt;10&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;2.98&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;2.96&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.44&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;1.64&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.37&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.03&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;right&#34;&gt;100&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;4.94&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;4.22&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;1.14&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;1.79&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.55&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.11&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;right&#34;&gt;1000&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;25.02&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;14.61&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;6.02&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;3.34&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;1.88&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.82&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://tamura.goga.co.jp/img/staticSiteGeneratorComparison.png&#34; alt=&#34;静的サイトジェネレータの実行時間グラフ&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;確かに Hugo が速いです。
+CPU 時間も短いですが、Hugo はどこかで並列処理をしているらしくマルチコアを活用できていたため、
+実時間ではもう少し速くなるはずです。&lt;/p&gt;
+
+&lt;h1 id=&#34;そもそも生成時間が長いと何が困るの:a3f1f0d65ed4ea09eb7c2931fc64911b&#34;&gt;そもそも生成時間が長いと何が困るの？&lt;/h1&gt;
+
+&lt;p&gt;編集→確認のループが長くなりイライラします。
+記事を保存してから LiveReload で再読み込みが完了するまでの待ち時間が苦痛になります。
+いくつかの「xxx から Hugo に移行した」という記事でも
+「元々使っていたジェネレータの遅さに耐えきれなくなった」という理由が散見されました。
+生成時間の長さは移行の原因となりえます。&lt;/p&gt;
+
+&lt;p&gt;というわけで生成時間の伸び方は静的サイトジェネレータを選ぶ際のひとつの尺度になるかと思います。&lt;/p&gt;
+
+&lt;p&gt;とはいえ記事数が少ないうちは問題にならないですし、ジェネレータも改善されていくでしょう。
+デザインの豊富さや情報の多さなども重要ですから、問題になってから移行を考えてもいいと思います。
+そもそも別のこと(Twitterのタイムラインを眺めるなど)で待てばいいという向きもあるでしょう。&lt;/p&gt;
+
+&lt;!-- とはいえいつ耐えがたい待ち時間が訪れるかは --&gt;
+
+&lt;!-- 使用するデザインや計算機、記事を書くスピードによって変わりますし、 --&gt;
+
+&lt;!-- 別のこと(Twitterのタイムラインを眺めるなど)で待てばいいという向きもあるでしょう。 --&gt;
+
+&lt;!-- Hugo であっても 5000 記事ともなれば数秒待つ必要があり、 --&gt;
+
+&lt;!-- どのジェネレータも記事数に対して線形時間なのでいずれは破綻します。 --&gt;
+
+&lt;!-- 各自の環境で計測して体感的にどんなものなのか確認するのがいいと思います。 --&gt;
+
+&lt;h1 id=&#34;まとめ:a3f1f0d65ed4ea09eb7c2931fc64911b&#34;&gt;まとめ&lt;/h1&gt;
+
+&lt;p&gt;静的サイトジェネレータ移行の原因となりうる生成時間について比較しました。
+Hugo がとにかく速いです。とりあえず自分は Hugo を使ってみます。&lt;/p&gt;
+
+&lt;h1 id=&#34;余談:a3f1f0d65ed4ea09eb7c2931fc64911b&#34;&gt;余談&lt;/h1&gt;
+
+&lt;p&gt;10000 記事では Hugo のサーバが起動しませんでした。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ERROR: 2015/11/16 Error: listen tcp 127.0.0.1:1313: socket: too many open files in system
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>静的サイトジェネレータのまとめ</title>
+      <link>http://tamura.goga.co.jp/staticSiteGenerator/</link>
+      <pubDate>Fri, 13 Nov 2015 18:17:59 +0900</pubDate>
+      
+      <guid>http://tamura.goga.co.jp/staticSiteGenerator/</guid>
+      <description>
+
+&lt;h1 id=&#34;静的サイトジェネレータとは:394884b88a3f0c48115b7c23d11eea30&#34;&gt;静的サイトジェネレータとは&lt;/h1&gt;
+
+&lt;p&gt;コンテンツとデザインを分離&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
