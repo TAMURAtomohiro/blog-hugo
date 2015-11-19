@@ -6,13 +6,13 @@
     <description>Recent content on 嵐の小舟より</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <lastBuildDate>Thu, 19 Nov 2015 17:40:52 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 19 Nov 2015 17:45:01 +0900</lastBuildDate>
     <atom:link href="http://tamura.goga.co.jp/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>静的サイトジェネレータの生成時間比較</title>
       <link>http://tamura.goga.co.jp/staticSiteGeneratorComparison/</link>
-      <pubDate>Thu, 19 Nov 2015 17:40:52 +0900</pubDate>
+      <pubDate>Thu, 19 Nov 2015 17:45:01 +0900</pubDate>
       
       <guid>http://tamura.goga.co.jp/staticSiteGeneratorComparison/</guid>
       <description>
@@ -189,7 +189,7 @@
 &lt;p&gt;&lt;img src=&#34;http://tamura.goga.co.jp/img/staticSiteGeneratorComparison.png&#34; alt=&#34;静的サイトジェネレータの実行時間グラフ&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;確かに Hugo が速いです。
-CPU 時間も短いですが、Hugo はどこかで並列処理をしているらしくマルチコアを活用しているようだったため、
+CPU 時間も短いですが、Hugo はどこかで並列処理をしているらしくマルチコアを活用できているようだったため、
 実時間ではもう少し速くなるはずです。&lt;/p&gt;
 
 &lt;h1 id=&#34;そもそも生成時間が長いと何が困るのか:a3f1f0d65ed4ea09eb7c2931fc64911b&#34;&gt;そもそも生成時間が長いと何が困るのか？&lt;/h1&gt;
