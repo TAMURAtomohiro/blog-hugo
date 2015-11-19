@@ -6,13 +6,13 @@
     <description>Recent content on 嵐の小舟より</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <lastBuildDate>Wed, 18 Nov 2015 14:59:18 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 19 Nov 2015 11:30:11 +0900</lastBuildDate>
     <atom:link href="http://tamura.goga.co.jp/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>静的サイトジェネレータの生成時間比較</title>
       <link>http://tamura.goga.co.jp/staticSiteGeneratorComparison/</link>
-      <pubDate>Wed, 18 Nov 2015 14:59:18 +0900</pubDate>
+      <pubDate>Thu, 19 Nov 2015 11:30:11 +0900</pubDate>
       
       <guid>http://tamura.goga.co.jp/staticSiteGeneratorComparison/</guid>
       <description>
@@ -22,7 +22,7 @@
 
 &lt;p&gt;調べていく過程で&lt;a href=&#34;https://gohugo.io/overview/introduction/&#34;&gt;Hugo&lt;/a&gt;のサイトに
 「Hugoは速いよ！」という内容の動画を見つけ、
-他と比べてどれくらい違うのかが気になったので、ざっくり確認してみます。&lt;/p&gt;
+実行時間の伸び方が気になったので、ざっくり確認してみます。&lt;/p&gt;
 
 &lt;h1 id=&#34;対象としたジェネレータについて:a3f1f0d65ed4ea09eb7c2931fc64911b&#34;&gt;対象としたジェネレータについて&lt;/h1&gt;
 
