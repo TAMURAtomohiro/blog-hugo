@@ -6,13 +6,13 @@
     <description>Recent content on 嵐の小舟より</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <lastBuildDate>Thu, 19 Nov 2015 17:45:01 +0900</lastBuildDate>
+    <lastBuildDate>Fri, 20 Nov 2015 11:35:26 +0900</lastBuildDate>
     <atom:link href="http://tamura.goga.co.jp/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>静的サイトジェネレータの生成時間比較</title>
       <link>http://tamura.goga.co.jp/staticSiteGeneratorComparison/</link>
-      <pubDate>Thu, 19 Nov 2015 17:45:01 +0900</pubDate>
+      <pubDate>Fri, 20 Nov 2015 11:35:26 +0900</pubDate>
       
       <guid>http://tamura.goga.co.jp/staticSiteGeneratorComparison/</guid>
       <description>
@@ -195,24 +195,27 @@ CPU 時間も短いですが、Hugo はどこかで並列処理をしている�
 &lt;h1 id=&#34;そもそも生成時間が長いと何が困るのか:a3f1f0d65ed4ea09eb7c2931fc64911b&#34;&gt;そもそも生成時間が長いと何が困るのか？&lt;/h1&gt;
 
 &lt;p&gt;編集→確認のループが長くなりイライラします。
-記事を保存してから LiveReload で再読み込みが完了するまでの待ち時間が苦痛になり、
-GithubPages などに push するのも一苦労です。
-「Hugo に移行した」系のブログ記事でも
+記事を保存してから LiveReload で再読み込みが完了するまでの待ち時間が苦痛になりますし、
+デザインを変えようとして再生成するとか、Github Pages などへのデプロイのために再生成するとか、
+CPUを温めるために再生成するとか、生活の端々でいったん待たされることになります。&lt;/p&gt;
+
+&lt;p&gt;「Hugo に移行した」系のブログ記事でも
 「元々使っていたジェネレータの遅さに耐えきれなくなった」という理由が散見されました。
 生成時間の長さは移行の原因となりえます。&lt;/p&gt;
 
 &lt;p&gt;というわけで生成時間の伸び方は静的サイトジェネレータを選ぶ際のひとつの尺度になるかと思います。&lt;/p&gt;
 
 &lt;p&gt;とはいえ記事数が少ないうちは問題にならないですし、
+生成物の違い・Github Pages などとの連携のような機能面での差異、
 デザインの豊富さや情報の多さなども重要ですから、問題になってから移行を考えてもいいと思います。
-そもそも別のことをやって待てばいいという向きもあるでしょう。
+そもそも別のことをやって待てばいいという向きもあるでしょうし、
 耐えきれるかどうか、一度適当に記事を増やして体感してみるのがおすすめです。&lt;/p&gt;
 
 &lt;p&gt;とりあえず自分は Hugo を使ってみます。&lt;/p&gt;
 
 &lt;h1 id=&#34;余談:a3f1f0d65ed4ea09eb7c2931fc64911b&#34;&gt;余談&lt;/h1&gt;
 
-&lt;p&gt;octopress の時間は指数的に増えているように見えます。&lt;/p&gt;
+&lt;p&gt;Octopress の時間は指数的に増えているように見えます。&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&#34;http://tamura.goga.co.jp/img/staticSiteGeneratorComparison-5000.png&#34; alt=&#34;静的サイトジェネレータの実行時間グラフ&#34; /&gt;&lt;/p&gt;
 
