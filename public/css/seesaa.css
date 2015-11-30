@@ -252,7 +252,6 @@ figure,
 footer,
 header,
 nav,
-section,
 time,
 mark,
 input,
@@ -265,6 +264,10 @@ textarea {
   font-weight: normal;
   font-style: normal;
   font-size: 100%;
+}
+
+section {
+    margin: 5px 0px 5px 0px;
 }
 
 /* other */
@@ -1366,6 +1369,14 @@ article.hugo-article h1:before {
     content: "■ ";
     font-size: 1.5em;
 }
+article.hugo-article h2{
+    font-size: 1.1em;
+    font-weight: bold;
+}
+article.hugo-article h2:before {
+    content: "・";
+    font-size: 1.1em;
+}
 
 article.hugo-article table {
     margin-bottom: 1em;
@@ -1374,7 +1385,7 @@ article.hugo-article table {
 article.hugo-article p {
     margin: 0.8em 0 0.8em 0;
 }
-/* .hugo-article thead {
+/* article.hugo-article thead {
    color: white;
    background-color: #4164E1;
    } */
