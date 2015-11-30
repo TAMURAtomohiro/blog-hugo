@@ -6,13 +6,13 @@
     <description>Recent content on 嵐の小舟より</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <lastBuildDate>Mon, 30 Nov 2015 12:10:07 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 30 Nov 2015 14:20:55 +0900</lastBuildDate>
     <atom:link href="http://tamura.goga.co.jp/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>なぜ静的サイト配信が重要となるか</title>
       <link>http://tamura.goga.co.jp/whyStaticWebsiteGeneratorsAreTheNextBigThing/</link>
-      <pubDate>Mon, 30 Nov 2015 12:10:07 +0900</pubDate>
+      <pubDate>Mon, 30 Nov 2015 14:20:55 +0900</pubDate>
       
       <guid>http://tamura.goga.co.jp/whyStaticWebsiteGeneratorsAreTheNextBigThing/</guid>
       <description>
@@ -20,7 +20,7 @@
 &lt;p&gt;Smashing Magazine の
 &lt;a href=&#34;http://www.smashingmagazine.com/2015/11/modern-static-website-generators-next-big-thing/&#34;&gt;Why Static Website Generators Are The Next Big Thing&lt;/a&gt;
 という記事を読んでの、自分の理解のためのメモです。
-この記事には独自研究が含まれる恐れがあります。&lt;/p&gt;
+直訳というわけでもなく、独自研究が含まれる恐れがあります。&lt;/p&gt;
 
 &lt;h1 id=&#34;概要:b18f011c14223c1c8e900075a4dc18a6&#34;&gt;概要&lt;/h1&gt;
 
@@ -37,7 +37,7 @@
 
 &lt;h1 id=&#34;クライアントサイドで動的なhtml生成を行なうアプローチ:b18f011c14223c1c8e900075a4dc18a6&#34;&gt;クライアントサイドで動的なHTML生成を行なうアプローチ&lt;/h1&gt;
 
-&lt;p&gt;タイトルでは静的サイトジェネレータと言ってますが、動的なコンテンツも扱います。
+&lt;p&gt;タイトルでは静的サイトジェネレータと言ってますが、静的サイトだけでなく、動的なコンテンツも対象です。
 つまり、HTML と JavaScript コードを静的ファイルとしてユーザに配信したのち、
 JavaScript コードによりコメントなどの動的なコンテンツを取得して表示を切り替えるという手法です。
 いわゆる MEAN スタックのような構成で、データベースや API サーバを含むものも想定しています。&lt;/p&gt;
@@ -49,11 +49,10 @@ JavaScript コードによりコメントなどの動的なコンテンツを取
 &lt;p&gt;たとえばログインが必要なコンテンツでは、ユーザのログイン状態に応じてレスポンスが異なります。
 また、コメント機能のついたサイトでは、誰かがコメントするたびに返却されるレスポンスが変わることになります。
 このように、サーバサイド動的HTML生成では、
-ある URL に対して返却されるレスポンスがデータベースの状態などに左右されるため、
-サーバに問い合わせてみないと最新のコンテンツであるかどうかが判断できません。
-そのため、CDN を利用しようと思うと、キャッシュの管理が非常に難しくなります。&lt;/p&gt;
+ある URL に対して返却されるレスポンスがデータベースや Cookie の状態などに依存するため、
+CDN を利用しようと思うと、キャッシュの管理が非常に難しくなります。&lt;/p&gt;
 
-&lt;p&gt;一方クライアントサイド動的HTML生成では、ある URL に対応するレスポンスは固定であり、
+&lt;p&gt;一方クライアントサイド動的HTML生成では、ある URL に対応するレスポンスは一意であり、
 デプロイのタイミングで CDN のキャッシュを更新すればよいため、管理が容易です。&lt;/p&gt;
 
 &lt;h2 id=&#34;遅い:b18f011c14223c1c8e900075a4dc18a6&#34;&gt;遅い&lt;/h2&gt;
