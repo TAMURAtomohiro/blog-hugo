@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.15-DEV" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="http://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<link rel="stylesheet" href="/css/normalize.css">
+<link rel="stylesheet" href="/css/skeleton.css">
+<link rel="stylesheet" href="/css/custom.css">
+<link rel="alternate" href="/index.xml" type="application/rss+xml" title="嵐の小舟より">
+<title>Angular2 から Web Components を使う - 嵐の小舟より</title>
+</head>
+<body>
+
+<div class="container">
+
+	<header role="banner">
+		<div class="header-logo">
+			<a href="/"><img src="" width="60" height="60"></a>
+		</div>
+		
+	</header>
+
+
+	<main role="main">
+		<article itemscope itemtype="http://schema.org/BlogPosting">
+			<h1 class="entry-title" itemprop="headline">Angular2 から Web Components を使う</h1>
+			<span class="entry-meta"><time itemprop="datePublished" datetime="2016-02-22">February 22, 2016</time></span>
+			<section itemprop="entry-text">
+				
+
+<p><a href="https://angular.io/">Angular2</a>が
+<a href="http://angularjs.blogspot.jp/2015/12/angular-2-beta.html">昨年12月に Beta リリース</a>されたため、
+色々触りながら調べています。</p>
+
+<p>Angular2 の設計ドキュメントのひとつ(<a href="https://docs.google.com/document/d/1kpuR512G1b0D8egl9245OHaG0cFh0ST0ekhD_g8sxtI/edit#heading=h.ptbnyo3pqsmq">Data Binding with Web Components</a>)
+を見かけ、Web Components との併用を考慮しているようだったので、
+使い方を調べてみることにしました。</p>
+
+<p>この記事の<a href="https://github.com/TAMURAtomohiro/angular2-with-web-components">サンプルコード(TypeScript)</a>をGitHubで公開しています。</p>
+
+<h1 id="題材:39f18a51edff96d02b28f0dac99ffb70">題材</h1>
+
+<p><a href="https://elements.polymer-project.org/elements/google-map">Google Map Web Component</a>(以下 google-map と表記) を Angular2 から使用します。
+やりたいことは以下の三種類です。</p>
+
+<ul>
+<li>DOM のプロパティを介して Web Components に値を渡す</li>
+<li>DOM のメソッドを呼ぶ</li>
+<li>DOM から上がってくるイベントを捕捉する</li>
+</ul>
+
+<h1 id="コンポーネントの構成:39f18a51edff96d02b28f0dac99ffb70">コンポーネントの構成</h1>
+
+<p>Angular2 では Component(コンポーネント)という単位でモジュールを分けるようになりました。
+ざっくり言うとテンプレートHTMLを持つ Directive を Component と呼びます。</p>
+
+<p>今回のコードでは <code>AppComponent</code>(<code>app.component.ts</code>) と <code>GoogleMapWebComponent</code>(<code>googlemap.component.ts</code>) の二種類です。</p>
+
+<p><code>AppComponent</code> では google-map に渡す値やイベントハンドラを定義します。</p>
+
+<p><code>GoogleMapWebComponent</code> は Angular2 から google-map を触るために DOM 要素を保持します。</p>
+
+<h1 id="dom-のプロパティを介して-web-components-に値を渡す:39f18a51edff96d02b28f0dac99ffb70">DOM のプロパティを介して Web Components に値を渡す</h1>
+
+<p><code>AppComponent</code> のテンプレートにある <code>[latitude]=&quot;lat&quot;</code> のような記述により google-map に Angular の値を渡すことができます。</p>
+
+<pre><code>&lt;google-map [latitude]=&quot;lat&quot; [longitude]=&quot;lng&quot;&gt;&lt;/google-map&gt;
+</code></pre>
+
+<p>値は同じく <code>AppComponent</code> で以下のように定義してあります。右辺の <code>lat</code>、<code>lng</code> はこれを参照しています。</p>
+
+<pre><code>constructor() {
+    this.lat = 35.71;
+    this.lng = 139.98;
+}
+</code></pre>
+
+<h2 id="記法:39f18a51edff96d02b28f0dac99ffb70">[ ] 記法</h2>
+
+<p><code>[latitude]=&quot;lat&quot;</code> は property binding と呼ばれ、
+DOM のプロパティに右辺の式を一方向バインディングするという意味を持ちます。</p>
+
+<p>つまり、以下のようなコードで Angular2 のプロパティを更新すると、
+<code>google-map</code> HTML要素の <code>longitude</code> プロパティも合わせて更新されます。</p>
+
+<pre><code>goWest() {
+    this.lng = this.lng - 0.1; // Angular 側のプロパティ更新が Web Components に反映される
+}
+</code></pre>
+
+<p>しかし、地図をドラッグして移動しても、Angular2 の <code>lat</code>、<code>lng</code> プロパティは更新されません。
+追従するためには <code>google-map-dragend</code> のイベントを捕捉し、明示的に更新処理を書く必要があります。</p>
+
+<p>ここで、<code>GoogleMapWebComponent</code> に <code>@Input</code> デコレータを「書かない」ことに注意しましょう。
+<code>@Input</code> デコレータを書くとコンポーネントのプロパティに設定するようになり、
+DOM のプロパティに設定されなくなってしまいます。</p>
+
+<h1 id="dom-のメソッドを呼ぶ:39f18a51edff96d02b28f0dac99ffb70">DOM のメソッドを呼ぶ</h1>
+
+<h2 id="dom-を取得する:39f18a51edff96d02b28f0dac99ffb70">DOM を取得する</h2>
+
+<p>DOM のメソッドを呼ぶにはまず DOM を取得する必要があります。
+(一休さんで言うところの、虎を捕まえるからまず屏風から虎を追い出してくれ、みたいな話です)</p>
+
+<p>古文書によればこれは <code>document.getElementById(...)</code> などで実現できますが、
+今風の書き方だと <code>GoogleMapWebComponent</code> 内の以下のような記述になります。</p>
+
+<pre><code>constructor(elRef:ElementRef) {
+    this.elem = elRef.nativeElement;
+}
+</code></pre>
+
+<p>ルート要素が取得できるため、これをコンポーネントのプロパティに保持しておきます。</p>
+
+<h2 id="子コンポーネントのプロパティに触る:39f18a51edff96d02b28f0dac99ffb70">子コンポーネントのプロパティに触る</h2>
+
+<p>子コンポーネントにアクセスするには
+<a href="https://angular.io/docs/js/latest/api/core/ViewChild-var.html">ViewChild</a> などを使います。
+適切に import などを行った上で、<code>AppComponent</code> のプロパティとして以下のように宣言します。</p>
+
+<pre><code>@ViewChild(GoogleMapWebComponent)
+googlemap: GoogleMapWebComponent;
+</code></pre>
+
+<p>使えるようになるタイミングには注意が必要で、
+子コンポーネントの作成が親コンポーネントよりあとに起こるため、
+<code>ngAfterViewInit</code> というメソッドが呼ばれた時点で <code>googlemap</code> にセットされます。</p>
+
+<h1 id="dom-から上がってくるイベントを捕捉する:39f18a51edff96d02b28f0dac99ffb70">DOM から上がってくるイベントを捕捉する</h1>
+
+<p><code>( )</code>記法でイベント名を指定し、対応する処理を右辺に書きます。
+たとえば <code>google-map-dragend</code> イベントを捕捉するには以下のように書きます。
+<code>[dragEvents]=&quot;true&quot;</code> はドラッグ関係のイベントを ON にするための設定です。</p>
+
+<pre><code>[dragEvents]=&quot;true&quot; (google-map-dragend)=&quot;dragendHandler($event)&quot;
+</code></pre>
+
+<p>あとはハンドラで Angular のプロパティを更新しましょう。</p>
+
+<pre><code>dragendHandler(event) {
+    console.log('dragend');
+    this.lat = event.target.latitude;
+    this.lng = event.target.longitude;
+}
+</code></pre>
+
+<h1 id="プロパティバインディングの捕捉:39f18a51edff96d02b28f0dac99ffb70">プロパティバインディングの捕捉</h1>
+
+<h2 id="記法の変換:39f18a51edff96d02b28f0dac99ffb70">{{ }} 記法の変換</h2>
+
+<p>Angular.js に慣れていると以下のように書きたくなるかもしれません。</p>
+
+<pre><code>latitude=&quot;{{lat}}&quot;
+</code></pre>
+
+<p>この書き方でも問題なく動作します。
+Angular2 は <code>{{ }}</code> 記法を以下のように <code>[ ]</code>記法へ変換します。</p>
+
+<pre><code>[latitude]=&quot;lat&quot;
+</code></pre>
+
+<p>これは以下のようなテキストコンテンツでも同様です。</p>
+
+<pre><code>&lt;div&gt; My Name is {{ name }} &lt;/div&gt;
+</code></pre>
+
+<p>以下のようになります。</p>
+
+<pre><code>&lt;div [textContent]=&quot;'My Name is ' + name&quot;&gt;&lt;/div&gt;
+</code></pre>
+
+<h2 id="属性の削除:39f18a51edff96d02b28f0dac99ffb70">属性の削除</h2>
+
+<p><code>[latitude]</code> や <code>(google-map-dragend)</code> などの属性は Angular2 によって削除されるため、
+ブラウザの開発コンソールで HTML を見ても載っていません。</p>
+
+<h1 id="まとめ:39f18a51edff96d02b28f0dac99ffb70">まとめ</h1>
+
+<p>Angular2 から Web Components を使ってみました。
+対応するコンポーネントを作って DOM 要素に触れるようにしておけば、
+あとはコンポーネント間のやりとりで実現できます。</p>
+
+<h1 id="参照:39f18a51edff96d02b28f0dac99ffb70">参照</h1>
+
+<ul>
+<li><a href="https://angular.io/docs/ts/latest/guide/template-syntax.html">Angular2: Template Syntax</a></li>
+<li><a href="http://blog.mgechev.com/2016/01/23/angular2-viewchildren-contentchildren-difference-viewproviders">ViewChildren and ContentChildren in Angular 2</a></li>
+</ul>
+
+			</section>
+		</article>
+	</main>
+
+
+	<footer role="contentinfo">
+		<div class="hr"></div>
+		<div class="footer-link">
+			
+			
+			
+			
+		</div>
+		<div class="copyright">Copyright &copy; </div>
+	</footer>
+
+</div>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+</body>
+</html>

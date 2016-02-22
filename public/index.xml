@@ -6,190 +6,182 @@
     <description>Recent content on 嵐の小舟より</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <lastBuildDate>Mon, 30 Nov 2015 14:20:55 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 22 Feb 2016 16:08:13 +0900</lastBuildDate>
     <atom:link href="http://tamura.goga.co.jp/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
-      <title>なぜ静的サイト配信が重要となるか</title>
-      <link>http://tamura.goga.co.jp/whyStaticWebsiteGeneratorsAreTheNextBigThing/</link>
-      <pubDate>Mon, 30 Nov 2015 14:20:55 +0900</pubDate>
+      <title>Angular2 から Web Components を使う</title>
+      <link>http://tamura.goga.co.jp/Angular2_WebComponents/</link>
+      <pubDate>Mon, 22 Feb 2016 16:08:13 +0900</pubDate>
       
-      <guid>http://tamura.goga.co.jp/whyStaticWebsiteGeneratorsAreTheNextBigThing/</guid>
+      <guid>http://tamura.goga.co.jp/Angular2_WebComponents/</guid>
       <description>
 
-&lt;p&gt;Smashing Magazine の
-&lt;a href=&#34;http://www.smashingmagazine.com/2015/11/modern-static-website-generators-next-big-thing/&#34;&gt;Why Static Website Generators Are The Next Big Thing&lt;/a&gt;
-という記事を読んでの、自分の理解のためのメモです。
-直訳というわけでもなく、独自研究が含まれる恐れがあります。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://angular.io/&#34;&gt;Angular2&lt;/a&gt;が
+&lt;a href=&#34;http://angularjs.blogspot.jp/2015/12/angular-2-beta.html&#34;&gt;昨年12月に Beta リリース&lt;/a&gt;されたため、
+色々触りながら調べています。&lt;/p&gt;
 
-&lt;h1 id=&#34;概要:b18f011c14223c1c8e900075a4dc18a6&#34;&gt;概要&lt;/h1&gt;
+&lt;p&gt;Angular2 の設計ドキュメントのひとつ(&lt;a href=&#34;https://docs.google.com/document/d/1kpuR512G1b0D8egl9245OHaG0cFh0ST0ekhD_g8sxtI/edit#heading=h.ptbnyo3pqsmq&#34;&gt;Data Binding with Web Components&lt;/a&gt;)
+を見かけ、Web Components との併用を考慮しているようだったので、
+使い方を調べてみることにしました。&lt;/p&gt;
 
-&lt;p&gt;現在の CMS はサーバサイドで動的にHTMLを生成するアプローチが主流ですが、
-ブラウザを取り巻く環境の変化や、CDN との兼ね合いで、
-静的HTMLを配信してJavaScriptで書き換えるアプローチが重要になりそうです。&lt;/p&gt;
+&lt;p&gt;この記事の&lt;a href=&#34;https://github.com/TAMURAtomohiro/angular2-with-web-components&#34;&gt;サンプルコード(TypeScript)&lt;/a&gt;をGitHubで公開しています。&lt;/p&gt;
 
-&lt;h1 id=&#34;サーバサイドで動的なhtml生成を行なうアプローチ:b18f011c14223c1c8e900075a4dc18a6&#34;&gt;サーバサイドで動的なHTML生成を行なうアプローチ&lt;/h1&gt;
+&lt;h1 id=&#34;題材:39f18a51edff96d02b28f0dac99ffb70&#34;&gt;題材&lt;/h1&gt;
 
-&lt;p&gt;ここで想定しているのは WordPress のようなCMSです。
-コンテンツをデータベースに保存しておき、
-リクエストに応じて PHP などのスクリプトで動的に HTML を生成します。
-いわゆる LAMP スタックの構成となります。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://elements.polymer-project.org/elements/google-map&#34;&gt;Google Map Web Component&lt;/a&gt;(以下 google-map と表記) を Angular2 から使用します。
+やりたいことは以下の三種類です。&lt;/p&gt;
 
-&lt;h1 id=&#34;クライアントサイドで動的なhtml生成を行なうアプローチ:b18f011c14223c1c8e900075a4dc18a6&#34;&gt;クライアントサイドで動的なHTML生成を行なうアプローチ&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;DOM のプロパティを介して Web Components に値を渡す&lt;/li&gt;
+&lt;li&gt;DOM のメソッドを呼ぶ&lt;/li&gt;
+&lt;li&gt;DOM から上がってくるイベントを捕捉する&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;p&gt;タイトルでは静的サイトジェネレータと言ってますが、静的サイトだけでなく、動的なコンテンツも対象です。
-つまり、HTML と JavaScript コードを静的ファイルとしてユーザに配信したのち、
-JavaScript コードによりコメントなどの動的なコンテンツを取得して表示を切り替えるという手法です。
-いわゆる MEAN スタックのような構成で、データベースや API サーバを含むものも想定しています。&lt;/p&gt;
+&lt;h1 id=&#34;コンポーネントの構成:39f18a51edff96d02b28f0dac99ffb70&#34;&gt;コンポーネントの構成&lt;/h1&gt;
 
-&lt;h1 id=&#34;サーバサイドでの動的な-html-生成の問題点:b18f011c14223c1c8e900075a4dc18a6&#34;&gt;サーバサイドでの動的な HTML 生成の問題点&lt;/h1&gt;
+&lt;p&gt;Angular2 では Component(コンポーネント)という単位でモジュールを分けるようになりました。
+ざっくり言うとテンプレートHTMLを持つ Directive を Component と呼びます。&lt;/p&gt;
 
-&lt;h2 id=&#34;cdnと相性が悪い:b18f011c14223c1c8e900075a4dc18a6&#34;&gt;CDNと相性が悪い&lt;/h2&gt;
+&lt;p&gt;今回のコードでは &lt;code&gt;AppComponent&lt;/code&gt;(&lt;code&gt;app.component.ts&lt;/code&gt;) と &lt;code&gt;GoogleMapWebComponent&lt;/code&gt;(&lt;code&gt;googlemap.component.ts&lt;/code&gt;) の二種類です。&lt;/p&gt;
 
-&lt;p&gt;たとえばログインが必要なコンテンツでは、ユーザのログイン状態に応じてレスポンスが異なります。
-また、コメント機能のついたサイトでは、誰かがコメントするたびに返却されるレスポンスが変わることになります。
-このように、サーバサイド動的HTML生成では、
-ある URL に対して返却されるレスポンスがデータベースや Cookie の状態などに依存するため、
-CDN を利用しようと思うと、キャッシュの管理が非常に難しくなります。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;AppComponent&lt;/code&gt; では google-map に渡す値やイベントハンドラを定義します。&lt;/p&gt;
 
-&lt;p&gt;一方クライアントサイド動的HTML生成では、ある URL に対応するレスポンスは一意であり、
-デプロイのタイミングで CDN のキャッシュを更新すればよいため、管理が容易です。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;GoogleMapWebComponent&lt;/code&gt; は Angular2 から google-map を触るために DOM 要素を保持します。&lt;/p&gt;
 
-&lt;h2 id=&#34;遅い:b18f011c14223c1c8e900075a4dc18a6&#34;&gt;遅い&lt;/h2&gt;
+&lt;h1 id=&#34;dom-のプロパティを介して-web-components-に値を渡す:39f18a51edff96d02b28f0dac99ffb70&#34;&gt;DOM のプロパティを介して Web Components に値を渡す&lt;/h1&gt;
 
-&lt;p&gt;結局のところサーバサイド動的HTML生成のアプローチで
-どんなにパフォーマンスチューニングを施しても静的なHTML配信にはおよびません。
-ただし、ここで重視しているのはファーストビューが表示されるまでの時間で、
-すべてのコンテンツが読み込まれるまでの時間ではないことに注意してください。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;AppComponent&lt;/code&gt; のテンプレートにある &lt;code&gt;[latitude]=&amp;quot;lat&amp;quot;&lt;/code&gt; のような記述により google-map に Angular の値を渡すことができます。&lt;/p&gt;
 
-&lt;p&gt;また、先に述べたようにサーバサイド動的HTML生成でのキャッシュ管理には難しい問題があり、
-パフォーマンスチューニングには多大なコストがかかります。&lt;/p&gt;
-
-&lt;p&gt;パフォーマンスの重要性については
-&lt;a href=&#34;http://news.mynavi.jp/news/2012/12/11/025/&#34;&gt;ページが表示されるまでに3秒かかると57%のユーザが離脱する&lt;/a&gt;
-(&lt;a href=&#34;http://blog.smartbear.com/web-performance/the-cost-of-poor-web-performance-infographic/&#34;&gt;元記事&lt;/a&gt;)
-という調査に言及しています。
-スマートフォンで貧弱なネットワークを介しての閲覧が増えているため、配信の速さは昔よりも重要です。&lt;/p&gt;
-
-&lt;h1 id=&#34;歴史的経緯:b18f011c14223c1c8e900075a4dc18a6&#34;&gt;歴史的経緯&lt;/h1&gt;
-
-&lt;p&gt;WordPress が登場した当時は Ajax や DHTML が市民権を勝ち得ていませんでしたが、状況が変わりました。
-データベースの情報に応じてコンテンツを生成するために、
-従来はサーバサイドのスクリプトを利用する必要がありましたが、現在ではクライアントサイドで実現できます。&lt;/p&gt;
-
-&lt;h1 id=&#34;静的サイトジェネレータ普及のために何が足りないか:b18f011c14223c1c8e900075a4dc18a6&#34;&gt;静的サイトジェネレータ普及のために何が足りないか？&lt;/h1&gt;
-
-&lt;p&gt;現在、静的サイトジェネレータと呼ばれるツールはざっくり言って
-Markdown 形式で記述したコンテンツからHTMLを生成してGithubPagesで公開するためのものです(出力形式や公開先で違いはありますが)。
-エンジニアが黒い画面を見つめて使うもので、
-非エンジニアでもブラウザ上で使えるリッチなエディタや、
-複数ユーザを管理するための認証機構などは含まれていません。
-あるいは、好みのデザインを探せるマーケットプレイスのようなコミュニティも欲しいところです。&lt;/p&gt;
-
-&lt;h1 id=&#34;静的html配信に向かないもの:b18f011c14223c1c8e900075a4dc18a6&#34;&gt;静的HTML配信に向かないもの&lt;/h1&gt;
-
-&lt;p&gt;大量のデータから検索とフィルタリングで生成されるコンテンツでは、
-ユーザに配信してから処理するわけにもいかないので、
-サーバサイドでの処理が必要になります。&lt;/p&gt;
-
-&lt;p&gt;また、リアルタイム性が高く頻繁に更新されるようなコンテンツでも、
-更新のたびに HTML を生成し直すことは現実的でないため、
-静的HTMLでの配信ではなく API 経由でデータベースを参照するような形になるでしょう。&lt;/p&gt;
-
-&lt;h1 id=&#34;まとめ:b18f011c14223c1c8e900075a4dc18a6&#34;&gt;まとめ&lt;/h1&gt;
-
-&lt;p&gt;静的サイトジェネレータというツール群にはまだ足りない部分がありますが、
-静的サイト配信という手法は速度や CDN を利用したスケーラビリティの面で有利なので、
-今後ますます重要になりそうです。&lt;/p&gt;
-
-&lt;!--
-未調査ですが[Dato](http://www.leanpanda.com/blog/2015/10/13/dato-cms-static-website/)というのもあります。
-スケーラビリティは期間限定のキャンペーンサイトなどで必要になります。
---&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Emacs から外部プロセスを呼び出して結果をエコーエリアに表示する</title>
-      <link>http://tamura.goga.co.jp/callProcessOnEmacs/</link>
-      <pubDate>Fri, 20 Nov 2015 13:00:29 +0900</pubDate>
-      
-      <guid>http://tamura.goga.co.jp/callProcessOnEmacs/</guid>
-      <description>
-
-&lt;p&gt;学生時代からの習慣と宗教上の理由から普段使いのエディタは Emacs
-(ここでは &lt;a href=&#34;http://emacsformacosx.com/&#34;&gt;GNU Emacs for Mac OS X&lt;/a&gt;)
-です。&lt;/p&gt;
-
-&lt;p&gt;設定ファイルを除いて自分で Emacs Lisp を書いて機能を追加したことはこれまで無かったのですが、
-このたび必要にかられて追加いたしました。&lt;/p&gt;
-
-&lt;p&gt;ど素人なので作法やらベストプラクティスやらがわからないですが、まあ動きます。
-&lt;a href=&#34;https://gist.github.com/TAMURAtomohiro/18cd0fb0ae33baa48625&#34;&gt;Gist&lt;/a&gt; にも置いてあります。&lt;/p&gt;
-
-&lt;h1 id=&#34;経緯:be4749ace7856f2106f2c84e7a92ff65&#34;&gt;経緯&lt;/h1&gt;
-
-&lt;p&gt;とあるプロジェクトで JavaScript のソフトウェアメトリクスを測り、
-コード改善のときの目安とすることになりました。
-そこで&lt;a href=&#34;http://es-analysis.github.io/plato/examples/marionette/index.html&#34;&gt;Plato&lt;/a&gt;を導入したわけですが、
-このツールでは今まさに自分が変更したファイルのメトリクスを確認するのが面倒です。&lt;/p&gt;
-
-&lt;p&gt;どうせなら書いたそばから教えていただければ「もうちょっとメトリクス上げてみようか」という気分にもなるわけです。
-before-save-hook などで保存時に何かしらの処理をフックできることは知っていましたので、
-前述の plato を呼んで結果を表示するくらいのことはすぐできるだろう……と作り始めました。&lt;/p&gt;
-
-&lt;h1 id=&#34;メトリクスを取り出す:be4749ace7856f2106f2c84e7a92ff65&#34;&gt;メトリクスを取り出す&lt;/h1&gt;
-
-&lt;p&gt;plato には「結果を標準出力に出す」ようなオプションがなかったため、
-とりあえずごり押しで plato の結果を取り出してみます。
-生成された HTML から Average Maintainability の部分を取り出せれば細かいことはとやかく言いません。
-(一時ファイルの名前やらが決め打ちじゃ並列実行したときおかしくなるぞ、とか)&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;#!/bin/sh
-TMPFILE=/tmp/js-metrics.js
-REPORT_DIR=/tmp
-cat - &amp;gt; ${TMPFILE}
-plato -d ${REPORT_DIR} ${TMPFILE} &amp;gt; /dev/null
-grep &#39;class=&amp;quot;stat&amp;quot;&#39; ${REPORT_DIR}/index.html | tail -n 1 | sed -e &amp;quot;s/&amp;lt;p class=\&amp;quot;stat\&amp;quot;&amp;gt;//g&amp;quot; | sed -e &amp;quot;s/&amp;lt;\/p&amp;gt;//g&amp;quot; | sed -e &amp;quot;s/ //g&amp;quot; | tr -d &#39;\n&#39;
+&lt;pre&gt;&lt;code&gt;&amp;lt;google-map [latitude]=&amp;quot;lat&amp;quot; [longitude]=&amp;quot;lng&amp;quot;&amp;gt;&amp;lt;/google-map&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h1 id=&#34;現在のバッファの内容を外部プロセスに渡し-結果をエコーエリアに表示する:be4749ace7856f2106f2c84e7a92ff65&#34;&gt;現在のバッファの内容を外部プロセスに渡し、結果をエコーエリアに表示する&lt;/h1&gt;
+&lt;p&gt;値は同じく &lt;code&gt;AppComponent&lt;/code&gt; で以下のように定義してあります。右辺の &lt;code&gt;lat&lt;/code&gt;、&lt;code&gt;lng&lt;/code&gt; はこれを参照しています。&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;call-process-region&lt;/code&gt; という関数を使うと現在のバッファの内容を標準入力として外部プロセスに渡せるのでこれを使います。
-ただ、エコーエリアに表示しようとして、結果の出力先バッファを &lt;code&gt;*Messages*&lt;/code&gt; とするやり方はうまくいかず(&lt;code&gt;*Messages*&lt;/code&gt;バッファが read-only になっていて書き込めない)、
-&lt;code&gt;message&lt;/code&gt; 関数を使うことになりました。&lt;/p&gt;
-
-&lt;p&gt;なので出力先バッファを用意しなきゃいけないですが、
-自分で管理するのは面倒なので &lt;code&gt;with-temp-buffer&lt;/code&gt; を使ってみます。
-これを使うと新たなバッファが作られ、一連の処理が終わったあとに破棄してくれます。
-カレントバッファが切り替わってしまうので今回の目的のためには
-元バッファの JavaScript コードを取得しておいて転記する必要があります。&lt;/p&gt;
-
-&lt;p&gt;ということで今回の成果物を以下の通りです。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;(defun jsmetrics ()
-    (if (derived-mode-p &#39;js-mode) ; JavaScript ファイルが js-mode で開かれることを前提として JavaScript のみを対象とする
-        (let ((jscode (buffer-string))) ; カレントバッファの内容を取得しておき
-            (with-temp-buffer
-                (insert jscode)         ; 一時バッファに書き込む
-                (call-process-region (point-min) (point-max) &amp;quot;js-metrics.sh&amp;quot; t t nil) ; 一時バッファの内容を外部プロセスの結果で置き換える
-                (message (buffer-string)))))) ; 結果をエコーエリアに表示
-
-(add-hook &#39;js-mode-hook
-    (lambda () (add-hook &#39;after-save-hook &#39;jsmetrics)))
+&lt;pre&gt;&lt;code&gt;constructor() {
+    this.lat = 35.71;
+    this.lng = 139.98;
+}
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h1 id=&#34;まとめ:be4749ace7856f2106f2c84e7a92ff65&#34;&gt;まとめ&lt;/h1&gt;
+&lt;h2 id=&#34;記法:39f18a51edff96d02b28f0dac99ffb70&#34;&gt;[ ] 記法&lt;/h2&gt;
 
-&lt;p&gt;標準入出力という偉大なインタフェースのおかげで Emacs Lisp 内で完結させる必要がなく、
-他言語のモジュールを利用できるのが素晴らしいです。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;[latitude]=&amp;quot;lat&amp;quot;&lt;/code&gt; は property binding と呼ばれ、
+DOM のプロパティに右辺の式を一方向バインディングするという意味を持ちます。&lt;/p&gt;
+
+&lt;p&gt;つまり、以下のようなコードで Angular2 のプロパティを更新すると、
+&lt;code&gt;google-map&lt;/code&gt; HTML要素の &lt;code&gt;longitude&lt;/code&gt; プロパティも合わせて更新されます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;goWest() {
+    this.lng = this.lng - 0.1; // Angular 側のプロパティ更新が Web Components に反映される
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;しかし、地図をドラッグして移動しても、Angular2 の &lt;code&gt;lat&lt;/code&gt;、&lt;code&gt;lng&lt;/code&gt; プロパティは更新されません。
+追従するためには &lt;code&gt;google-map-dragend&lt;/code&gt; のイベントを捕捉し、明示的に更新処理を書く必要があります。&lt;/p&gt;
+
+&lt;p&gt;ここで、&lt;code&gt;GoogleMapWebComponent&lt;/code&gt; に &lt;code&gt;@Input&lt;/code&gt; デコレータを「書かない」ことに注意しましょう。
+&lt;code&gt;@Input&lt;/code&gt; デコレータを書くとコンポーネントのプロパティに設定するようになり、
+DOM のプロパティに設定されなくなってしまいます。&lt;/p&gt;
+
+&lt;h1 id=&#34;dom-のメソッドを呼ぶ:39f18a51edff96d02b28f0dac99ffb70&#34;&gt;DOM のメソッドを呼ぶ&lt;/h1&gt;
+
+&lt;h2 id=&#34;dom-を取得する:39f18a51edff96d02b28f0dac99ffb70&#34;&gt;DOM を取得する&lt;/h2&gt;
+
+&lt;p&gt;DOM のメソッドを呼ぶにはまず DOM を取得する必要があります。
+(一休さんで言うところの、虎を捕まえるからまず屏風から虎を追い出してくれ、みたいな話です)&lt;/p&gt;
+
+&lt;p&gt;古文書によればこれは &lt;code&gt;document.getElementById(...)&lt;/code&gt; などで実現できますが、
+今風の書き方だと &lt;code&gt;GoogleMapWebComponent&lt;/code&gt; 内の以下のような記述になります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;constructor(elRef:ElementRef) {
+    this.elem = elRef.nativeElement;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ルート要素が取得できるため、これをコンポーネントのプロパティに保持しておきます。&lt;/p&gt;
+
+&lt;h2 id=&#34;子コンポーネントのプロパティに触る:39f18a51edff96d02b28f0dac99ffb70&#34;&gt;子コンポーネントのプロパティに触る&lt;/h2&gt;
+
+&lt;p&gt;子コンポーネントにアクセスするには
+&lt;a href=&#34;https://angular.io/docs/js/latest/api/core/ViewChild-var.html&#34;&gt;ViewChild&lt;/a&gt; などを使います。
+適切に import などを行った上で、&lt;code&gt;AppComponent&lt;/code&gt; のプロパティとして以下のように宣言します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@ViewChild(GoogleMapWebComponent)
+googlemap: GoogleMapWebComponent;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;使えるようになるタイミングには注意が必要で、
+子コンポーネントの作成が親コンポーネントよりあとに起こるため、
+&lt;code&gt;ngAfterViewInit&lt;/code&gt; というメソッドが呼ばれた時点で &lt;code&gt;googlemap&lt;/code&gt; にセットされます。&lt;/p&gt;
+
+&lt;h1 id=&#34;dom-から上がってくるイベントを捕捉する:39f18a51edff96d02b28f0dac99ffb70&#34;&gt;DOM から上がってくるイベントを捕捉する&lt;/h1&gt;
+
+&lt;p&gt;&lt;code&gt;( )&lt;/code&gt;記法でイベント名を指定し、対応する処理を右辺に書きます。
+たとえば &lt;code&gt;google-map-dragend&lt;/code&gt; イベントを捕捉するには以下のように書きます。
+&lt;code&gt;[dragEvents]=&amp;quot;true&amp;quot;&lt;/code&gt; はドラッグ関係のイベントを ON にするための設定です。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[dragEvents]=&amp;quot;true&amp;quot; (google-map-dragend)=&amp;quot;dragendHandler($event)&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;あとはハンドラで Angular のプロパティを更新しましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;dragendHandler(event) {
+    console.log(&#39;dragend&#39;);
+    this.lat = event.target.latitude;
+    this.lng = event.target.longitude;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;プロパティバインディングの捕捉:39f18a51edff96d02b28f0dac99ffb70&#34;&gt;プロパティバインディングの捕捉&lt;/h1&gt;
+
+&lt;h2 id=&#34;記法の変換:39f18a51edff96d02b28f0dac99ffb70&#34;&gt;{{ }} 記法の変換&lt;/h2&gt;
+
+&lt;p&gt;Angular.js に慣れていると以下のように書きたくなるかもしれません。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;latitude=&amp;quot;{{lat}}&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;この書き方でも問題なく動作します。
+Angular2 は &lt;code&gt;{{ }}&lt;/code&gt; 記法を以下のように &lt;code&gt;[ ]&lt;/code&gt;記法へ変換します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[latitude]=&amp;quot;lat&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これは以下のようなテキストコンテンツでも同様です。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;div&amp;gt; My Name is {{ name }} &amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;以下のようになります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;div [textContent]=&amp;quot;&#39;My Name is &#39; + name&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;属性の削除:39f18a51edff96d02b28f0dac99ffb70&#34;&gt;属性の削除&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;[latitude]&lt;/code&gt; や &lt;code&gt;(google-map-dragend)&lt;/code&gt; などの属性は Angular2 によって削除されるため、
+ブラウザの開発コンソールで HTML を見ても載っていません。&lt;/p&gt;
+
+&lt;h1 id=&#34;まとめ:39f18a51edff96d02b28f0dac99ffb70&#34;&gt;まとめ&lt;/h1&gt;
+
+&lt;p&gt;Angular2 から Web Components を使ってみました。
+対応するコンポーネントを作って DOM 要素に触れるようにしておけば、
+あとはコンポーネント間のやりとりで実現できます。&lt;/p&gt;
+
+&lt;h1 id=&#34;参照:39f18a51edff96d02b28f0dac99ffb70&#34;&gt;参照&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://angular.io/docs/ts/latest/guide/template-syntax.html&#34;&gt;Angular2: Template Syntax&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://blog.mgechev.com/2016/01/23/angular2-viewchildren-contentchildren-difference-viewproviders&#34;&gt;ViewChildren and ContentChildren in Angular 2&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 </description>
     </item>
     
     <item>
       <title>静的サイトジェネレータの生成時間比較</title>
       <link>http://tamura.goga.co.jp/staticSiteGeneratorComparison/</link>
-      <pubDate>Fri, 20 Nov 2015 11:35:26 +0900</pubDate>
+      <pubDate>Tue, 08 Dec 2015 15:08:00 +0900</pubDate>
       
       <guid>http://tamura.goga.co.jp/staticSiteGeneratorComparison/</guid>
       <description>
@@ -403,6 +395,183 @@ CPUを温めるために再生成するとか、生活の端々でいったん�
 &lt;!-- ERROR: 2015/11/16 Error: listen tcp 127.0.0.1:1313: socket: too many open files in system --&gt;
 
 &lt;!-- ``` --&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>なぜ静的サイト配信が重要となるか</title>
+      <link>http://tamura.goga.co.jp/whyStaticWebsiteGeneratorsAreTheNextBigThing/</link>
+      <pubDate>Mon, 30 Nov 2015 14:20:55 +0900</pubDate>
+      
+      <guid>http://tamura.goga.co.jp/whyStaticWebsiteGeneratorsAreTheNextBigThing/</guid>
+      <description>
+
+&lt;p&gt;Smashing Magazine の
+&lt;a href=&#34;http://www.smashingmagazine.com/2015/11/modern-static-website-generators-next-big-thing/&#34;&gt;Why Static Website Generators Are The Next Big Thing&lt;/a&gt;
+という記事を読んでの、自分の理解のためのメモです。
+直訳というわけでもなく、独自研究が含まれる恐れがあります。&lt;/p&gt;
+
+&lt;h1 id=&#34;概要:b18f011c14223c1c8e900075a4dc18a6&#34;&gt;概要&lt;/h1&gt;
+
+&lt;p&gt;現在の CMS はサーバサイドで動的にHTMLを生成するアプローチが主流ですが、
+ブラウザを取り巻く環境の変化や、CDN との兼ね合いで、
+静的HTMLを配信してJavaScriptで書き換えるアプローチが重要になりそうです。&lt;/p&gt;
+
+&lt;h1 id=&#34;サーバサイドで動的なhtml生成を行なうアプローチ:b18f011c14223c1c8e900075a4dc18a6&#34;&gt;サーバサイドで動的なHTML生成を行なうアプローチ&lt;/h1&gt;
+
+&lt;p&gt;ここで想定しているのは WordPress のようなCMSです。
+コンテンツをデータベースに保存しておき、
+リクエストに応じて PHP などのスクリプトで動的に HTML を生成します。
+いわゆる LAMP スタックの構成となります。&lt;/p&gt;
+
+&lt;h1 id=&#34;クライアントサイドで動的なhtml生成を行なうアプローチ:b18f011c14223c1c8e900075a4dc18a6&#34;&gt;クライアントサイドで動的なHTML生成を行なうアプローチ&lt;/h1&gt;
+
+&lt;p&gt;タイトルでは静的サイトジェネレータと言ってますが、静的サイトだけでなく、動的なコンテンツも対象です。
+つまり、HTML と JavaScript コードを静的ファイルとしてユーザに配信したのち、
+JavaScript コードによりコメントなどの動的なコンテンツを取得して表示を切り替えるという手法です。
+いわゆる MEAN スタックのような構成で、データベースや API サーバを含むものも想定しています。&lt;/p&gt;
+
+&lt;h1 id=&#34;サーバサイドでの動的な-html-生成の問題点:b18f011c14223c1c8e900075a4dc18a6&#34;&gt;サーバサイドでの動的な HTML 生成の問題点&lt;/h1&gt;
+
+&lt;h2 id=&#34;cdnと相性が悪い:b18f011c14223c1c8e900075a4dc18a6&#34;&gt;CDNと相性が悪い&lt;/h2&gt;
+
+&lt;p&gt;たとえばログインが必要なコンテンツでは、ユーザのログイン状態に応じてレスポンスが異なります。
+また、コメント機能のついたサイトでは、誰かがコメントするたびに返却されるレスポンスが変わることになります。
+このように、サーバサイド動的HTML生成では、
+ある URL に対して返却されるレスポンスがデータベースや Cookie の状態などに依存するため、
+CDN を利用しようと思うと、キャッシュの管理が非常に難しくなります。&lt;/p&gt;
+
+&lt;p&gt;一方クライアントサイド動的HTML生成では、ある URL に対応するレスポンスは一意であり、
+デプロイのタイミングで CDN のキャッシュを更新すればよいため、管理が容易です。&lt;/p&gt;
+
+&lt;h2 id=&#34;遅い:b18f011c14223c1c8e900075a4dc18a6&#34;&gt;遅い&lt;/h2&gt;
+
+&lt;p&gt;結局のところサーバサイド動的HTML生成のアプローチで
+どんなにパフォーマンスチューニングを施しても静的なHTML配信にはおよびません。
+ただし、ここで重視しているのはファーストビューが表示されるまでの時間で、
+すべてのコンテンツが読み込まれるまでの時間ではないことに注意してください。&lt;/p&gt;
+
+&lt;p&gt;また、先に述べたようにサーバサイド動的HTML生成でのキャッシュ管理には難しい問題があり、
+パフォーマンスチューニングには多大なコストがかかります。&lt;/p&gt;
+
+&lt;p&gt;パフォーマンスの重要性については
+&lt;a href=&#34;http://news.mynavi.jp/news/2012/12/11/025/&#34;&gt;ページが表示されるまでに3秒かかると57%のユーザが離脱する&lt;/a&gt;
+(&lt;a href=&#34;http://blog.smartbear.com/web-performance/the-cost-of-poor-web-performance-infographic/&#34;&gt;元記事&lt;/a&gt;)
+という調査に言及しています。
+スマートフォンで貧弱なネットワークを介しての閲覧が増えているため、配信の速さは昔よりも重要です。&lt;/p&gt;
+
+&lt;h1 id=&#34;歴史的経緯:b18f011c14223c1c8e900075a4dc18a6&#34;&gt;歴史的経緯&lt;/h1&gt;
+
+&lt;p&gt;WordPress が登場した当時は Ajax や DHTML が市民権を勝ち得ていませんでしたが、状況が変わりました。
+データベースの情報に応じてコンテンツを生成するために、
+従来はサーバサイドのスクリプトを利用する必要がありましたが、現在ではクライアントサイドで実現できます。&lt;/p&gt;
+
+&lt;h1 id=&#34;静的サイトジェネレータ普及のために何が足りないか:b18f011c14223c1c8e900075a4dc18a6&#34;&gt;静的サイトジェネレータ普及のために何が足りないか？&lt;/h1&gt;
+
+&lt;p&gt;現在、静的サイトジェネレータと呼ばれるツールはざっくり言って
+Markdown 形式で記述したコンテンツからHTMLを生成してGithubPagesで公開するためのものです(出力形式や公開先で違いはありますが)。
+エンジニアが黒い画面を見つめて使うもので、
+非エンジニアでもブラウザ上で使えるリッチなエディタや、
+複数ユーザを管理するための認証機構などは含まれていません。
+あるいは、好みのデザインを探せるマーケットプレイスのようなコミュニティも欲しいところです。&lt;/p&gt;
+
+&lt;h1 id=&#34;静的html配信に向かないもの:b18f011c14223c1c8e900075a4dc18a6&#34;&gt;静的HTML配信に向かないもの&lt;/h1&gt;
+
+&lt;p&gt;大量のデータから検索とフィルタリングで生成されるコンテンツでは、
+ユーザに配信してから処理するわけにもいかないので、
+サーバサイドでの処理が必要になります。&lt;/p&gt;
+
+&lt;p&gt;また、リアルタイム性が高く頻繁に更新されるようなコンテンツでも、
+更新のたびに HTML を生成し直すことは現実的でないため、
+静的HTMLでの配信ではなく API 経由でデータベースを参照するような形になるでしょう。&lt;/p&gt;
+
+&lt;h1 id=&#34;まとめ:b18f011c14223c1c8e900075a4dc18a6&#34;&gt;まとめ&lt;/h1&gt;
+
+&lt;p&gt;静的サイトジェネレータというツール群にはまだ足りない部分がありますが、
+静的サイト配信という手法は速度や CDN を利用したスケーラビリティの面で有利なので、
+今後ますます重要になりそうです。&lt;/p&gt;
+
+&lt;!--
+未調査ですが[Dato](http://www.leanpanda.com/blog/2015/10/13/dato-cms-static-website/)というのもあります。
+スケーラビリティは期間限定のキャンペーンサイトなどで必要になります。
+--&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Emacs から外部プロセスを呼び出して結果をエコーエリアに表示する</title>
+      <link>http://tamura.goga.co.jp/callProcessOnEmacs/</link>
+      <pubDate>Fri, 20 Nov 2015 13:00:29 +0900</pubDate>
+      
+      <guid>http://tamura.goga.co.jp/callProcessOnEmacs/</guid>
+      <description>
+
+&lt;p&gt;学生時代からの習慣と宗教上の理由から普段使いのエディタは Emacs
+(ここでは &lt;a href=&#34;http://emacsformacosx.com/&#34;&gt;GNU Emacs for Mac OS X&lt;/a&gt;)
+です。&lt;/p&gt;
+
+&lt;p&gt;設定ファイルを除いて自分で Emacs Lisp を書いて機能を追加したことはこれまで無かったのですが、
+このたび必要にかられて追加いたしました。&lt;/p&gt;
+
+&lt;p&gt;ど素人なので作法やらベストプラクティスやらがわからないですが、まあ動きます。
+&lt;a href=&#34;https://gist.github.com/TAMURAtomohiro/18cd0fb0ae33baa48625&#34;&gt;Gist&lt;/a&gt; にも置いてあります。&lt;/p&gt;
+
+&lt;h1 id=&#34;経緯:be4749ace7856f2106f2c84e7a92ff65&#34;&gt;経緯&lt;/h1&gt;
+
+&lt;p&gt;とあるプロジェクトで JavaScript のソフトウェアメトリクスを測り、
+コード改善のときの目安とすることになりました。
+そこで&lt;a href=&#34;http://es-analysis.github.io/plato/examples/marionette/index.html&#34;&gt;Plato&lt;/a&gt;を導入したわけですが、
+このツールでは今まさに自分が変更したファイルのメトリクスを確認するのが面倒です。&lt;/p&gt;
+
+&lt;p&gt;どうせなら書いたそばから教えていただければ「もうちょっとメトリクス上げてみようか」という気分にもなるわけです。
+before-save-hook などで保存時に何かしらの処理をフックできることは知っていましたので、
+前述の plato を呼んで結果を表示するくらいのことはすぐできるだろう……と作り始めました。&lt;/p&gt;
+
+&lt;h1 id=&#34;メトリクスを取り出す:be4749ace7856f2106f2c84e7a92ff65&#34;&gt;メトリクスを取り出す&lt;/h1&gt;
+
+&lt;p&gt;plato には「結果を標準出力に出す」ようなオプションがなかったため、
+とりあえずごり押しで plato の結果を取り出してみます。
+生成された HTML から Average Maintainability の部分を取り出せれば細かいことはとやかく言いません。
+(一時ファイルの名前やらが決め打ちじゃ並列実行したときおかしくなるぞ、とか)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#!/bin/sh
+TMPFILE=/tmp/js-metrics.js
+REPORT_DIR=/tmp
+cat - &amp;gt; ${TMPFILE}
+plato -d ${REPORT_DIR} ${TMPFILE} &amp;gt; /dev/null
+grep &#39;class=&amp;quot;stat&amp;quot;&#39; ${REPORT_DIR}/index.html | tail -n 1 | sed -e &amp;quot;s/&amp;lt;p class=\&amp;quot;stat\&amp;quot;&amp;gt;//g&amp;quot; | sed -e &amp;quot;s/&amp;lt;\/p&amp;gt;//g&amp;quot; | sed -e &amp;quot;s/ //g&amp;quot; | tr -d &#39;\n&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;現在のバッファの内容を外部プロセスに渡し-結果をエコーエリアに表示する:be4749ace7856f2106f2c84e7a92ff65&#34;&gt;現在のバッファの内容を外部プロセスに渡し、結果をエコーエリアに表示する&lt;/h1&gt;
+
+&lt;p&gt;&lt;code&gt;call-process-region&lt;/code&gt; という関数を使うと現在のバッファの内容を標準入力として外部プロセスに渡せるのでこれを使います。
+ただ、エコーエリアに表示しようとして、結果の出力先バッファを &lt;code&gt;*Messages*&lt;/code&gt; とするやり方はうまくいかず(&lt;code&gt;*Messages*&lt;/code&gt;バッファが read-only になっていて書き込めない)、
+&lt;code&gt;message&lt;/code&gt; 関数を使うことになりました。&lt;/p&gt;
+
+&lt;p&gt;なので出力先バッファを用意しなきゃいけないですが、
+自分で管理するのは面倒なので &lt;code&gt;with-temp-buffer&lt;/code&gt; を使ってみます。
+これを使うと新たなバッファが作られ、一連の処理が終わったあとに破棄してくれます。
+カレントバッファが切り替わってしまうので今回の目的のためには
+元バッファの JavaScript コードを取得しておいて転記する必要があります。&lt;/p&gt;
+
+&lt;p&gt;ということで今回の成果物を以下の通りです。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;(defun jsmetrics ()
+    (if (derived-mode-p &#39;js-mode) ; JavaScript ファイルが js-mode で開かれることを前提として JavaScript のみを対象とする
+        (let ((jscode (buffer-string))) ; カレントバッファの内容を取得しておき
+            (with-temp-buffer
+                (insert jscode)         ; 一時バッファに書き込む
+                (call-process-region (point-min) (point-max) &amp;quot;js-metrics.sh&amp;quot; t t nil) ; 一時バッファの内容を外部プロセスの結果で置き換える
+                (message (buffer-string)))))) ; 結果をエコーエリアに表示
+
+(add-hook &#39;js-mode-hook
+    (lambda () (add-hook &#39;after-save-hook &#39;jsmetrics)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;まとめ:be4749ace7856f2106f2c84e7a92ff65&#34;&gt;まとめ&lt;/h1&gt;
+
+&lt;p&gt;標準入出力という偉大なインタフェースのおかげで Emacs Lisp 内で完結させる必要がなく、
+他言語のモジュールを利用できるのが素晴らしいです。&lt;/p&gt;
 </description>
     </item>
     
