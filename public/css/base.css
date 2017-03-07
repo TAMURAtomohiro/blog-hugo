@@ -1,0 +1,85 @@
+pre {
+  background-color: #d7ccc8 !important;
+  padding: 10px !important;
+  font-family: 'Droid Sans Mono', monospace !important;
+}
+
+h1 {
+  font-size: 1.7rem;
+  padding: 10px;
+  background-color: #90caf9;
+}
+
+h2 {
+  font-size: 1.3rem;
+  padding: 7px;
+  background-color: #bbdefb;
+}
+
+li:before {
+  content: "- ";
+}
+
+p:not(:first-child) {
+  padding-top: 10px;
+}
+
+.castaway-header-bar nav{
+  height: 128px;
+}
+
+.castaway-site-logo {
+  background: url('/assets/logo.jpg') center / cover;
+  cursor: pointer;
+  color: white;
+}
+
+.castaway-site-title {
+  font-size: 1.5rem !important;
+  display: table;
+}
+.castaway-site-title > * {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.castaway-card-link {
+  cursor: pointer;
+}
+
+.castaway-card {
+  margin: 5px;
+  width: 100% !important;
+}
+
+.castaway-date-published {
+  margin-bottom: 5px;
+}
+.castaway-date-published > *{
+  vertical-align: middle;
+}
+
+.castaway-card-title {
+  font-size: 2rem !important;
+  color: white;
+}
+
+.castaway-card-summary {
+  flex-grow: 3;
+}
+
+.castaway-card-footer > * {
+  vertical-align: middle;
+}
+
+.game-screenshot {
+  margin: 0 !important;
+}
+.game-screenshot img {
+  width: 100%;
+}
+
+.castaway-md-icon {
+  vertical-align: bottom;
+}
+

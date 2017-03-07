@@ -2,29 +2,40 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://tamura.goga.co.jp/</loc>
-    <lastmod>2016-02-22T16:16:21+09:00</lastmod>
-    <priority>0</priority>
+    <loc>https://tmrtmhr.info/tech/hugo-with-material-icon/</loc>
+    <lastmod>2017-03-08T08:52:50+09:00</lastmod>
   </url>
   
   <url>
-    <loc>http://tamura.goga.co.jp/callProcessOnEmacs/</loc>
+    <loc>https://tmrtmhr.info/tech/call-process-on-emacs/</loc>
     <lastmod>2016-02-22T16:16:21+09:00</lastmod>
   </url>
   
   <url>
-    <loc>http://tamura.goga.co.jp/Angular2_WebComponents/</loc>
+    <loc>https://tmrtmhr.info/tech/angular2-web-components/</loc>
     <lastmod>2016-02-22T16:08:13+09:00</lastmod>
   </url>
   
   <url>
-    <loc>http://tamura.goga.co.jp/staticSiteGeneratorComparison/</loc>
+    <loc>https://tmrtmhr.info/tech/static-site-generator-comparison/</loc>
     <lastmod>2015-12-08T15:08:00+09:00</lastmod>
   </url>
   
   <url>
-    <loc>http://tamura.goga.co.jp/whyStaticWebsiteGeneratorsAreTheNextBigThing/</loc>
+    <loc>https://tmrtmhr.info/tech/why-static-website-generators-are-the-next-big-thing/</loc>
     <lastmod>2015-11-30T14:20:55+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tmrtmhr.info/tech/</loc>
+    <lastmod>2017-03-08T08:52:50+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tmrtmhr.info/</loc>
+    <lastmod>2017-03-08T08:52:50+09:00</lastmod>
+    <priority>0</priority>
   </url>
   
 </urlset>

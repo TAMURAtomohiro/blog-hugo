@@ -1,9 +1,9 @@
 +++
-date = "2016-02-22T16:06:53+09:00"
 draft = true
 title = "書きかけのメモ"
-
+date = "2016-02-22T16:06:53+09:00"
 +++
+<!--more-->
 
 [Angular2 のデザインドキュメント](https://drive.google.com/drive/u/0/folders/0B7Ovm8bUYiUDR29iSkEyMk5pVUk)
 

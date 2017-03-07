@@ -1,4 +1,10 @@
-baseurl = "http://tamura.goga.co.jp/"
-languageCode = "ja-JP"
+baseurl = "https://tmrtmhr.info/"
+description = "ブログ"
+languagecode = "ja-JP"
 title = "嵐の小舟より"
-#theme = "hugo-zen"
+theme = "castaway"
+categories = [ "Game", "Tech" ]
+paginate = 9
+googleAnalytics = "UA-92780964-1"
+[params]
+headerCover = "img/logo.jpg"

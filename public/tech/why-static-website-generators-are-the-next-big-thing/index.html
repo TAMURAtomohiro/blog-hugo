@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.18.1" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css">
+
+  
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script>
+          
+<link rel="stylesheet" href="/css/base.css">
+
+<link rel="alternate" href="/index.xml" type="application/rss+xml" title="嵐の小舟より">
+<title>なぜ静的サイト配信が重要となるか - 嵐の小舟より</title>
+</head>
+<body>
+  
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-92780964-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+  <div class="">
+  <header class="castaway-header-bar">
+    <nav>
+      <div class="nav-wrapper castaway-site-logo">
+        <div>
+          <a href="/" class="brand-logo right">
+            <i class="material-icons" style="margin-right: 5px;">rowing</i>
+            <span class="castaway-site-title">嵐の小舟より</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  
+
+
+<section id="main">
+  <div class="row">
+    <div class="col s12 m12 l6 offset-l3">
+
+      <article itemscope itemtype="http://schema.org/Blog" class="card castaway-card">
+
+        <div class="card-title indigo darken-3 castaway-card-title">
+          <div class="card-content">
+            <div class="white-text" itemprop="headline">
+              なぜ静的サイト配信が重要となるか
+            </div>
+          </div>
+        </div>
+
+        <div class="card-content">
+          <div class="castaway-date-published">
+            <span>公開日：</span>
+            <i class="material-icons">today</i>
+            <time itemprop="datePublished" datetime="2015-11-30">2015/11/30</time>
+          </div>
+          
+          
+          <div class="castaway-card-content mdl-card__supporting-text mdl-color-text--grey-700">
+            <p>Smashing Magazine の
+<a href="http://www.smashingmagazine.com/2015/11/modern-static-website-generators-next-big-thing/">Why Static Website Generators Are The Next Big Thing</a>
+という記事を読んでの、自分の理解のためのメモです。
+直訳というわけでもなく、独自研究が含まれる恐れがあります。
+</p>
+
+<h1 id="概要">概要</h1>
+
+<p>現在の CMS はサーバサイドで動的にHTMLを生成するアプローチが主流ですが、
+ブラウザを取り巻く環境の変化や、CDN との兼ね合いで、
+静的HTMLを配信してJavaScriptで書き換えるアプローチが重要になりそうです。</p>
+
+<h1 id="サーバサイドで動的なhtml生成を行なうアプローチ">サーバサイドで動的なHTML生成を行なうアプローチ</h1>
+
+<p>ここで想定しているのは WordPress のようなCMSです。
+コンテンツをデータベースに保存しておき、
+リクエストに応じて PHP などのスクリプトで動的に HTML を生成します。
+いわゆる LAMP スタックの構成となります。</p>
+
+<h1 id="クライアントサイドで動的なhtml生成を行なうアプローチ">クライアントサイドで動的なHTML生成を行なうアプローチ</h1>
+
+<p>タイトルでは静的サイトジェネレータと言ってますが、静的サイトだけでなく、動的なコンテンツも対象です。
+つまり、HTML と JavaScript コードを静的ファイルとしてユーザに配信したのち、
+JavaScript コードによりコメントなどの動的なコンテンツを取得して表示を切り替えるという手法です。
+いわゆる MEAN スタックのような構成で、データベースや API サーバを含むものも想定しています。</p>
+
+<h1 id="サーバサイドでの動的な-html-生成の問題点">サーバサイドでの動的な HTML 生成の問題点</h1>
+
+<h2 id="cdnと相性が悪い">CDNと相性が悪い</h2>
+
+<p>たとえばログインが必要なコンテンツでは、ユーザのログイン状態に応じてレスポンスが異なります。
+また、コメント機能のついたサイトでは、誰かがコメントするたびに返却されるレスポンスが変わることになります。
+このように、サーバサイド動的HTML生成では、
+ある URL に対して返却されるレスポンスがデータベースや Cookie の状態などに依存するため、
+CDN を利用しようと思うと、キャッシュの管理が非常に難しくなります。</p>
+
+<p>一方クライアントサイド動的HTML生成では、ある URL に対応するレスポンスは一意であり、
+デプロイのタイミングで CDN のキャッシュを更新すればよいため、管理が容易です。</p>
+
+<h2 id="遅い">遅い</h2>
+
+<p>結局のところサーバサイド動的HTML生成のアプローチで
+どんなにパフォーマンスチューニングを施しても静的なHTML配信にはおよびません。
+ただし、ここで重視しているのはファーストビューが表示されるまでの時間で、
+すべてのコンテンツが読み込まれるまでの時間ではないことに注意してください。</p>
+
+<p>また、先に述べたようにサーバサイド動的HTML生成でのキャッシュ管理には難しい問題があり、
+パフォーマンスチューニングには多大なコストがかかります。</p>
+
+<p>パフォーマンスの重要性については
+<a href="http://news.mynavi.jp/news/2012/12/11/025/">ページが表示されるまでに3秒かかると57%のユーザが離脱する</a>
+(<a href="http://blog.smartbear.com/web-performance/the-cost-of-poor-web-performance-infographic/">元記事</a>)
+という調査に言及しています。
+スマートフォンで貧弱なネットワークを介しての閲覧が増えているため、配信の速さは昔よりも重要です。</p>
+
+<h1 id="歴史的経緯">歴史的経緯</h1>
+
+<p>WordPress が登場した当時は Ajax や DHTML が市民権を勝ち得ていませんでしたが、状況が変わりました。
+データベースの情報に応じてコンテンツを生成するために、
+従来はサーバサイドのスクリプトを利用する必要がありましたが、現在ではクライアントサイドで実現できます。</p>
+
+<h1 id="静的サイトジェネレータ普及のために何が足りないか">静的サイトジェネレータ普及のために何が足りないか？</h1>
+
+<p>現在、静的サイトジェネレータと呼ばれるツールはざっくり言って
+Markdown 形式で記述したコンテンツからHTMLを生成してGithubPagesで公開するためのものです(出力形式や公開先で違いはありますが)。
+エンジニアが黒い画面を見つめて使うもので、
+非エンジニアでもブラウザ上で使えるリッチなエディタや、
+複数ユーザを管理するための認証機構などは含まれていません。
+あるいは、好みのデザインを探せるマーケットプレイスのようなコミュニティも欲しいところです。</p>
+
+<h1 id="静的html配信に向かないもの">静的HTML配信に向かないもの</h1>
+
+<p>大量のデータから検索とフィルタリングで生成されるコンテンツでは、
+ユーザに配信してから処理するわけにもいかないので、
+サーバサイドでの処理が必要になります。</p>
+
+<p>また、リアルタイム性が高く頻繁に更新されるようなコンテンツでも、
+更新のたびに HTML を生成し直すことは現実的でないため、
+静的HTMLでの配信ではなく API 経由でデータベースを参照するような形になるでしょう。</p>
+
+<h1 id="まとめ">まとめ</h1>
+
+<p>静的サイトジェネレータというツール群にはまだ足りない部分がありますが、
+静的サイト配信という手法は速度や CDN を利用したスケーラビリティの面で有利なので、
+今後ますます重要になりそうです。</p>
+
+<!--
+未調査ですが[Dato](http://www.leanpanda.com/blog/2015/10/13/dato-cms-static-website/)というのもあります。
+スケーラビリティは期間限定のキャンペーンサイトなどで必要になります。
+-->
+          </div>
+        </div>
+          
+          <div class="card-action castaway-card-footer">
+            <a class="btn waves-effect waves-light" href="/">サイトトップ</a>
+          </div>            
+
+      </article>
+        
+    </div>
+
+    </div>
+  </div>
+</section>
+
+
+</div>
+</body>
+</html>
+

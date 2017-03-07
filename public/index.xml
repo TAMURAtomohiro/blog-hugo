@@ -2,32 +2,101 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>嵐の小舟より</title>
-    <link>http://tamura.goga.co.jp/</link>
+    <link>https://tmrtmhr.info/index.xml</link>
     <description>Recent content on 嵐の小舟より</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <lastBuildDate>Mon, 22 Feb 2016 16:16:21 +0900</lastBuildDate>
-    <atom:link href="http://tamura.goga.co.jp/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 08 Mar 2017 08:52:50 +0900</lastBuildDate>
+    <atom:link href="https://tmrtmhr.info/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Hugo でマテリアルアイコンを使うための ShortCode</title>
+      <link>https://tmrtmhr.info/tech/hugo-with-material-icon/</link>
+      <pubDate>Wed, 08 Mar 2017 08:52:50 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/hugo-with-material-icon/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://gohugo.io/&#34;&gt;Hugo&lt;/a&gt; で任意の HTML を生成したい場合は &lt;a href=&#34;https://gohugo.io/extras/shortcodes/&#34;&gt;ShortCode&lt;/a&gt; を書くことになります。&lt;/p&gt;
+
+&lt;p&gt;本サイトでは使い道はさておきマテリアルアイコンを読み込んでいるので、
+ShortCode で使えるようにしてみました。
+&lt;/p&gt;
+
+&lt;h1 id=&#34;hugo-からマテリアルアイコンを使う手順&#34;&gt;Hugo からマテリアルアイコンを使う手順&lt;/h1&gt;
+
+&lt;p&gt;まず &lt;code&gt;themes/${テーマ名}/layouts/partials/header.html&lt;/code&gt; などに以下を追記してマテリアルアイコンのフォントを読み込みます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;https://fonts.googleapis.com/icon?family=Material+Icons&amp;quot;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;layouts/shortcodes/md-icon.html&lt;/code&gt; として以下の内容を用意し、ShortCode として使えるようにします。&lt;/p&gt;
+
+&lt;script src=&#34;//gist.github.com/tmrtmhr/90cff33e3e18fbc10f8daf9dac753b30.js&#34;&gt;&lt;/script&gt;
+
+&lt;p&gt;ここで、&lt;code&gt;vertical-align: bottom;&lt;/code&gt; はアイコンと文章の高さをそろえるための指定です。
+また、&lt;code&gt;.Get 0&lt;/code&gt; で ShortCode の引数を取得しています。&lt;/p&gt;
+
+&lt;p&gt;Markdown ファイル中では以下のように書きます。&lt;code&gt;favorite&lt;/code&gt; が &lt;code&gt;.Get 0&lt;/code&gt; の部分に埋め込まれた HTML が生成されます。&lt;/p&gt;
+
+&lt;p&gt;{{&amp;lt; md-icon favorite &amp;gt;}}&lt;/p&gt;
+
+&lt;p&gt;&lt;i class=&#34;material-icons&#34; style=&#34;vertical-align: bottom;&#34;&gt;
+  favorite
+&lt;/i&gt;
+&lt;i class=&#34;material-icons&#34; style=&#34;vertical-align: bottom;&#34;&gt;
+  favorite
+&lt;/i&gt;
+&lt;i class=&#34;material-icons&#34; style=&#34;vertical-align: bottom;&#34;&gt;
+  favorite
+&lt;/i&gt;
+
+表示はこんな感じです
+&lt;i class=&#34;material-icons&#34; style=&#34;vertical-align: bottom;&#34;&gt;
+  favorite
+&lt;/i&gt;
+&lt;i class=&#34;material-icons&#34; style=&#34;vertical-align: bottom;&#34;&gt;
+  favorite
+&lt;/i&gt;
+&lt;i class=&#34;material-icons&#34; style=&#34;vertical-align: bottom;&#34;&gt;
+  favorite
+&lt;/i&gt;
+&lt;/p&gt;
+
+&lt;h1 id=&#34;なぜ-raw-html-ではなく-shortcode-を書くのか&#34;&gt;なぜ Raw HTML ではなく ShortCode を書くのか&lt;/h1&gt;
+
+&lt;p&gt;Markdown は &lt;a href=&#34;http://daringfireball.net/projects/markdown/syntax#html&#34;&gt;HTMLを埋め込める&lt;/a&gt;ため、
+アイコン表示の HTML (前述の Gist)を直接書いても表示されます。&lt;/p&gt;
+
+&lt;p&gt;ではなぜ ShortCode として用意するのかというと、
+&lt;a href=&#34;https://gohugo.io/extras/shortcodes/&#34;&gt;公式サイトの説明&lt;/a&gt;にある通り、
+以下のような利点があるためです。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;定型のHTMLを毎回書かずにすむ&lt;/li&gt;
+&lt;li&gt;ShortCode を変更することで該当の HTML 部分がすべて置き換わるので更新が楽にすむ&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;そんなわけで、一生に一度の HTML だと心に決めている、というのでなければ、
+ShortCode 化して再利用するほうが良いかと思います。&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Emacs から外部プロセスを呼び出して結果をエコーエリアに表示する</title>
-      <link>http://tamura.goga.co.jp/callProcessOnEmacs/</link>
+      <link>https://tmrtmhr.info/tech/call-process-on-emacs/</link>
       <pubDate>Mon, 22 Feb 2016 16:16:21 +0900</pubDate>
       
-      <guid>http://tamura.goga.co.jp/callProcessOnEmacs/</guid>
-      <description>
-
-&lt;p&gt;学生時代からの習慣と宗教上の理由から普段使いのエディタは Emacs
+      <guid>https://tmrtmhr.info/tech/call-process-on-emacs/</guid>
+      <description>&lt;p&gt;学生時代からの習慣と宗教上の理由から普段使いのエディタは Emacs
 (ここでは &lt;a href=&#34;http://emacsformacosx.com/&#34;&gt;GNU Emacs for Mac OS X&lt;/a&gt;)
 です。&lt;/p&gt;
 
 &lt;p&gt;設定ファイルを除いて自分で Emacs Lisp を書いて機能を追加したことはこれまで無かったのですが、
-このたび必要にかられて追加いたしました。&lt;/p&gt;
+このたび必要にかられて追加いたしました。
+&lt;/p&gt;
 
 &lt;p&gt;ど素人なので作法やらベストプラクティスやらがわからないですが、まあ動きます。
 &lt;a href=&#34;https://gist.github.com/TAMURAtomohiro/18cd0fb0ae33baa48625&#34;&gt;Gist&lt;/a&gt; にも置いてあります。&lt;/p&gt;
 
-&lt;h1 id=&#34;経緯:be4749ace7856f2106f2c84e7a92ff65&#34;&gt;経緯&lt;/h1&gt;
+&lt;h1 id=&#34;経緯&#34;&gt;経緯&lt;/h1&gt;
 
 &lt;p&gt;とあるプロジェクトで JavaScript のソフトウェアメトリクスを測り、
 コード改善のときの目安とすることになりました。
@@ -38,7 +107,7 @@
 before-save-hook などで保存時に何かしらの処理をフックできることは知っていましたので、
 前述の plato を呼んで結果を表示するくらいのことはすぐできるだろう……と作り始めました。&lt;/p&gt;
 
-&lt;h1 id=&#34;メトリクスを取り出す:be4749ace7856f2106f2c84e7a92ff65&#34;&gt;メトリクスを取り出す&lt;/h1&gt;
+&lt;h1 id=&#34;メトリクスを取り出す&#34;&gt;メトリクスを取り出す&lt;/h1&gt;
 
 &lt;p&gt;plato には「結果を標準出力に出す」ようなオプションがなかったため、
 とりあえずごり押しで plato の結果を取り出してみます。
@@ -53,7 +122,7 @@ plato -d ${REPORT_DIR} ${TMPFILE} &amp;gt; /dev/null
 grep &#39;class=&amp;quot;stat&amp;quot;&#39; ${REPORT_DIR}/index.html | tail -n 1 | sed -e &amp;quot;s/&amp;lt;p class=\&amp;quot;stat\&amp;quot;&amp;gt;//g&amp;quot; | sed -e &amp;quot;s/&amp;lt;\/p&amp;gt;//g&amp;quot; | sed -e &amp;quot;s/ //g&amp;quot; | tr -d &#39;\n&#39;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h1 id=&#34;現在のバッファの内容を外部プロセスに渡し-結果をエコーエリアに表示する:be4749ace7856f2106f2c84e7a92ff65&#34;&gt;現在のバッファの内容を外部プロセスに渡し、結果をエコーエリアに表示する&lt;/h1&gt;
+&lt;h1 id=&#34;現在のバッファの内容を外部プロセスに渡し-結果をエコーエリアに表示する&#34;&gt;現在のバッファの内容を外部プロセスに渡し、結果をエコーエリアに表示する&lt;/h1&gt;
 
 &lt;p&gt;&lt;code&gt;call-process-region&lt;/code&gt; という関数を使うと現在のバッファの内容を標準入力として外部プロセスに渡せるのでこれを使います。
 ただ、エコーエリアに表示しようとして、結果の出力先バッファを &lt;code&gt;*Messages*&lt;/code&gt; とするやり方はうまくいかず(&lt;code&gt;*Messages*&lt;/code&gt;バッファが read-only になっていて書き込めない)、
@@ -79,32 +148,30 @@ grep &#39;class=&amp;quot;stat&amp;quot;&#39; ${REPORT_DIR}/index.html | tail -n
     (lambda () (add-hook &#39;after-save-hook &#39;jsmetrics)))
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h1 id=&#34;まとめ:be4749ace7856f2106f2c84e7a92ff65&#34;&gt;まとめ&lt;/h1&gt;
+&lt;h1 id=&#34;まとめ&#34;&gt;まとめ&lt;/h1&gt;
 
 &lt;p&gt;標準入出力という偉大なインタフェースのおかげで Emacs Lisp 内で完結させる必要がなく、
-他言語のモジュールを利用できるのが素晴らしいです。&lt;/p&gt;
-</description>
+他言語のモジュールを利用できるのが素晴らしいです。&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>Angular2 から Web Components を使う</title>
-      <link>http://tamura.goga.co.jp/Angular2_WebComponents/</link>
+      <link>https://tmrtmhr.info/tech/angular2-web-components/</link>
       <pubDate>Mon, 22 Feb 2016 16:08:13 +0900</pubDate>
       
-      <guid>http://tamura.goga.co.jp/Angular2_WebComponents/</guid>
-      <description>
-
-&lt;p&gt;&lt;a href=&#34;https://angular.io/&#34;&gt;Angular2&lt;/a&gt;が
+      <guid>https://tmrtmhr.info/tech/angular2-web-components/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://angular.io/&#34;&gt;Angular2&lt;/a&gt;が
 &lt;a href=&#34;http://angularjs.blogspot.jp/2015/12/angular-2-beta.html&#34;&gt;昨年12月に Beta リリース&lt;/a&gt;されたため、
 色々触りながら調べています。&lt;/p&gt;
 
 &lt;p&gt;Angular2 の設計ドキュメントのひとつ(&lt;a href=&#34;https://docs.google.com/document/d/1kpuR512G1b0D8egl9245OHaG0cFh0ST0ekhD_g8sxtI/edit#heading=h.ptbnyo3pqsmq&#34;&gt;Data Binding with Web Components&lt;/a&gt;)
 を見かけ、Web Components との併用を考慮しているようだったので、
-使い方を調べてみることにしました。&lt;/p&gt;
+使い方を調べてみることにしました。
+&lt;/p&gt;
 
 &lt;p&gt;この記事の&lt;a href=&#34;https://github.com/TAMURAtomohiro/angular2-with-web-components&#34;&gt;サンプルコード(TypeScript)&lt;/a&gt;をGitHubで公開しています。&lt;/p&gt;
 
-&lt;h1 id=&#34;題材:39f18a51edff96d02b28f0dac99ffb70&#34;&gt;題材&lt;/h1&gt;
+&lt;h1 id=&#34;題材&#34;&gt;題材&lt;/h1&gt;
 
 &lt;p&gt;&lt;a href=&#34;https://elements.polymer-project.org/elements/google-map&#34;&gt;Google Map Web Component&lt;/a&gt;(以下 google-map と表記) を Angular2 から使用します。
 やりたいことは以下の三種類です。&lt;/p&gt;
@@ -115,7 +182,7 @@ grep &#39;class=&amp;quot;stat&amp;quot;&#39; ${REPORT_DIR}/index.html | tail -n
 &lt;li&gt;DOM から上がってくるイベントを捕捉する&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h1 id=&#34;コンポーネントの構成:39f18a51edff96d02b28f0dac99ffb70&#34;&gt;コンポーネントの構成&lt;/h1&gt;
+&lt;h1 id=&#34;コンポーネントの構成&#34;&gt;コンポーネントの構成&lt;/h1&gt;
 
 &lt;p&gt;Angular2 では Component(コンポーネント)という単位でモジュールを分けるようになりました。
 ざっくり言うとテンプレートHTMLを持つ Directive を Component と呼びます。&lt;/p&gt;
@@ -126,7 +193,7 @@ grep &#39;class=&amp;quot;stat&amp;quot;&#39; ${REPORT_DIR}/index.html | tail -n
 
 &lt;p&gt;&lt;code&gt;GoogleMapWebComponent&lt;/code&gt; は Angular2 から google-map を触るために DOM 要素を保持します。&lt;/p&gt;
 
-&lt;h1 id=&#34;dom-のプロパティを介して-web-components-に値を渡す:39f18a51edff96d02b28f0dac99ffb70&#34;&gt;DOM のプロパティを介して Web Components に値を渡す&lt;/h1&gt;
+&lt;h1 id=&#34;dom-のプロパティを介して-web-components-に値を渡す&#34;&gt;DOM のプロパティを介して Web Components に値を渡す&lt;/h1&gt;
 
 &lt;p&gt;&lt;code&gt;AppComponent&lt;/code&gt; のテンプレートにある &lt;code&gt;[latitude]=&amp;quot;lat&amp;quot;&lt;/code&gt; のような記述により google-map に Angular の値を渡すことができます。&lt;/p&gt;
 
@@ -141,7 +208,7 @@ grep &#39;class=&amp;quot;stat&amp;quot;&#39; ${REPORT_DIR}/index.html | tail -n
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h2 id=&#34;記法:39f18a51edff96d02b28f0dac99ffb70&#34;&gt;[ ] 記法&lt;/h2&gt;
+&lt;h2 id=&#34;記法&#34;&gt;[ ] 記法&lt;/h2&gt;
 
 &lt;p&gt;&lt;code&gt;[latitude]=&amp;quot;lat&amp;quot;&lt;/code&gt; は property binding と呼ばれ、
 DOM のプロパティに右辺の式を一方向バインディングするという意味を持ちます。&lt;/p&gt;
@@ -161,9 +228,9 @@ DOM のプロパティに右辺の式を一方向バインディングすると�
 &lt;code&gt;@Input&lt;/code&gt; デコレータを書くとコンポーネントのプロパティに設定するようになり、
 DOM のプロパティに設定されなくなってしまいます。&lt;/p&gt;
 
-&lt;h1 id=&#34;dom-のメソッドを呼ぶ:39f18a51edff96d02b28f0dac99ffb70&#34;&gt;DOM のメソッドを呼ぶ&lt;/h1&gt;
+&lt;h1 id=&#34;dom-のメソッドを呼ぶ&#34;&gt;DOM のメソッドを呼ぶ&lt;/h1&gt;
 
-&lt;h2 id=&#34;dom-を取得する:39f18a51edff96d02b28f0dac99ffb70&#34;&gt;DOM を取得する&lt;/h2&gt;
+&lt;h2 id=&#34;dom-を取得する&#34;&gt;DOM を取得する&lt;/h2&gt;
 
 &lt;p&gt;DOM のメソッドを呼ぶにはまず DOM を取得する必要があります。
 (一休さんで言うところの、虎を捕まえるからまず屏風から虎を追い出してくれ、みたいな話です)&lt;/p&gt;
@@ -178,7 +245,7 @@ DOM のプロパティに設定されなくなってしまいます。&lt;/p&gt;
 
 &lt;p&gt;ルート要素が取得できるため、これをコンポーネントのプロパティに保持しておきます。&lt;/p&gt;
 
-&lt;h2 id=&#34;子コンポーネントのプロパティに触る:39f18a51edff96d02b28f0dac99ffb70&#34;&gt;子コンポーネントのプロパティに触る&lt;/h2&gt;
+&lt;h2 id=&#34;子コンポーネントのプロパティに触る&#34;&gt;子コンポーネントのプロパティに触る&lt;/h2&gt;
 
 &lt;p&gt;子コンポーネントにアクセスするには
 &lt;a href=&#34;https://angular.io/docs/js/latest/api/core/ViewChild-var.html&#34;&gt;ViewChild&lt;/a&gt; などを使います。
@@ -192,7 +259,7 @@ googlemap: GoogleMapWebComponent;
 子コンポーネントの作成が親コンポーネントよりあとに起こるため、
 &lt;code&gt;ngAfterViewInit&lt;/code&gt; というメソッドが呼ばれた時点で &lt;code&gt;googlemap&lt;/code&gt; にセットされます。&lt;/p&gt;
 
-&lt;h1 id=&#34;dom-から上がってくるイベントを捕捉する:39f18a51edff96d02b28f0dac99ffb70&#34;&gt;DOM から上がってくるイベントを捕捉する&lt;/h1&gt;
+&lt;h1 id=&#34;dom-から上がってくるイベントを捕捉する&#34;&gt;DOM から上がってくるイベントを捕捉する&lt;/h1&gt;
 
 &lt;p&gt;&lt;code&gt;( )&lt;/code&gt;記法でイベント名を指定し、対応する処理を右辺に書きます。
 たとえば &lt;code&gt;google-map-dragend&lt;/code&gt; イベントを捕捉するには以下のように書きます。
@@ -210,9 +277,9 @@ googlemap: GoogleMapWebComponent;
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h1 id=&#34;プロパティバインディングの捕捉:39f18a51edff96d02b28f0dac99ffb70&#34;&gt;プロパティバインディングの捕捉&lt;/h1&gt;
+&lt;h1 id=&#34;プロパティバインディングの捕捉&#34;&gt;プロパティバインディングの捕捉&lt;/h1&gt;
 
-&lt;h2 id=&#34;記法の変換:39f18a51edff96d02b28f0dac99ffb70&#34;&gt;{{ }} 記法の変換&lt;/h2&gt;
+&lt;h2 id=&#34;記法の変換&#34;&gt;{{ }} 記法の変換&lt;/h2&gt;
 
 &lt;p&gt;Angular.js に慣れていると以下のように書きたくなるかもしれません。&lt;/p&gt;
 
@@ -235,48 +302,46 @@ Angular2 は &lt;code&gt;{{ }}&lt;/code&gt; 記法を以下のように &lt;code
 &lt;pre&gt;&lt;code&gt;&amp;lt;div [textContent]=&amp;quot;&#39;My Name is &#39; + name&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h2 id=&#34;属性の削除:39f18a51edff96d02b28f0dac99ffb70&#34;&gt;属性の削除&lt;/h2&gt;
+&lt;h2 id=&#34;属性の削除&#34;&gt;属性の削除&lt;/h2&gt;
 
 &lt;p&gt;&lt;code&gt;[latitude]&lt;/code&gt; や &lt;code&gt;(google-map-dragend)&lt;/code&gt; などの属性は Angular2 によって削除されるため、
 ブラウザの開発コンソールで HTML を見ても載っていません。&lt;/p&gt;
 
-&lt;h1 id=&#34;まとめ:39f18a51edff96d02b28f0dac99ffb70&#34;&gt;まとめ&lt;/h1&gt;
+&lt;h1 id=&#34;まとめ&#34;&gt;まとめ&lt;/h1&gt;
 
 &lt;p&gt;Angular2 から Web Components を使ってみました。
 対応するコンポーネントを作って DOM 要素に触れるようにしておけば、
 あとはコンポーネント間のやりとりで実現できます。&lt;/p&gt;
 
-&lt;h1 id=&#34;参照:39f18a51edff96d02b28f0dac99ffb70&#34;&gt;参照&lt;/h1&gt;
+&lt;h1 id=&#34;参照&#34;&gt;参照&lt;/h1&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://angular.io/docs/ts/latest/guide/template-syntax.html&#34;&gt;Angular2: Template Syntax&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;http://blog.mgechev.com/2016/01/23/angular2-viewchildren-contentchildren-difference-viewproviders&#34;&gt;ViewChildren and ContentChildren in Angular 2&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-</description>
+&lt;/ul&gt;</description>
     </item>
     
     <item>
       <title>静的サイトジェネレータの生成時間比較</title>
-      <link>http://tamura.goga.co.jp/staticSiteGeneratorComparison/</link>
+      <link>https://tmrtmhr.info/tech/static-site-generator-comparison/</link>
       <pubDate>Tue, 08 Dec 2015 15:08:00 +0900</pubDate>
       
-      <guid>http://tamura.goga.co.jp/staticSiteGeneratorComparison/</guid>
-      <description>
-
-&lt;p&gt;エンジニア界隈ではどうもブログを作る目的で静的サイトジェネレータというものが使われている、
-と聞いたため、せっかくなので使ってみることにしました。&lt;/p&gt;
+      <guid>https://tmrtmhr.info/tech/static-site-generator-comparison/</guid>
+      <description>&lt;p&gt;エンジニア界隈ではどうもブログを作る目的で静的サイトジェネレータというものが使われている、
+と聞いたため、せっかくなので使ってみることにしました。
+&lt;/p&gt;
 
 &lt;p&gt;調べていく過程で&lt;a href=&#34;https://gohugo.io/overview/introduction/&#34;&gt;Hugo&lt;/a&gt;のサイトに
 「Hugoは速いよ！」という内容の動画を見つけたり、
 速度が原因で Hugo に移行したブログ記事を見かけたりして、
 実行時間の伸び方が気になったのでざっくり確認してみます。&lt;/p&gt;
 
-&lt;h1 id=&#34;対象としたジェネレータについて:a3f1f0d65ed4ea09eb7c2931fc64911b&#34;&gt;対象としたジェネレータについて&lt;/h1&gt;
+&lt;h1 id=&#34;対象としたジェネレータについて&#34;&gt;対象としたジェネレータについて&lt;/h1&gt;
 
 &lt;p&gt;&lt;a href=&#34;https://www.staticgen.com/&#34;&gt;StaticGen&lt;/a&gt;のスター数が多いものから選びました。
 2015/11月の時点では Jekyll, GitBook, Octopress, Hexo, Hugo, Pelican の順です。&lt;/p&gt;
 
-&lt;h1 id=&#34;測定環境:a3f1f0d65ed4ea09eb7c2931fc64911b&#34;&gt;測定環境&lt;/h1&gt;
+&lt;h1 id=&#34;測定環境&#34;&gt;測定環境&lt;/h1&gt;
 
 &lt;ul&gt;
 &lt;li&gt;計算機&lt;/li&gt;
@@ -352,7 +417,7 @@ Angular2 は &lt;code&gt;{{ }}&lt;/code&gt; 記法を以下のように &lt;code
 &lt;/tbody&gt;
 &lt;/table&gt;
 
-&lt;h1 id=&#34;測定方法:a3f1f0d65ed4ea09eb7c2931fc64911b&#34;&gt;測定方法&lt;/h1&gt;
+&lt;h1 id=&#34;測定方法&#34;&gt;測定方法&lt;/h1&gt;
 
 &lt;p&gt;以下の手順を繰り返し、5回計測して単純平均を取りました。&lt;/p&gt;
 
@@ -370,7 +435,7 @@ Angular2 は &lt;code&gt;{{ }}&lt;/code&gt; 記法を以下のように &lt;code
 &lt;/ul&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h1 id=&#34;生成時間測定結果:a3f1f0d65ed4ea09eb7c2931fc64911b&#34;&gt;生成時間測定結果&lt;/h1&gt;
+&lt;h1 id=&#34;生成時間測定結果&#34;&gt;生成時間測定結果&lt;/h1&gt;
 
 &lt;ul&gt;
 &lt;li&gt;静的サイトジェネレータの CPU 時間(秒)&lt;/li&gt;
@@ -432,13 +497,13 @@ Angular2 は &lt;code&gt;{{ }}&lt;/code&gt; 記法を以下のように &lt;code
 &lt;/tbody&gt;
 &lt;/table&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://tamura.goga.co.jp/img/staticSiteGeneratorComparison.png&#34; alt=&#34;静的サイトジェネレータの実行時間グラフ&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://tmrtmhr.info/img/staticSiteGeneratorComparison.png&#34; alt=&#34;静的サイトジェネレータの実行時間グラフ&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;確かに Hugo が速いです。
 CPU 時間も短いですが、Hugo はどこかで並列処理をしているらしくマルチコアを活用できているようだったため、
 実時間ではもう少し速くなるはずです。&lt;/p&gt;
 
-&lt;h1 id=&#34;そもそも生成時間が長いと何が困るのか:a3f1f0d65ed4ea09eb7c2931fc64911b&#34;&gt;そもそも生成時間が長いと何が困るのか？&lt;/h1&gt;
+&lt;h1 id=&#34;そもそも生成時間が長いと何が困るのか&#34;&gt;そもそも生成時間が長いと何が困るのか？&lt;/h1&gt;
 
 &lt;p&gt;編集→確認のループが長くなりイライラします。
 記事を保存してから LiveReload で再読み込みが完了するまでの待ち時間が苦痛になりますし、
@@ -459,11 +524,11 @@ CPUを温めるために再生成するとか、生活の端々でいったん�
 
 &lt;p&gt;とりあえず自分は Hugo を使ってみます。&lt;/p&gt;
 
-&lt;h1 id=&#34;余談:a3f1f0d65ed4ea09eb7c2931fc64911b&#34;&gt;余談&lt;/h1&gt;
+&lt;h1 id=&#34;余談&#34;&gt;余談&lt;/h1&gt;
 
 &lt;p&gt;Octopress の時間は指数的に増えているように見えます。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://tamura.goga.co.jp/img/staticSiteGeneratorComparison-5000.png&#34; alt=&#34;静的サイトジェネレータの実行時間グラフ&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://tmrtmhr.info/img/staticSiteGeneratorComparison-5000.png&#34; alt=&#34;静的サイトジェネレータの実行時間グラフ&#34; /&gt;&lt;/p&gt;
 
 &lt;!-- 10000 記事では Hugo のサーバが起動しませんでした。 --&gt;
 
@@ -471,46 +536,44 @@ CPUを温めるために再生成するとか、生活の端々でいったん�
 
 &lt;!-- ERROR: 2015/11/16 Error: listen tcp 127.0.0.1:1313: socket: too many open files in system --&gt;
 
-&lt;!-- ``` --&gt;
-</description>
+&lt;!-- ``` --&gt;</description>
     </item>
     
     <item>
       <title>なぜ静的サイト配信が重要となるか</title>
-      <link>http://tamura.goga.co.jp/whyStaticWebsiteGeneratorsAreTheNextBigThing/</link>
+      <link>https://tmrtmhr.info/tech/why-static-website-generators-are-the-next-big-thing/</link>
       <pubDate>Mon, 30 Nov 2015 14:20:55 +0900</pubDate>
       
-      <guid>http://tamura.goga.co.jp/whyStaticWebsiteGeneratorsAreTheNextBigThing/</guid>
-      <description>
-
-&lt;p&gt;Smashing Magazine の
+      <guid>https://tmrtmhr.info/tech/why-static-website-generators-are-the-next-big-thing/</guid>
+      <description>&lt;p&gt;Smashing Magazine の
 &lt;a href=&#34;http://www.smashingmagazine.com/2015/11/modern-static-website-generators-next-big-thing/&#34;&gt;Why Static Website Generators Are The Next Big Thing&lt;/a&gt;
 という記事を読んでの、自分の理解のためのメモです。
-直訳というわけでもなく、独自研究が含まれる恐れがあります。&lt;/p&gt;
+直訳というわけでもなく、独自研究が含まれる恐れがあります。
+&lt;/p&gt;
 
-&lt;h1 id=&#34;概要:b18f011c14223c1c8e900075a4dc18a6&#34;&gt;概要&lt;/h1&gt;
+&lt;h1 id=&#34;概要&#34;&gt;概要&lt;/h1&gt;
 
 &lt;p&gt;現在の CMS はサーバサイドで動的にHTMLを生成するアプローチが主流ですが、
 ブラウザを取り巻く環境の変化や、CDN との兼ね合いで、
 静的HTMLを配信してJavaScriptで書き換えるアプローチが重要になりそうです。&lt;/p&gt;
 
-&lt;h1 id=&#34;サーバサイドで動的なhtml生成を行なうアプローチ:b18f011c14223c1c8e900075a4dc18a6&#34;&gt;サーバサイドで動的なHTML生成を行なうアプローチ&lt;/h1&gt;
+&lt;h1 id=&#34;サーバサイドで動的なhtml生成を行なうアプローチ&#34;&gt;サーバサイドで動的なHTML生成を行なうアプローチ&lt;/h1&gt;
 
 &lt;p&gt;ここで想定しているのは WordPress のようなCMSです。
 コンテンツをデータベースに保存しておき、
 リクエストに応じて PHP などのスクリプトで動的に HTML を生成します。
 いわゆる LAMP スタックの構成となります。&lt;/p&gt;
 
-&lt;h1 id=&#34;クライアントサイドで動的なhtml生成を行なうアプローチ:b18f011c14223c1c8e900075a4dc18a6&#34;&gt;クライアントサイドで動的なHTML生成を行なうアプローチ&lt;/h1&gt;
+&lt;h1 id=&#34;クライアントサイドで動的なhtml生成を行なうアプローチ&#34;&gt;クライアントサイドで動的なHTML生成を行なうアプローチ&lt;/h1&gt;
 
 &lt;p&gt;タイトルでは静的サイトジェネレータと言ってますが、静的サイトだけでなく、動的なコンテンツも対象です。
 つまり、HTML と JavaScript コードを静的ファイルとしてユーザに配信したのち、
 JavaScript コードによりコメントなどの動的なコンテンツを取得して表示を切り替えるという手法です。
 いわゆる MEAN スタックのような構成で、データベースや API サーバを含むものも想定しています。&lt;/p&gt;
 
-&lt;h1 id=&#34;サーバサイドでの動的な-html-生成の問題点:b18f011c14223c1c8e900075a4dc18a6&#34;&gt;サーバサイドでの動的な HTML 生成の問題点&lt;/h1&gt;
+&lt;h1 id=&#34;サーバサイドでの動的な-html-生成の問題点&#34;&gt;サーバサイドでの動的な HTML 生成の問題点&lt;/h1&gt;
 
-&lt;h2 id=&#34;cdnと相性が悪い:b18f011c14223c1c8e900075a4dc18a6&#34;&gt;CDNと相性が悪い&lt;/h2&gt;
+&lt;h2 id=&#34;cdnと相性が悪い&#34;&gt;CDNと相性が悪い&lt;/h2&gt;
 
 &lt;p&gt;たとえばログインが必要なコンテンツでは、ユーザのログイン状態に応じてレスポンスが異なります。
 また、コメント機能のついたサイトでは、誰かがコメントするたびに返却されるレスポンスが変わることになります。
@@ -521,7 +584,7 @@ CDN を利用しようと思うと、キャッシュの管理が非常に難し�
 &lt;p&gt;一方クライアントサイド動的HTML生成では、ある URL に対応するレスポンスは一意であり、
 デプロイのタイミングで CDN のキャッシュを更新すればよいため、管理が容易です。&lt;/p&gt;
 
-&lt;h2 id=&#34;遅い:b18f011c14223c1c8e900075a4dc18a6&#34;&gt;遅い&lt;/h2&gt;
+&lt;h2 id=&#34;遅い&#34;&gt;遅い&lt;/h2&gt;
 
 &lt;p&gt;結局のところサーバサイド動的HTML生成のアプローチで
 どんなにパフォーマンスチューニングを施しても静的なHTML配信にはおよびません。
@@ -537,13 +600,13 @@ CDN を利用しようと思うと、キャッシュの管理が非常に難し�
 という調査に言及しています。
 スマートフォンで貧弱なネットワークを介しての閲覧が増えているため、配信の速さは昔よりも重要です。&lt;/p&gt;
 
-&lt;h1 id=&#34;歴史的経緯:b18f011c14223c1c8e900075a4dc18a6&#34;&gt;歴史的経緯&lt;/h1&gt;
+&lt;h1 id=&#34;歴史的経緯&#34;&gt;歴史的経緯&lt;/h1&gt;
 
 &lt;p&gt;WordPress が登場した当時は Ajax や DHTML が市民権を勝ち得ていませんでしたが、状況が変わりました。
 データベースの情報に応じてコンテンツを生成するために、
 従来はサーバサイドのスクリプトを利用する必要がありましたが、現在ではクライアントサイドで実現できます。&lt;/p&gt;
 
-&lt;h1 id=&#34;静的サイトジェネレータ普及のために何が足りないか:b18f011c14223c1c8e900075a4dc18a6&#34;&gt;静的サイトジェネレータ普及のために何が足りないか？&lt;/h1&gt;
+&lt;h1 id=&#34;静的サイトジェネレータ普及のために何が足りないか&#34;&gt;静的サイトジェネレータ普及のために何が足りないか？&lt;/h1&gt;
 
 &lt;p&gt;現在、静的サイトジェネレータと呼ばれるツールはざっくり言って
 Markdown 形式で記述したコンテンツからHTMLを生成してGithubPagesで公開するためのものです(出力形式や公開先で違いはありますが)。
@@ -552,7 +615,7 @@ Markdown 形式で記述したコンテンツからHTMLを生成してGithubPage
 複数ユーザを管理するための認証機構などは含まれていません。
 あるいは、好みのデザインを探せるマーケットプレイスのようなコミュニティも欲しいところです。&lt;/p&gt;
 
-&lt;h1 id=&#34;静的html配信に向かないもの:b18f011c14223c1c8e900075a4dc18a6&#34;&gt;静的HTML配信に向かないもの&lt;/h1&gt;
+&lt;h1 id=&#34;静的html配信に向かないもの&#34;&gt;静的HTML配信に向かないもの&lt;/h1&gt;
 
 &lt;p&gt;大量のデータから検索とフィルタリングで生成されるコンテンツでは、
 ユーザに配信してから処理するわけにもいかないので、
@@ -562,7 +625,7 @@ Markdown 形式で記述したコンテンツからHTMLを生成してGithubPage
 更新のたびに HTML を生成し直すことは現実的でないため、
 静的HTMLでの配信ではなく API 経由でデータベースを参照するような形になるでしょう。&lt;/p&gt;
 
-&lt;h1 id=&#34;まとめ:b18f011c14223c1c8e900075a4dc18a6&#34;&gt;まとめ&lt;/h1&gt;
+&lt;h1 id=&#34;まとめ&#34;&gt;まとめ&lt;/h1&gt;
 
 &lt;p&gt;静的サイトジェネレータというツール群にはまだ足りない部分がありますが、
 静的サイト配信という手法は速度や CDN を利用したスケーラビリティの面で有利なので、
@@ -571,8 +634,7 @@ Markdown 形式で記述したコンテンツからHTMLを生成してGithubPage
 &lt;!--
 未調査ですが[Dato](http://www.leanpanda.com/blog/2015/10/13/dato-cms-static-website/)というのもあります。
 スケーラビリティは期間限定のキャンペーンサイトなどで必要になります。
---&gt;
-</description>
+--&gt;</description>
     </item>
     
   </channel>

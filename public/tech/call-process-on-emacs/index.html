@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.18.1" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css">
+
+  
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script>
+          
+<link rel="stylesheet" href="/css/base.css">
+
+<link rel="alternate" href="/index.xml" type="application/rss+xml" title="嵐の小舟より">
+<title>Emacs から外部プロセスを呼び出して結果をエコーエリアに表示する - 嵐の小舟より</title>
+</head>
+<body>
+  
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-92780964-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+  <div class="">
+  <header class="castaway-header-bar">
+    <nav>
+      <div class="nav-wrapper castaway-site-logo">
+        <div>
+          <a href="/" class="brand-logo right">
+            <i class="material-icons" style="margin-right: 5px;">rowing</i>
+            <span class="castaway-site-title">嵐の小舟より</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  
+
+
+<section id="main">
+  <div class="row">
+    <div class="col s12 m12 l6 offset-l3">
+
+      <article itemscope itemtype="http://schema.org/Blog" class="card castaway-card">
+
+        <div class="card-title indigo darken-3 castaway-card-title">
+          <div class="card-content">
+            <div class="white-text" itemprop="headline">
+              Emacs から外部プロセスを呼び出して結果をエコーエリアに表示する
+            </div>
+          </div>
+        </div>
+
+        <div class="card-content">
+          <div class="castaway-date-published">
+            <span>公開日：</span>
+            <i class="material-icons">today</i>
+            <time itemprop="datePublished" datetime="2016-02-22">2016/02/22</time>
+          </div>
+          
+          
+          <div class="castaway-card-content mdl-card__supporting-text mdl-color-text--grey-700">
+            <p>学生時代からの習慣と宗教上の理由から普段使いのエディタは Emacs
+(ここでは <a href="http://emacsformacosx.com/">GNU Emacs for Mac OS X</a>)
+です。</p>
+
+<p>設定ファイルを除いて自分で Emacs Lisp を書いて機能を追加したことはこれまで無かったのですが、
+このたび必要にかられて追加いたしました。
+</p>
+
+<p>ど素人なので作法やらベストプラクティスやらがわからないですが、まあ動きます。
+<a href="https://gist.github.com/TAMURAtomohiro/18cd0fb0ae33baa48625">Gist</a> にも置いてあります。</p>
+
+<h1 id="経緯">経緯</h1>
+
+<p>とあるプロジェクトで JavaScript のソフトウェアメトリクスを測り、
+コード改善のときの目安とすることになりました。
+そこで<a href="http://es-analysis.github.io/plato/examples/marionette/index.html">Plato</a>を導入したわけですが、
+このツールでは今まさに自分が変更したファイルのメトリクスを確認するのが面倒です。</p>
+
+<p>どうせなら書いたそばから教えていただければ「もうちょっとメトリクス上げてみようか」という気分にもなるわけです。
+before-save-hook などで保存時に何かしらの処理をフックできることは知っていましたので、
+前述の plato を呼んで結果を表示するくらいのことはすぐできるだろう……と作り始めました。</p>
+
+<h1 id="メトリクスを取り出す">メトリクスを取り出す</h1>
+
+<p>plato には「結果を標準出力に出す」ようなオプションがなかったため、
+とりあえずごり押しで plato の結果を取り出してみます。
+生成された HTML から Average Maintainability の部分を取り出せれば細かいことはとやかく言いません。
+(一時ファイルの名前やらが決め打ちじゃ並列実行したときおかしくなるぞ、とか)</p>
+
+<pre><code>#!/bin/sh
+TMPFILE=/tmp/js-metrics.js
+REPORT_DIR=/tmp
+cat - &gt; ${TMPFILE}
+plato -d ${REPORT_DIR} ${TMPFILE} &gt; /dev/null
+grep 'class=&quot;stat&quot;' ${REPORT_DIR}/index.html | tail -n 1 | sed -e &quot;s/&lt;p class=\&quot;stat\&quot;&gt;//g&quot; | sed -e &quot;s/&lt;\/p&gt;//g&quot; | sed -e &quot;s/ //g&quot; | tr -d '\n'
+</code></pre>
+
+<h1 id="現在のバッファの内容を外部プロセスに渡し-結果をエコーエリアに表示する">現在のバッファの内容を外部プロセスに渡し、結果をエコーエリアに表示する</h1>
+
+<p><code>call-process-region</code> という関数を使うと現在のバッファの内容を標準入力として外部プロセスに渡せるのでこれを使います。
+ただ、エコーエリアに表示しようとして、結果の出力先バッファを <code>*Messages*</code> とするやり方はうまくいかず(<code>*Messages*</code>バッファが read-only になっていて書き込めない)、
+<code>message</code> 関数を使うことになりました。</p>
+
+<p>なので出力先バッファを用意しなきゃいけないですが、
+自分で管理するのは面倒なので <code>with-temp-buffer</code> を使ってみます。
+これを使うと新たなバッファが作られ、一連の処理が終わったあとに破棄してくれます。
+カレントバッファが切り替わってしまうので今回の目的のためには
+元バッファの JavaScript コードを取得しておいて転記する必要があります。</p>
+
+<p>ということで今回の成果物を以下の通りです。</p>
+
+<pre><code>(defun jsmetrics ()
+    (if (derived-mode-p 'js-mode) ; JavaScript ファイルが js-mode で開かれることを前提として JavaScript のみを対象とする
+        (let ((jscode (buffer-string))) ; カレントバッファの内容を取得しておき
+            (with-temp-buffer
+                (insert jscode)         ; 一時バッファに書き込む
+                (call-process-region (point-min) (point-max) &quot;js-metrics.sh&quot; t t nil) ; 一時バッファの内容を外部プロセスの結果で置き換える
+                (message (buffer-string)))))) ; 結果をエコーエリアに表示
+
+(add-hook 'js-mode-hook
+    (lambda () (add-hook 'after-save-hook 'jsmetrics)))
+</code></pre>
+
+<h1 id="まとめ">まとめ</h1>
+
+<p>標準入出力という偉大なインタフェースのおかげで Emacs Lisp 内で完結させる必要がなく、
+他言語のモジュールを利用できるのが素晴らしいです。</p>
+          </div>
+        </div>
+          
+          <div class="card-action castaway-card-footer">
+            <a class="btn waves-effect waves-light" href="/">サイトトップ</a>
+          </div>            
+
+      </article>
+        
+    </div>
+
+    </div>
+  </div>
+</section>
+
+
+</div>
+</body>
+</html>
+

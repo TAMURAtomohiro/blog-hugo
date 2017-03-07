@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.18.1" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css">
+
+  
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script>
+          
+<link rel="stylesheet" href="/css/base.css">
+
+<link rel="alternate" href="/index.xml" type="application/rss+xml" title="嵐の小舟より">
+<title>Hugo でマテリアルアイコンを使うための ShortCode - 嵐の小舟より</title>
+</head>
+<body>
+  
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-92780964-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+  <div class="">
+  <header class="castaway-header-bar">
+    <nav>
+      <div class="nav-wrapper castaway-site-logo">
+        <div>
+          <a href="/" class="brand-logo right">
+            <i class="material-icons" style="margin-right: 5px;">rowing</i>
+            <span class="castaway-site-title">嵐の小舟より</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  
+
+
+<section id="main">
+  <div class="row">
+    <div class="col s12 m12 l6 offset-l3">
+
+      <article itemscope itemtype="http://schema.org/Blog" class="card castaway-card">
+
+        <div class="card-title indigo darken-3 castaway-card-title">
+          <div class="card-content">
+            <div class="white-text" itemprop="headline">
+              Hugo でマテリアルアイコンを使うための ShortCode
+            </div>
+          </div>
+        </div>
+
+        <div class="card-content">
+          <div class="castaway-date-published">
+            <span>公開日：</span>
+            <i class="material-icons">today</i>
+            <time itemprop="datePublished" datetime="2017-03-08">2017/03/08</time>
+          </div>
+          
+          
+          <div class="castaway-card-content mdl-card__supporting-text mdl-color-text--grey-700">
+            <p><a href="https://gohugo.io/">Hugo</a> で任意の HTML を生成したい場合は <a href="https://gohugo.io/extras/shortcodes/">ShortCode</a> を書くことになります。</p>
+
+<p>本サイトでは使い道はさておきマテリアルアイコンを読み込んでいるので、
+ShortCode で使えるようにしてみました。
+</p>
+
+<h1 id="hugo-からマテリアルアイコンを使う手順">Hugo からマテリアルアイコンを使う手順</h1>
+
+<p>まず <code>themes/${テーマ名}/layouts/partials/header.html</code> などに以下を追記してマテリアルアイコンのフォントを読み込みます。</p>
+
+<pre><code>&lt;link rel=&quot;stylesheet&quot; href=&quot;https://fonts.googleapis.com/icon?family=Material+Icons&quot;&gt;
+</code></pre>
+
+<p><code>layouts/shortcodes/md-icon.html</code> として以下の内容を用意し、ShortCode として使えるようにします。</p>
+
+<script src="//gist.github.com/tmrtmhr/90cff33e3e18fbc10f8daf9dac753b30.js"></script>
+
+<p>ここで、<code>vertical-align: bottom;</code> はアイコンと文章の高さをそろえるための指定です。
+また、<code>.Get 0</code> で ShortCode の引数を取得しています。</p>
+
+<p>Markdown ファイル中では以下のように書きます。<code>favorite</code> が <code>.Get 0</code> の部分に埋め込まれた HTML が生成されます。</p>
+
+<p>{{&lt; md-icon favorite &gt;}}</p>
+
+<p><i class="material-icons" style="vertical-align: bottom;">
+  favorite
+</i>
+<i class="material-icons" style="vertical-align: bottom;">
+  favorite
+</i>
+<i class="material-icons" style="vertical-align: bottom;">
+  favorite
+</i>
+
+表示はこんな感じです
+<i class="material-icons" style="vertical-align: bottom;">
+  favorite
+</i>
+<i class="material-icons" style="vertical-align: bottom;">
+  favorite
+</i>
+<i class="material-icons" style="vertical-align: bottom;">
+  favorite
+</i>
+</p>
+
+<h1 id="なぜ-raw-html-ではなく-shortcode-を書くのか">なぜ Raw HTML ではなく ShortCode を書くのか</h1>
+
+<p>Markdown は <a href="http://daringfireball.net/projects/markdown/syntax#html">HTMLを埋め込める</a>ため、
+アイコン表示の HTML (前述の Gist)を直接書いても表示されます。</p>
+
+<p>ではなぜ ShortCode として用意するのかというと、
+<a href="https://gohugo.io/extras/shortcodes/">公式サイトの説明</a>にある通り、
+以下のような利点があるためです。</p>
+
+<ul>
+<li>定型のHTMLを毎回書かずにすむ</li>
+<li>ShortCode を変更することで該当の HTML 部分がすべて置き換わるので更新が楽にすむ</li>
+</ul>
+
+<p>そんなわけで、一生に一度の HTML だと心に決めている、というのでなければ、
+ShortCode 化して再利用するほうが良いかと思います。</p>
+          </div>
+        </div>
+          
+          <div class="card-action castaway-card-footer">
+            <a class="btn waves-effect waves-light" href="/">サイトトップ</a>
+          </div>            
+
+      </article>
+        
+    </div>
+
+    </div>
+  </div>
+</section>
+
+
+</div>
+</body>
+</html>
+
