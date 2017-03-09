@@ -5,6 +5,10 @@ date = "2016-02-22T16:06:53+09:00"
 +++
 <!--more-->
 
+# CloudFront のキャッシュを削除する
+Hugo で更新のあったエントリーについてキャッシュを削除したい
+
+
 [Angular2 のデザインドキュメント](https://drive.google.com/drive/u/0/folders/0B7Ovm8bUYiUDR29iSkEyMk5pVUk)
 
 [ViewChild と ContentChild](http://stackoverflow.com/questions/34326745/whats-the-difference-between-viewchild-and-contentchild)

@@ -2,6 +2,7 @@
 draft = false
 title = "Hugo でマテリアルアイコンを使うための ShortCode"
 date = "2017-03-08T08:52:50+09:00"
+tags = ["hugo"]
 +++
 
 [Hugo](https://gohugo.io/) で任意の HTML を生成したい場合は [ShortCode](https://gohugo.io/extras/shortcodes/) を書くことになります。
@@ -24,7 +25,7 @@ ShortCode で使えるようにしてみました。
 ここで、`vertical-align: bottom;` はアイコンと文章の高さをそろえるための指定です。
 また、`.Get 0` で ShortCode の引数を取得しています。
 
-Markdown ファイル中では以下のように書きます。`favorite` が `.Get 0` の部分に埋め込まれた HTML が生成されます。
+Markdown ファイル中では以下のように書きます。これにより `favorite` が `.Get 0` の部分に埋め込まれた HTML を生成します。
 
 {{&lt; md-icon favorite &gt;}}
 

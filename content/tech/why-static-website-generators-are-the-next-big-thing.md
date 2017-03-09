@@ -1,6 +1,7 @@
 +++
 draft = false
 title = "なぜ静的サイト配信が重要となるか"
+tags = ["web"]
 date = "2015-11-30T14:20:55+09:00"
 +++
 Smashing Magazine の

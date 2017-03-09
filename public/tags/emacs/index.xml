@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Emacs on 嵐の小舟より</title>
+    <link>https://tmrtmhr.info/tags/emacs/index.xml</link>
+    <description>Recent content in Emacs on 嵐の小舟より</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja-JP</language>
+    <atom:link href="https://tmrtmhr.info/tags/emacs/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Emacs から外部プロセスを呼び出して結果をエコーエリアに表示する</title>
+      <link>https://tmrtmhr.info/tech/call-process-on-emacs/</link>
+      <pubDate>Mon, 22 Feb 2016 16:16:21 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/call-process-on-emacs/</guid>
+      <description>&lt;p&gt;学生時代からの習慣と宗教上の理由から普段使いのエディタは Emacs
+(ここでは &lt;a href=&#34;http://emacsformacosx.com/&#34;&gt;GNU Emacs for Mac OS X&lt;/a&gt;)
+です。&lt;/p&gt;
+
+&lt;p&gt;設定ファイルを除いて自分で Emacs Lisp を書いて機能を追加したことはこれまで無かったのですが、
+このたび必要にかられて追加いたしました。
+&lt;/p&gt;
+
+&lt;p&gt;ど素人なので作法やらベストプラクティスやらがわからないですが、まあ動きます。
+&lt;a href=&#34;https://gist.github.com/TAMURAtomohiro/18cd0fb0ae33baa48625&#34;&gt;Gist&lt;/a&gt; にも置いてあります。&lt;/p&gt;
+
+&lt;h1 id=&#34;経緯&#34;&gt;経緯&lt;/h1&gt;
+
+&lt;p&gt;とあるプロジェクトで JavaScript のソフトウェアメトリクスを測り、
+コード改善のときの目安とすることになりました。
+そこで&lt;a href=&#34;http://es-analysis.github.io/plato/examples/marionette/index.html&#34;&gt;Plato&lt;/a&gt;を導入したわけですが、
+このツールでは今まさに自分が変更したファイルのメトリクスを確認するのが面倒です。&lt;/p&gt;
+
+&lt;p&gt;どうせなら書いたそばから教えていただければ「もうちょっとメトリクス上げてみようか」という気分にもなるわけです。
+before-save-hook などで保存時に何かしらの処理をフックできることは知っていましたので、
+前述の plato を呼んで結果を表示するくらいのことはすぐできるだろう……と作り始めました。&lt;/p&gt;
+
+&lt;h1 id=&#34;メトリクスを取り出す&#34;&gt;メトリクスを取り出す&lt;/h1&gt;
+
+&lt;p&gt;plato には「結果を標準出力に出す」ようなオプションがなかったため、
+とりあえずごり押しで plato の結果を取り出してみます。
+生成された HTML から Average Maintainability の部分を取り出せれば細かいことはとやかく言いません。
+(一時ファイルの名前やらが決め打ちじゃ並列実行したときおかしくなるぞ、とか)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#!/bin/sh
+TMPFILE=/tmp/js-metrics.js
+REPORT_DIR=/tmp
+cat - &amp;gt; ${TMPFILE}
+plato -d ${REPORT_DIR} ${TMPFILE} &amp;gt; /dev/null
+grep &#39;class=&amp;quot;stat&amp;quot;&#39; ${REPORT_DIR}/index.html | tail -n 1 | sed -e &amp;quot;s/&amp;lt;p class=\&amp;quot;stat\&amp;quot;&amp;gt;//g&amp;quot; | sed -e &amp;quot;s/&amp;lt;\/p&amp;gt;//g&amp;quot; | sed -e &amp;quot;s/ //g&amp;quot; | tr -d &#39;\n&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;現在のバッファの内容を外部プロセスに渡し-結果をエコーエリアに表示する&#34;&gt;現在のバッファの内容を外部プロセスに渡し、結果をエコーエリアに表示する&lt;/h1&gt;
+
+&lt;p&gt;&lt;code&gt;call-process-region&lt;/code&gt; という関数を使うと現在のバッファの内容を標準入力として外部プロセスに渡せるのでこれを使います。
+ただ、エコーエリアに表示しようとして、結果の出力先バッファを &lt;code&gt;*Messages*&lt;/code&gt; とするやり方はうまくいかず(&lt;code&gt;*Messages*&lt;/code&gt;バッファが read-only になっていて書き込めない)、
+&lt;code&gt;message&lt;/code&gt; 関数を使うことになりました。&lt;/p&gt;
+
+&lt;p&gt;なので出力先バッファを用意しなきゃいけないですが、
+自分で管理するのは面倒なので &lt;code&gt;with-temp-buffer&lt;/code&gt; を使ってみます。
+これを使うと新たなバッファが作られ、一連の処理が終わったあとに破棄してくれます。
+カレントバッファが切り替わってしまうので今回の目的のためには
+元バッファの JavaScript コードを取得しておいて転記する必要があります。&lt;/p&gt;
+
+&lt;p&gt;ということで今回の成果物を以下の通りです。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;(defun jsmetrics ()
+    (if (derived-mode-p &#39;js-mode) ; JavaScript ファイルが js-mode で開かれることを前提として JavaScript のみを対象とする
+        (let ((jscode (buffer-string))) ; カレントバッファの内容を取得しておき
+            (with-temp-buffer
+                (insert jscode)         ; 一時バッファに書き込む
+                (call-process-region (point-min) (point-max) &amp;quot;js-metrics.sh&amp;quot; t t nil) ; 一時バッファの内容を外部プロセスの結果で置き換える
+                (message (buffer-string)))))) ; 結果をエコーエリアに表示
+
+(add-hook &#39;js-mode-hook
+    (lambda () (add-hook &#39;after-save-hook &#39;jsmetrics)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;まとめ&#34;&gt;まとめ&lt;/h1&gt;
+
+&lt;p&gt;標準入出力という偉大なインタフェースのおかげで Emacs Lisp 内で完結させる必要がなく、
+他言語のモジュールを利用できるのが素晴らしいです。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

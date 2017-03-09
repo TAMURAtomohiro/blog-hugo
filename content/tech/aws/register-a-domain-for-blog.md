@@ -1,7 +1,8 @@
 +++
-date = "2017-03-07T17:06:34+09:00"
-draft = true
+date = "2017-03-09T13:31:53+09:00"
+draft = false
 title = "ブログに使うドメインを AWS で取得する"
+tags = ["aws"]
 +++
 
 せっかくなので本サイトのドメインを AWS Route53 で管理するようにした際のメモです。
@@ -9,13 +10,13 @@ title = "ブログに使うドメインを AWS で取得する"
 やったことは以下の通り。
 
 * [Route 53](https://aws.amazon.com/jp/route53/) でドメインを取得
-* [SES](https://aws.amazon.com/jp/ses/) で取得したドメインのメールアドレスにて受信
-* [Certificate Manager](https://aws.amazon.com/jp/certificate-manager/) で取得したドメインのSSL証明書を取得
+* [SES](https://aws.amazon.com/jp/ses/) で対象ドメインのメールアドレスにて受信
+* [Certificate Manager](https://aws.amazon.com/jp/certificate-manager/) で対象ドメインのSSL証明書を取得
 * [CloudFront](https://aws.amazon.com/jp/cloudfront/) に取得したSSL証明書を設定
 
 なお、今のところ CloudFront のオリジンサーバとしては [S3](https://aws.amazon.com/jp/s3/) ではなく [GitHub Pages](https://pages.github.com/) を使用しています。
 
-<!-- more -->
+<!--more-->
 
 # なぜ AWS でドメインを取得したか
 
@@ -26,7 +27,7 @@ title = "ブログに使うドメインを AWS で取得する"
 
 ということで、要するに設定や管理の手間を省くことを重視したためです。
 
-## Route 53 におけるドメイン管理者情報の公開範囲について
+# Route 53 におけるドメイン管理者情報の公開範囲について
 
 Route 53 でドメインを取得する際、管理者情報を隠すかどうかのチェックボックスがありますが、
 トップレベルドメインによって秘匿できる項目が異なります。
@@ -36,7 +37,7 @@ Route 53 でドメインを取得する際、管理者情報を隠すかどう�
 名前だけが公開されます。
 残りの項目はドメインレジストラである [Gandi](https://www.gandi.net/) の情報に置換されます。
 
-## ドメイン取得時に登録するメールアドレスについて
+# ドメイン取得時に登録するメールアドレスについて
 
 今回、ドメイン取得時に登録するメールアドレスについても該当ドメインを使用することにしました( a&#100;mi&#110;&#64;&#116;m&#114;tmhr.in&#102;o )。
 当然ながらドメイン取得申請の段階ではこのメールアドレスで受信することはできません。
@@ -52,19 +53,25 @@ Certificate Manager でもドメイン認証のためにメールが発信され
 1. ドメインに次の接頭辞をつけた 5 個のメールアドレス: `admin@`, `administrator@`,`hostmaster@`, `webmaster@`, `postmaster@`
  
 管理者情報を秘匿した場合は `whois` で取得できるメールアドレスがドメインレジストラのものになりますので、
-(2)のアドレスのどれかを登録しておきましょう。
+(2)のアドレスのどれかを登録しておきます。
 
-## SES で受信したメールに対するアクションについて
+# SES で受信したメールに対するアクションについて
 
 認証のための URL がわかれば十分であり、
 Route 53 と Certificate Manager から送られる二通を読めればよいので、
 今回は単純に S3 へ保存しました。
 
-## SSL証明書を取得するリージョンについて
+# SSL証明書を取得するリージョンについて
 
 Certificate Manager で取得した SSL 証明書は、取得したリージョンでのみ利用することができます。
 CloudFront はグローバルなサービスのため、Webコンソール上でリージョンを選択できませんが、
 便宜的に `US East(N. Virginia)` で設定するという扱いのためSSL 証明書もここで取得します。
+
+# CloudFront が持つキャッシュについて
+
+デフォルトのままの設定だと TTL が 86400 秒となるので、GitHub Pages にデプロイしてから
+最大一日程度は古いコンテンツが表示されます。
+デプロイの際にスクリプトからキャッシュを削除するようにすれば良いと思いますが、未実装です。
 
 <!-- 詰まったところ -->
 <!-- CloudFront に Alternate CNAME 設定し忘れ -->

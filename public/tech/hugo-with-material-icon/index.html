@@ -60,10 +60,20 @@ ga('send', 'pageview');
         </div>
 
         <div class="card-content">
-          <div class="castaway-date-published">
-            <span>公開日：</span>
-            <i class="material-icons">today</i>
-            <time itemprop="datePublished" datetime="2017-03-08">2017/03/08</time>
+          <div class="row">
+            <div class="castaway-date-published">
+              <span>公開日：</span>
+              <i class="material-icons" style="vertical-align: middle;">today</i>
+              <time itemprop="datePublished" datetime="2017-03-08">2017/03/08</time>
+              <span style="margin-left: 10px;"> タグ: </span>
+              
+              <a href="/tags/hugo">
+                <div class="tag-hugo waves-effect waves-teal chip">
+                  hugo
+                </div>
+              </a>
+              
+            </div>
           </div>
           
           
@@ -88,28 +98,28 @@ ShortCode で使えるようにしてみました。
 <p>ここで、<code>vertical-align: bottom;</code> はアイコンと文章の高さをそろえるための指定です。
 また、<code>.Get 0</code> で ShortCode の引数を取得しています。</p>
 
-<p>Markdown ファイル中では以下のように書きます。<code>favorite</code> が <code>.Get 0</code> の部分に埋め込まれた HTML が生成されます。</p>
+<p>Markdown ファイル中では以下のように書きます。これにより <code>favorite</code> が <code>.Get 0</code> の部分に埋め込まれた HTML を生成します。</p>
 
 <p>{{&lt; md-icon favorite &gt;}}</p>
 
-<p><i class="material-icons" style="vertical-align: bottom;">
+<p><i class="material-icons castaway-md-icon">
   favorite
 </i>
-<i class="material-icons" style="vertical-align: bottom;">
+<i class="material-icons castaway-md-icon">
   favorite
 </i>
-<i class="material-icons" style="vertical-align: bottom;">
+<i class="material-icons castaway-md-icon">
   favorite
 </i>
 
 表示はこんな感じです
-<i class="material-icons" style="vertical-align: bottom;">
+<i class="material-icons castaway-md-icon">
   favorite
 </i>
-<i class="material-icons" style="vertical-align: bottom;">
+<i class="material-icons castaway-md-icon">
   favorite
 </i>
-<i class="material-icons" style="vertical-align: bottom;">
+<i class="material-icons castaway-md-icon">
   favorite
 </i>
 </p>

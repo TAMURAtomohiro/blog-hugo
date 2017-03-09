@@ -1,10 +1,12 @@
 baseurl = "https://tmrtmhr.info/"
-description = "ブログ"
+description = "個人ブログです。"
 languagecode = "ja-JP"
 title = "嵐の小舟より"
 theme = "castaway"
-categories = [ "Game", "Tech" ]
-paginate = 9
+paginate = 10
 googleAnalytics = "UA-92780964-1"
 [params]
 headerCover = "img/logo.jpg"
+
+[taxonomies]
+tag = "tags"

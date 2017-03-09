@@ -56,15 +56,81 @@ ga('send', 'pageview');
           <div class="card-title indigo darken-3 castaway-card-title">
             <div class="card-content">
               <div class="white-text" itemprop="headline">
+                ブログに使うドメインを AWS で取得する
+              </div>
+            </div>
+          </div>
+            
+          <div class="card-content castaway-card-summary blue-grey-text">
+            
+            <div class="row">
+              <div class="col castaway-date-published">
+                <span>公開日: </span>
+                <i class="material-icons" style="vertical-align: middle;">today</i>
+                <time itemprop="datePublished" datetime="2017-03-09">2017/03/09</time>
+                <span style="margin-left: 10px;"> タグ: </span>
+                
+                <a href="/tags/aws">
+                  <div class="tag-aws waves-effect waves-teal chip">
+                    aws
+                  </div>
+                </a>
+                
+              </div>
+            </div>
+            <p>せっかくなので本サイトのドメインを AWS Route53 で管理するようにした際のメモです。</p>
+
+<p>やったことは以下の通り。</p>
+
+<ul>
+<li><a href="https://aws.amazon.com/jp/route53/">Route 53</a> でドメインを取得</li>
+<li><a href="https://aws.amazon.com/jp/ses/">SES</a> で対象ドメインのメールアドレスにて受信</li>
+<li><a href="https://aws.amazon.com/jp/certificate-manager/">Certificate Manager</a> で対象ドメインのSSL証明書を取得</li>
+<li><a href="https://aws.amazon.com/jp/cloudfront/">CloudFront</a> に取得したSSL証明書を設定</li>
+</ul>
+
+<p>なお、今のところ CloudFront のオリジンサーバとしては <a href="https://aws.amazon.com/jp/s3/">S3</a> ではなく <a href="https://pages.github.com/">GitHub Pages</a> を使用しています。</p>
+
+<p></p>
+          </div>
+
+          <div class="card-action castaway-card-footer">
+            <a class="btn waves-effect waves-light" href="/tech/aws/register-a-domain-for-blog/">この記事を読む</a>
+          </div>
+		    </article>
+      </div>
+    </div>
+      
+    
+
+    <div class="row">
+      <div class="col s12 m12 l6 offset-l3">
+        <article itemscope itemtype="http://schema.org/Blog" class="card castaway-card-link">
+
+          <div class="card-title indigo darken-3 castaway-card-title">
+            <div class="card-content">
+              <div class="white-text" itemprop="headline">
                 Hugo でマテリアルアイコンを使うための ShortCode
               </div>
             </div>
           </div>
             
           <div class="card-content castaway-card-summary blue-grey-text">
-            <div class="castaway-date-published">
-              <i class="material-icons">today</i>
-              <time itemprop="datePublished" datetime="2017-03-08">2017/03/08</time>
+            
+            <div class="row">
+              <div class="col castaway-date-published">
+                <span>公開日: </span>
+                <i class="material-icons" style="vertical-align: middle;">today</i>
+                <time itemprop="datePublished" datetime="2017-03-08">2017/03/08</time>
+                <span style="margin-left: 10px;"> タグ: </span>
+                
+                <a href="/tags/hugo">
+                  <div class="tag-hugo waves-effect waves-teal chip">
+                    hugo
+                  </div>
+                </a>
+                
+              </div>
             </div>
             <p><a href="https://gohugo.io/">Hugo</a> で任意の HTML を生成したい場合は <a href="https://gohugo.io/extras/shortcodes/">ShortCode</a> を書くことになります。</p>
 
@@ -95,9 +161,21 @@ ShortCode で使えるようにしてみました。
           </div>
             
           <div class="card-content castaway-card-summary blue-grey-text">
-            <div class="castaway-date-published">
-              <i class="material-icons">today</i>
-              <time itemprop="datePublished" datetime="2016-02-22">2016/02/22</time>
+            
+            <div class="row">
+              <div class="col castaway-date-published">
+                <span>公開日: </span>
+                <i class="material-icons" style="vertical-align: middle;">today</i>
+                <time itemprop="datePublished" datetime="2016-02-22">2016/02/22</time>
+                <span style="margin-left: 10px;"> タグ: </span>
+                
+                <a href="/tags/emacs">
+                  <div class="tag-emacs waves-effect waves-teal chip">
+                    emacs
+                  </div>
+                </a>
+                
+              </div>
             </div>
             <p>学生時代からの習慣と宗教上の理由から普段使いのエディタは Emacs
 (ここでは <a href="http://emacsformacosx.com/">GNU Emacs for Mac OS X</a>)
@@ -130,9 +208,15 @@ ShortCode で使えるようにしてみました。
           </div>
             
           <div class="card-content castaway-card-summary blue-grey-text">
-            <div class="castaway-date-published">
-              <i class="material-icons">today</i>
-              <time itemprop="datePublished" datetime="2016-02-22">2016/02/22</time>
+            
+            <div class="row">
+              <div class="col castaway-date-published">
+                <span>公開日: </span>
+                <i class="material-icons" style="vertical-align: middle;">today</i>
+                <time itemprop="datePublished" datetime="2016-02-22">2016/02/22</time>
+                <span style="margin-left: 10px;"> タグ: </span>
+                
+              </div>
             </div>
             <p><a href="https://angular.io/">Angular2</a>が
 <a href="http://angularjs.blogspot.jp/2015/12/angular-2-beta.html">昨年12月に Beta リリース</a>されたため、
@@ -166,9 +250,21 @@ ShortCode で使えるようにしてみました。
           </div>
             
           <div class="card-content castaway-card-summary blue-grey-text">
-            <div class="castaway-date-published">
-              <i class="material-icons">today</i>
-              <time itemprop="datePublished" datetime="2015-12-08">2015/12/08</time>
+            
+            <div class="row">
+              <div class="col castaway-date-published">
+                <span>公開日: </span>
+                <i class="material-icons" style="vertical-align: middle;">today</i>
+                <time itemprop="datePublished" datetime="2015-12-08">2015/12/08</time>
+                <span style="margin-left: 10px;"> タグ: </span>
+                
+                <a href="/tags/hugo">
+                  <div class="tag-hugo waves-effect waves-teal chip">
+                    hugo
+                  </div>
+                </a>
+                
+              </div>
             </div>
             <p>エンジニア界隈ではどうもブログを作る目的で静的サイトジェネレータというものが使われている、
 と聞いたため、せっかくなので使ってみることにしました。
@@ -197,9 +293,21 @@ ShortCode で使えるようにしてみました。
           </div>
             
           <div class="card-content castaway-card-summary blue-grey-text">
-            <div class="castaway-date-published">
-              <i class="material-icons">today</i>
-              <time itemprop="datePublished" datetime="2015-11-30">2015/11/30</time>
+            
+            <div class="row">
+              <div class="col castaway-date-published">
+                <span>公開日: </span>
+                <i class="material-icons" style="vertical-align: middle;">today</i>
+                <time itemprop="datePublished" datetime="2015-11-30">2015/11/30</time>
+                <span style="margin-left: 10px;"> タグ: </span>
+                
+                <a href="/tags/web">
+                  <div class="tag-web waves-effect waves-teal chip">
+                    web
+                  </div>
+                </a>
+                
+              </div>
             </div>
             <p>Smashing Magazine の
 <a href="http://www.smashingmagazine.com/2015/11/modern-static-website-generators-next-big-thing/">Why Static Website Generators Are The Next Big Thing</a>

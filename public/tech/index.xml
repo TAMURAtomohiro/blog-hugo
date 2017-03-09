@@ -6,8 +6,101 @@
     <description>Recent content in Teches on 嵐の小舟より</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <lastBuildDate>Wed, 08 Mar 2017 08:52:50 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 09 Mar 2017 13:31:53 +0900</lastBuildDate>
     <atom:link href="https://tmrtmhr.info/tech/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>ブログに使うドメインを AWS で取得する</title>
+      <link>https://tmrtmhr.info/tech/aws/register-a-domain-for-blog/</link>
+      <pubDate>Thu, 09 Mar 2017 13:31:53 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/aws/register-a-domain-for-blog/</guid>
+      <description>&lt;p&gt;せっかくなので本サイトのドメインを AWS Route53 で管理するようにした際のメモです。&lt;/p&gt;
+
+&lt;p&gt;やったことは以下の通り。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://aws.amazon.com/jp/route53/&#34;&gt;Route 53&lt;/a&gt; でドメインを取得&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://aws.amazon.com/jp/ses/&#34;&gt;SES&lt;/a&gt; で対象ドメインのメールアドレスにて受信&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://aws.amazon.com/jp/certificate-manager/&#34;&gt;Certificate Manager&lt;/a&gt; で対象ドメインのSSL証明書を取得&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://aws.amazon.com/jp/cloudfront/&#34;&gt;CloudFront&lt;/a&gt; に取得したSSL証明書を設定&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;なお、今のところ CloudFront のオリジンサーバとしては &lt;a href=&#34;https://aws.amazon.com/jp/s3/&#34;&gt;S3&lt;/a&gt; ではなく &lt;a href=&#34;https://pages.github.com/&#34;&gt;GitHub Pages&lt;/a&gt; を使用しています。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;なぜ-aws-でドメインを取得したか&#34;&gt;なぜ AWS でドメインを取得したか&lt;/h1&gt;
+
+&lt;p&gt;ドメインの料金だけだと&lt;a href=&#34;www.onamae.com&#34;&gt;お名前.com&lt;/a&gt;などのように Route 53 より安いところもあります。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;取得したドメインでのメール受信設定( MX レコードの登録)を SES がやってくれるため楽&lt;/li&gt;
+&lt;li&gt;SSL証明書が無料かつ自動更新&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;ということで、要するに設定や管理の手間を省くことを重視したためです。&lt;/p&gt;
+
+&lt;h1 id=&#34;route-53-におけるドメイン管理者情報の公開範囲について&#34;&gt;Route 53 におけるドメイン管理者情報の公開範囲について&lt;/h1&gt;
+
+&lt;p&gt;Route 53 でドメインを取得する際、管理者情報を隠すかどうかのチェックボックスがありますが、
+トップレベルドメインによって秘匿できる項目が異なります。
+(参考：&lt;a href=&#34;http://dev.classmethod.jp/cloud/aws/route53-privacy-protection/&#34;&gt;Route 53で管理するドメインでプライバシー保護できるWHOIS項目は、ドメインによって違うので注意&lt;/a&gt; )&lt;/p&gt;
+
+&lt;p&gt;本サイトのような&lt;a href=&#34;http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/registrar-tld-list.html#info&#34;&gt;.info ドメイン&lt;/a&gt; の場合は
+名前だけが公開されます。
+残りの項目はドメインレジストラである &lt;a href=&#34;https://www.gandi.net/&#34;&gt;Gandi&lt;/a&gt; の情報に置換されます。&lt;/p&gt;
+
+&lt;h1 id=&#34;ドメイン取得時に登録するメールアドレスについて&#34;&gt;ドメイン取得時に登録するメールアドレスについて&lt;/h1&gt;
+
+&lt;p&gt;今回、ドメイン取得時に登録するメールアドレスについても該当ドメインを使用することにしました( a&amp;#100;mi&amp;#110;&amp;#64;&amp;#116;m&amp;#114;tmhr.in&amp;#102;o )。
+当然ながらドメイン取得申請の段階ではこのメールアドレスで受信することはできません。
+ドメインを申請すると Route 53 からメールが送信され、本文中の URL にアクセスすることで取得完了となりますが、
+期限に猶予があるため、その間に SES の設定を済ませることになります。&lt;/p&gt;
+
+&lt;p&gt;Route 53 でドメイン申請 &lt;i class=&#34;material-icons castaway-md-icon&#34;&gt;
+  arrow_forward
+&lt;/i&gt;
+ SES で MX レコード登録 &lt;i class=&#34;material-icons castaway-md-icon&#34;&gt;
+  arrow_forward
+&lt;/i&gt;
+ Route 53 から送られてくるメール本文の URL にアクセス、という流れです。&lt;/p&gt;
+
+&lt;p&gt;ここで、Certificate Manager での SSL 証明書取得を予定していて、かつドメインの管理者情報を秘匿している場合は注意が必要です。
+Certificate Manager でもドメイン認証のためにメールが発信されますが、宛先は以下のように固定されます。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;whois&lt;/code&gt; で取得できる管理者メールアドレス&lt;/li&gt;
+&lt;li&gt;ドメインに次の接頭辞をつけた 5 個のメールアドレス: &lt;code&gt;admin@&lt;/code&gt;, &lt;code&gt;administrator@&lt;/code&gt;,&lt;code&gt;hostmaster@&lt;/code&gt;, &lt;code&gt;webmaster@&lt;/code&gt;, &lt;code&gt;postmaster@&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;管理者情報を秘匿した場合は &lt;code&gt;whois&lt;/code&gt; で取得できるメールアドレスがドメインレジストラのものになりますので、
+(2)のアドレスのどれかを登録しておきます。&lt;/p&gt;
+
+&lt;h1 id=&#34;ses-で受信したメールに対するアクションについて&#34;&gt;SES で受信したメールに対するアクションについて&lt;/h1&gt;
+
+&lt;p&gt;認証のための URL がわかれば十分であり、
+Route 53 と Certificate Manager から送られる二通を読めればよいので、
+今回は単純に S3 へ保存しました。&lt;/p&gt;
+
+&lt;h1 id=&#34;ssl証明書を取得するリージョンについて&#34;&gt;SSL証明書を取得するリージョンについて&lt;/h1&gt;
+
+&lt;p&gt;Certificate Manager で取得した SSL 証明書は、取得したリージョンでのみ利用することができます。
+CloudFront はグローバルなサービスのため、Webコンソール上でリージョンを選択できませんが、
+便宜的に &lt;code&gt;US East(N. Virginia)&lt;/code&gt; で設定するという扱いのためSSL 証明書もここで取得します。&lt;/p&gt;
+
+&lt;h1 id=&#34;cloudfront-が持つキャッシュについて&#34;&gt;CloudFront が持つキャッシュについて&lt;/h1&gt;
+
+&lt;p&gt;デフォルトのままの設定だと TTL が 86400 秒となるので、GitHub Pages にデプロイしてから
+最大一日程度は古いコンテンツが表示されます。
+デプロイの際にスクリプトからキャッシュを削除するようにすれば良いと思いますが、未実装です。&lt;/p&gt;
+
+&lt;!-- 詰まったところ --&gt;
+
+&lt;!-- CloudFront に Alternate CNAME 設定し忘れ --&gt;
+
+&lt;!-- http://blog.ybbo.net/2015/04/11/how-to-fix-error-of-error-the-request-could-not-be-satisfied-generated-by-cloudfront-cloudfront-on-aws-cloud-front/ --&gt;</description>
+    </item>
     
     <item>
       <title>Hugo でマテリアルアイコンを使うための ShortCode</title>
@@ -35,28 +128,28 @@ ShortCode で使えるようにしてみました。
 &lt;p&gt;ここで、&lt;code&gt;vertical-align: bottom;&lt;/code&gt; はアイコンと文章の高さをそろえるための指定です。
 また、&lt;code&gt;.Get 0&lt;/code&gt; で ShortCode の引数を取得しています。&lt;/p&gt;
 
-&lt;p&gt;Markdown ファイル中では以下のように書きます。&lt;code&gt;favorite&lt;/code&gt; が &lt;code&gt;.Get 0&lt;/code&gt; の部分に埋め込まれた HTML が生成されます。&lt;/p&gt;
+&lt;p&gt;Markdown ファイル中では以下のように書きます。これにより &lt;code&gt;favorite&lt;/code&gt; が &lt;code&gt;.Get 0&lt;/code&gt; の部分に埋め込まれた HTML を生成します。&lt;/p&gt;
 
 &lt;p&gt;{{&amp;lt; md-icon favorite &amp;gt;}}&lt;/p&gt;
 
-&lt;p&gt;&lt;i class=&#34;material-icons&#34; style=&#34;vertical-align: bottom;&#34;&gt;
+&lt;p&gt;&lt;i class=&#34;material-icons castaway-md-icon&#34;&gt;
   favorite
 &lt;/i&gt;
-&lt;i class=&#34;material-icons&#34; style=&#34;vertical-align: bottom;&#34;&gt;
+&lt;i class=&#34;material-icons castaway-md-icon&#34;&gt;
   favorite
 &lt;/i&gt;
-&lt;i class=&#34;material-icons&#34; style=&#34;vertical-align: bottom;&#34;&gt;
+&lt;i class=&#34;material-icons castaway-md-icon&#34;&gt;
   favorite
 &lt;/i&gt;
 
 表示はこんな感じです
-&lt;i class=&#34;material-icons&#34; style=&#34;vertical-align: bottom;&#34;&gt;
+&lt;i class=&#34;material-icons castaway-md-icon&#34;&gt;
   favorite
 &lt;/i&gt;
-&lt;i class=&#34;material-icons&#34; style=&#34;vertical-align: bottom;&#34;&gt;
+&lt;i class=&#34;material-icons castaway-md-icon&#34;&gt;
   favorite
 &lt;/i&gt;
-&lt;i class=&#34;material-icons&#34; style=&#34;vertical-align: bottom;&#34;&gt;
+&lt;i class=&#34;material-icons castaway-md-icon&#34;&gt;
   favorite
 &lt;/i&gt;
 &lt;/p&gt;

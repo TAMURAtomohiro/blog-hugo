@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.18.1" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css">
+
+  
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script>
+          
+<link rel="stylesheet" href="/css/base.css">
+
+<link rel="alternate" href="/index.xml" type="application/rss+xml" title="嵐の小舟より">
+<title>ブログに使うドメインを AWS で取得する - 嵐の小舟より</title>
+</head>
+<body>
+  
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-92780964-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+  <div class="">
+  <header class="castaway-header-bar">
+    <nav>
+      <div class="nav-wrapper castaway-site-logo">
+        <div>
+          <a href="/" class="brand-logo right">
+            <i class="material-icons" style="margin-right: 5px;">rowing</i>
+            <span class="castaway-site-title">嵐の小舟より</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  
+
+
+<section id="main">
+  <div class="row">
+    <div class="col s12 m12 l6 offset-l3">
+
+      <article itemscope itemtype="http://schema.org/Blog" class="card castaway-card">
+
+        <div class="card-title indigo darken-3 castaway-card-title">
+          <div class="card-content">
+            <div class="white-text" itemprop="headline">
+              ブログに使うドメインを AWS で取得する
+            </div>
+          </div>
+        </div>
+
+        <div class="card-content">
+          <div class="row">
+            <div class="castaway-date-published">
+              <span>公開日：</span>
+              <i class="material-icons" style="vertical-align: middle;">today</i>
+              <time itemprop="datePublished" datetime="2017-03-09">2017/03/09</time>
+              <span style="margin-left: 10px;"> タグ: </span>
+              
+              <a href="/tags/aws">
+                <div class="tag-aws waves-effect waves-teal chip">
+                  aws
+                </div>
+              </a>
+              
+            </div>
+          </div>
+          
+          
+          <div class="castaway-card-content mdl-card__supporting-text mdl-color-text--grey-700">
+            <p>せっかくなので本サイトのドメインを AWS Route53 で管理するようにした際のメモです。</p>
+
+<p>やったことは以下の通り。</p>
+
+<ul>
+<li><a href="https://aws.amazon.com/jp/route53/">Route 53</a> でドメインを取得</li>
+<li><a href="https://aws.amazon.com/jp/ses/">SES</a> で対象ドメインのメールアドレスにて受信</li>
+<li><a href="https://aws.amazon.com/jp/certificate-manager/">Certificate Manager</a> で対象ドメインのSSL証明書を取得</li>
+<li><a href="https://aws.amazon.com/jp/cloudfront/">CloudFront</a> に取得したSSL証明書を設定</li>
+</ul>
+
+<p>なお、今のところ CloudFront のオリジンサーバとしては <a href="https://aws.amazon.com/jp/s3/">S3</a> ではなく <a href="https://pages.github.com/">GitHub Pages</a> を使用しています。</p>
+
+<p></p>
+
+<h1 id="なぜ-aws-でドメインを取得したか">なぜ AWS でドメインを取得したか</h1>
+
+<p>ドメインの料金だけだと<a href="www.onamae.com">お名前.com</a>などのように Route 53 より安いところもあります。</p>
+
+<ul>
+<li>取得したドメインでのメール受信設定( MX レコードの登録)を SES がやってくれるため楽</li>
+<li>SSL証明書が無料かつ自動更新</li>
+</ul>
+
+<p>ということで、要するに設定や管理の手間を省くことを重視したためです。</p>
+
+<h1 id="route-53-におけるドメイン管理者情報の公開範囲について">Route 53 におけるドメイン管理者情報の公開範囲について</h1>
+
+<p>Route 53 でドメインを取得する際、管理者情報を隠すかどうかのチェックボックスがありますが、
+トップレベルドメインによって秘匿できる項目が異なります。
+(参考：<a href="http://dev.classmethod.jp/cloud/aws/route53-privacy-protection/">Route 53で管理するドメインでプライバシー保護できるWHOIS項目は、ドメインによって違うので注意</a> )</p>
+
+<p>本サイトのような<a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/registrar-tld-list.html#info">.info ドメイン</a> の場合は
+名前だけが公開されます。
+残りの項目はドメインレジストラである <a href="https://www.gandi.net/">Gandi</a> の情報に置換されます。</p>
+
+<h1 id="ドメイン取得時に登録するメールアドレスについて">ドメイン取得時に登録するメールアドレスについて</h1>
+
+<p>今回、ドメイン取得時に登録するメールアドレスについても該当ドメインを使用することにしました( a&#100;mi&#110;&#64;&#116;m&#114;tmhr.in&#102;o )。
+当然ながらドメイン取得申請の段階ではこのメールアドレスで受信することはできません。
+ドメインを申請すると Route 53 からメールが送信され、本文中の URL にアクセスすることで取得完了となりますが、
+期限に猶予があるため、その間に SES の設定を済ませることになります。</p>
+
+<p>Route 53 でドメイン申請 <i class="material-icons castaway-md-icon">
+  arrow_forward
+</i>
+ SES で MX レコード登録 <i class="material-icons castaway-md-icon">
+  arrow_forward
+</i>
+ Route 53 から送られてくるメール本文の URL にアクセス、という流れです。</p>
+
+<p>ここで、Certificate Manager での SSL 証明書取得を予定していて、かつドメインの管理者情報を秘匿している場合は注意が必要です。
+Certificate Manager でもドメイン認証のためにメールが発信されますが、宛先は以下のように固定されます。</p>
+
+<ol>
+<li><code>whois</code> で取得できる管理者メールアドレス</li>
+<li>ドメインに次の接頭辞をつけた 5 個のメールアドレス: <code>admin@</code>, <code>administrator@</code>,<code>hostmaster@</code>, <code>webmaster@</code>, <code>postmaster@</code></li>
+</ol>
+
+<p>管理者情報を秘匿した場合は <code>whois</code> で取得できるメールアドレスがドメインレジストラのものになりますので、
+(2)のアドレスのどれかを登録しておきます。</p>
+
+<h1 id="ses-で受信したメールに対するアクションについて">SES で受信したメールに対するアクションについて</h1>
+
+<p>認証のための URL がわかれば十分であり、
+Route 53 と Certificate Manager から送られる二通を読めればよいので、
+今回は単純に S3 へ保存しました。</p>
+
+<h1 id="ssl証明書を取得するリージョンについて">SSL証明書を取得するリージョンについて</h1>
+
+<p>Certificate Manager で取得した SSL 証明書は、取得したリージョンでのみ利用することができます。
+CloudFront はグローバルなサービスのため、Webコンソール上でリージョンを選択できませんが、
+便宜的に <code>US East(N. Virginia)</code> で設定するという扱いのためSSL 証明書もここで取得します。</p>
+
+<h1 id="cloudfront-が持つキャッシュについて">CloudFront が持つキャッシュについて</h1>
+
+<p>デフォルトのままの設定だと TTL が 86400 秒となるので、GitHub Pages にデプロイしてから
+最大一日程度は古いコンテンツが表示されます。
+デプロイの際にスクリプトからキャッシュを削除するようにすれば良いと思いますが、未実装です。</p>
+
+<!-- 詰まったところ -->
+
+<!-- CloudFront に Alternate CNAME 設定し忘れ -->
+
+<!-- http://blog.ybbo.net/2015/04/11/how-to-fix-error-of-error-the-request-could-not-be-satisfied-generated-by-cloudfront-cloudfront-on-aws-cloud-front/ -->
+          </div>
+        </div>
+          
+          <div class="card-action castaway-card-footer">
+            <a class="btn waves-effect waves-light" href="/">サイトトップ</a>
+          </div>            
+
+      </article>
+        
+    </div>
+
+    </div>
+  </div>
+</section>
+
+
+</div>
+</body>
+</html>
+

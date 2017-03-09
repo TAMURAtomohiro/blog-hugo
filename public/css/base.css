@@ -16,7 +16,7 @@ h2 {
   background-color: #bbdefb;
 }
 
-li:before {
+ul > li:before {
   content: "- ";
 }
 
@@ -53,10 +53,8 @@ p:not(:first-child) {
 }
 
 .castaway-date-published {
+  height: 32px;
   margin-bottom: 5px;
-}
-.castaway-date-published > *{
-  vertical-align: middle;
 }
 
 .castaway-card-title {
@@ -80,6 +78,6 @@ p:not(:first-child) {
 }
 
 .castaway-md-icon {
-  vertical-align: bottom;
+  vertical-align: bottom !important;
 }
 

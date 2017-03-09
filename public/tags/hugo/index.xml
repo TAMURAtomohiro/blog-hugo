@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Hugo on 嵐の小舟より</title>
+    <link>https://tmrtmhr.info/tags/hugo/index.xml</link>
+    <description>Recent content in Hugo on 嵐の小舟より</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja-JP</language>
+    <atom:link href="https://tmrtmhr.info/tags/hugo/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Hugo でマテリアルアイコンを使うための ShortCode</title>
+      <link>https://tmrtmhr.info/tech/hugo-with-material-icon/</link>
+      <pubDate>Wed, 08 Mar 2017 08:52:50 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/hugo-with-material-icon/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://gohugo.io/&#34;&gt;Hugo&lt;/a&gt; で任意の HTML を生成したい場合は &lt;a href=&#34;https://gohugo.io/extras/shortcodes/&#34;&gt;ShortCode&lt;/a&gt; を書くことになります。&lt;/p&gt;
+
+&lt;p&gt;本サイトでは使い道はさておきマテリアルアイコンを読み込んでいるので、
+ShortCode で使えるようにしてみました。
+&lt;/p&gt;
+
+&lt;h1 id=&#34;hugo-からマテリアルアイコンを使う手順&#34;&gt;Hugo からマテリアルアイコンを使う手順&lt;/h1&gt;
+
+&lt;p&gt;まず &lt;code&gt;themes/${テーマ名}/layouts/partials/header.html&lt;/code&gt; などに以下を追記してマテリアルアイコンのフォントを読み込みます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;https://fonts.googleapis.com/icon?family=Material+Icons&amp;quot;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;layouts/shortcodes/md-icon.html&lt;/code&gt; として以下の内容を用意し、ShortCode として使えるようにします。&lt;/p&gt;
+
+&lt;script src=&#34;//gist.github.com/tmrtmhr/90cff33e3e18fbc10f8daf9dac753b30.js&#34;&gt;&lt;/script&gt;
+
+&lt;p&gt;ここで、&lt;code&gt;vertical-align: bottom;&lt;/code&gt; はアイコンと文章の高さをそろえるための指定です。
+また、&lt;code&gt;.Get 0&lt;/code&gt; で ShortCode の引数を取得しています。&lt;/p&gt;
+
+&lt;p&gt;Markdown ファイル中では以下のように書きます。これにより &lt;code&gt;favorite&lt;/code&gt; が &lt;code&gt;.Get 0&lt;/code&gt; の部分に埋め込まれた HTML を生成します。&lt;/p&gt;
+
+&lt;p&gt;{{&amp;lt; md-icon favorite &amp;gt;}}&lt;/p&gt;
+
+&lt;p&gt;&lt;i class=&#34;material-icons castaway-md-icon&#34;&gt;
+  favorite
+&lt;/i&gt;
+&lt;i class=&#34;material-icons castaway-md-icon&#34;&gt;
+  favorite
+&lt;/i&gt;
+&lt;i class=&#34;material-icons castaway-md-icon&#34;&gt;
+  favorite
+&lt;/i&gt;
+
+表示はこんな感じです
+&lt;i class=&#34;material-icons castaway-md-icon&#34;&gt;
+  favorite
+&lt;/i&gt;
+&lt;i class=&#34;material-icons castaway-md-icon&#34;&gt;
+  favorite
+&lt;/i&gt;
+&lt;i class=&#34;material-icons castaway-md-icon&#34;&gt;
+  favorite
+&lt;/i&gt;
+&lt;/p&gt;
+
+&lt;h1 id=&#34;なぜ-raw-html-ではなく-shortcode-を書くのか&#34;&gt;なぜ Raw HTML ではなく ShortCode を書くのか&lt;/h1&gt;
+
+&lt;p&gt;Markdown は &lt;a href=&#34;http://daringfireball.net/projects/markdown/syntax#html&#34;&gt;HTMLを埋め込める&lt;/a&gt;ため、
+アイコン表示の HTML (前述の Gist)を直接書いても表示されます。&lt;/p&gt;
+
+&lt;p&gt;ではなぜ ShortCode として用意するのかというと、
+&lt;a href=&#34;https://gohugo.io/extras/shortcodes/&#34;&gt;公式サイトの説明&lt;/a&gt;にある通り、
+以下のような利点があるためです。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;定型のHTMLを毎回書かずにすむ&lt;/li&gt;
+&lt;li&gt;ShortCode を変更することで該当の HTML 部分がすべて置き換わるので更新が楽にすむ&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;そんなわけで、一生に一度の HTML だと心に決めている、というのでなければ、
+ShortCode 化して再利用するほうが良いかと思います。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>静的サイトジェネレータの生成時間比較</title>
+      <link>https://tmrtmhr.info/tech/static-site-generator-comparison/</link>
+      <pubDate>Tue, 08 Dec 2015 15:08:00 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/static-site-generator-comparison/</guid>
+      <description>&lt;p&gt;エンジニア界隈ではどうもブログを作る目的で静的サイトジェネレータというものが使われている、
+と聞いたため、せっかくなので使ってみることにしました。
+&lt;/p&gt;
+
+&lt;p&gt;調べていく過程で&lt;a href=&#34;https://gohugo.io/overview/introduction/&#34;&gt;Hugo&lt;/a&gt;のサイトに
+「Hugoは速いよ！」という内容の動画を見つけたり、
+速度が原因で Hugo に移行したブログ記事を見かけたりして、
+実行時間の伸び方が気になったのでざっくり確認してみます。&lt;/p&gt;
+
+&lt;h1 id=&#34;対象としたジェネレータについて&#34;&gt;対象としたジェネレータについて&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://www.staticgen.com/&#34;&gt;StaticGen&lt;/a&gt;のスター数が多いものから選びました。
+2015/11月の時点では Jekyll, GitBook, Octopress, Hexo, Hugo, Pelican の順です。&lt;/p&gt;
+
+&lt;h1 id=&#34;測定環境&#34;&gt;測定環境&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;計算機&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;OS&lt;/th&gt;
+&lt;th&gt;CPU&lt;/th&gt;
+&lt;th&gt;Memory&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Mac OS X 10.10.5&lt;/td&gt;
+&lt;td&gt;3.1 GHz デュアルコア Intel Core i7&lt;/td&gt;
+&lt;td&gt;16GB&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;ul&gt;
+&lt;li&gt;処理系のバージョン&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Node.js&lt;/th&gt;
+&lt;th&gt;Python&lt;/th&gt;
+&lt;th&gt;Ruby&lt;/th&gt;
+&lt;th&gt;Go&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;5.0.0&lt;/td&gt;
+&lt;td&gt;2.7.9&lt;/td&gt;
+&lt;td&gt;2.2.1&lt;/td&gt;
+&lt;td&gt;1.5.1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ジェネレータのバージョン&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Octopress&lt;/th&gt;
+&lt;th&gt;Hexo&lt;/th&gt;
+&lt;th&gt;Pelican&lt;/th&gt;
+&lt;th&gt;GitBook&lt;/th&gt;
+&lt;th&gt;Jekyll&lt;/th&gt;
+&lt;th&gt;Hugo&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;3.0.11&lt;/td&gt;
+&lt;td&gt;0.1.9&lt;/td&gt;
+&lt;td&gt;3.6.3&lt;/td&gt;
+&lt;td&gt;1.0.0&lt;/td&gt;
+&lt;td&gt;3.0.0&lt;/td&gt;
+&lt;td&gt;v0.15-DEV&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h1 id=&#34;測定方法&#34;&gt;測定方法&lt;/h1&gt;
+
+&lt;p&gt;以下の手順を繰り返し、5回計測して単純平均を取りました。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;出力先にある生成物を消しておく&lt;/li&gt;
+&lt;li&gt;本文に&amp;rdquo;あ&amp;rdquo;を1000文字並べた md ファイルを必要な個数用意する
+
+&lt;ul&gt;
+&lt;li&gt;1,10,100,1000 という刻み&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;各ジェネレータの実行時間を time コマンドの user + sys で測る
+
+&lt;ul&gt;
+&lt;li&gt;たとえば Hexo なら hexo generate を実行&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&#34;生成時間測定結果&#34;&gt;生成時間測定結果&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;静的サイトジェネレータの CPU 時間(秒)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&#34;right&#34;&gt;記事数&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;Octopress&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;Hexo&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;Pelican&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;Gitbook&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;Jekyll&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;Hugo&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&#34;right&#34;&gt;1&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;2.86&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;2.88&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.39&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;1.77&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.43&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.02&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;right&#34;&gt;10&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;2.98&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;2.96&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.44&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;1.64&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.37&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.03&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;right&#34;&gt;100&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;4.94&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;4.22&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;1.14&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;1.79&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.55&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.11&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;right&#34;&gt;1000&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;25.02&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;14.61&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;6.02&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;3.34&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;1.88&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.82&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://tmrtmhr.info/img/staticSiteGeneratorComparison.png&#34; alt=&#34;静的サイトジェネレータの実行時間グラフ&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;確かに Hugo が速いです。
+CPU 時間も短いですが、Hugo はどこかで並列処理をしているらしくマルチコアを活用できているようだったため、
+実時間ではもう少し速くなるはずです。&lt;/p&gt;
+
+&lt;h1 id=&#34;そもそも生成時間が長いと何が困るのか&#34;&gt;そもそも生成時間が長いと何が困るのか？&lt;/h1&gt;
+
+&lt;p&gt;編集→確認のループが長くなりイライラします。
+記事を保存してから LiveReload で再読み込みが完了するまでの待ち時間が苦痛になりますし、
+デザインを変えようとして再生成するとか、Github Pages などへのデプロイのために再生成するとか、
+CPUを温めるために再生成するとか、生活の端々でいったん待たされることになります。&lt;/p&gt;
+
+&lt;p&gt;「Hugo に移行した」系のブログ記事でも
+「元々使っていたジェネレータの遅さに耐えきれなくなった」という理由が散見されました。
+生成時間の長さは移行の原因となりえます。&lt;/p&gt;
+
+&lt;p&gt;というわけで生成時間の伸び方は静的サイトジェネレータを選ぶ際のひとつの尺度になるかと思います。&lt;/p&gt;
+
+&lt;p&gt;とはいえ記事数が少ないうちは問題にならないですし、
+生成物の違い・Github Pages などとの連携のような機能面での差異、
+デザインの豊富さや情報の多さなども重要ですから、問題になってから移行を考えてもいいと思います。
+そもそも別のことをやって待てばいいという向きもあるでしょうし、
+耐えきれるかどうか、一度適当に記事を増やして体感してみるのがおすすめです。&lt;/p&gt;
+
+&lt;p&gt;とりあえず自分は Hugo を使ってみます。&lt;/p&gt;
+
+&lt;h1 id=&#34;余談&#34;&gt;余談&lt;/h1&gt;
+
+&lt;p&gt;Octopress の時間は指数的に増えているように見えます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://tmrtmhr.info/img/staticSiteGeneratorComparison-5000.png&#34; alt=&#34;静的サイトジェネレータの実行時間グラフ&#34; /&gt;&lt;/p&gt;
+
+&lt;!-- 10000 記事では Hugo のサーバが起動しませんでした。 --&gt;
+
+&lt;!-- ``` --&gt;
+
+&lt;!-- ERROR: 2015/11/16 Error: listen tcp 127.0.0.1:1313: socket: too many open files in system --&gt;
+
+&lt;!-- ``` --&gt;</description>
+    </item>
+    
+  </channel>
+</rss>
