@@ -34,13 +34,14 @@ cat json/cloudfront-invalidation.json |
 ```
 <!--more-->
 
-# スクリプトの内容
+# プログラムの内容
 
 [コードはここ](https://github.com/tmrtmhr/filljson)で、
 Go 言語で書いたので `go get github.com/tmrtmhr/filljson` でコマンドをインストールできます。
 リポジトリの `js/filljson.js` に node.js で実装したものもあります。
 
 エラーチェックをしていないので、利用する際は十分注意してください。
+今のところテストコードも書いてないです。
 
 入力としては配列を想定しておらず、オブジェクトのみなので `map[string]interface{}` 型を `json.Unmarshal` に渡します。
 エラーは捨てているので配列が来たら死にます。

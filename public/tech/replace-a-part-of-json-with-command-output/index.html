@@ -124,13 +124,14 @@ ga('send', 'pageview');
 
 <p></p>
 
-<h1 id="スクリプトの内容">スクリプトの内容</h1>
+<h1 id="プログラムの内容">プログラムの内容</h1>
 
 <p><a href="https://github.com/tmrtmhr/filljson">コードはここ</a>で、
 Go 言語で書いたので <code>go get github.com/tmrtmhr/filljson</code> でコマンドをインストールできます。
 リポジトリの <code>js/filljson.js</code> に node.js で実装したものもあります。</p>
 
-<p>エラーチェックをしていないので、利用する際は十分注意してください。</p>
+<p>エラーチェックをしていないので、利用する際は十分注意してください。
+今のところテストコードも書いてないです。</p>
 
 <p>入力としては配列を想定しておらず、オブジェクトのみなので <code>map[string]interface{}</code> 型を <code>json.Unmarshal</code> に渡します。
 エラーは捨てているので配列が来たら死にます。</p>

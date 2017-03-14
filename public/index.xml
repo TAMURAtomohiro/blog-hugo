@@ -43,13 +43,14 @@
 
 &lt;p&gt;&lt;/p&gt;
 
-&lt;h1 id=&#34;スクリプトの内容&#34;&gt;スクリプトの内容&lt;/h1&gt;
+&lt;h1 id=&#34;プログラムの内容&#34;&gt;プログラムの内容&lt;/h1&gt;
 
 &lt;p&gt;&lt;a href=&#34;https://github.com/tmrtmhr/filljson&#34;&gt;コードはここ&lt;/a&gt;で、
 Go 言語で書いたので &lt;code&gt;go get github.com/tmrtmhr/filljson&lt;/code&gt; でコマンドをインストールできます。
 リポジトリの &lt;code&gt;js/filljson.js&lt;/code&gt; に node.js で実装したものもあります。&lt;/p&gt;
 
-&lt;p&gt;エラーチェックをしていないので、利用する際は十分注意してください。&lt;/p&gt;
+&lt;p&gt;エラーチェックをしていないので、利用する際は十分注意してください。
+今のところテストコードも書いてないです。&lt;/p&gt;
 
 &lt;p&gt;入力としては配列を想定しておらず、オブジェクトのみなので &lt;code&gt;map[string]interface{}&lt;/code&gt; 型を &lt;code&gt;json.Unmarshal&lt;/code&gt; に渡します。
 エラーは捨てているので配列が来たら死にます。&lt;/p&gt;
