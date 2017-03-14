@@ -17,7 +17,7 @@
 <link rel="stylesheet" href="/css/base.css">
 
 <link rel="alternate" href="/index.xml" type="application/rss+xml" title="嵐の小舟より">
-<title>Aws - 嵐の小舟より</title>
+<title>Go - 嵐の小舟より</title>
 </head>
 <body>
   
@@ -127,123 +127,6 @@ ga('send', 'pageview');
 
           <div class="card-action castaway-card-footer">
             <a class="btn waves-effect waves-light" href="/tech/replace-a-part-of-json-with-command-output/">この記事を読む</a>
-          </div>
-		    </article>
-      </div>
-    </div>
-      
-    
-
-    <div class="row">
-      <div class="col s12 m12 l6 offset-l3">
-        <article itemscope itemtype="http://schema.org/Blog" class="card castaway-card-link">
-
-          <div class="card-title indigo darken-3 castaway-card-title">
-            <div class="card-content">
-              <div class="white-text" itemprop="headline">
-                git diff を利用して更新のあったファイルのみ CloudFront のキャッシュを削除する
-              </div>
-            </div>
-          </div>
-            
-          <div class="card-content castaway-card-summary blue-grey-text">
-            
-            <div class="row">
-              <div class="col castaway-date-published">
-                <span>公開日: </span>
-                <i class="material-icons" style="vertical-align: middle;">today</i>
-                <time itemprop="datePublished" datetime="2017-03-14">2017/03/14</time>
-                <span style="margin-left: 10px;"> タグ: </span>
-                
-                <a href="/tags/hugo">
-                  <div class="tag-hugo waves-effect waves-teal chip">
-                    hugo
-                  </div>
-                </a>
-                
-                <a href="/tags/aws">
-                  <div class="tag-aws waves-effect waves-teal chip">
-                    aws
-                  </div>
-                </a>
-                
-              </div>
-            </div>
-            <p>本サイトは Hugo で生成したものを GitHub Pages に push して公開し、
-CloudFront を利用して配信しています。
-CloudFront はキャッシュサーバとして働くので、
-何もしなければ TTL が切れるまでは古いコンテンツが表示されます。</p>
-
-<p>単純にキャッシュ全削除という手もありますが、
-せっかくなので更新のあったファイルのみキャッシュを削除してみました。</p>
-
-<p>やっていることは以下のような感じです。</p>
-
-<ul>
-<li><code>git diff</code> で更新のあったファイル一覧を取得</li>
-<li>一覧を加工して AWS CLI 用の JSON ファイルを生成</li>
-<li>AWS CLI の <code>aws cloudfront create-invalidation</code> でキャッシュ削除</li>
-</ul>
-
-<p></p>
-          </div>
-
-          <div class="card-action castaway-card-footer">
-            <a class="btn waves-effect waves-light" href="/tech/aws/delete-updated-file-cache-on-cloudfront/">この記事を読む</a>
-          </div>
-		    </article>
-      </div>
-    </div>
-      
-    
-
-    <div class="row">
-      <div class="col s12 m12 l6 offset-l3">
-        <article itemscope itemtype="http://schema.org/Blog" class="card castaway-card-link">
-
-          <div class="card-title indigo darken-3 castaway-card-title">
-            <div class="card-content">
-              <div class="white-text" itemprop="headline">
-                ブログに使うドメインを AWS で取得する
-              </div>
-            </div>
-          </div>
-            
-          <div class="card-content castaway-card-summary blue-grey-text">
-            
-            <div class="row">
-              <div class="col castaway-date-published">
-                <span>公開日: </span>
-                <i class="material-icons" style="vertical-align: middle;">today</i>
-                <time itemprop="datePublished" datetime="2017-03-14">2017/03/14</time>
-                <span style="margin-left: 10px;"> タグ: </span>
-                
-                <a href="/tags/aws">
-                  <div class="tag-aws waves-effect waves-teal chip">
-                    aws
-                  </div>
-                </a>
-                
-              </div>
-            </div>
-            <p>せっかくなので本サイトのドメインを AWS Route53 で管理するようにした際のメモです。</p>
-
-<p>やったことは以下の通り。</p>
-
-<ul>
-<li><a href="https://aws.amazon.com/jp/route53/">Route 53</a> でドメインを取得</li>
-<li><a href="https://aws.amazon.com/jp/ses/">SES</a> で対象ドメインのメールアドレスにて受信</li>
-<li><a href="https://aws.amazon.com/jp/certificate-manager/">Certificate Manager</a> で対象ドメインのSSL証明書を取得</li>
-<li><a href="https://aws.amazon.com/jp/cloudfront/">CloudFront</a> に取得したSSL証明書を設定</li>
-</ul>
-
-<p>なお、今のところ CloudFront のオリジンサーバとしては <a href="https://aws.amazon.com/jp/s3/">S3</a> ではなく <a href="https://pages.github.com/">GitHub Pages</a> を使用しています。</p>
-
-<p></p>
-          </div>
-
-          <div class="card-action castaway-card-footer">
-            <a class="btn waves-effect waves-light" href="/tech/aws/register-a-domain-for-blog/">この記事を読む</a>
           </div>
 		    </article>
       </div>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Shell Script on 嵐の小舟より</title>
+    <link>https://tmrtmhr.info/tags/shell-script/index.xml</link>
+    <description>Recent content in Shell Script on 嵐の小舟より</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja-JP</language>
+    <atom:link href="https://tmrtmhr.info/tags/shell-script/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>GO言語で雛形JSONの内容をコマンド出力の内容で置換する</title>
+      <link>https://tmrtmhr.info/tech/replace-a-part-of-json-with-command-output/</link>
+      <pubDate>Tue, 14 Mar 2017 18:04:09 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/replace-a-part-of-json-with-command-output/</guid>
+      <description>&lt;p&gt;AWS CLI によりコマンドラインから制御したりする際、リクエストパラメータとして JSON ファイルが必要になることがあります。
+&lt;a href=&#34;https://tmrtmhr.info/tech/aws/delete-updated-file-cache-on-cloudfront/&#34;&gt;CloudFront のキャッシュを削除したいとき&lt;/a&gt;なんかがそうです。&lt;/p&gt;
+
+&lt;p&gt;AWS CLI のコマンドごとに、リクエストJSONを生成する専用スクリプトを書くという手もありますが、
+シェル上でパイプやらリダイレクトやらを駆使していい感じに JSON を生成できるある程度汎用的なスクリプトにならんものか、
+という思いから試してみた結果をここに記します。
+どこかに既にあるものでしたらすみません。&lt;/p&gt;
+
+&lt;p&gt;コマンド引数は以下のようになっていて、JSON ファイルは標準入力から与えます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;filljson ${入力の型} ${キーパス} ${入力ファイル名}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;標準入出力で JSON をやりとりするので以下のようにパイプでつなげることで
+中間ファイルを作ることなく最終的なリクエスト JSON が得られます。
+入力ファイル名のところには &lt;code&gt;bash&lt;/code&gt; や &lt;code&gt;zsh&lt;/code&gt; のプロセス置換機能を利用しています。
+プロセス置換機能を使うとプログラム側からは単にファイルパスが渡ってくるように見えるので、
+ファイルIOとして処理すればOKです。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;cat json/cloudfront-invalidation.json |
+  filljson int InvalidationBatch.Paths.Quantity &amp;lt;(git diff --ignore-all-space --diff-filter=M --name-only HEAD^ HEAD  public | wc -l) |
+  filljson [string] InvalidationBatch.Paths.Items &amp;lt;(git diff --ignore-all-space --diff-filter=M --name-only HEAD^ HEAD  public | sed -e &#39;s/^public//g&#39;) |
+  filljson string InvalidationBatch.CallerReference &amp;lt;(date +&amp;quot;osone3-%Y/%m/%d-%H:%k:%m&amp;quot; | tr -d &#39;\n&#39;) |
+  jq . &amp;gt; request.json
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;スクリプトの内容&#34;&gt;スクリプトの内容&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/tmrtmhr/filljson&#34;&gt;コードはここ&lt;/a&gt;で、
+Go 言語で書いたので &lt;code&gt;go get github.com/tmrtmhr/filljson&lt;/code&gt; でコマンドをインストールできます。
+リポジトリの &lt;code&gt;js/filljson.js&lt;/code&gt; に node.js で実装したものもあります。&lt;/p&gt;
+
+&lt;p&gt;エラーチェックをしていないので、利用する際は十分注意してください。&lt;/p&gt;
+
+&lt;p&gt;入力としては配列を想定しておらず、オブジェクトのみなので &lt;code&gt;map[string]interface{}&lt;/code&gt; 型を &lt;code&gt;json.Unmarshal&lt;/code&gt; に渡します。
+エラーは捨てているので配列が来たら死にます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;var jsonData map[string]interface{}
+_ = json.Unmarshal(jsonStr, &amp;amp;jsonData)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;取り出した値が &lt;code&gt;interface{}&lt;/code&gt; となっているので再度 &lt;code&gt;map[string]interface{}&lt;/code&gt;として型アサーションをつけます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;finger = finger[propName].(map[string]interface{})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;参考：&lt;a href=&#34;https://www.kaoriya.net/blog/2016/06/25/&#34;&gt;golang は ゆるふわに JSON を扱えまぁす!&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;雑感&#34;&gt;雑感&lt;/h1&gt;
+
+&lt;p&gt;標準入出力は偉大です。&lt;/p&gt;
+
+&lt;p&gt;GO言語的には特化した(たとえばCloudFront専用のJSON生成専用)コマンドを作ってきっちり型検査したほうが良さそうですが、
+まあこういう書き方もできるということで御参考いただければ幸いです。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

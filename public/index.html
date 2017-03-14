@@ -56,6 +56,154 @@ ga('send', 'pageview');
           <div class="card-title indigo darken-3 castaway-card-title">
             <div class="card-content">
               <div class="white-text" itemprop="headline">
+                GO言語で雛形JSONの内容をコマンド出力の内容で置換する
+              </div>
+            </div>
+          </div>
+            
+          <div class="card-content castaway-card-summary blue-grey-text">
+            
+            <div class="row">
+              <div class="col castaway-date-published">
+                <span>公開日: </span>
+                <i class="material-icons" style="vertical-align: middle;">today</i>
+                <time itemprop="datePublished" datetime="2017-03-14">2017/03/14</time>
+                <span style="margin-left: 10px;"> タグ: </span>
+                
+                <a href="/tags/aws">
+                  <div class="tag-aws waves-effect waves-teal chip">
+                    aws
+                  </div>
+                </a>
+                
+                <a href="/tags/go">
+                  <div class="tag-go waves-effect waves-teal chip">
+                    go
+                  </div>
+                </a>
+                
+                <a href="/tags/node.js">
+                  <div class="tag-node.js waves-effect waves-teal chip">
+                    node.js
+                  </div>
+                </a>
+                
+                <a href="/tags/shell-script">
+                  <div class="tag-shell script waves-effect waves-teal chip">
+                    shell script
+                  </div>
+                </a>
+                
+              </div>
+            </div>
+            <p>AWS CLI によりコマンドラインから制御したりする際、リクエストパラメータとして JSON ファイルが必要になることがあります。
+<a href="https://tmrtmhr.info/tech/aws/delete-updated-file-cache-on-cloudfront/">CloudFront のキャッシュを削除したいとき</a>なんかがそうです。</p>
+
+<p>AWS CLI のコマンドごとに、リクエストJSONを生成する専用スクリプトを書くという手もありますが、
+シェル上でパイプやらリダイレクトやらを駆使していい感じに JSON を生成できるある程度汎用的なスクリプトにならんものか、
+という思いから試してみた結果をここに記します。
+どこかに既にあるものでしたらすみません。</p>
+
+<p>コマンド引数は以下のようになっていて、JSON ファイルは標準入力から与えます。</p>
+
+<pre><code>filljson ${入力の型} ${キーパス} ${入力ファイル名}
+</code></pre>
+
+<p>標準入出力で JSON をやりとりするので以下のようにパイプでつなげることで
+中間ファイルを作ることなく最終的なリクエスト JSON が得られます。
+入力ファイル名のところには <code>bash</code> や <code>zsh</code> のプロセス置換機能を利用しています。
+プロセス置換機能を使うとプログラム側からは単にファイルパスが渡ってくるように見えるので、
+ファイルIOとして処理すればOKです。</p>
+
+<pre><code>cat json/cloudfront-invalidation.json |
+  filljson int InvalidationBatch.Paths.Quantity &lt;(git diff --ignore-all-space --diff-filter=M --name-only HEAD^ HEAD  public | wc -l) |
+  filljson [string] InvalidationBatch.Paths.Items &lt;(git diff --ignore-all-space --diff-filter=M --name-only HEAD^ HEAD  public | sed -e 's/^public//g') |
+  filljson string InvalidationBatch.CallerReference &lt;(date +&quot;osone3-%Y/%m/%d-%H:%k:%m&quot; | tr -d '\n') |
+  jq . &gt; request.json
+</code></pre>
+
+<p></p>
+          </div>
+
+          <div class="card-action castaway-card-footer">
+            <a class="btn waves-effect waves-light" href="/tech/replace-a-part-of-json-with-command-output/">この記事を読む</a>
+          </div>
+		    </article>
+      </div>
+    </div>
+      
+    
+
+    <div class="row">
+      <div class="col s12 m12 l6 offset-l3">
+        <article itemscope itemtype="http://schema.org/Blog" class="card castaway-card-link">
+
+          <div class="card-title indigo darken-3 castaway-card-title">
+            <div class="card-content">
+              <div class="white-text" itemprop="headline">
+                git diff を利用して更新のあったファイルのみ CloudFront のキャッシュを削除する
+              </div>
+            </div>
+          </div>
+            
+          <div class="card-content castaway-card-summary blue-grey-text">
+            
+            <div class="row">
+              <div class="col castaway-date-published">
+                <span>公開日: </span>
+                <i class="material-icons" style="vertical-align: middle;">today</i>
+                <time itemprop="datePublished" datetime="2017-03-14">2017/03/14</time>
+                <span style="margin-left: 10px;"> タグ: </span>
+                
+                <a href="/tags/hugo">
+                  <div class="tag-hugo waves-effect waves-teal chip">
+                    hugo
+                  </div>
+                </a>
+                
+                <a href="/tags/aws">
+                  <div class="tag-aws waves-effect waves-teal chip">
+                    aws
+                  </div>
+                </a>
+                
+              </div>
+            </div>
+            <p>本サイトは Hugo で生成したものを GitHub Pages に push して公開し、
+CloudFront を利用して配信しています。
+CloudFront はキャッシュサーバとして働くので、
+何もしなければ TTL が切れるまでは古いコンテンツが表示されます。</p>
+
+<p>単純にキャッシュ全削除という手もありますが、
+せっかくなので更新のあったファイルのみキャッシュを削除してみました。</p>
+
+<p>やっていることは以下のような感じです。</p>
+
+<ul>
+<li><code>git diff</code> で更新のあったファイル一覧を取得</li>
+<li>一覧を加工して AWS CLI 用の JSON ファイルを生成</li>
+<li>AWS CLI の <code>aws cloudfront create-invalidation</code> でキャッシュ削除</li>
+</ul>
+
+<p></p>
+          </div>
+
+          <div class="card-action castaway-card-footer">
+            <a class="btn waves-effect waves-light" href="/tech/aws/delete-updated-file-cache-on-cloudfront/">この記事を読む</a>
+          </div>
+		    </article>
+      </div>
+    </div>
+      
+    
+
+    <div class="row">
+      <div class="col s12 m12 l6 offset-l3">
+        <article itemscope itemtype="http://schema.org/Blog" class="card castaway-card-link">
+
+          <div class="card-title indigo darken-3 castaway-card-title">
+            <div class="card-content">
+              <div class="white-text" itemprop="headline">
                 ブログに使うドメインを AWS で取得する
               </div>
             </div>
@@ -67,7 +215,7 @@ ga('send', 'pageview');
               <div class="col castaway-date-published">
                 <span>公開日: </span>
                 <i class="material-icons" style="vertical-align: middle;">today</i>
-                <time itemprop="datePublished" datetime="2017-03-09">2017/03/09</time>
+                <time itemprop="datePublished" datetime="2017-03-14">2017/03/14</time>
                 <span style="margin-left: 10px;"> タグ: </span>
                 
                 <a href="/tags/aws">

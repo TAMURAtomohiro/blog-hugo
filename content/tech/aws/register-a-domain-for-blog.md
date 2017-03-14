@@ -1,5 +1,5 @@
 +++
-date = "2017-03-09T13:31:53+09:00"
+date = "2017-03-14T17:03:40+09:00"
 draft = false
 title = "ブログに使うドメインを AWS で取得する"
 tags = ["aws"]
@@ -51,7 +51,7 @@ Certificate Manager でもドメイン認証のためにメールが発信され
 
 1. `whois` で取得できる管理者メールアドレス
 1. ドメインに次の接頭辞をつけた 5 個のメールアドレス: `admin@`, `administrator@`,`hostmaster@`, `webmaster@`, `postmaster@`
- 
+
 管理者情報を秘匿した場合は `whois` で取得できるメールアドレスがドメインレジストラのものになりますので、
 (2)のアドレスのどれかを登録しておきます。
 
@@ -67,11 +67,17 @@ Certificate Manager で取得した SSL 証明書は、取得したリージョ�
 CloudFront はグローバルなサービスのため、Webコンソール上でリージョンを選択できませんが、
 便宜的に `US East(N. Virginia)` で設定するという扱いのためSSL 証明書もここで取得します。
 
+# 料金について
+
+[ドメインの料金は AWS クレジットでは支払えない](http://docs.aws.amazon.com/ja_jp/Route53/latest/DeveloperGuide/domain-transfer-to-route-53.html)ため、
+クレジットが残っていても料金が発生することに注意が必要です。
+
 # CloudFront が持つキャッシュについて
 
 デフォルトのままの設定だと TTL が 86400 秒となるので、GitHub Pages にデプロイしてから
 最大一日程度は古いコンテンツが表示されます。
-デプロイの際にスクリプトからキャッシュを削除するようにすれば良いと思いますが、未実装です。
+デプロイの際にスクリプトからキャッシュ削除リクエストを発行するようにすれば良いと思います。
+[実装はこちら。]({{< ref "tech/aws/delete-updated-file-cache-on-cloudfront.md" >}})
 
 <!-- 詰まったところ -->
 <!-- CloudFront に Alternate CNAME 設定し忘れ -->

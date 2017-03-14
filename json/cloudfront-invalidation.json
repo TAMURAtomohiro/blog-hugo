@@ -1,0 +1,12 @@
+{
+    "DistributionId": "ET2NM45TDGVIY",
+    "InvalidationBatch": {
+        "Paths": {
+            "Quantity": 0,
+            "Items": [
+                ""
+            ]
+        },
+        "CallerReference": ""
+    }
+}

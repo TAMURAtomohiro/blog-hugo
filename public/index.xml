@@ -6,13 +6,208 @@
     <description>Recent content on 嵐の小舟より</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <lastBuildDate>Thu, 09 Mar 2017 13:31:53 +0900</lastBuildDate>
+    <lastBuildDate>Tue, 14 Mar 2017 18:04:09 +0900</lastBuildDate>
     <atom:link href="https://tmrtmhr.info/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>GO言語で雛形JSONの内容をコマンド出力の内容で置換する</title>
+      <link>https://tmrtmhr.info/tech/replace-a-part-of-json-with-command-output/</link>
+      <pubDate>Tue, 14 Mar 2017 18:04:09 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/replace-a-part-of-json-with-command-output/</guid>
+      <description>&lt;p&gt;AWS CLI によりコマンドラインから制御したりする際、リクエストパラメータとして JSON ファイルが必要になることがあります。
+&lt;a href=&#34;https://tmrtmhr.info/tech/aws/delete-updated-file-cache-on-cloudfront/&#34;&gt;CloudFront のキャッシュを削除したいとき&lt;/a&gt;なんかがそうです。&lt;/p&gt;
+
+&lt;p&gt;AWS CLI のコマンドごとに、リクエストJSONを生成する専用スクリプトを書くという手もありますが、
+シェル上でパイプやらリダイレクトやらを駆使していい感じに JSON を生成できるある程度汎用的なスクリプトにならんものか、
+という思いから試してみた結果をここに記します。
+どこかに既にあるものでしたらすみません。&lt;/p&gt;
+
+&lt;p&gt;コマンド引数は以下のようになっていて、JSON ファイルは標準入力から与えます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;filljson ${入力の型} ${キーパス} ${入力ファイル名}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;標準入出力で JSON をやりとりするので以下のようにパイプでつなげることで
+中間ファイルを作ることなく最終的なリクエスト JSON が得られます。
+入力ファイル名のところには &lt;code&gt;bash&lt;/code&gt; や &lt;code&gt;zsh&lt;/code&gt; のプロセス置換機能を利用しています。
+プロセス置換機能を使うとプログラム側からは単にファイルパスが渡ってくるように見えるので、
+ファイルIOとして処理すればOKです。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;cat json/cloudfront-invalidation.json |
+  filljson int InvalidationBatch.Paths.Quantity &amp;lt;(git diff --ignore-all-space --diff-filter=M --name-only HEAD^ HEAD  public | wc -l) |
+  filljson [string] InvalidationBatch.Paths.Items &amp;lt;(git diff --ignore-all-space --diff-filter=M --name-only HEAD^ HEAD  public | sed -e &#39;s/^public//g&#39;) |
+  filljson string InvalidationBatch.CallerReference &amp;lt;(date +&amp;quot;osone3-%Y/%m/%d-%H:%k:%m&amp;quot; | tr -d &#39;\n&#39;) |
+  jq . &amp;gt; request.json
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;スクリプトの内容&#34;&gt;スクリプトの内容&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/tmrtmhr/filljson&#34;&gt;コードはここ&lt;/a&gt;で、
+Go 言語で書いたので &lt;code&gt;go get github.com/tmrtmhr/filljson&lt;/code&gt; でコマンドをインストールできます。
+リポジトリの &lt;code&gt;js/filljson.js&lt;/code&gt; に node.js で実装したものもあります。&lt;/p&gt;
+
+&lt;p&gt;エラーチェックをしていないので、利用する際は十分注意してください。&lt;/p&gt;
+
+&lt;p&gt;入力としては配列を想定しておらず、オブジェクトのみなので &lt;code&gt;map[string]interface{}&lt;/code&gt; 型を &lt;code&gt;json.Unmarshal&lt;/code&gt; に渡します。
+エラーは捨てているので配列が来たら死にます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;var jsonData map[string]interface{}
+_ = json.Unmarshal(jsonStr, &amp;amp;jsonData)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;取り出した値が &lt;code&gt;interface{}&lt;/code&gt; となっているので再度 &lt;code&gt;map[string]interface{}&lt;/code&gt;として型アサーションをつけます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;finger = finger[propName].(map[string]interface{})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;参考：&lt;a href=&#34;https://www.kaoriya.net/blog/2016/06/25/&#34;&gt;golang は ゆるふわに JSON を扱えまぁす!&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;雑感&#34;&gt;雑感&lt;/h1&gt;
+
+&lt;p&gt;標準入出力は偉大です。&lt;/p&gt;
+
+&lt;p&gt;GO言語的には特化した(たとえばCloudFront専用のJSON生成専用)コマンドを作ってきっちり型検査したほうが良さそうですが、
+まあこういう書き方もできるということで御参考いただければ幸いです。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>git diff を利用して更新のあったファイルのみ CloudFront のキャッシュを削除する</title>
+      <link>https://tmrtmhr.info/tech/aws/delete-updated-file-cache-on-cloudfront/</link>
+      <pubDate>Tue, 14 Mar 2017 17:15:21 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/aws/delete-updated-file-cache-on-cloudfront/</guid>
+      <description>&lt;p&gt;本サイトは Hugo で生成したものを GitHub Pages に push して公開し、
+CloudFront を利用して配信しています。
+CloudFront はキャッシュサーバとして働くので、
+何もしなければ TTL が切れるまでは古いコンテンツが表示されます。&lt;/p&gt;
+
+&lt;p&gt;単純にキャッシュ全削除という手もありますが、
+せっかくなので更新のあったファイルのみキャッシュを削除してみました。&lt;/p&gt;
+
+&lt;p&gt;やっていることは以下のような感じです。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;git diff&lt;/code&gt; で更新のあったファイル一覧を取得&lt;/li&gt;
+&lt;li&gt;一覧を加工して AWS CLI 用の JSON ファイルを生成&lt;/li&gt;
+&lt;li&gt;AWS CLI の &lt;code&gt;aws cloudfront create-invalidation&lt;/code&gt; でキャッシュ削除&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;前提-ブログデータを管理するリポジトリの構成&#34;&gt;前提：ブログデータを管理するリポジトリの構成&lt;/h1&gt;
+
+&lt;p&gt;本サイトの構成では以下の二種類のリポジトリが登場します。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Markdown などを管理するリポジトリ(&lt;code&gt;blog-hugo&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;生成したHTMLを GitHub Pages で公開するリポジトリ(&lt;code&gt;tmrtmhr.github.io&lt;/code&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code&gt;blog-hugo/public&lt;/code&gt; に &lt;code&gt;tmrtmhr.github.io&lt;/code&gt; を &lt;code&gt;subtree&lt;/code&gt; として取り込んでいます。&lt;/p&gt;
+
+&lt;p&gt;この構成は、昔&lt;a href=&#34;http://gohugo.io/tutorials/github-pages-blog/#hosting-personal-organization-pages&#34;&gt;「Hugo チュートリアル：GitHub Pages で個人ページを公開する」&lt;/a&gt;
+を参考にして言われるがままに構成したのですが、
+現在は &lt;code&gt;submodule&lt;/code&gt; として取り込んで、&lt;code&gt;public&lt;/code&gt; 以下のみ &lt;code&gt;push&lt;/code&gt; するようになっており、
+Markdown のほうの管理には言及がなくなったようです。&lt;/p&gt;
+
+&lt;h1 id=&#34;更新のあったファイル一覧の取得&#34;&gt;更新のあったファイル一覧の取得&lt;/h1&gt;
+
+&lt;p&gt;Hugo で生成した HTML ファイル群は &lt;code&gt;public&lt;/code&gt; ディレクトリ以下に出来上がりますが、
+全記事を再生成するのでタイムスタンプがほぼ同じとなります。
+なので、&lt;code&gt;find public -mmin -5&lt;/code&gt;のようにして5分以内に更新のあったファイルを探して……というアプローチではうまくいきません。&lt;/p&gt;
+
+&lt;p&gt;というわけで &lt;code&gt;git diff&lt;/code&gt; を使います。
+&lt;code&gt;--diff-filter=M&lt;/code&gt; で更新のあったファイルのみの抽出、&lt;code&gt;--name-only&lt;/code&gt;でパスのみの表示、&lt;code&gt;HEAD^ HEAD&lt;/code&gt; で一つ前と最新との比較、&lt;code&gt;public&lt;/code&gt; で対象のディレクトリを指定します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;git diff --diff-filter=M --name-only HEAD^ HEAD public
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;参考：&lt;a href=&#34;http://qiita.com/kaminaly/items/28f9cb4e680deb700833&#34;&gt;gitで差分ファイルを抽出する&lt;/a&gt;、&lt;a href=&#34;https://git-scm.com/docs/git-diff&#34;&gt;git diff のオプション&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;ファイル一覧を-json-ファイルへ加工&#34;&gt;ファイル一覧を JSON ファイルへ加工&lt;/h1&gt;
+
+&lt;p&gt;AWS CLI で CloudFront にキャッシュ削除したいファイルパスを送る際、
+コマンド引数として &lt;code&gt;--paths&lt;/code&gt; も利用できますが、
+ファイル数が増えてくると&lt;a href=&#34;https://www.ecoop.net/memo/archives/2010-01-26-1.html&#34;&gt;コマンド引数の長さ制限&lt;/a&gt;に引っかかりそうなので、
+JSON を構築することにします。&lt;/p&gt;
+
+&lt;p&gt;AWS CLI から CloudFront にキャッシュ削除リクエストを投げるための雛形JSONが以下のコマンドで得られます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;aws cloudfront create-invalidation --generate-cli-skeleton
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;注： AWS CLI のバージョン &lt;code&gt;aws-cli/1.11.58&lt;/code&gt; においても &lt;code&gt;cloudfront&lt;/code&gt; コマンドはプレビュー版なので
+&lt;code&gt;aws configure set preview.cloudfront true&lt;/code&gt; とコマンドを打って設定ファイルを書き換えてください。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{
+    &amp;quot;DistributionId&amp;quot;: &amp;quot;&amp;quot;,
+    &amp;quot;InvalidationBatch&amp;quot;: {
+        &amp;quot;Paths&amp;quot;: {
+            &amp;quot;Quantity&amp;quot;: 0,
+            &amp;quot;Items&amp;quot;: [
+                &amp;quot;&amp;quot;
+            ]
+        },
+        &amp;quot;CallerReference&amp;quot;: &amp;quot;&amp;quot;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;DistributionId&lt;/code&gt;: 対象とする CloudFront ディストリビューションID&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Items&lt;/code&gt;: ファイルパスのリスト&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Quantity&lt;/code&gt;: ファイルパスの数&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;CallerReference&lt;/code&gt;: こちらで自由に指定するリクエストのID&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code&gt;CallerReference&lt;/code&gt; は、&lt;a href=&#34;http://docs.aws.amazon.com/cli/latest/reference/cloudfront/create-invalidation.html&#34;&gt;AWS CLI のリファレンス&lt;/a&gt;によると
+「間違って同じリクエストが重複しないよう」に使われます。
+まったく同じリクエストを投げた場合は新しい Invalidation Batch は作られず、
+&lt;code&gt;CallerReference&lt;/code&gt;が重複していて &lt;code&gt;Items&lt;/code&gt; の内容が異なるような場合は &lt;code&gt;InvalidationBatchAlreadyExists&lt;/code&gt; となるようです。
+とりあえず時刻に基いて生成すれば良いかと思います。&lt;/p&gt;
+
+&lt;p&gt;この雛形JSONに対しコマンド出力をはめこんでリクエストを作ります。
+&lt;a href=&#34;https://tmrtmhr.info/tech/replace-a-part-of-json-with-command-output/&#34;&gt;この加工のためのスクリプト&lt;/a&gt;は別記事にしていますので
+詳細についてはそちらをご参照ください。&lt;/p&gt;
+
+&lt;p&gt;こういったスクリプトがあると、以下のようにして、雛形となるJSONにコマンドの出力を当てはめていって最終的なリクエストJSONを得られます。
+(&lt;code&gt;DistributionId&lt;/code&gt; についてはあらかじめ JSON に書いてあります)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;cat json/cloudfront-invalidation.json |
+  filljson int InvalidationBatch.Paths.Quantity &amp;lt;(git diff --ignore-all-space --diff-filter=M --name-only HEAD^ HEAD  public | wc -l) |
+  filljson [string] InvalidationBatch.Paths.Items &amp;lt;(git diff --ignore-all-space --diff-filter=M --name-only HEAD^ HEAD  public | sed -e &#39;s/^public//g&#39;) |
+  filljson string InvalidationBatch.CallerReference &amp;lt;(date +&amp;quot;tmrtmhr-%Y/%m/%d-%H:%k:%m&amp;quot; | tr -d &#39;\n&#39;) |
+  jq . &amp;gt; request.json
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;aws-cli-を使用した-cloudfront-のキャッシュ削除&#34;&gt;AWS CLI を使用した CloudFront のキャッシュ削除&lt;/h1&gt;
+
+&lt;p&gt;前項でリクエストJSONを生成したので、それを投げます。
+使用する profile については適宜指定してください。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;aws cloudfront create-invalidation --cli-input-json file://request.json
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;invalidation-の注意点&#34;&gt;Invalidation の注意点&lt;/h1&gt;
+
+&lt;p&gt;月間 1000 ファイルパスまでは無料、以降は $0.005 / 1パスとなるようなので、
+更新が頻繁にある・更新ファイル数が多いなどで Invaliation を乱発するケースでは追加で料金が発生します。&lt;/p&gt;
+
+&lt;p&gt;参考：&lt;a href=&#34;http://dev.sukimash.com/aws/cloud-front-invalidation/&#34;&gt;CLOUD FRONT の INVALIDATION が有料だなんて知らんかった&lt;/a&gt;、&lt;a href=&#34;https://aws.amazon.com/jp/cloudfront/pricing/&#34;&gt;CloudFront: 料金&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;まとめ&#34;&gt;まとめ&lt;/h1&gt;
+
+&lt;p&gt;&lt;code&gt;git diff&lt;/code&gt; の結果から CloudFront のキャッシュ削除を行う例を示しました。
+リクエストのための JSON 生成については&lt;a href=&#34;https://tmrtmhr.info/tech/replace-a-part-of-json-with-command-output/&#34;&gt;補助スクリプト&lt;/a&gt;を作って公開しています。&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>ブログに使うドメインを AWS で取得する</title>
       <link>https://tmrtmhr.info/tech/aws/register-a-domain-for-blog/</link>
-      <pubDate>Thu, 09 Mar 2017 13:31:53 +0900</pubDate>
+      <pubDate>Tue, 14 Mar 2017 17:03:40 +0900</pubDate>
       
       <guid>https://tmrtmhr.info/tech/aws/register-a-domain-for-blog/</guid>
       <description>&lt;p&gt;せっかくなので本サイトのドメインを AWS Route53 で管理するようにした際のメモです。&lt;/p&gt;
@@ -89,11 +284,17 @@ Route 53 と Certificate Manager から送られる二通を読めればよい�
 CloudFront はグローバルなサービスのため、Webコンソール上でリージョンを選択できませんが、
 便宜的に &lt;code&gt;US East(N. Virginia)&lt;/code&gt; で設定するという扱いのためSSL 証明書もここで取得します。&lt;/p&gt;
 
+&lt;h1 id=&#34;料金について&#34;&gt;料金について&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://docs.aws.amazon.com/ja_jp/Route53/latest/DeveloperGuide/domain-transfer-to-route-53.html&#34;&gt;ドメインの料金は AWS クレジットでは支払えない&lt;/a&gt;ため、
+クレジットが残っていても料金が発生することに注意が必要です。&lt;/p&gt;
+
 &lt;h1 id=&#34;cloudfront-が持つキャッシュについて&#34;&gt;CloudFront が持つキャッシュについて&lt;/h1&gt;
 
 &lt;p&gt;デフォルトのままの設定だと TTL が 86400 秒となるので、GitHub Pages にデプロイしてから
 最大一日程度は古いコンテンツが表示されます。
-デプロイの際にスクリプトからキャッシュを削除するようにすれば良いと思いますが、未実装です。&lt;/p&gt;
+デプロイの際にスクリプトからキャッシュ削除リクエストを発行するようにすれば良いと思います。
+&lt;a href=&#34;https://tmrtmhr.info/tech/aws/delete-updated-file-cache-on-cloudfront/&#34;&gt;実装はこちら。&lt;/a&gt;&lt;/p&gt;
 
 &lt;!-- 詰まったところ --&gt;
 

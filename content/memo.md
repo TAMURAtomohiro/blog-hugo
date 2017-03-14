@@ -5,8 +5,10 @@ date = "2016-02-22T16:06:53+09:00"
 +++
 <!--more-->
 
-# CloudFront のキャッシュを削除する
-Hugo で更新のあったエントリーについてキャッシュを削除したい
+# 「オープンワールド」という言葉について
+
+https://ja.wikipedia.org/wiki/%E3%82%AA%E3%83%BC%E3%83%97%E3%83%B3%E3%83%AF%E3%83%BC%E3%83%AB%E3%83%89
+http://www.gamesradar.com/the-roots-of-open-world-games/
 
 
 [Angular2 のデザインドキュメント](https://drive.google.com/drive/u/0/folders/0B7Ovm8bUYiUDR29iSkEyMk5pVUk)

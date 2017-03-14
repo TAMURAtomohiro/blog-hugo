@@ -1,0 +1,22 @@
+{
+  "DistributionId": "ET2NM45TDGVIY",
+  "InvalidationBatch": {
+    "Paths": {
+      "Quantity": 11,
+      "Items": [
+        "/css/base.css",
+        "/index.html",
+        "/index.xml",
+        "/sitemap.xml",
+        "/tech/angular2-web-components/index.html",
+        "/tech/call-process-on-emacs/index.html",
+        "/tech/hugo-with-material-icon/index.html",
+        "/tech/index.html",
+        "/tech/index.xml",
+        "/tech/static-site-generator-comparison/index.html",
+        "/tech/why-static-website-generators-are-the-next-big-thing/index.html"
+      ]
+    },
+    "CallerReference": "osone3-2017/03/09-17:17:03"
+  }
+}

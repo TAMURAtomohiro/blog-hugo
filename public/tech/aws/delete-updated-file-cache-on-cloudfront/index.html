@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.18.1" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css">
+
+  
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script>
+          
+<link rel="stylesheet" href="/css/base.css">
+
+<link rel="alternate" href="/index.xml" type="application/rss+xml" title="嵐の小舟より">
+<title>git diff を利用して更新のあったファイルのみ CloudFront のキャッシュを削除する - 嵐の小舟より</title>
+</head>
+<body>
+  
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-92780964-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+  <div class="">
+  <header class="castaway-header-bar">
+    <nav>
+      <div class="nav-wrapper castaway-site-logo">
+        <div>
+          <a href="/" class="brand-logo right">
+            <i class="material-icons" style="margin-right: 5px;">rowing</i>
+            <span class="castaway-site-title">嵐の小舟より</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  
+
+
+<section id="main">
+  <div class="row">
+    <div class="col s12 m12 l6 offset-l3">
+
+      <article itemscope itemtype="http://schema.org/Blog" class="card castaway-card">
+
+        <div class="card-title indigo darken-3 castaway-card-title">
+          <div class="card-content">
+            <div class="white-text" itemprop="headline">
+              git diff を利用して更新のあったファイルのみ CloudFront のキャッシュを削除する
+            </div>
+          </div>
+        </div>
+
+        <div class="card-content">
+          <div class="row">
+            <div class="castaway-date-published">
+              <span>公開日：</span>
+              <i class="material-icons" style="vertical-align: middle;">today</i>
+              <time itemprop="datePublished" datetime="2017-03-14">2017/03/14</time>
+              <span style="margin-left: 10px;"> タグ: </span>
+              
+              <a href="/tags/hugo">
+                <div class="tag-hugo waves-effect waves-teal chip">
+                  hugo
+                </div>
+              </a>
+              
+              <a href="/tags/aws">
+                <div class="tag-aws waves-effect waves-teal chip">
+                  aws
+                </div>
+              </a>
+              
+            </div>
+          </div>
+          
+          
+          <div class="castaway-card-content mdl-card__supporting-text mdl-color-text--grey-700">
+            <p>本サイトは Hugo で生成したものを GitHub Pages に push して公開し、
+CloudFront を利用して配信しています。
+CloudFront はキャッシュサーバとして働くので、
+何もしなければ TTL が切れるまでは古いコンテンツが表示されます。</p>
+
+<p>単純にキャッシュ全削除という手もありますが、
+せっかくなので更新のあったファイルのみキャッシュを削除してみました。</p>
+
+<p>やっていることは以下のような感じです。</p>
+
+<ul>
+<li><code>git diff</code> で更新のあったファイル一覧を取得</li>
+<li>一覧を加工して AWS CLI 用の JSON ファイルを生成</li>
+<li>AWS CLI の <code>aws cloudfront create-invalidation</code> でキャッシュ削除</li>
+</ul>
+
+<p></p>
+
+<h1 id="前提-ブログデータを管理するリポジトリの構成">前提：ブログデータを管理するリポジトリの構成</h1>
+
+<p>本サイトの構成では以下の二種類のリポジトリが登場します。</p>
+
+<ul>
+<li>Markdown などを管理するリポジトリ(<code>blog-hugo</code>)</li>
+<li>生成したHTMLを GitHub Pages で公開するリポジトリ(<code>tmrtmhr.github.io</code>)</li>
+</ul>
+
+<p><code>blog-hugo/public</code> に <code>tmrtmhr.github.io</code> を <code>subtree</code> として取り込んでいます。</p>
+
+<p>この構成は、昔<a href="http://gohugo.io/tutorials/github-pages-blog/#hosting-personal-organization-pages">「Hugo チュートリアル：GitHub Pages で個人ページを公開する」</a>
+を参考にして言われるがままに構成したのですが、
+現在は <code>submodule</code> として取り込んで、<code>public</code> 以下のみ <code>push</code> するようになっており、
+Markdown のほうの管理には言及がなくなったようです。</p>
+
+<h1 id="更新のあったファイル一覧の取得">更新のあったファイル一覧の取得</h1>
+
+<p>Hugo で生成した HTML ファイル群は <code>public</code> ディレクトリ以下に出来上がりますが、
+全記事を再生成するのでタイムスタンプがほぼ同じとなります。
+なので、<code>find public -mmin -5</code>のようにして5分以内に更新のあったファイルを探して……というアプローチではうまくいきません。</p>
+
+<p>というわけで <code>git diff</code> を使います。
+<code>--diff-filter=M</code> で更新のあったファイルのみの抽出、<code>--name-only</code>でパスのみの表示、<code>HEAD^ HEAD</code> で一つ前と最新との比較、<code>public</code> で対象のディレクトリを指定します。</p>
+
+<pre><code>git diff --diff-filter=M --name-only HEAD^ HEAD public
+</code></pre>
+
+<p>参考：<a href="http://qiita.com/kaminaly/items/28f9cb4e680deb700833">gitで差分ファイルを抽出する</a>、<a href="https://git-scm.com/docs/git-diff">git diff のオプション</a></p>
+
+<h1 id="ファイル一覧を-json-ファイルへ加工">ファイル一覧を JSON ファイルへ加工</h1>
+
+<p>AWS CLI で CloudFront にキャッシュ削除したいファイルパスを送る際、
+コマンド引数として <code>--paths</code> も利用できますが、
+ファイル数が増えてくると<a href="https://www.ecoop.net/memo/archives/2010-01-26-1.html">コマンド引数の長さ制限</a>に引っかかりそうなので、
+JSON を構築することにします。</p>
+
+<p>AWS CLI から CloudFront にキャッシュ削除リクエストを投げるための雛形JSONが以下のコマンドで得られます。</p>
+
+<pre><code>aws cloudfront create-invalidation --generate-cli-skeleton
+</code></pre>
+
+<p>注： AWS CLI のバージョン <code>aws-cli/1.11.58</code> においても <code>cloudfront</code> コマンドはプレビュー版なので
+<code>aws configure set preview.cloudfront true</code> とコマンドを打って設定ファイルを書き換えてください。</p>
+
+<pre><code>{
+    &quot;DistributionId&quot;: &quot;&quot;,
+    &quot;InvalidationBatch&quot;: {
+        &quot;Paths&quot;: {
+            &quot;Quantity&quot;: 0,
+            &quot;Items&quot;: [
+                &quot;&quot;
+            ]
+        },
+        &quot;CallerReference&quot;: &quot;&quot;
+    }
+}
+</code></pre>
+
+<ul>
+<li><code>DistributionId</code>: 対象とする CloudFront ディストリビューションID</li>
+<li><code>Items</code>: ファイルパスのリスト</li>
+<li><code>Quantity</code>: ファイルパスの数</li>
+<li><code>CallerReference</code>: こちらで自由に指定するリクエストのID</li>
+</ul>
+
+<p><code>CallerReference</code> は、<a href="http://docs.aws.amazon.com/cli/latest/reference/cloudfront/create-invalidation.html">AWS CLI のリファレンス</a>によると
+「間違って同じリクエストが重複しないよう」に使われます。
+まったく同じリクエストを投げた場合は新しい Invalidation Batch は作られず、
+<code>CallerReference</code>が重複していて <code>Items</code> の内容が異なるような場合は <code>InvalidationBatchAlreadyExists</code> となるようです。
+とりあえず時刻に基いて生成すれば良いかと思います。</p>
+
+<p>この雛形JSONに対しコマンド出力をはめこんでリクエストを作ります。
+<a href="https://tmrtmhr.info/tech/replace-a-part-of-json-with-command-output/">この加工のためのスクリプト</a>は別記事にしていますので
+詳細についてはそちらをご参照ください。</p>
+
+<p>こういったスクリプトがあると、以下のようにして、雛形となるJSONにコマンドの出力を当てはめていって最終的なリクエストJSONを得られます。
+(<code>DistributionId</code> についてはあらかじめ JSON に書いてあります)</p>
+
+<pre><code>cat json/cloudfront-invalidation.json |
+  filljson int InvalidationBatch.Paths.Quantity &lt;(git diff --ignore-all-space --diff-filter=M --name-only HEAD^ HEAD  public | wc -l) |
+  filljson [string] InvalidationBatch.Paths.Items &lt;(git diff --ignore-all-space --diff-filter=M --name-only HEAD^ HEAD  public | sed -e 's/^public//g') |
+  filljson string InvalidationBatch.CallerReference &lt;(date +&quot;tmrtmhr-%Y/%m/%d-%H:%k:%m&quot; | tr -d '\n') |
+  jq . &gt; request.json
+</code></pre>
+
+<h1 id="aws-cli-を使用した-cloudfront-のキャッシュ削除">AWS CLI を使用した CloudFront のキャッシュ削除</h1>
+
+<p>前項でリクエストJSONを生成したので、それを投げます。
+使用する profile については適宜指定してください。</p>
+
+<pre><code>aws cloudfront create-invalidation --cli-input-json file://request.json
+</code></pre>
+
+<h1 id="invalidation-の注意点">Invalidation の注意点</h1>
+
+<p>月間 1000 ファイルパスまでは無料、以降は $0.005 / 1パスとなるようなので、
+更新が頻繁にある・更新ファイル数が多いなどで Invaliation を乱発するケースでは追加で料金が発生します。</p>
+
+<p>参考：<a href="http://dev.sukimash.com/aws/cloud-front-invalidation/">CLOUD FRONT の INVALIDATION が有料だなんて知らんかった</a>、<a href="https://aws.amazon.com/jp/cloudfront/pricing/">CloudFront: 料金</a></p>
+
+<h1 id="まとめ">まとめ</h1>
+
+<p><code>git diff</code> の結果から CloudFront のキャッシュ削除を行う例を示しました。
+リクエストのための JSON 生成については<a href="https://tmrtmhr.info/tech/replace-a-part-of-json-with-command-output/">補助スクリプト</a>を作って公開しています。</p>
+          </div>
+        </div>
+          
+          <div class="card-action castaway-card-footer">
+            <a class="btn waves-effect waves-light" href="/">サイトトップ</a>
+          </div>            
+
+      </article>
+        
+    </div>
+
+    </div>
+  </div>
+</section>
+
+
+</div>
+</body>
+</html>
+

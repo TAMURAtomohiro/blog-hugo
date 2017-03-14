@@ -64,7 +64,7 @@ ga('send', 'pageview');
             <div class="castaway-date-published">
               <span>公開日：</span>
               <i class="material-icons" style="vertical-align: middle;">today</i>
-              <time itemprop="datePublished" datetime="2017-03-09">2017/03/09</time>
+              <time itemprop="datePublished" datetime="2017-03-14">2017/03/14</time>
               <span style="margin-left: 10px;"> タグ: </span>
               
               <a href="/tags/aws">
@@ -152,11 +152,17 @@ Route 53 と Certificate Manager から送られる二通を読めればよい�
 CloudFront はグローバルなサービスのため、Webコンソール上でリージョンを選択できませんが、
 便宜的に <code>US East(N. Virginia)</code> で設定するという扱いのためSSL 証明書もここで取得します。</p>
 
+<h1 id="料金について">料金について</h1>
+
+<p><a href="http://docs.aws.amazon.com/ja_jp/Route53/latest/DeveloperGuide/domain-transfer-to-route-53.html">ドメインの料金は AWS クレジットでは支払えない</a>ため、
+クレジットが残っていても料金が発生することに注意が必要です。</p>
+
 <h1 id="cloudfront-が持つキャッシュについて">CloudFront が持つキャッシュについて</h1>
 
 <p>デフォルトのままの設定だと TTL が 86400 秒となるので、GitHub Pages にデプロイしてから
 最大一日程度は古いコンテンツが表示されます。
-デプロイの際にスクリプトからキャッシュを削除するようにすれば良いと思いますが、未実装です。</p>
+デプロイの際にスクリプトからキャッシュ削除リクエストを発行するようにすれば良いと思います。
+<a href="https://tmrtmhr.info/tech/aws/delete-updated-file-cache-on-cloudfront/">実装はこちら。</a></p>
 
 <!-- 詰まったところ -->
 
