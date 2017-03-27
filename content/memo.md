@@ -169,7 +169,7 @@ Ember.js: Data Binding
   set のときに get で登録されたリスナーを呼ぶ
 
 React: Virtual DOM
-プログラマは Virtual DOM と呼ばれる 
+プログラマは Virtual DOM と呼ばれる
 
 * Virtual DOM を
 
@@ -526,7 +526,7 @@ DOM のプロパティに右辺(`angularLat`)の評価結果をセットしま�
 
 # まとめ
 
-* Angular2 Component では template 
+* Angular2 Component では template
 * Angular2 は属性値を変更せず、DOM プロパティのみ変更する
 
 ということです。
@@ -632,7 +632,7 @@ DOM のプロパティに右辺(`angularLat`)の評価結果をセットしま�
 
 # まとめ
 
-* Angular2 Component では template 
+* Angular2 Component では template
 * Angular2 は属性値を変更せず、DOM プロパティのみ変更する
 
 ということです。
@@ -749,4 +749,3 @@ title = "ShadowDOM における JavaScript の挙動"
 
 参考文献
 [](http://robdodson.me/shadow-dom-javascript/)
-

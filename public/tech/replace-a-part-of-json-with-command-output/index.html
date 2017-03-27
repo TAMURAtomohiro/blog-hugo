@@ -130,14 +130,13 @@ ga('send', 'pageview');
 Go 言語で書いたので <code>go get github.com/tmrtmhr/filljson</code> でコマンドをインストールできます。
 リポジトリの <code>js/filljson.js</code> に node.js で実装したものもあります。</p>
 
-<p>エラーチェックをしていないので、利用する際は十分注意してください。
-今のところテストコードも書いてないです。</p>
+<p>どこかでエラーが出たら死にます(<code>os.Exit(1)</code>)。
+テストコードは少しだけ書きました。</p>
 
-<p>入力としては配列を想定しておらず、オブジェクトのみなので <code>map[string]interface{}</code> 型を <code>json.Unmarshal</code> に渡します。
-エラーは捨てているので配列が来たら死にます。</p>
+<p>入力としては配列を想定しておらず、オブジェクトのみなので <code>map[string]interface{}</code> 型を <code>json.Unmarshal</code> に渡します。</p>
 
 <pre><code class="language-go">var jsonData map[string]interface{}
-_ = json.Unmarshal(jsonStr, &amp;jsonData)
+err = json.Unmarshal(jsonStr, &amp;jsonData)
 </code></pre>
 
 <p>取り出した値が <code>interface{}</code> となっているので再度 <code>map[string]interface{}</code>として型アサーションをつけます。</p>

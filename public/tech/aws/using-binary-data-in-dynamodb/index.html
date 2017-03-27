@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.18.1" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css">
+
+  
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script>
+          
+<link rel="stylesheet" href="/css/base.css">
+
+<link rel="alternate" href="/index.xml" type="application/rss+xml" title="嵐の小舟より">
+<title>AWS Lambda (Node.js v6.10) から DynamoDB に入れた Gzip バイナリデータを展開する - 嵐の小舟より</title>
+</head>
+<body>
+  
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-92780964-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+  <div class="">
+  <header class="castaway-header-bar">
+    <nav>
+      <div class="nav-wrapper castaway-site-logo">
+        <div>
+          <a href="/" class="brand-logo right">
+            <i class="material-icons" style="margin-right: 5px;">rowing</i>
+            <span class="castaway-site-title">嵐の小舟より</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  
+
+
+<section id="main">
+  <div class="row">
+    <div class="col s12 m12 l6 offset-l3">
+
+      <article itemscope itemtype="http://schema.org/Blog" class="card castaway-card">
+
+        <div class="card-title indigo darken-3 castaway-card-title">
+          <div class="card-content">
+            <div class="white-text" itemprop="headline">
+              AWS Lambda (Node.js v6.10) から DynamoDB に入れた Gzip バイナリデータを展開する
+            </div>
+          </div>
+        </div>
+
+        <div class="card-content">
+          <div class="row">
+            <div class="castaway-date-published">
+              <span>公開日：</span>
+              <i class="material-icons" style="vertical-align: middle;">today</i>
+              <time itemprop="datePublished" datetime="2017-03-27">2017/03/27</time>
+              <span style="margin-left: 10px;"> タグ: </span>
+              
+              <a href="/tags/aws">
+                <div class="tag-aws waves-effect waves-teal chip">
+                  aws
+                </div>
+              </a>
+              
+              <a href="/tags/node.js">
+                <div class="tag-node.js waves-effect waves-teal chip">
+                  node.js
+                </div>
+              </a>
+              
+            </div>
+          </div>
+          
+          
+          <div class="castaway-card-content mdl-card__supporting-text mdl-color-text--grey-700">
+            <p>AWS DynamoDB では指定した IO 性能に応じて料金が発生するため、
+クエリなどで使用しないプロパティについては gzip 圧縮などを施してバイナリデータとして格納したほうが、
+必要な IO 性能が少なくなるためお得です(参考：<a href="http://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/GuidelinesForItems.html#GuidelinesForItems.CompressingLargeAttributeValues">大量の属性値を圧縮する</a>)。</p>
+
+<p>本記事は、AWS Lambda (Node.js 6.10) から DynamoDB のデータを取得し、
+展開する処理のメモです。</p>
+
+<p></p>
+
+<p>DynamoDB に以下のような形式でデータが入っているとします。</p>
+
+<pre><code>{ &quot;hash_id&quot;: &quot;string&quot;,
+  &quot;body&quot;: JSON データ文字列を gzip 圧縮したバイナリ }
+</code></pre>
+
+<p>ここでは <code>hash_id</code> を partition key として指定しています。
+なので以下のように <code>hash_id</code> を指定して GET するとデータが取得できます。</p>
+
+<pre><code>var dynamodb = new AWS.DynamoDB.DocumentClient();
+var params = { TableName: 'dynamedb_table_name', Key: { 'hash_id': 'xxx' } };
+dynamodb.get(params, function(err, data) { ... }
+</code></pre>
+
+<p>JSON 形式ではバイナリデータを扱えないので、Base64 形式に直してやりとりします。
+そのため、DynamoDB からのレスポンスである <code>data.Item.body</code> は「Base64 エンコードされたバイナリデータのバイト列(<code>Buffer</code>)」という状態です。</p>
+
+<p>なのでこれをデコードしたバイト列を作り、</p>
+
+<pre><code>var binary = Buffer.from(data.Item.body.toString(), 'base64');
+</code></pre>
+
+<p>展開します。</p>
+
+<pre><code>var body = zlib.gunzipSync(binary);
+</code></pre>
+
+<p>これも <code>Buffer</code> なので、文字列に変換して parse することでようやく元の JSON データとなります。</p>
+
+<pre><code>JSON.parse(body.toString())
+</code></pre>
+
+<p>最後に以上の処理を行う AWS Lambda のサンプルを置いておきます。
+<script src="//gist.github.com/tmrtmhr/3b8b9630ad01a5768c4a8b93ae6a814c.js"></script></p>
+          </div>
+        </div>
+          
+          <div class="card-action castaway-card-footer">
+            <a class="btn waves-effect waves-light" href="/">サイトトップ</a>
+          </div>            
+
+      </article>
+        
+    </div>
+
+    </div>
+  </div>
+</section>
+
+
+</div>
+</body>
+</html>
+

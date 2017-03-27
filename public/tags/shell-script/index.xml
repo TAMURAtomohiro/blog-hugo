@@ -48,14 +48,13 @@
 Go 言語で書いたので &lt;code&gt;go get github.com/tmrtmhr/filljson&lt;/code&gt; でコマンドをインストールできます。
 リポジトリの &lt;code&gt;js/filljson.js&lt;/code&gt; に node.js で実装したものもあります。&lt;/p&gt;
 
-&lt;p&gt;エラーチェックをしていないので、利用する際は十分注意してください。
-今のところテストコードも書いてないです。&lt;/p&gt;
+&lt;p&gt;どこかでエラーが出たら死にます(&lt;code&gt;os.Exit(1)&lt;/code&gt;)。
+テストコードは少しだけ書きました。&lt;/p&gt;
 
-&lt;p&gt;入力としては配列を想定しておらず、オブジェクトのみなので &lt;code&gt;map[string]interface{}&lt;/code&gt; 型を &lt;code&gt;json.Unmarshal&lt;/code&gt; に渡します。
-エラーは捨てているので配列が来たら死にます。&lt;/p&gt;
+&lt;p&gt;入力としては配列を想定しておらず、オブジェクトのみなので &lt;code&gt;map[string]interface{}&lt;/code&gt; 型を &lt;code&gt;json.Unmarshal&lt;/code&gt; に渡します。&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;var jsonData map[string]interface{}
-_ = json.Unmarshal(jsonStr, &amp;amp;jsonData)
+err = json.Unmarshal(jsonStr, &amp;amp;jsonData)
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;取り出した値が &lt;code&gt;interface{}&lt;/code&gt; となっているので再度 &lt;code&gt;map[string]interface{}&lt;/code&gt;として型アサーションをつけます。&lt;/p&gt;

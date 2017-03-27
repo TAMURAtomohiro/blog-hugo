@@ -9,6 +9,57 @@
     <atom:link href="https://tmrtmhr.info/tags/aws/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>AWS Lambda (Node.js v6.10) から DynamoDB に入れた Gzip バイナリデータを展開する</title>
+      <link>https://tmrtmhr.info/tech/aws/using-binary-data-in-dynamodb/</link>
+      <pubDate>Mon, 27 Mar 2017 18:10:28 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/aws/using-binary-data-in-dynamodb/</guid>
+      <description>&lt;p&gt;AWS DynamoDB では指定した IO 性能に応じて料金が発生するため、
+クエリなどで使用しないプロパティについては gzip 圧縮などを施してバイナリデータとして格納したほうが、
+必要な IO 性能が少なくなるためお得です(参考：&lt;a href=&#34;http://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/GuidelinesForItems.html#GuidelinesForItems.CompressingLargeAttributeValues&#34;&gt;大量の属性値を圧縮する&lt;/a&gt;)。&lt;/p&gt;
+
+&lt;p&gt;本記事は、AWS Lambda (Node.js 6.10) から DynamoDB のデータを取得し、
+展開する処理のメモです。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;DynamoDB に以下のような形式でデータが入っているとします。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{ &amp;quot;hash_id&amp;quot;: &amp;quot;string&amp;quot;,
+  &amp;quot;body&amp;quot;: JSON データ文字列を gzip 圧縮したバイナリ }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ここでは &lt;code&gt;hash_id&lt;/code&gt; を partition key として指定しています。
+なので以下のように &lt;code&gt;hash_id&lt;/code&gt; を指定して GET するとデータが取得できます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var dynamodb = new AWS.DynamoDB.DocumentClient();
+var params = { TableName: &#39;dynamedb_table_name&#39;, Key: { &#39;hash_id&#39;: &#39;xxx&#39; } };
+dynamodb.get(params, function(err, data) { ... }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;JSON 形式ではバイナリデータを扱えないので、Base64 形式に直してやりとりします。
+そのため、DynamoDB からのレスポンスである &lt;code&gt;data.Item.body&lt;/code&gt; は「Base64 エンコードされたバイナリデータのバイト列(&lt;code&gt;Buffer&lt;/code&gt;)」という状態です。&lt;/p&gt;
+
+&lt;p&gt;なのでこれをデコードしたバイト列を作り、&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var binary = Buffer.from(data.Item.body.toString(), &#39;base64&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;展開します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var body = zlib.gunzipSync(binary);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これも &lt;code&gt;Buffer&lt;/code&gt; なので、文字列に変換して parse することでようやく元の JSON データとなります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;JSON.parse(body.toString())
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;最後に以上の処理を行う AWS Lambda のサンプルを置いておきます。
+&lt;script src=&#34;//gist.github.com/tmrtmhr/3b8b9630ad01a5768c4a8b93ae6a814c.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
       <title>GO言語で雛形JSONの内容をコマンド出力の内容で置換する</title>
       <link>https://tmrtmhr.info/tech/replace-a-part-of-json-with-command-output/</link>
       <pubDate>Tue, 14 Mar 2017 18:04:09 +0900</pubDate>
@@ -48,14 +99,13 @@
 Go 言語で書いたので &lt;code&gt;go get github.com/tmrtmhr/filljson&lt;/code&gt; でコマンドをインストールできます。
 リポジトリの &lt;code&gt;js/filljson.js&lt;/code&gt; に node.js で実装したものもあります。&lt;/p&gt;
 
-&lt;p&gt;エラーチェックをしていないので、利用する際は十分注意してください。
-今のところテストコードも書いてないです。&lt;/p&gt;
+&lt;p&gt;どこかでエラーが出たら死にます(&lt;code&gt;os.Exit(1)&lt;/code&gt;)。
+テストコードは少しだけ書きました。&lt;/p&gt;
 
-&lt;p&gt;入力としては配列を想定しておらず、オブジェクトのみなので &lt;code&gt;map[string]interface{}&lt;/code&gt; 型を &lt;code&gt;json.Unmarshal&lt;/code&gt; に渡します。
-エラーは捨てているので配列が来たら死にます。&lt;/p&gt;
+&lt;p&gt;入力としては配列を想定しておらず、オブジェクトのみなので &lt;code&gt;map[string]interface{}&lt;/code&gt; 型を &lt;code&gt;json.Unmarshal&lt;/code&gt; に渡します。&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;var jsonData map[string]interface{}
-_ = json.Unmarshal(jsonStr, &amp;amp;jsonData)
+err = json.Unmarshal(jsonStr, &amp;amp;jsonData)
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;取り出した値が &lt;code&gt;interface{}&lt;/code&gt; となっているので再度 &lt;code&gt;map[string]interface{}&lt;/code&gt;として型アサーションをつけます。&lt;/p&gt;

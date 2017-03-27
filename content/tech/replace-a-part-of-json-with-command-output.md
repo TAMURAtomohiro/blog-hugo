@@ -40,15 +40,14 @@ cat json/cloudfront-invalidation.json |
 Go 言語で書いたので `go get github.com/tmrtmhr/filljson` でコマンドをインストールできます。
 リポジトリの `js/filljson.js` に node.js で実装したものもあります。
 
-エラーチェックをしていないので、利用する際は十分注意してください。
-今のところテストコードも書いてないです。
+どこかでエラーが出たら死にます(`os.Exit(1)`)。
+テストコードは少しだけ書きました。
 
 入力としては配列を想定しておらず、オブジェクトのみなので `map[string]interface{}` 型を `json.Unmarshal` に渡します。
-エラーは捨てているので配列が来たら死にます。
 
 ```go
 var jsonData map[string]interface{}
-_ = json.Unmarshal(jsonStr, &jsonData)
+err = json.Unmarshal(jsonStr, &jsonData)
 ```
 
 取り出した値が `interface{}` となっているので再度 `map[string]interface{}`として型アサーションをつけます。
