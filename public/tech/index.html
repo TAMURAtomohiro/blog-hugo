@@ -56,6 +56,84 @@ ga('send', 'pageview');
           <div class="card-title indigo darken-3 castaway-card-title">
             <div class="card-content">
               <div class="white-text" itemprop="headline">
+                Go言語で union とか直和型のようなデータを表現したいときは interface を使う
+              </div>
+            </div>
+          </div>
+            
+          <div class="card-content castaway-card-summary blue-grey-text">
+            
+            <div class="row">
+              <div class="col castaway-date-published">
+                <span>公開日: </span>
+                <i class="material-icons" style="vertical-align: middle;">today</i>
+                <time itemprop="datePublished" datetime="2017-03-29">2017/03/29</time>
+                <span style="margin-left: 10px;"> タグ: </span>
+                
+                <a href="/tags/go">
+                  <div class="tag-go waves-effect waves-teal chip">
+                    go
+                  </div>
+                </a>
+                
+              </div>
+            </div>
+            <p>たとえば Haskell では以下のようなデータ型を定義できます。</p>
+
+<pre><code>data Tree = Leaf | Branch Tree Tree
+</code></pre>
+
+<p>C言語で言えばタグ付き共用体(union)のような感じです。</p>
+
+<!-- ``` -->
+
+<!-- union Tree { -->
+
+<!--   struct Leaf { -->
+
+<!--     tag int; -->
+
+<!--   } leaf; -->
+
+<!--   struct Branch { -->
+
+<!--     tag int; -->
+
+<!--     left *Tree; -->
+
+<!--     right *Tree; -->
+
+<!--   } branch; -->
+
+<!-- } -->
+
+<!-- ``` -->
+
+<p>この記事は、こんな感じで木構造などを表現したい時
+Go 言語ではどうするのか？という点について調べてみたメモです。
+結論としては<code>type Tree interface{ ... }</code>を定義します。</p>
+
+<p><code>data Tree a</code> のように汎用的なコンテナを作る方法については言及しません。</p>
+
+<p></p>
+          </div>
+
+          <div class="card-action castaway-card-footer">
+            <a class="btn waves-effect waves-light" href="/tech/sum-type-in-golang/">この記事を読む</a>
+          </div>
+		    </article>
+      </div>
+    </div>
+      
+    
+
+    <div class="row">
+      <div class="col s12 m12 l6 offset-l3">
+        <article itemscope itemtype="http://schema.org/Blog" class="card castaway-card-link">
+
+          <div class="card-title indigo darken-3 castaway-card-title">
+            <div class="card-content">
+              <div class="white-text" itemprop="headline">
                 AWS Lambda (Node.js v6.10) から DynamoDB に入れた Gzip バイナリデータを展開する
               </div>
             </div>

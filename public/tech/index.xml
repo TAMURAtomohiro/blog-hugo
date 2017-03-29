@@ -6,8 +6,83 @@
     <description>Recent content in Teches on 嵐の小舟より</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <lastBuildDate>Mon, 27 Mar 2017 18:10:28 +0900</lastBuildDate>
+    <lastBuildDate>Wed, 29 Mar 2017 22:46:34 +0900</lastBuildDate>
     <atom:link href="https://tmrtmhr.info/tech/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Go言語で union とか直和型のようなデータを表現したいときは interface を使う</title>
+      <link>https://tmrtmhr.info/tech/sum-type-in-golang/</link>
+      <pubDate>Wed, 29 Mar 2017 22:46:34 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/sum-type-in-golang/</guid>
+      <description>&lt;p&gt;たとえば Haskell では以下のようなデータ型を定義できます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;data Tree = Leaf | Branch Tree Tree
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;C言語で言えばタグ付き共用体(union)のような感じです。&lt;/p&gt;
+
+&lt;!-- ``` --&gt;
+
+&lt;!-- union Tree { --&gt;
+
+&lt;!--   struct Leaf { --&gt;
+
+&lt;!--     tag int; --&gt;
+
+&lt;!--   } leaf; --&gt;
+
+&lt;!--   struct Branch { --&gt;
+
+&lt;!--     tag int; --&gt;
+
+&lt;!--     left *Tree; --&gt;
+
+&lt;!--     right *Tree; --&gt;
+
+&lt;!--   } branch; --&gt;
+
+&lt;!-- } --&gt;
+
+&lt;!-- ``` --&gt;
+
+&lt;p&gt;この記事は、こんな感じで木構造などを表現したい時
+Go 言語ではどうするのか？という点について調べてみたメモです。
+結論としては&lt;code&gt;type Tree interface{ ... }&lt;/code&gt;を定義します。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;data Tree a&lt;/code&gt; のように汎用的なコンテナを作る方法については言及しません。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;leaf-と-branch-に対して行いたい操作&#34;&gt;Leaf と Branch に対して行いたい操作&lt;/h1&gt;
+
+&lt;p&gt;ここでは&lt;code&gt;Tree&lt;/code&gt;中の&lt;code&gt;Leaf&lt;/code&gt;を数える&lt;code&gt;Count&lt;/code&gt;という関数を考えてみます。
+Haskell だったらパターンマッチで分岐です。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;count :: Tree -&amp;gt; Int
+count Leaf = 1
+count (Branch l r) = count l + count r
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;今Go言語で実現したいのは以下のような内容です。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Leaf&lt;/code&gt;か&lt;code&gt;Branch&lt;/code&gt;のどちらかのデータ構造を引数に取る&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Leaf&lt;/code&gt;か&lt;code&gt;Branch&lt;/code&gt;かによって処理を分岐する&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;そこで登場するのが &lt;code&gt;interface&lt;/code&gt; です。
+ここで&lt;code&gt;Leaf&lt;/code&gt;と&lt;code&gt;Branch&lt;/code&gt;は&lt;code&gt;count&lt;/code&gt;という共通のインタフェースを持っているわけなので、
+そういうふうに書きます。&lt;/p&gt;
+
+&lt;p&gt;そんなわけでコードは以下の通りです。&lt;/p&gt;
+
+&lt;script src=&#34;//gist.github.com/tmrtmhr/3134ee6b7201197471e33f98780e1285.js&#34;&gt;&lt;/script&gt;
+
+&lt;h1 id=&#34;まとめ&#34;&gt;まとめ&lt;/h1&gt;
+
+&lt;p&gt;ということでGo言語で木構造のような直和型のデータ構造を扱う小さな例を示しました。&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>AWS Lambda (Node.js v6.10) から DynamoDB に入れた Gzip バイナリデータを展開する</title>

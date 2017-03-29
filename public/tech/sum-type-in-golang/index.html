@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.18.1" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css">
+
+  
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script>
+          
+<link rel="stylesheet" href="/css/base.css">
+
+<link rel="alternate" href="/index.xml" type="application/rss+xml" title="嵐の小舟より">
+<title>Go言語で union とか直和型のようなデータを表現したいときは interface を使う - 嵐の小舟より</title>
+</head>
+<body>
+  
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-92780964-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+  <div class="">
+  <header class="castaway-header-bar">
+    <nav>
+      <div class="nav-wrapper castaway-site-logo">
+        <div>
+          <a href="/" class="brand-logo right">
+            <i class="material-icons" style="margin-right: 5px;">rowing</i>
+            <span class="castaway-site-title">嵐の小舟より</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  
+
+
+<section id="main">
+  <div class="row">
+    <div class="col s12 m12 l6 offset-l3">
+
+      <article itemscope itemtype="http://schema.org/Blog" class="card castaway-card">
+
+        <div class="card-title indigo darken-3 castaway-card-title">
+          <div class="card-content">
+            <div class="white-text" itemprop="headline">
+              Go言語で union とか直和型のようなデータを表現したいときは interface を使う
+            </div>
+          </div>
+        </div>
+
+        <div class="card-content">
+          <div class="row">
+            <div class="castaway-date-published">
+              <span>公開日：</span>
+              <i class="material-icons" style="vertical-align: middle;">today</i>
+              <time itemprop="datePublished" datetime="2017-03-29">2017/03/29</time>
+              <span style="margin-left: 10px;"> タグ: </span>
+              
+              <a href="/tags/go">
+                <div class="tag-go waves-effect waves-teal chip">
+                  go
+                </div>
+              </a>
+              
+            </div>
+          </div>
+          
+          
+          <div class="castaway-card-content mdl-card__supporting-text mdl-color-text--grey-700">
+            <p>たとえば Haskell では以下のようなデータ型を定義できます。</p>
+
+<pre><code>data Tree = Leaf | Branch Tree Tree
+</code></pre>
+
+<p>C言語で言えばタグ付き共用体(union)のような感じです。</p>
+
+<!-- ``` -->
+
+<!-- union Tree { -->
+
+<!--   struct Leaf { -->
+
+<!--     tag int; -->
+
+<!--   } leaf; -->
+
+<!--   struct Branch { -->
+
+<!--     tag int; -->
+
+<!--     left *Tree; -->
+
+<!--     right *Tree; -->
+
+<!--   } branch; -->
+
+<!-- } -->
+
+<!-- ``` -->
+
+<p>この記事は、こんな感じで木構造などを表現したい時
+Go 言語ではどうするのか？という点について調べてみたメモです。
+結論としては<code>type Tree interface{ ... }</code>を定義します。</p>
+
+<p><code>data Tree a</code> のように汎用的なコンテナを作る方法については言及しません。</p>
+
+<p></p>
+
+<h1 id="leaf-と-branch-に対して行いたい操作">Leaf と Branch に対して行いたい操作</h1>
+
+<p>ここでは<code>Tree</code>中の<code>Leaf</code>を数える<code>Count</code>という関数を考えてみます。
+Haskell だったらパターンマッチで分岐です。</p>
+
+<pre><code class="language-haskell">count :: Tree -&gt; Int
+count Leaf = 1
+count (Branch l r) = count l + count r
+</code></pre>
+
+<p>今Go言語で実現したいのは以下のような内容です。</p>
+
+<ul>
+<li><code>Leaf</code>か<code>Branch</code>のどちらかのデータ構造を引数に取る</li>
+<li><code>Leaf</code>か<code>Branch</code>かによって処理を分岐する</li>
+</ul>
+
+<p>そこで登場するのが <code>interface</code> です。
+ここで<code>Leaf</code>と<code>Branch</code>は<code>count</code>という共通のインタフェースを持っているわけなので、
+そういうふうに書きます。</p>
+
+<p>そんなわけでコードは以下の通りです。</p>
+
+<script src="//gist.github.com/tmrtmhr/3134ee6b7201197471e33f98780e1285.js"></script>
+
+<h1 id="まとめ">まとめ</h1>
+
+<p>ということでGo言語で木構造のような直和型のデータ構造を扱う小さな例を示しました。</p>
+          </div>
+        </div>
+          
+          <div class="card-action castaway-card-footer">
+            <a class="btn waves-effect waves-light" href="/">サイトトップ</a>
+          </div>            
+
+      </article>
+        
+    </div>
+
+    </div>
+  </div>
+</section>
+
+
+</div>
+</body>
+</html>
+
