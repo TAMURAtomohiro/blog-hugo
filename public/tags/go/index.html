@@ -56,6 +56,138 @@ ga('send', 'pageview');
           <div class="card-title indigo darken-3 castaway-card-title">
             <div class="card-content">
               <div class="white-text" itemprop="headline">
+                Go言語でアプリケーション・ハンガリアン記法的なことを型で表現する
+              </div>
+            </div>
+          </div>
+            
+          <div class="card-content castaway-card-summary blue-grey-text">
+            
+            <div class="row">
+              <div class="col castaway-date-published">
+                <span>公開日: </span>
+                <i class="material-icons" style="vertical-align: middle;">today</i>
+                <time itemprop="datePublished" datetime="2017-04-03">2017/04/03</time>
+                <span style="margin-left: 10px;"> タグ: </span>
+                
+                <a href="/tags/go">
+                  <div class="tag-go waves-effect waves-teal chip">
+                    go
+                  </div>
+                </a>
+                
+              </div>
+            </div>
+            <p><a href="http://local.joelonsoftware.com/wiki/%E9%96%93%E9%81%95%E3%81%A3%E3%81%9F%E3%82%B3%E3%83%BC%E3%83%89%E3%81%AF%E9%96%93%E9%81%95%E3%81%A3%E3%81%A6%E8%A6%8B%E3%81%88%E3%82%8B%E3%82%88%E3%81%86%E3%81%AB%E3%81%99%E3%82%8B">間違ったコードは間違って見えるようにする</a>
+で説明されている「アプリケーションハンガリアン記法」とは、</p>
+
+<ul>
+<li>同じデータ型の変数を区別するために、内容を示す名前をつける</li>
+</ul>
+
+<p>というものです。
+先のページで挙げられている例では、行と列の最大値に <code>rowMax</code> <code>colMax</code> と名前をつけることで取り違えを防ぐ、といった感じです。
+これらはともに整数なので相互に代入できてしまいますが、バグなので、命名規則で気づきやすくする、という意図です。</p>
+
+<p>Go 言語では型に別名をつけることができ、コンパイル時の型チェックで違う型として扱われるため、取り違えを防ぐのに有効です。</p>
+
+<p></p>
+          </div>
+
+          <div class="card-action castaway-card-footer">
+            <a class="btn waves-effect waves-light" href="/tech/golang-hungarian-notation/">この記事を読む</a>
+          </div>
+		    </article>
+      </div>
+    </div>
+      
+    
+
+    <div class="row">
+      <div class="col s12 m12 l6 offset-l3">
+        <article itemscope itemtype="http://schema.org/Blog" class="card castaway-card-link">
+
+          <div class="card-title indigo darken-3 castaway-card-title">
+            <div class="card-content">
+              <div class="white-text" itemprop="headline">
+                なぜGo言語はエラー返却に例外機構を使わないのか
+              </div>
+            </div>
+          </div>
+            
+          <div class="card-content castaway-card-summary blue-grey-text">
+            
+            <div class="row">
+              <div class="col castaway-date-published">
+                <span>公開日: </span>
+                <i class="material-icons" style="vertical-align: middle;">today</i>
+                <time itemprop="datePublished" datetime="2017-04-03">2017/04/03</time>
+                <span style="margin-left: 10px;"> タグ: </span>
+                
+                <a href="/tags/go">
+                  <div class="tag-go waves-effect waves-teal chip">
+                    go
+                  </div>
+                </a>
+                
+              </div>
+            </div>
+            <p><a href="http://golang.jp/go_faq#exceptions">Go言語 FAQ</a>より引用すると</p>
+
+<blockquote>
+<p>例外(exception)がない理由は?</p>
+
+<p>我々は、処理構造を制御するためのtry-catch-finally形式の例外処理機構によって、コードが入り組んでしまうと考えています。</p>
+</blockquote>
+
+<p>とのことです。</p>
+
+<p>うーん、これだけじゃよく分かりません。</p>
+
+<p>知りたいのは、</p>
+
+<ul>
+<li>「例外機構が有用な場面」についてGo言語ではどのように対処するのか？
+はたしてGo言語の他の機能を組み合わせることでカバーできるのか？</li>
+<li>「例外機構ではコードが入り組んでしまう」というのはどういうことを指しているのか？</li>
+</ul>
+
+<p>自分の探し方が悪かったら申し訳ないですが、
+講演やら Effective Go やらでこういったことに言及している部分を見つけられなかったので、
+調べた内容と自分の推測をまとめてみます。</p>
+
+<p>結論としては</p>
+
+<ul>
+<li>例外機構が欲しい場面は Go 言語の他の機能でカバーできそう</li>
+<li>例外機構によるエラー返却では、関数の出口が増えるため制御フローが複雑になる</li>
+<li>エラー値返却の手段としての例外機構は、並行プログラムにそぐわない</li>
+</ul>
+
+<p>ということです。</p>
+
+<p>Go言語の他の機能というのは多値返却、<code>goto</code>、<code>defer</code>、<code>panic</code>、<code>recover</code> です。
+具体的にエラーハンドリングのコードがどうなるかについては別の記事にまとめたいです。</p>
+
+<p></p>
+          </div>
+
+          <div class="card-action castaway-card-footer">
+            <a class="btn waves-effect waves-light" href="/tech/why-does-golang-not-have-exceptions/">この記事を読む</a>
+          </div>
+		    </article>
+      </div>
+    </div>
+      
+    
+
+    <div class="row">
+      <div class="col s12 m12 l6 offset-l3">
+        <article itemscope itemtype="http://schema.org/Blog" class="card castaway-card-link">
+
+          <div class="card-title indigo darken-3 castaway-card-title">
+            <div class="card-content">
+              <div class="white-text" itemprop="headline">
                 Go言語で union とか直和型のようなデータを表現したいときは interface を使う
               </div>
             </div>

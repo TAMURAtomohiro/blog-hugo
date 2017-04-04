@@ -2,6 +2,21 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://tmrtmhr.info/tech/drag-and-drop-using-rxjs/</loc>
+    <lastmod>2017-04-04T17:24:23+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tmrtmhr.info/tech/golang-hungarian-notation/</loc>
+    <lastmod>2017-04-03T17:35:08+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tmrtmhr.info/tech/why-does-golang-not-have-exceptions/</loc>
+    <lastmod>2017-04-03T17:04:30+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://tmrtmhr.info/tech/sum-type-in-golang/</loc>
     <lastmod>2017-03-29T22:46:34+09:00</lastmod>
   </url>
@@ -65,7 +80,7 @@
   
   <url>
     <loc>https://tmrtmhr.info/tags/go/</loc>
-    <lastmod>2017-03-29T22:46:34+09:00</lastmod>
+    <lastmod>2017-04-03T17:35:08+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -76,8 +91,20 @@
   </url>
   
   <url>
+    <loc>https://tmrtmhr.info/tags/javascript/</loc>
+    <lastmod>2017-04-04T17:24:23+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://tmrtmhr.info/tags/node/index.js/</loc>
     <lastmod>2017-03-27T18:10:28+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tmrtmhr.info/tags/rxjs/</loc>
+    <lastmod>2017-04-04T17:24:23+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -94,7 +121,7 @@
   
   <url>
     <loc>https://tmrtmhr.info/tech/</loc>
-    <lastmod>2017-03-29T22:46:34+09:00</lastmod>
+    <lastmod>2017-04-04T17:24:23+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -106,7 +133,7 @@
   
   <url>
     <loc>https://tmrtmhr.info/</loc>
-    <lastmod>2017-03-29T22:46:34+09:00</lastmod>
+    <lastmod>2017-04-04T17:24:23+09:00</lastmod>
     <priority>0</priority>
   </url>
   

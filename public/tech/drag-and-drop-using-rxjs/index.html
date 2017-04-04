@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.18.1" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css">
+
+  
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script>
+          
+<link rel="stylesheet" href="/css/base.css">
+
+<link rel="alternate" href="/index.xml" type="application/rss+xml" title="嵐の小舟より">
+<title>HTML要素をドラッグアンドドロップ(D&amp;D)中にブラウザ外に出た場合、D&amp;Dを終了するよう RxJS 5 を用いて実装する - 嵐の小舟より</title>
+</head>
+<body>
+  
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-92780964-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+  <div class="">
+  <header class="castaway-header-bar">
+    <nav>
+      <div class="nav-wrapper castaway-site-logo">
+        <div>
+          <a href="/" class="brand-logo right">
+            <i class="material-icons" style="margin-right: 5px;">rowing</i>
+            <span class="castaway-site-title">嵐の小舟より</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  
+
+
+<section id="main">
+  <div class="row">
+    <div class="col s12 m12 l6 offset-l3">
+
+      <article itemscope itemtype="http://schema.org/Blog" class="card castaway-card">
+
+        <div class="card-title indigo darken-3 castaway-card-title">
+          <div class="card-content">
+            <div class="white-text" itemprop="headline">
+              HTML要素をドラッグアンドドロップ(D&amp;D)中にブラウザ外に出た場合、D&amp;Dを終了するよう RxJS 5 を用いて実装する
+            </div>
+          </div>
+        </div>
+
+        <div class="card-content">
+          <div class="row">
+            <div class="castaway-date-published">
+              <span>公開日：</span>
+              <i class="material-icons" style="vertical-align: middle;">today</i>
+              <time itemprop="datePublished" datetime="2017-04-04">2017/04/04</time>
+              <span style="margin-left: 10px;"> タグ: </span>
+              
+              <a href="/tags/javascript">
+                <div class="tag-javascript waves-effect waves-teal chip">
+                  javascript
+                </div>
+              </a>
+              
+              <a href="/tags/rxjs">
+                <div class="tag-rxjs waves-effect waves-teal chip">
+                  rxjs
+                </div>
+              </a>
+              
+            </div>
+          </div>
+          
+          
+          <div class="castaway-card-content mdl-card__supporting-text mdl-color-text--grey-700">
+            <p>HTML要素をドラッグアンドドロップ(以降 D&amp;D)で移動させようと思ったときは、
+対象要素に対する <code>mousedown</code>、<code>mousemove</code>、<code>mouseup</code> のイベントを使って実装するかと思います。</p>
+
+<p>しかしながらウィンドウ外では対象要素の <code>mouseup</code> を捕捉できないため、
+単純な実装ではウィンドウ外でD&amp;Dをやめて戻った際、再度クリックなどして<code>mouseup</code>が発生するまで要素が追従してしまいます。</p>
+
+<p>本記事では以下の挙動を <a href="https://github.com/ReactiveX/rxjs">RxJS</a> で実装してみた例です。</p>
+
+<ul>
+<li>D&amp;D 終了時は初期位置に移動する</li>
+<li>ウィンドウ外で D&amp;D 終了(<code>mouseup</code>)を検知する</li>
+</ul>
+
+<p></p>
+
+<p>とりあえず触ってみてください。Google Chrome 57.0.2987.133 (64-bit) でしか動作確認してません。</p>
+
+<script src="https://code.jquery.com/jquery-3.2.0.min.js"
+  integrity="sha256-JAW99MJVpJBGcbzEuXk4Az05s/XyDdBomFqNlM3ic+I="
+  crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://unpkg.com/rxjs/bundles/Rx.min.js"></script>
+<script type="text/javascript" src="/js/drag-and-drop.js"></script>
+
+<div id="dnd-container" style="position: relative; width: 512px; height:64px;">
+<div id="dnd-target" class="z-depth-2" style="width:32px; height: 32px; background-color: blue; position:absolute; top: 16px; left: 240px; z-index: 999;"></div>
+</div>
+
+<p><a href="https://liginc.co.jp/web/js/151272">「RxJS」初心者入門 – JavaScriptの非同期処理の常識を変えるライブラリ</a>
+にあるコードとほぼ同じですが、終了条件のストリームを <code>mouseup</code> だけでなく <code>$(window)</code> の <code>mouseup</code> からも作っています。</p>
+
+<pre><code class="language-javascript">  // 終了条件を表すストリーム
+  var terminateDndStream = Rx.Observable.merge(
+    mouseUpStream,
+    Rx.Observable.fromEvent($(window), 'mouseup')
+  );
+</code></pre>
+
+<p>今回用いた技術的なポイントは以下の通りです。</p>
+
+<ul>
+<li><code>window</code> 内でドラッグを開始した場合、ウィンドウ外での <code>mouseup</code> や <code>mousemove</code> を捕捉できる</li>
+<li>イベントストリームをマージして OR 条件を表現する</li>
+</ul>
+
+<p>参考：</p>
+
+<ul>
+<li><a href="https://liginc.co.jp/web/js/151272">「RxJS」初心者入門 – JavaScriptの非同期処理の常識を変えるライブラリ</a></li>
+<li><a href="http://qiita.com/tyfkda/items/228934160b0951a8e732">マウスをウィンドウ外で離されてもイベントを受け取る</a></li>
+<li><a href="http://stackoverflow.com/questions/14912515/how-to-detect-a-mouseup-event-outside-the-window">How to detect a MouseUp event outside the window?</a></li>
+</ul>
+
+<p>Gist も貼っておきます。
+<script src="//gist.github.com/tmrtmhr/d02aaa74e54a6fa684137ae8d4d8b16e.js"></script></p>
+          </div>
+        </div>
+          
+          <div class="card-action castaway-card-footer">
+            <a class="btn waves-effect waves-light" href="/">サイトトップ</a>
+          </div>            
+
+      </article>
+        
+    </div>
+
+    </div>
+  </div>
+</section>
+
+
+</div>
+</body>
+</html>
+

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.18.1" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css">
+
+  
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script>
+          
+<link rel="stylesheet" href="/css/base.css">
+
+<link rel="alternate" href="/index.xml" type="application/rss+xml" title="嵐の小舟より">
+<title>なぜGo言語はエラー返却に例外機構を使わないのか - 嵐の小舟より</title>
+</head>
+<body>
+  
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-92780964-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+  <div class="">
+  <header class="castaway-header-bar">
+    <nav>
+      <div class="nav-wrapper castaway-site-logo">
+        <div>
+          <a href="/" class="brand-logo right">
+            <i class="material-icons" style="margin-right: 5px;">rowing</i>
+            <span class="castaway-site-title">嵐の小舟より</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  
+
+
+<section id="main">
+  <div class="row">
+    <div class="col s12 m12 l6 offset-l3">
+
+      <article itemscope itemtype="http://schema.org/Blog" class="card castaway-card">
+
+        <div class="card-title indigo darken-3 castaway-card-title">
+          <div class="card-content">
+            <div class="white-text" itemprop="headline">
+              なぜGo言語はエラー返却に例外機構を使わないのか
+            </div>
+          </div>
+        </div>
+
+        <div class="card-content">
+          <div class="row">
+            <div class="castaway-date-published">
+              <span>公開日：</span>
+              <i class="material-icons" style="vertical-align: middle;">today</i>
+              <time itemprop="datePublished" datetime="2017-04-03">2017/04/03</time>
+              <span style="margin-left: 10px;"> タグ: </span>
+              
+              <a href="/tags/go">
+                <div class="tag-go waves-effect waves-teal chip">
+                  go
+                </div>
+              </a>
+              
+            </div>
+          </div>
+          
+          
+          <div class="castaway-card-content mdl-card__supporting-text mdl-color-text--grey-700">
+            <p><a href="http://golang.jp/go_faq#exceptions">Go言語 FAQ</a>より引用すると</p>
+
+<blockquote>
+<p>例外(exception)がない理由は?</p>
+
+<p>我々は、処理構造を制御するためのtry-catch-finally形式の例外処理機構によって、コードが入り組んでしまうと考えています。</p>
+</blockquote>
+
+<p>とのことです。</p>
+
+<p>うーん、これだけじゃよく分かりません。</p>
+
+<p>知りたいのは、</p>
+
+<ul>
+<li>「例外機構が有用な場面」についてGo言語ではどのように対処するのか？
+はたしてGo言語の他の機能を組み合わせることでカバーできるのか？</li>
+<li>「例外機構ではコードが入り組んでしまう」というのはどういうことを指しているのか？</li>
+</ul>
+
+<p>自分の探し方が悪かったら申し訳ないですが、
+講演やら Effective Go やらでこういったことに言及している部分を見つけられなかったので、
+調べた内容と自分の推測をまとめてみます。</p>
+
+<p>結論としては</p>
+
+<ul>
+<li>例外機構が欲しい場面は Go 言語の他の機能でカバーできそう</li>
+<li>例外機構によるエラー返却では、関数の出口が増えるため制御フローが複雑になる</li>
+<li>エラー値返却の手段としての例外機構は、並行プログラムにそぐわない</li>
+</ul>
+
+<p>ということです。</p>
+
+<p>Go言語の他の機能というのは多値返却、<code>goto</code>、<code>defer</code>、<code>panic</code>、<code>recover</code> です。
+具体的にエラーハンドリングのコードがどうなるかについては別の記事にまとめたいです。</p>
+
+<p></p>
+
+<h1 id="例外機構にいたった歴史">例外機構にいたった歴史</h1>
+
+<p>まず例外機構というのが何を目的に生まれたのかおさらいしてみました。</p>
+
+<p>たまたま手元にあった「Concepts in Programming Languages(CIPL)」によると例外機構については「8章 Control in Sequential Languages」の中にあります。
+つまり例外機構とは制御フローを記述するものです。</p>
+
+<h2 id="行番号ベースのジャンプ-例-fortran">行番号ベースのジャンプ(例：Fortran)</h2>
+
+<p>以下、CIPL p.204-205 から引用したコードです。</p>
+
+<pre><code>10 IF (X .GT. 0.000001) GO TO 20
+   X = -X
+11 Y = X*X - SIN(Y)/(X+1)
+   IF (X .LT. 0.000001) GO TO 50
+20 IF (X*Y .LT. 0.00001) GO TO 30
+   X = X - Y -Y
+30 X = X+Y
+   ...
+50 CONTINUE
+   X = A
+   Y = B - A + C * C
+   GO TO 11
+</code></pre>
+
+<p>引用終わり。</p>
+
+<p>条件分岐の際、実行するコードを選ぶために明示的に行番号を指定してジャンプしています。
+このコードでは、50 から 11 に戻ることでループを作っています。
+フラットなコードなので、どこがループしているのがよく読まないとわかりません。
+さらにはループの途中にジャンプする、のようなことも書けてしまうため、複雑に入り組んだスパゲティコードを量産することが可能でした<sup class="footnote-ref" id="fnref:1"><a rel="footnote" href="#fn:1">1</a></sup>。
+そのため、無制限なジャンプを許さないようにプログラム言語が発展します。</p>
+
+<h2 id="コードブロックベースのジャンプ">コードブロックベースのジャンプ</h2>
+
+<p>昨今の言語では条件分岐やループの際に <code>{ }</code> やインデントルールでコードブロックを示すことで、
+言語処理系がいい感じにジャンプしてくれます。
+また、<code>break</code>や<code>continue</code>のような、やはりコードブロックベースのジャンプが広く採用されています。</p>
+
+<h2 id="例外機構">例外機構</h2>
+
+<p><code>if-then-else</code>などで記述できないパターンのジャンプとして例外機構が生まれます。
+その名の通り例外的なケースに際してコードブロックや関数呼び出しを抜けるためのものですが、
+それが実際に例外的なケースであるかどうかまで処理系がチェックするわけではありません。</p>
+
+<p>そのため、例外機構というのは言語が提供する機能としては「値を渡せるジャンプ」です。
+典型的には<code>try { ... } catch(e) { ... }</code>のような構文で、<code>try</code>ブロックの実行中に例外が投げられると、対応する<code>catch</code>ブロックへ移動します。
+注意が必要なのは、対応する<code>catch</code>ブロックが見つかるまでコールスタックを戻りつつ探す点です。
+つまり、<code>try-catch</code> に辿り着くたび <code>catch</code> ブロックの情報がスタックに積まれ、ジャンプ先は実行時の関数呼び出し履歴に基いて決まります。</p>
+
+<h1 id="例外機構を使いたいケース">例外機構を使いたいケース</h1>
+
+<p>例外機構によってできることは以下の通りです。</p>
+
+<ul>
+<li>エラー値返却の表現</li>
+<li>処理の中止および制御フローの移動</li>
+</ul>
+
+<p>また、これによって生まれるメリットは以下のようになります。</p>
+
+<ul>
+<li>ネストした処理(多重ループ、再帰呼び出しなど)をまとめて中止できる</li>
+<li>事前のエラーチェックを省ける</li>
+<li>エラー処理を一箇所にまとめられる</li>
+</ul>
+
+<h2 id="ネストした処理をまとめて中止できることの例">ネストした処理をまとめて中止できることの例</h2>
+
+<p>CIPL p.214 の例を示します。</p>
+
+<p>木構造の中にある数値をすべて掛け合わせる <code>prod</code> を考えます。
+乗算なのでどこかにゼロが存在すると結果もゼロになるため、残りの計算が無駄です。
+再帰呼び出しで木を辿っているとコールスタックが伸びていきますが、
+例外機構を使えば処理を中止してまとめてスタックを戻り、ゼロを返すということが可能です。</p>
+
+<h2 id="事前のエラーチェックを省ける例">事前のエラーチェックを省ける例</h2>
+
+<p>CIPL p.208 の例を示します。</p>
+
+<p>A の逆行列を求める関数 <code>invert</code> を考えます。
+まず行列式 <code>det(A)</code> を求め、これを利用することで逆行列が得られますが、<code>det(A)</code>がゼロの場合には逆行列が存在しません。
+しかしながら <code>invert</code> を使う前に、<code>det(A)</code> を計算して値をチェックするのは<code>invert</code>での処理と重複してしまいイマイチです。</p>
+
+<p>なのでとりあえず <code>invert</code> 内でとりあえず det(A) を計算し、ゼロであれば例外を投げてエラー値を表現し、処理を中止するということが可能です。</p>
+
+<h2 id="エラー処理を一箇所にまとめたいケース">エラー処理を一箇所にまとめたいケース</h2>
+
+<p>CIPL には載っていないですが例外機構の利用例としてよく見かけるものです。
+<code>try</code>ブロックで複数種類のエラーが発生し得る、エラー処理が長い、などの状況では、
+正常系の機能コードとエラー処理のコードが混在するのが好ましくありません。
+これらを分離するために例外を利用し、エラー処理については<code>catch</code>ブロックにまとめることができます。</p>
+
+<h1 id="例外機構を使うべきでないケース">例外機構を使うべきでないケース</h1>
+
+<p>個人的に面白いなと思ったのでメモしておきます。</p>
+
+<p>「catch ブロックを探すためのスタック巻きとりにかかる時間を予測しにくいため、リアルタイム性が損なわれる」というもの。
+組込み機器で計算機資源が乏しかったり、あるいは処理時間について厳密に予測しなければならないケースには、例外機構は向いていません。</p>
+
+<p>参考：</p>
+
+<p><a href="http://softwareengineering.stackexchange.com/questions/258012/why-design-a-modern-language-without-an-exception-handling-mechanism">Why design a modern language without an exception-handling mechanism?</a></p>
+
+<blockquote>
+<p>In embedded programming, exceptions were traditionally not allowed, because the overhead of the stack unwinding you have to do was deemed an unacceptable variability when trying to maintain real-time performance.</p>
+</blockquote>
+
+<p><a href="http://qiita.com/MasayaMizuhara/items/98c0d490f1633d9b636f">もう少し例外を使用しても良いのではないか&hellip;</a></p>
+
+<blockquote>
+<p>例えば 組み込みシステムのような厳しい処理速度が要求されるケース では例外を使用すべきではない(例外を throw してから catch するまでの最大時間を正確に測定することが困難なため)。</p>
+</blockquote>
+
+<h1 id="go言語でのやり方">Go言語でのやり方</h1>
+
+<h2 id="ネストした処理を中止する">ネストした処理を中止する</h2>
+
+<p>多重ループであれば <code>return</code>、<code>break</code> あるいは <code>goto</code> が使えます。
+コールスタックを戻りたい場合は <code>defer</code>、<code>panic</code>、<code>recover</code> を使います。</p>
+
+<h2 id="エラー値返却の表現">エラー値返却の表現</h2>
+
+<p>多値返却できるため、値としてエラーを返します。</p>
+
+<h2 id="エラー処理を一箇所にまとめる">エラー処理を一箇所にまとめる</h2>
+
+<p><code>goto</code>です。これは数少ない <code>goto</code> が有用なケースのうちのひとつです。
+ただし、</p>
+
+<pre><code>if err != nil { goto ErrorHandling; }
+</code></pre>
+
+<p>みたいなコードはあちこちに残ります。</p>
+
+<h1 id="例外機構が並行プログラムで使えない理由">例外機構が並行プログラムで使えない理由</h1>
+
+<p>スレッド間ではスタックを共有しないためです。
+(参考：<a href="http://www.lighterra.com/papers/exceptionsharmful/">Exception Handling Considered Harmful</a>)</p>
+
+<p>ここまでの説明では、例外が投げられたとき、対応する <code>catch</code> ブロックをコールスタックから探すという挙動でした。
+POSIXスレッドにも<a href="https://www.ibm.com/developerworks/jp/linux/library/l-posix1/#f">親子の概念がない</a>ですし、
+スレッド間で暗黙的に例外が伝わるような仕様は難しそうです。</p>
+
+<p>C++ や Java をちょろっと調べた感じでは、スレッド間で例外の情報を伝える際には何かしら共有メモリ方式を使うようです。</p>
+
+<ul>
+<li><a href="http://phst.hateblo.jp/entry/2016/09/10/205618">マルチスレッドにおける例外処理の受け渡し (VC++)</a></li>
+<li><a href="http://minor.hatenablog.com/entry/20101130/1291125150">スレッドがスローする例外をキャッチする</a></li>
+</ul>
+
+<!-- [Erlang と Golang を比較してみる](http://qiita.com/soranoba/items/68d57b4635a2917f3c73) -->
+
+<!-- [Semipredicate problem](https://en.wikipedia.org/wiki/Semipredicate_problem) -->
+
+<!-- [Go, for Distributed System](https://talks.golang.org/2013/distsys.slide#1) -->
+
+<h1 id="例外機構に対する批判">例外機構に対する批判</h1>
+
+<p>前節までに調べたことで、個人的には「例外機構でやりたいことは Go 言語の他の機能でもカバーできそうだ」という気持ちになりました。
+また、「並行プログラムを念頭に置くなら例外機構は筋が悪そう」とも思います。</p>
+
+<p>ですがそれだけだと「例外機構ではコードが入り組んでしまう」という説明にはならないので、例外機構への批判を探してみました。</p>
+
+<p>大体「関数の出口が増えるため、制御フローが複雑になる」という感じの指摘でしょうか。
+<a href="http://local.joelonsoftware.com/wiki/%E9%96%93%E9%81%95%E3%81%A3%E3%81%9F%E3%82%B3%E3%83%BC%E3%83%89%E3%81%AF%E9%96%93%E9%81%95%E3%81%A3%E3%81%A6%E8%A6%8B%E3%81%88%E3%82%8B%E3%82%88%E3%81%86%E3%81%AB%E3%81%99%E3%82%8B">間違ったコードは間違って見えるようにする</a>から引用すると、</p>
+
+<blockquote>
+<p>本当の問題は、例外がコロケーションを殺してしまうということだ。コードが正しいことをしているかという質問に答えるためには、どこか別なところを見なければならず、あなたの目の持つまずいコードを見つけ出す能力が生かせないことになる。そこには見えるものがないからだ。</p>
+</blockquote>
+
+<p>ということで、明示的に <code>return</code> が書いてあるのに比べて関数を抜ける可能性に気づきにくく、不正な状態に落ち入りやすくなるのを嫌っているという理解です。</p>
+
+<p>参考：</p>
+
+<ul>
+<li><a href="https://blogs.msdn.microsoft.com/oldnewthing/20040422-00/?p=39683">Cleaner, more elegant, and wrong</a></li>
+<li><a href="https://blogs.msdn.microsoft.com/oldnewthing/20050114-00/?p=36693">Cleaner, more elegant, and harder to recognize</a></li>
+<li><a href="http://local.joelonsoftware.com/wiki/%E9%96%93%E9%81%95%E3%81%A3%E3%81%9F%E3%82%B3%E3%83%BC%E3%83%89%E3%81%AF%E9%96%93%E9%81%95%E3%81%A3%E3%81%A6%E8%A6%8B%E3%81%88%E3%82%8B%E3%82%88%E3%81%86%E3%81%AB%E3%81%99%E3%82%8B">間違ったコードは間違って見えるようにする</a></li>
+<li><a href="https://www.joelonsoftware.com/2003/10/13/13/">Joel on software: 2003/10/13</a><a href="http://d.hatena.ne.jp/kmaebashi/20091227/p1">とその翻訳</a></li>
+<li><a href="http://stackoverflow.com/questions/1736146/why-is-exception-handling-bad">StackOverflow: Why is exception handling bad</a></li>
+<li><a href="http://xahlee.info/comp/why_i_hate_exceptions.html">Why I Hate Exceptions</a></li>
+</ul>
+
+<h1 id="まとめ">まとめ</h1>
+
+<p>個人の感想です。</p>
+
+<ul>
+<li>例外機構が欲しい場面は Go 言語の他の機能でカバーできそう</li>
+<li>例外機構によるエラー返却では、関数の出口が増えるため制御フローが複雑になる</li>
+<li>エラー値返却の手段としての例外機構は、並行プログラムにそぐわないので Go 言語は例外機構を採用しなかった</li>
+</ul>
+<div class="footnotes">
+
+<hr />
+
+<ol>
+<li id="fn:1">この時代には、何しろ計算機資源が少ないので、そうしたジャンプを駆使してコードサイズ・命令数を削減することも重要だったようです。
+ <a class="footnote-return" href="#fnref:1"><sup>[return]</sup></a></li>
+</ol>
+</div>
+          </div>
+        </div>
+          
+          <div class="card-action castaway-card-footer">
+            <a class="btn waves-effect waves-light" href="/">サイトトップ</a>
+          </div>            
+
+      </article>
+        
+    </div>
+
+    </div>
+  </div>
+</section>
+
+
+</div>
+</body>
+</html>
+

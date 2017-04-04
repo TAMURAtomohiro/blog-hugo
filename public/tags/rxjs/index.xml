@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Rxjs on 嵐の小舟より</title>
+    <link>https://tmrtmhr.info/tags/rxjs/index.xml</link>
+    <description>Recent content in Rxjs on 嵐の小舟より</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja-JP</language>
+    <atom:link href="https://tmrtmhr.info/tags/rxjs/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>HTML要素をドラッグアンドドロップ(D&amp;D)中にブラウザ外に出た場合、D&amp;Dを終了するよう RxJS 5 を用いて実装する</title>
+      <link>https://tmrtmhr.info/tech/drag-and-drop-using-rxjs/</link>
+      <pubDate>Tue, 04 Apr 2017 17:24:23 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/drag-and-drop-using-rxjs/</guid>
+      <description>&lt;p&gt;HTML要素をドラッグアンドドロップ(以降 D&amp;amp;D)で移動させようと思ったときは、
+対象要素に対する &lt;code&gt;mousedown&lt;/code&gt;、&lt;code&gt;mousemove&lt;/code&gt;、&lt;code&gt;mouseup&lt;/code&gt; のイベントを使って実装するかと思います。&lt;/p&gt;
+
+&lt;p&gt;しかしながらウィンドウ外では対象要素の &lt;code&gt;mouseup&lt;/code&gt; を捕捉できないため、
+単純な実装ではウィンドウ外でD&amp;amp;Dをやめて戻った際、再度クリックなどして&lt;code&gt;mouseup&lt;/code&gt;が発生するまで要素が追従してしまいます。&lt;/p&gt;
+
+&lt;p&gt;本記事では以下の挙動を &lt;a href=&#34;https://github.com/ReactiveX/rxjs&#34;&gt;RxJS&lt;/a&gt; で実装してみた例です。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;D&amp;amp;D 終了時は初期位置に移動する&lt;/li&gt;
+&lt;li&gt;ウィンドウ外で D&amp;amp;D 終了(&lt;code&gt;mouseup&lt;/code&gt;)を検知する&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;とりあえず触ってみてください。Google Chrome 57.0.2987.133 (64-bit) でしか動作確認してません。&lt;/p&gt;
+
+&lt;script src=&#34;https://code.jquery.com/jquery-3.2.0.min.js&#34;
+  integrity=&#34;sha256-JAW99MJVpJBGcbzEuXk4Az05s/XyDdBomFqNlM3ic+I=&#34;
+  crossorigin=&#34;anonymous&#34;&gt;&lt;/script&gt;
+&lt;script type=&#34;text/javascript&#34; src=&#34;https://unpkg.com/rxjs/bundles/Rx.min.js&#34;&gt;&lt;/script&gt;
+&lt;script type=&#34;text/javascript&#34; src=&#34;https://tmrtmhr.info/js/drag-and-drop.js&#34;&gt;&lt;/script&gt;
+
+&lt;div id=&#34;dnd-container&#34; style=&#34;position: relative; width: 512px; height:64px;&#34;&gt;
+&lt;div id=&#34;dnd-target&#34; class=&#34;z-depth-2&#34; style=&#34;width:32px; height: 32px; background-color: blue; position:absolute; top: 16px; left: 240px; z-index: 999;&#34;&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://liginc.co.jp/web/js/151272&#34;&gt;「RxJS」初心者入門 – JavaScriptの非同期処理の常識を変えるライブラリ&lt;/a&gt;
+にあるコードとほぼ同じですが、終了条件のストリームを &lt;code&gt;mouseup&lt;/code&gt; だけでなく &lt;code&gt;$(window)&lt;/code&gt; の &lt;code&gt;mouseup&lt;/code&gt; からも作っています。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;  // 終了条件を表すストリーム
+  var terminateDndStream = Rx.Observable.merge(
+    mouseUpStream,
+    Rx.Observable.fromEvent($(window), &#39;mouseup&#39;)
+  );
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;今回用いた技術的なポイントは以下の通りです。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;window&lt;/code&gt; 内でドラッグを開始した場合、ウィンドウ外での &lt;code&gt;mouseup&lt;/code&gt; や &lt;code&gt;mousemove&lt;/code&gt; を捕捉できる&lt;/li&gt;
+&lt;li&gt;イベントストリームをマージして OR 条件を表現する&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;参考：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://liginc.co.jp/web/js/151272&#34;&gt;「RxJS」初心者入門 – JavaScriptの非同期処理の常識を変えるライブラリ&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://qiita.com/tyfkda/items/228934160b0951a8e732&#34;&gt;マウスをウィンドウ外で離されてもイベントを受け取る&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://stackoverflow.com/questions/14912515/how-to-detect-a-mouseup-event-outside-the-window&#34;&gt;How to detect a MouseUp event outside the window?&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Gist も貼っておきます。
+&lt;script src=&#34;//gist.github.com/tmrtmhr/d02aaa74e54a6fa684137ae8d4d8b16e.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,54 +1,218 @@
 +++
-date = "2017-03-29T10:51:18+09:00"
-draft = true
-title = "なぜGO言語が例外を採用しなかったのか"
+draft = false
+title = "なぜGo言語はエラー返却に例外機構を使わないのか"
+tags = ["go"]
+date = "2017-04-03T17:04:30+09:00"
 +++
-GO言語といえば例外機構を持たない
 
+[Go言語 FAQ](http://golang.jp/go_faq#exceptions)より引用すると
+
+> 例外(exception)がない理由は?
+
+> 我々は、処理構造を制御するためのtry-catch-finally形式の例外処理機構によって、コードが入り組んでしまうと考えています。
+
+とのことです。
+
+うーん、これだけじゃよく分かりません。
+
+知りたいのは、
+
+- 「例外機構が有用な場面」についてGo言語ではどのように対処するのか？
+   はたしてGo言語の他の機能を組み合わせることでカバーできるのか？
+- 「例外機構ではコードが入り組んでしまう」というのはどういうことを指しているのか？
+
+自分の探し方が悪かったら申し訳ないですが、
+講演やら Effective Go やらでこういったことに言及している部分を見つけられなかったので、
+調べた内容と自分の推測をまとめてみます。
+
+結論としては
+
+- 例外機構が欲しい場面は Go 言語の他の機能でカバーできそう
+- 例外機構によるエラー返却では、関数の出口が増えるため制御フローが複雑になる
+- エラー値返却の手段としての例外機構は、並行プログラムにそぐわない
+
+ということです。
+
+Go言語の他の機能というのは多値返却、`goto`、`defer`、`panic`、`recover` です。
+具体的にエラーハンドリングのコードがどうなるかについては別の記事にまとめたいです。
 
 <!--more-->
-[package errors](https://godoc.org/github.com/pkg/errors)
+# 例外機構にいたった歴史
 
-[Golang Error Handling lesson by Rob Pike](http://jxck.hatenablog.com/entry/golang-error-handling-lesson-by-rob-pike)
-[Errors are values](https://blog.golang.org/errors-are-values)
-[Golangのエラー処理とpkg/errors](http://deeeet.com/writing/2016/04/25/go-pkg-errors/)
+まず例外機構というのが何を目的に生まれたのかおさらいしてみました。
 
-https://dave.cheney.net/paste/gocon-spring-2016.pdf
+たまたま手元にあった「Concepts in Programming Languages(CIPL)」によると例外機構については「8章 Control in Sequential Languages」の中にあります。
+つまり例外機構とは制御フローを記述するものです。
 
-sentinel error
-io.EOF のような pre defined なエラー
-err == io.EOF のような同値性判定で分岐する
-fmt.Errorf で情報を追加して返す
-err.Error() で得られる文字列は human readable なものであって code のためのものではない
-> To check if an error is equal to `io.EOF`, your code must import the `io` package.
-sentinel error はモジュール間に依存性を作るのでよくない
+## 行番号ベースのジャンプ(例：Fortran)
 
-error type に応じたディスパッチも結局依存性を作るのでよくない
+以下、CIPL p.204-205 から引用したコードです。
 
-opacue error
-x, err := bar.Foo()
-if err != nil { return err } のように処理で何か起きたことだけを判断するエラーハンドリング
+```
+10 IF (X .GT. 0.000001) GO TO 20
+   X = -X
+11 Y = X*X - SIN(Y)/(X+1)
+   IF (X .LT. 0.000001) GO TO 50
+20 IF (X*Y .LT. 0.00001) GO TO 30
+   X = X - Y -Y
+30 X = X+Y
+   ...
+50 CONTINUE
+   X = A
+   Y = B - A + C * C
+   GO TO 11
+```
 
-http://www.thedotpost.com/2015/11/rob-pike-simplicity-is-complicated
+引用終わり。
 
-例外について
-[Cleaner, more elegant, and harder to recognize](https://blogs.msdn.microsoft.com/oldnewthing/20050114-00/?p=36693)
-* エラーコードベースで良いコードを書くのは難しいが例外ベースではさらに難しい
-* 例外ベースでは良いコードと悪いコードを見分けるのも難しい
+条件分岐の際、実行するコードを選ぶために明示的に行番号を指定してジャンプしています。
+このコードでは、50 から 11 に戻ることでループを作っています。
+フラットなコードなので、どこがループしているのがよく読まないとわかりません。
+さらにはループの途中にジャンプする、のようなことも書けてしまうため、複雑に入り組んだスパゲティコードを量産することが可能でした[^1]。
+そのため、無制限なジャンプを許さないようにプログラム言語が発展します。
 
-[Joel on software 2013/10/13](https://www.joelonsoftware.com/2003/10/13/13/)
-> They are invisible in the source code. Looking at a block of code, including functions which may or may not throw exceptions, there is no way to see which exceptions might be thrown and from where. This means that even careful code inspection doesn’t reveal potential bugs.
-> They create too many possible exit points for a function. To write correct code, you really have to think about every possible code path through your function. Every time you call a function that can raise an exception and don’t catch it on the spot, you create opportunities for surprise bugs caused by functions that terminated abruptly, leaving data in an inconsistent state, or other code paths that you didn’t think about.
+## コードブロックベースのジャンプ
 
-memory usage after a call to free (dangling pointer) or before a call to malloc (wild pointer), calling free twice ("double free"),
+昨今の言語では条件分岐やループの際に `{ }` やインデントルールでコードブロックを示すことで、
+言語処理系がいい感じにジャンプしてくれます。
+また、`break`や`continue`のような、やはりコードブロックベースのジャンプが広く採用されています。
 
-個人的に面白いなと思ったのは「組込み機器のようにリソースの乏しい機器では、スタックを巻きとるのに時間がかかるためリアルタイム性が損なわれる」というもの。
-[Swift がなぜ例外機構を持たないのか](http://softwareengineering.stackexchange.com/questions/258012/why-design-a-modern-language-without-an-exception-handling-mechanism)
+## 例外機構
+
+`if-then-else`などで記述できないパターンのジャンプとして例外機構が生まれます。
+その名の通り例外的なケースに際してコードブロックや関数呼び出しを抜けるためのものですが、
+それが実際に例外的なケースであるかどうかまで処理系がチェックするわけではありません。
+
+そのため、例外機構というのは言語が提供する機能としては「値を渡せるジャンプ」です。
+典型的には`try { ... } catch(e) { ... }`のような構文で、`try`ブロックの実行中に例外が投げられると、対応する`catch`ブロックへ移動します。
+注意が必要なのは、対応する`catch`ブロックが見つかるまでコールスタックを戻りつつ探す点です。
+つまり、`try-catch` に辿り着くたび `catch` ブロックの情報がスタックに積まれ、ジャンプ先は実行時の関数呼び出し履歴に基いて決まります。
+
+# 例外機構を使いたいケース
+
+例外機構によってできることは以下の通りです。
+
+- エラー値返却の表現
+- 処理の中止および制御フローの移動
+
+また、これによって生まれるメリットは以下のようになります。
+
+- ネストした処理(多重ループ、再帰呼び出しなど)をまとめて中止できる
+- 事前のエラーチェックを省ける
+- エラー処理を一箇所にまとめられる
+
+## ネストした処理をまとめて中止できることの例
+
+CIPL p.214 の例を示します。
+
+木構造の中にある数値をすべて掛け合わせる `prod` を考えます。
+乗算なのでどこかにゼロが存在すると結果もゼロになるため、残りの計算が無駄です。
+再帰呼び出しで木を辿っているとコールスタックが伸びていきますが、
+例外機構を使えば処理を中止してまとめてスタックを戻り、ゼロを返すということが可能です。
+
+## 事前のエラーチェックを省ける例
+
+CIPL p.208 の例を示します。
+
+A の逆行列を求める関数 `invert` を考えます。
+まず行列式 `det(A)` を求め、これを利用することで逆行列が得られますが、`det(A)`がゼロの場合には逆行列が存在しません。
+しかしながら `invert` を使う前に、`det(A)` を計算して値をチェックするのは`invert`での処理と重複してしまいイマイチです。
+
+なのでとりあえず `invert` 内でとりあえず det(A) を計算し、ゼロであれば例外を投げてエラー値を表現し、処理を中止するということが可能です。
+
+## エラー処理を一箇所にまとめたいケース
+
+CIPL には載っていないですが例外機構の利用例としてよく見かけるものです。
+`try`ブロックで複数種類のエラーが発生し得る、エラー処理が長い、などの状況では、
+正常系の機能コードとエラー処理のコードが混在するのが好ましくありません。
+これらを分離するために例外を利用し、エラー処理については`catch`ブロックにまとめることができます。
+
+# 例外機構を使うべきでないケース
+
+個人的に面白いなと思ったのでメモしておきます。
+
+「catch ブロックを探すためのスタック巻きとりにかかる時間を予測しにくいため、リアルタイム性が損なわれる」というもの。
+組込み機器で計算機資源が乏しかったり、あるいは処理時間について厳密に予測しなければならないケースには、例外機構は向いていません。
+
+参考：
+
+[Why design a modern language without an exception-handling mechanism?](http://softwareengineering.stackexchange.com/questions/258012/why-design-a-modern-language-without-an-exception-handling-mechanism)
+
+> In embedded programming, exceptions were traditionally not allowed, because the overhead of the stack unwinding you have to do was deemed an unacceptable variability when trying to maintain real-time performance.
+
 [もう少し例外を使用しても良いのではないか...](http://qiita.com/MasayaMizuhara/items/98c0d490f1633d9b636f)
 
+> 例えば 組み込みシステムのような厳しい処理速度が要求されるケース では例外を使用すべきではない(例外を throw してから catch するまでの最大時間を正確に測定することが困難なため)。
 
-[Swift 2.0 の try, catch ファーストインプレッション](http://qiita.com/koher/items/0c60b13ff0fe93220210)
+# Go言語でのやり方
 
-[Swiftのエラー4分類が素晴らしすぎるのでみんなに知ってほしい](http://qiita.com/koher/items/a7a12e7e18d2bb7d8c77)
+## ネストした処理を中止する
 
-[Why use Exception?](https://isocpp.org/wiki/faq/exceptions#why-exceptions)
+多重ループであれば `return`、`break` あるいは `goto` が使えます。
+コールスタックを戻りたい場合は `defer`、`panic`、`recover` を使います。
+
+## エラー値返却の表現
+
+多値返却できるため、値としてエラーを返します。
+
+## エラー処理を一箇所にまとめる
+
+`goto`です。これは数少ない `goto` が有用なケースのうちのひとつです。
+ただし、
+
+```
+if err != nil { goto ErrorHandling; }
+```
+
+みたいなコードはあちこちに残ります。
+
+# 例外機構が並行プログラムで使えない理由
+
+スレッド間ではスタックを共有しないためです。
+(参考：[Exception Handling Considered Harmful](http://www.lighterra.com/papers/exceptionsharmful/))
+
+ここまでの説明では、例外が投げられたとき、対応する `catch` ブロックをコールスタックから探すという挙動でした。
+POSIXスレッドにも[親子の概念がない](https://www.ibm.com/developerworks/jp/linux/library/l-posix1/#f)ですし、
+スレッド間で暗黙的に例外が伝わるような仕様は難しそうです。
+
+C++ や Java をちょろっと調べた感じでは、スレッド間で例外の情報を伝える際には何かしら共有メモリ方式を使うようです。
+
+- [マルチスレッドにおける例外処理の受け渡し (VC++)](http://phst.hateblo.jp/entry/2016/09/10/205618)
+- [スレッドがスローする例外をキャッチする](http://minor.hatenablog.com/entry/20101130/1291125150)
+
+<!-- [Erlang と Golang を比較してみる](http://qiita.com/soranoba/items/68d57b4635a2917f3c73) -->
+<!-- [Semipredicate problem](https://en.wikipedia.org/wiki/Semipredicate_problem) -->
+<!-- [Go, for Distributed System](https://talks.golang.org/2013/distsys.slide#1) -->
+
+# 例外機構に対する批判
+
+前節までに調べたことで、個人的には「例外機構でやりたいことは Go 言語の他の機能でもカバーできそうだ」という気持ちになりました。
+また、「並行プログラムを念頭に置くなら例外機構は筋が悪そう」とも思います。
+
+ですがそれだけだと「例外機構ではコードが入り組んでしまう」という説明にはならないので、例外機構への批判を探してみました。
+
+大体「関数の出口が増えるため、制御フローが複雑になる」という感じの指摘でしょうか。
+[間違ったコードは間違って見えるようにする](http://local.joelonsoftware.com/wiki/%E9%96%93%E9%81%95%E3%81%A3%E3%81%9F%E3%82%B3%E3%83%BC%E3%83%89%E3%81%AF%E9%96%93%E9%81%95%E3%81%A3%E3%81%A6%E8%A6%8B%E3%81%88%E3%82%8B%E3%82%88%E3%81%86%E3%81%AB%E3%81%99%E3%82%8B)から引用すると、
+
+> 本当の問題は、例外がコロケーションを殺してしまうということだ。コードが正しいことをしているかという質問に答えるためには、どこか別なところを見なければならず、あなたの目の持つまずいコードを見つけ出す能力が生かせないことになる。そこには見えるものがないからだ。
+
+ということで、明示的に `return` が書いてあるのに比べて関数を抜ける可能性に気づきにくく、不正な状態に落ち入りやすくなるのを嫌っているという理解です。
+
+参考：
+
+- [Cleaner, more elegant, and wrong](https://blogs.msdn.microsoft.com/oldnewthing/20040422-00/?p=39683)
+- [Cleaner, more elegant, and harder to recognize](https://blogs.msdn.microsoft.com/oldnewthing/20050114-00/?p=36693)
+- [間違ったコードは間違って見えるようにする](http://local.joelonsoftware.com/wiki/%E9%96%93%E9%81%95%E3%81%A3%E3%81%9F%E3%82%B3%E3%83%BC%E3%83%89%E3%81%AF%E9%96%93%E9%81%95%E3%81%A3%E3%81%A6%E8%A6%8B%E3%81%88%E3%82%8B%E3%82%88%E3%81%86%E3%81%AB%E3%81%99%E3%82%8B)
+- [Joel on software: 2003/10/13](https://www.joelonsoftware.com/2003/10/13/13/)[とその翻訳](http://d.hatena.ne.jp/kmaebashi/20091227/p1)
+- [StackOverflow: Why is exception handling bad](http://stackoverflow.com/questions/1736146/why-is-exception-handling-bad)
+- [Why I Hate Exceptions](http://xahlee.info/comp/why_i_hate_exceptions.html)
+
+# まとめ
+
+個人の感想です。
+
+- 例外機構が欲しい場面は Go 言語の他の機能でカバーできそう
+- 例外機構によるエラー返却では、関数の出口が増えるため制御フローが複雑になる
+- エラー値返却の手段としての例外機構は、並行プログラムにそぐわないので Go 言語は例外機構を採用しなかった
+
+[^1]:この時代には、何しろ計算機資源が少ないので、そうしたジャンプを駆使してコードサイズ・命令数を削減することも重要だったようです。
