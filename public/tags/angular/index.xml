@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Angular on 嵐の小舟より</title>
+    <link>https://tmrtmhr.info/tags/angular/index.xml</link>
+    <description>Recent content in Angular on 嵐の小舟より</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja-JP</language>
+    <atom:link href="https://tmrtmhr.info/tags/angular/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Protractor での E2E テスト時に Google Chrome の通知バーを消す</title>
+      <link>https://tmrtmhr.info/tech/chrome-disable-infobars/</link>
+      <pubDate>Thu, 06 Apr 2017 19:44:06 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/chrome-disable-infobars/</guid>
+      <description>&lt;h1 id=&#34;結論&#34;&gt;結論&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Google Chrome の起動オプションに &lt;code&gt;--disable-infobars&lt;/code&gt; を渡す&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;経緯&#34;&gt;経緯&lt;/h1&gt;
+
+&lt;p&gt;バージョン 57.0.2987.133(64-bit) あたりの Google Chrome と
+Selenium Chrome driver 2.28 でE2Eテストを実行すると
+&amp;ldquo;Chrome is being controlled by automated test software&amp;rdquo; とか
+&amp;ldquo;Chrome は自動テスト ソフトウェアによって制御されています&amp;rdquo; とかいう黄色い通知バーが出てくるようになりました。&lt;/p&gt;
+
+&lt;p&gt;まあ画面キャプチャには入らないですし、出てくること自体はいいんですけれども、
+そのせいで失敗する E2E テストが出てきて、おいおい誰だよこんなコード書いたの、やろう、ぶっころしてやる、
+と込み上げてくる怒りを糧に調べた解決法をこの記事へ記す次第です。&lt;/p&gt;
+
+&lt;p&gt;結局 Google Chrome の起動オプションに &lt;code&gt;--disable-infobars&lt;/code&gt; を渡して表示しないようにしました。&lt;/p&gt;
+
+&lt;p&gt;protorator を仕様する場合は設定ファイルに以下のような内容があれば OK です。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;capabilities: [
+  chromeOptions: {
+    args: [&#39;disable-infobars&#39;],
+  },
+]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;mac-で-google-chrome-に-自動テストが云々-の通知バーを出す方法&#34;&gt;Mac で Google Chrome に&amp;rdquo;自動テストが云々&amp;rdquo;の通知バーを出す方法&lt;/h1&gt;
+
+&lt;p&gt;ターミナルで以下のように打つと起動している Chrome すべてに通知バーが出てきて嫌な気持ちになります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --enable-automation
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;通知バーが出ているときの-window-の高さ&#34;&gt;通知バーが出ているときの window の高さ&lt;/h1&gt;
+
+&lt;p&gt;以下のコードで高さを見てみると、通知バーの有無で 40px 違っていました。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;angular.element(window).height()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;e2e-テスト失敗の原因&#34;&gt;E2E テスト失敗の原因&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;E2Eテストのコードがウィンドウの高さに強く依存していた(スクロール量がピクセル値でハードコーディングされている、など)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;参考：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://sqa.stackexchange.com/questions/26051/chrome-driver-2-28-chrome-is-being-controlled-by-automated-test-software-notif&#34;&gt;Chrome driver 2.28 “Chrome is being controlled by automated test software” notification .Can it be removed?&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

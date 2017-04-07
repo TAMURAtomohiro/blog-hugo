@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://tmrtmhr.info/tech/chrome-disable-infobars/</loc>
+    <lastmod>2017-04-06T19:44:06+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://tmrtmhr.info/tech/drag-and-drop-using-rxjs/</loc>
     <lastmod>2017-04-04T17:24:23+09:00</lastmod>
   </url>
@@ -67,6 +72,12 @@
   </url>
   
   <url>
+    <loc>https://tmrtmhr.info/tags/angular/</loc>
+    <lastmod>2017-04-06T19:44:06+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://tmrtmhr.info/tags/aws/</loc>
     <lastmod>2017-03-27T18:10:28+09:00</lastmod>
     <priority>0</priority>
@@ -98,7 +109,7 @@
   
   <url>
     <loc>https://tmrtmhr.info/tags/node/index.js/</loc>
-    <lastmod>2017-03-27T18:10:28+09:00</lastmod>
+    <lastmod>2017-04-06T19:44:06+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -121,7 +132,7 @@
   
   <url>
     <loc>https://tmrtmhr.info/tech/</loc>
-    <lastmod>2017-04-04T17:24:23+09:00</lastmod>
+    <lastmod>2017-04-06T19:44:06+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -133,7 +144,7 @@
   
   <url>
     <loc>https://tmrtmhr.info/</loc>
-    <lastmod>2017-04-04T17:24:23+09:00</lastmod>
+    <lastmod>2017-04-06T19:44:06+09:00</lastmod>
     <priority>0</priority>
   </url>
   
