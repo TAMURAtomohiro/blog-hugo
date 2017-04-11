@@ -6,8 +6,65 @@
     <description>Recent content on 嵐の小舟より</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <lastBuildDate>Thu, 06 Apr 2017 19:44:06 +0900</lastBuildDate>
+    <lastBuildDate>Tue, 11 Apr 2017 21:37:09 +0900</lastBuildDate>
     <atom:link href="https://tmrtmhr.info/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>AWS Lambda (Node.js v6.10) から DynamoDB に入れた Gzip バイナリデータを展開する</title>
+      <link>https://tmrtmhr.info/tech/aws/using-binary-data-in-dynamodb/</link>
+      <pubDate>Tue, 11 Apr 2017 21:37:09 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/aws/using-binary-data-in-dynamodb/</guid>
+      <description>&lt;p&gt;AWS DynamoDB では指定した IO 性能に応じて料金が発生するため、
+クエリなどで使用しないプロパティについては gzip 圧縮などを施してバイナリデータとして格納したほうが、
+必要な IO 性能が少なくなるためお得です(参考：&lt;a href=&#34;http://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/GuidelinesForItems.html#GuidelinesForItems.CompressingLargeAttributeValues&#34;&gt;大量の属性値を圧縮する&lt;/a&gt;)。&lt;/p&gt;
+
+&lt;p&gt;本記事は、AWS Lambda (Node.js 6.10) から DynamoDB のデータを取得し、
+展開する処理のメモです。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;DynamoDB に以下のような形式でデータが入っているとします。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{ &amp;quot;hash_id&amp;quot;: &amp;quot;string&amp;quot;,
+  &amp;quot;body&amp;quot;: JSON データ文字列を gzip 圧縮したバイナリ }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ここでは &lt;code&gt;hash_id&lt;/code&gt; を partition key として指定しています。
+なので以下のように &lt;code&gt;hash_id&lt;/code&gt; を指定して GET するとデータが取得できます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var dynamodb = new AWS.DynamoDB.DocumentClient();
+var params = { TableName: &#39;dynamedb_table_name&#39;, Key: { &#39;hash_id&#39;: &#39;xxx&#39; } };
+dynamodb.get(params, function(err, data) { ... }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;JSON 形式ではバイナリデータを扱えないので、Base64 形式に直してやりとりします。
+しかし、受信した段階で &lt;code&gt;data.Item.body&lt;/code&gt; は &lt;code&gt;Buffer&lt;/code&gt; データとなっているようです。
+(参考：&lt;a href=&#34;http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#get-property&#34;&gt;AWS SDK for Javascript のドキュメント&lt;/a&gt;)&lt;/p&gt;
+
+&lt;!--
+そのため、DynamoDB からのレスポンスである `data.Item.body` は「Base64 エンコードされたバイナリデータのバイト列(`Buffer`)」という状態です。
+
+なのでこれをデコードしたバイト列を作り、
+
+```
+var binary = Buffer.from(data.Item.body.toString(), &#39;base64&#39;);
+```
+--&gt;
+
+&lt;p&gt;なのでこれを展開します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var body = zlib.gunzipSync(data.Item.body);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これも &lt;code&gt;Buffer&lt;/code&gt; なので、文字列に変換して parse することでようやく元の JSON データとなります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;JSON.parse(body.toString())
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;最後に以上の処理を行う AWS Lambda のサンプルを置いておきます。
+&lt;script src=&#34;//gist.github.com/tmrtmhr/3b8b9630ad01a5768c4a8b93ae6a814c.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Protractor での E2E テスト時に Google Chrome の通知バーを消す</title>
@@ -482,57 +539,6 @@ count (Branch l r) = count l + count r
 &lt;h1 id=&#34;まとめ&#34;&gt;まとめ&lt;/h1&gt;
 
 &lt;p&gt;ということでGo言語で木構造のような直和型のデータ構造を扱う小さな例を示しました。&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>AWS Lambda (Node.js v6.10) から DynamoDB に入れた Gzip バイナリデータを展開する</title>
-      <link>https://tmrtmhr.info/tech/aws/using-binary-data-in-dynamodb/</link>
-      <pubDate>Mon, 27 Mar 2017 18:10:28 +0900</pubDate>
-      
-      <guid>https://tmrtmhr.info/tech/aws/using-binary-data-in-dynamodb/</guid>
-      <description>&lt;p&gt;AWS DynamoDB では指定した IO 性能に応じて料金が発生するため、
-クエリなどで使用しないプロパティについては gzip 圧縮などを施してバイナリデータとして格納したほうが、
-必要な IO 性能が少なくなるためお得です(参考：&lt;a href=&#34;http://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/GuidelinesForItems.html#GuidelinesForItems.CompressingLargeAttributeValues&#34;&gt;大量の属性値を圧縮する&lt;/a&gt;)。&lt;/p&gt;
-
-&lt;p&gt;本記事は、AWS Lambda (Node.js 6.10) から DynamoDB のデータを取得し、
-展開する処理のメモです。&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;
-
-&lt;p&gt;DynamoDB に以下のような形式でデータが入っているとします。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;{ &amp;quot;hash_id&amp;quot;: &amp;quot;string&amp;quot;,
-  &amp;quot;body&amp;quot;: JSON データ文字列を gzip 圧縮したバイナリ }
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;ここでは &lt;code&gt;hash_id&lt;/code&gt; を partition key として指定しています。
-なので以下のように &lt;code&gt;hash_id&lt;/code&gt; を指定して GET するとデータが取得できます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;var dynamodb = new AWS.DynamoDB.DocumentClient();
-var params = { TableName: &#39;dynamedb_table_name&#39;, Key: { &#39;hash_id&#39;: &#39;xxx&#39; } };
-dynamodb.get(params, function(err, data) { ... }
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;JSON 形式ではバイナリデータを扱えないので、Base64 形式に直してやりとりします。
-そのため、DynamoDB からのレスポンスである &lt;code&gt;data.Item.body&lt;/code&gt; は「Base64 エンコードされたバイナリデータのバイト列(&lt;code&gt;Buffer&lt;/code&gt;)」という状態です。&lt;/p&gt;
-
-&lt;p&gt;なのでこれをデコードしたバイト列を作り、&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;var binary = Buffer.from(data.Item.body.toString(), &#39;base64&#39;);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;展開します。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;var body = zlib.gunzipSync(binary);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;これも &lt;code&gt;Buffer&lt;/code&gt; なので、文字列に変換して parse することでようやく元の JSON データとなります。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;JSON.parse(body.toString())
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;最後に以上の処理を行う AWS Lambda のサンプルを置いておきます。
-&lt;script src=&#34;//gist.github.com/tmrtmhr/3b8b9630ad01a5768c4a8b93ae6a814c.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;</description>
     </item>
     
     <item>

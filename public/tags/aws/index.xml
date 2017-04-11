@@ -11,7 +11,7 @@
     <item>
       <title>AWS Lambda (Node.js v6.10) から DynamoDB に入れた Gzip バイナリデータを展開する</title>
       <link>https://tmrtmhr.info/tech/aws/using-binary-data-in-dynamodb/</link>
-      <pubDate>Mon, 27 Mar 2017 18:10:28 +0900</pubDate>
+      <pubDate>Tue, 11 Apr 2017 21:37:09 +0900</pubDate>
       
       <guid>https://tmrtmhr.info/tech/aws/using-binary-data-in-dynamodb/</guid>
       <description>&lt;p&gt;AWS DynamoDB では指定した IO 性能に応じて料金が発生するため、
@@ -38,16 +38,22 @@ dynamodb.get(params, function(err, data) { ... }
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;JSON 形式ではバイナリデータを扱えないので、Base64 形式に直してやりとりします。
-そのため、DynamoDB からのレスポンスである &lt;code&gt;data.Item.body&lt;/code&gt; は「Base64 エンコードされたバイナリデータのバイト列(&lt;code&gt;Buffer&lt;/code&gt;)」という状態です。&lt;/p&gt;
+しかし、受信した段階で &lt;code&gt;data.Item.body&lt;/code&gt; は &lt;code&gt;Buffer&lt;/code&gt; データとなっているようです。
+(参考：&lt;a href=&#34;http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#get-property&#34;&gt;AWS SDK for Javascript のドキュメント&lt;/a&gt;)&lt;/p&gt;
 
-&lt;p&gt;なのでこれをデコードしたバイト列を作り、&lt;/p&gt;
+&lt;!--
+そのため、DynamoDB からのレスポンスである `data.Item.body` は「Base64 エンコードされたバイナリデータのバイト列(`Buffer`)」という状態です。
 
-&lt;pre&gt;&lt;code&gt;var binary = Buffer.from(data.Item.body.toString(), &#39;base64&#39;);
-&lt;/code&gt;&lt;/pre&gt;
+なのでこれをデコードしたバイト列を作り、
 
-&lt;p&gt;展開します。&lt;/p&gt;
+```
+var binary = Buffer.from(data.Item.body.toString(), &#39;base64&#39;);
+```
+--&gt;
 
-&lt;pre&gt;&lt;code&gt;var body = zlib.gunzipSync(binary);
+&lt;p&gt;なのでこれを展開します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var body = zlib.gunzipSync(data.Item.body);
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;これも &lt;code&gt;Buffer&lt;/code&gt; なので、文字列に変換して parse することでようやく元の JSON データとなります。&lt;/p&gt;

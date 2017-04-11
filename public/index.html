@@ -56,6 +56,60 @@ ga('send', 'pageview');
           <div class="card-title indigo darken-3 castaway-card-title">
             <div class="card-content">
               <div class="white-text" itemprop="headline">
+                AWS Lambda (Node.js v6.10) から DynamoDB に入れた Gzip バイナリデータを展開する
+              </div>
+            </div>
+          </div>
+            
+          <div class="card-content castaway-card-summary blue-grey-text">
+            
+            <div class="row">
+              <div class="col castaway-date-published">
+                <span>公開日: </span>
+                <i class="material-icons" style="vertical-align: middle;">today</i>
+                <time itemprop="datePublished" datetime="2017-04-11">2017/04/11</time>
+                <span style="margin-left: 10px;"> タグ: </span>
+                
+                <a href="/tags/aws">
+                  <div class="tag-aws waves-effect waves-teal chip">
+                    aws
+                  </div>
+                </a>
+                
+                <a href="/tags/node.js">
+                  <div class="tag-node.js waves-effect waves-teal chip">
+                    node.js
+                  </div>
+                </a>
+                
+              </div>
+            </div>
+            <p>AWS DynamoDB では指定した IO 性能に応じて料金が発生するため、
+クエリなどで使用しないプロパティについては gzip 圧縮などを施してバイナリデータとして格納したほうが、
+必要な IO 性能が少なくなるためお得です(参考：<a href="http://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/GuidelinesForItems.html#GuidelinesForItems.CompressingLargeAttributeValues">大量の属性値を圧縮する</a>)。</p>
+
+<p>本記事は、AWS Lambda (Node.js 6.10) から DynamoDB のデータを取得し、
+展開する処理のメモです。</p>
+
+<p></p>
+          </div>
+
+          <div class="card-action castaway-card-footer">
+            <a class="btn waves-effect waves-light" href="/tech/aws/using-binary-data-in-dynamodb/">この記事を読む</a>
+          </div>
+		    </article>
+      </div>
+    </div>
+      
+    
+
+    <div class="row">
+      <div class="col s12 m12 l6 offset-l3">
+        <article itemscope itemtype="http://schema.org/Blog" class="card castaway-card-link">
+
+          <div class="card-title indigo darken-3 castaway-card-title">
+            <div class="card-content">
+              <div class="white-text" itemprop="headline">
                 Protractor での E2E テスト時に Google Chrome の通知バーを消す
               </div>
             </div>
@@ -365,60 +419,6 @@ Go 言語ではどうするのか？という点について調べてみたメ�
 
           <div class="card-action castaway-card-footer">
             <a class="btn waves-effect waves-light" href="/tech/sum-type-in-golang/">この記事を読む</a>
-          </div>
-		    </article>
-      </div>
-    </div>
-      
-    
-
-    <div class="row">
-      <div class="col s12 m12 l6 offset-l3">
-        <article itemscope itemtype="http://schema.org/Blog" class="card castaway-card-link">
-
-          <div class="card-title indigo darken-3 castaway-card-title">
-            <div class="card-content">
-              <div class="white-text" itemprop="headline">
-                AWS Lambda (Node.js v6.10) から DynamoDB に入れた Gzip バイナリデータを展開する
-              </div>
-            </div>
-          </div>
-            
-          <div class="card-content castaway-card-summary blue-grey-text">
-            
-            <div class="row">
-              <div class="col castaway-date-published">
-                <span>公開日: </span>
-                <i class="material-icons" style="vertical-align: middle;">today</i>
-                <time itemprop="datePublished" datetime="2017-03-27">2017/03/27</time>
-                <span style="margin-left: 10px;"> タグ: </span>
-                
-                <a href="/tags/aws">
-                  <div class="tag-aws waves-effect waves-teal chip">
-                    aws
-                  </div>
-                </a>
-                
-                <a href="/tags/node.js">
-                  <div class="tag-node.js waves-effect waves-teal chip">
-                    node.js
-                  </div>
-                </a>
-                
-              </div>
-            </div>
-            <p>AWS DynamoDB では指定した IO 性能に応じて料金が発生するため、
-クエリなどで使用しないプロパティについては gzip 圧縮などを施してバイナリデータとして格納したほうが、
-必要な IO 性能が少なくなるためお得です(参考：<a href="http://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/GuidelinesForItems.html#GuidelinesForItems.CompressingLargeAttributeValues">大量の属性値を圧縮する</a>)。</p>
-
-<p>本記事は、AWS Lambda (Node.js 6.10) から DynamoDB のデータを取得し、
-展開する処理のメモです。</p>
-
-<p></p>
-          </div>
-
-          <div class="card-action castaway-card-footer">
-            <a class="btn waves-effect waves-light" href="/tech/aws/using-binary-data-in-dynamodb/">この記事を読む</a>
           </div>
 		    </article>
       </div>

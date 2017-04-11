@@ -64,7 +64,7 @@ ga('send', 'pageview');
             <div class="castaway-date-published">
               <span>公開日：</span>
               <i class="material-icons" style="vertical-align: middle;">today</i>
-              <time itemprop="datePublished" datetime="2017-03-27">2017/03/27</time>
+              <time itemprop="datePublished" datetime="2017-04-11">2017/04/11</time>
               <span style="margin-left: 10px;"> タグ: </span>
               
               <a href="/tags/aws">
@@ -108,16 +108,22 @@ dynamodb.get(params, function(err, data) { ... }
 </code></pre>
 
 <p>JSON 形式ではバイナリデータを扱えないので、Base64 形式に直してやりとりします。
-そのため、DynamoDB からのレスポンスである <code>data.Item.body</code> は「Base64 エンコードされたバイナリデータのバイト列(<code>Buffer</code>)」という状態です。</p>
+しかし、受信した段階で <code>data.Item.body</code> は <code>Buffer</code> データとなっているようです。
+(参考：<a href="http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#get-property">AWS SDK for Javascript のドキュメント</a>)</p>
 
-<p>なのでこれをデコードしたバイト列を作り、</p>
+<!--
+そのため、DynamoDB からのレスポンスである `data.Item.body` は「Base64 エンコードされたバイナリデータのバイト列(`Buffer`)」という状態です。
 
-<pre><code>var binary = Buffer.from(data.Item.body.toString(), 'base64');
-</code></pre>
+なのでこれをデコードしたバイト列を作り、
 
-<p>展開します。</p>
+```
+var binary = Buffer.from(data.Item.body.toString(), 'base64');
+```
+-->
 
-<pre><code>var body = zlib.gunzipSync(binary);
+<p>なのでこれを展開します。</p>
+
+<pre><code>var body = zlib.gunzipSync(data.Item.body);
 </code></pre>
 
 <p>これも <code>Buffer</code> なので、文字列に変換して parse することでようやく元の JSON データとなります。</p>
