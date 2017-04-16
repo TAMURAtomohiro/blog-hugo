@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.18.1" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+
+  
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+
+<link rel="stylesheet" href="/css/base.css">
+
+<link rel="alternate" href="/index.xml" type="application/rss+xml" title="嵐の小舟より">
+<title>JavaScript でプリミティブ値のプロパティを参照すると対応するオブジェクトが一時的に作られる - 嵐の小舟より</title>
+</head>
+<body>
+  
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-92780964-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+  <div class="">
+  <header class="castaway-header-bar">
+    <nav>
+      <div class="nav-wrapper castaway-site-logo">
+        <div>
+          <a href="/" class="brand-logo right">
+            <i class="material-icons" style="margin-right: 5px;">rowing</i>
+            <span class="castaway-site-title">嵐の小舟より</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+
+<section id="main">
+  <div class="row">
+    <div class="col s12 m12 l6 offset-l3">
+
+      <article itemscope itemtype="http://schema.org/Blog" class="card castaway-card">
+
+        <div class="card-title indigo darken-3 castaway-card-title">
+          <div class="card-content">
+            <div class="white-text" itemprop="headline">
+              JavaScript でプリミティブ値のプロパティを参照すると対応するオブジェクトが一時的に作られる
+            </div>
+          </div>
+        </div>
+
+        <div class="card-content">
+          <div class="row">
+            <div class="castaway-date-published">
+              <span>公開日：</span>
+              <i class="material-icons" style="vertical-align: middle;">today</i>
+              <time itemprop="datePublished" datetime="2017-04-15">2017/04/15</time>
+              <span style="margin-left: 10px;"> タグ: </span>
+              
+              <a href="/tags/javascript">
+                <div class="tag-javascript waves-effect waves-teal chip">
+                  javascript
+                </div>
+              </a>
+              
+            </div>
+          </div>
+          
+          
+          <div class="castaway-card-content mdl-card__supporting-text mdl-color-text--grey-700">
+            <p>JavaScript では以下のように数値のプロパティを参照することはできません。</p>
+
+<pre><code class="language-javascript">0.foo
+// 構文エラー
+</code></pre>
+
+<p>変数に入れると構文上は正しいため参照できます。</p>
+
+<pre><code class="language-javascript">var x = 0;
+console.log(x.foo);
+// =&gt; undefined
+</code></pre>
+
+<p>あるいは文字列の <code>length</code> プロパティを参照することも。</p>
+
+<pre><code class="language-javascript">&quot;bar&quot;.length
+// =&gt; 3
+</code></pre>
+
+<p>しかしながらプリミティブ値はオブジェクトではないため、プロパティもプロトタイプチェーンもありません。
+ではプリミティブ値のプロパティにアクセスしようとしたときに何が起こるかというと、
+<code>Number</code> などの対応するオブジェクトが生成されます。</p>
+
+<p>本記事は、この挙動が言語仕様のどの部分で言及されているのかのメモです。</p>
+
+<p></p>
+
+<h1 id="プリミティブ値のプロパティ参照をするときの挙動">プリミティブ値のプロパティ参照をするときの挙動</h1>
+
+<p><a href="http://www.ecma-international.org/ecma-262/6.0/index.html#sec-getvalue">ECMAScript 2015言語仕様 6.2.3.1節 GetValue(V)</a>
+の以下の部分です。</p>
+
+<blockquote>
+<p>If HasPrimitiveBase(V) is true, then</p>
+
+<p>Assert: In this case, base will never be null or undefined.</p>
+
+<p>Let base be ToObject(base).</p>
+</blockquote>
+
+<p>ということで言語仕様としてプリミティブ値のプロパティ参照はエラーじゃないと分かり安心しました。
+夜もぐっすり眠れそうです(納期が近くなければ)。</p>
+
+<p>ただし、ここで生成されたオブジェクトはその場限りのものなので、
+<strong>プリミティブ値がオブジェクトのように扱えるわけではない</strong>ことには注意が必要です。
+具体的には以下のように数値のプロパティに対して代入をしたとしても、
+その結果が残りません。</p>
+
+<pre><code>var x = 0;
+x.foo = 1;
+console.log(x.foo);
+// =&gt; undefined
+</code></pre>
+          </div>
+        </div>
+          
+          <div class="card-action castaway-card-footer">
+            <a class="btn waves-effect waves-light" href="/">サイトトップ</a>
+          </div>            
+
+      </article>
+        
+    </div>
+
+    </div>
+  </div>
+</section>
+
+
+</div>
+</body>
+</html>
+

@@ -8,12 +8,12 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
 
   
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script>
-          
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+
 <link rel="stylesheet" href="/css/base.css">
 
 <link rel="alternate" href="/index.xml" type="application/rss+xml" title="嵐の小舟より">
@@ -42,11 +42,75 @@ ga('send', 'pageview');
     </nav>
   </header>
 
-  
-
 
 	<main role="main">
     
+    
+
+    <div class="row">
+      <div class="col s12 m12 l6 offset-l3">
+        <article itemscope itemtype="http://schema.org/Blog" class="card castaway-card-link">
+
+          <div class="card-title indigo darken-3 castaway-card-title">
+            <div class="card-content">
+              <div class="white-text" itemprop="headline">
+                JavaScript でプリミティブ値のプロパティを参照すると対応するオブジェクトが一時的に作られる
+              </div>
+            </div>
+          </div>
+            
+          <div class="card-content castaway-card-summary blue-grey-text">
+            
+            <div class="row">
+              <div class="col castaway-date-published">
+                <span>公開日: </span>
+                <i class="material-icons" style="vertical-align: middle;">today</i>
+                <time itemprop="datePublished" datetime="2017-04-15">2017/04/15</time>
+                <span style="margin-left: 10px;"> タグ: </span>
+                
+                <a href="/tags/javascript">
+                  <div class="tag-javascript waves-effect waves-teal chip">
+                    javascript
+                  </div>
+                </a>
+                
+              </div>
+            </div>
+            <p>JavaScript では以下のように数値のプロパティを参照することはできません。</p>
+
+<pre><code class="language-javascript">0.foo
+// 構文エラー
+</code></pre>
+
+<p>変数に入れると構文上は正しいため参照できます。</p>
+
+<pre><code class="language-javascript">var x = 0;
+console.log(x.foo);
+// =&gt; undefined
+</code></pre>
+
+<p>あるいは文字列の <code>length</code> プロパティを参照することも。</p>
+
+<pre><code class="language-javascript">&quot;bar&quot;.length
+// =&gt; 3
+</code></pre>
+
+<p>しかしながらプリミティブ値はオブジェクトではないため、プロパティもプロトタイプチェーンもありません。
+ではプリミティブ値のプロパティにアクセスしようとしたときに何が起こるかというと、
+<code>Number</code> などの対応するオブジェクトが生成されます。</p>
+
+<p>本記事は、この挙動が言語仕様のどの部分で言及されているのかのメモです。</p>
+
+<p></p>
+          </div>
+
+          <div class="card-action castaway-card-footer">
+            <a class="btn waves-effect waves-light" href="/tech/javascript-property-of-primitive-value/">この記事を読む</a>
+          </div>
+		    </article>
+      </div>
+    </div>
+      
     
 
     <div class="row">

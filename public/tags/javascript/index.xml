@@ -9,6 +9,67 @@
     <atom:link href="https://tmrtmhr.info/tags/javascript/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>JavaScript でプリミティブ値のプロパティを参照すると対応するオブジェクトが一時的に作られる</title>
+      <link>https://tmrtmhr.info/tech/javascript-property-of-primitive-value/</link>
+      <pubDate>Sat, 15 Apr 2017 22:46:29 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/javascript-property-of-primitive-value/</guid>
+      <description>&lt;p&gt;JavaScript では以下のように数値のプロパティを参照することはできません。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;0.foo
+// 構文エラー
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;変数に入れると構文上は正しいため参照できます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var x = 0;
+console.log(x.foo);
+// =&amp;gt; undefined
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;あるいは文字列の &lt;code&gt;length&lt;/code&gt; プロパティを参照することも。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;&amp;quot;bar&amp;quot;.length
+// =&amp;gt; 3
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;しかしながらプリミティブ値はオブジェクトではないため、プロパティもプロトタイプチェーンもありません。
+ではプリミティブ値のプロパティにアクセスしようとしたときに何が起こるかというと、
+&lt;code&gt;Number&lt;/code&gt; などの対応するオブジェクトが生成されます。&lt;/p&gt;
+
+&lt;p&gt;本記事は、この挙動が言語仕様のどの部分で言及されているのかのメモです。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;プリミティブ値のプロパティ参照をするときの挙動&#34;&gt;プリミティブ値のプロパティ参照をするときの挙動&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.ecma-international.org/ecma-262/6.0/index.html#sec-getvalue&#34;&gt;ECMAScript 2015言語仕様 6.2.3.1節 GetValue(V)&lt;/a&gt;
+の以下の部分です。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;If HasPrimitiveBase(V) is true, then&lt;/p&gt;
+
+&lt;p&gt;Assert: In this case, base will never be null or undefined.&lt;/p&gt;
+
+&lt;p&gt;Let base be ToObject(base).&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;ということで言語仕様としてプリミティブ値のプロパティ参照はエラーじゃないと分かり安心しました。
+夜もぐっすり眠れそうです(納期が近くなければ)。&lt;/p&gt;
+
+&lt;p&gt;ただし、ここで生成されたオブジェクトはその場限りのものなので、
+&lt;strong&gt;プリミティブ値がオブジェクトのように扱えるわけではない&lt;/strong&gt;ことには注意が必要です。
+具体的には以下のように数値のプロパティに対して代入をしたとしても、
+その結果が残りません。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var x = 0;
+x.foo = 1;
+console.log(x.foo);
+// =&amp;gt; undefined
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
       <title>HTML要素をドラッグアンドドロップ(D&amp;D)中にブラウザ外に出た場合、D&amp;Dを終了するよう RxJS 5 を用いて実装する</title>
       <link>https://tmrtmhr.info/tech/drag-and-drop-using-rxjs/</link>
       <pubDate>Tue, 04 Apr 2017 17:24:23 +0900</pubDate>

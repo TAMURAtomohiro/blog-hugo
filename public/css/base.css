@@ -1,3 +1,7 @@
+strong {
+  font-weight: bold !important;
+}
+
 nav {
   background-color: white !important;
 }
@@ -84,4 +88,3 @@ p:not(:first-child) {
 .castaway-md-icon {
   vertical-align: bottom !important;
 }
-
