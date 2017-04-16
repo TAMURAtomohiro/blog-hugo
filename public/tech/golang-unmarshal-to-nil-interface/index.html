@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.18.1" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+
+  
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+
+<link rel="stylesheet" href="/css/base.css">
+
+<link rel="alternate" href="/index.xml" type="application/rss+xml" title="嵐の小舟より">
+<title>Go言語の json.Unmarshal で読み込んだデータをテストするときは数値の型に注意する - 嵐の小舟より</title>
+</head>
+<body>
+  
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-92780964-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+  <div class="">
+  <header class="castaway-header-bar">
+    <nav>
+      <div class="nav-wrapper castaway-site-logo">
+        <div>
+          <a href="/" class="brand-logo right">
+            <i class="material-icons" style="margin-right: 5px;">rowing</i>
+            <span class="castaway-site-title">嵐の小舟より</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+
+<section id="main">
+  <div class="row">
+    <div class="col s12 m12 l6 offset-l3">
+
+      <article itemscope itemtype="http://schema.org/Blog" class="card castaway-card">
+
+        <div class="card-title indigo darken-3 castaway-card-title">
+          <div class="card-content">
+            <div class="white-text" itemprop="headline">
+              Go言語の json.Unmarshal で読み込んだデータをテストするときは数値の型に注意する
+            </div>
+          </div>
+        </div>
+
+        <div class="card-content">
+          <div class="row">
+            <div class="castaway-date-published">
+              <span>公開日：</span>
+              <i class="material-icons" style="vertical-align: middle;">today</i>
+              <time itemprop="datePublished" datetime="2017-04-16">2017/04/16</time>
+              <span style="margin-left: 10px;"> タグ: </span>
+              
+              <a href="/tags/go">
+                <div class="tag-go waves-effect waves-teal chip">
+                  go
+                </div>
+              </a>
+              
+            </div>
+          </div>
+          
+          
+          <div class="castaway-card-content mdl-card__supporting-text mdl-color-text--grey-700">
+            <p>以下のようなコードで <code>interface{}</code> に対し数値を読み込んだ際、
+数値の型は <code>float64</code> になります。
+(参考: <a href="https://golang.org/pkg/encoding/json/#Unmarshal">公式ドキュメント</a>)</p>
+
+<pre><code>var got []interface{}
+json.Unmarshal([]byte(&quot;[1,2,null]&quot;, &amp;got)
+</code></pre>
+
+<p>しかし、これをテストするために比較対象のデータをリテラルとして用意すると、</p>
+
+<pre><code>want := []interface{}{1,2,nil}
+</code></pre>
+
+<p>定数のデフォルト型の宿命で数値の型が <code>int</code> になってしまうため、<code>reflect.DeepEqual</code> などの比較において失敗してしまいます。</p>
+
+<h1 id="解決策">解決策</h1>
+
+<p>解決策としては以下の2つかな、と考えており、(2)のほうは煩雑なので今のところ(1)でやっています。</p>
+
+<ol>
+<li>テストデータも <code>json.Unmarshal</code> で作る</li>
+<li>明示的に <code>float64(1)</code> として変換する</li>
+</ol>
+
+<p></p>
+
+<h1 id="コードの挙動確認">コードの挙動確認</h1>
+
+<p>以下でコードの挙動を確認できます。
+<a href="https://play.golang.org/p/7U2AtxLORC">The Go Playground</a></p>
+
+<script src="//gist.github.com/tmrtmhr/197cf8ed967cc97c0388464b315cfda0.js"></script>
+          </div>
+        </div>
+          
+          <div class="card-action castaway-card-footer">
+            <a class="btn waves-effect waves-light" href="/">サイトトップ</a>
+          </div>            
+
+      </article>
+        
+    </div>
+
+    </div>
+  </div>
+</section>
+
+
+</div>
+</body>
+</html>
+

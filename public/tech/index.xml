@@ -6,8 +6,48 @@
     <description>Recent content in Teches on 嵐の小舟より</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <lastBuildDate>Sat, 15 Apr 2017 22:46:29 +0900</lastBuildDate>
+    <lastBuildDate>Sun, 16 Apr 2017 15:01:48 +0900</lastBuildDate>
     <atom:link href="https://tmrtmhr.info/tech/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Go言語の json.Unmarshal で読み込んだデータをテストするときは数値の型に注意する</title>
+      <link>https://tmrtmhr.info/tech/golang-unmarshal-to-nil-interface/</link>
+      <pubDate>Sun, 16 Apr 2017 15:01:48 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/golang-unmarshal-to-nil-interface/</guid>
+      <description>&lt;p&gt;以下のようなコードで &lt;code&gt;interface{}&lt;/code&gt; に対し数値を読み込んだ際、
+数値の型は &lt;code&gt;float64&lt;/code&gt; になります。
+(参考: &lt;a href=&#34;https://golang.org/pkg/encoding/json/#Unmarshal&#34;&gt;公式ドキュメント&lt;/a&gt;)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var got []interface{}
+json.Unmarshal([]byte(&amp;quot;[1,2,null]&amp;quot;, &amp;amp;got)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;しかし、これをテストするために比較対象のデータをリテラルとして用意すると、&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;want := []interface{}{1,2,nil}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;定数のデフォルト型の宿命で数値の型が &lt;code&gt;int&lt;/code&gt; になってしまうため、&lt;code&gt;reflect.DeepEqual&lt;/code&gt; などの比較において失敗してしまいます。&lt;/p&gt;
+
+&lt;h1 id=&#34;解決策&#34;&gt;解決策&lt;/h1&gt;
+
+&lt;p&gt;解決策としては以下の2つかな、と考えており、(2)のほうは煩雑なので今のところ(1)でやっています。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;テストデータも &lt;code&gt;json.Unmarshal&lt;/code&gt; で作る&lt;/li&gt;
+&lt;li&gt;明示的に &lt;code&gt;float64(1)&lt;/code&gt; として変換する&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;コードの挙動確認&#34;&gt;コードの挙動確認&lt;/h1&gt;
+
+&lt;p&gt;以下でコードの挙動を確認できます。
+&lt;a href=&#34;https://play.golang.org/p/7U2AtxLORC&#34;&gt;The Go Playground&lt;/a&gt;&lt;/p&gt;
+
+&lt;script src=&#34;//gist.github.com/tmrtmhr/197cf8ed967cc97c0388464b315cfda0.js&#34;&gt;&lt;/script&gt;</description>
+    </item>
     
     <item>
       <title>JavaScript でプリミティブ値のプロパティを参照すると対応するオブジェクトが一時的に作られる</title>
@@ -1424,104 +1464,6 @@ CPUを温めるために再生成するとか、生活の端々でいったん�
 &lt;!-- ERROR: 2015/11/16 Error: listen tcp 127.0.0.1:1313: socket: too many open files in system --&gt;
 
 &lt;!-- ``` --&gt;</description>
-    </item>
-    
-    <item>
-      <title>なぜ静的サイト配信が重要となるか</title>
-      <link>https://tmrtmhr.info/tech/why-static-website-generators-are-the-next-big-thing/</link>
-      <pubDate>Mon, 30 Nov 2015 14:20:55 +0900</pubDate>
-      
-      <guid>https://tmrtmhr.info/tech/why-static-website-generators-are-the-next-big-thing/</guid>
-      <description>&lt;p&gt;Smashing Magazine の
-&lt;a href=&#34;http://www.smashingmagazine.com/2015/11/modern-static-website-generators-next-big-thing/&#34;&gt;Why Static Website Generators Are The Next Big Thing&lt;/a&gt;
-という記事を読んでの、自分の理解のためのメモです。
-直訳というわけでもなく、独自研究が含まれる恐れがあります。
-&lt;/p&gt;
-
-&lt;h1 id=&#34;概要&#34;&gt;概要&lt;/h1&gt;
-
-&lt;p&gt;現在の CMS はサーバサイドで動的にHTMLを生成するアプローチが主流ですが、
-ブラウザを取り巻く環境の変化や、CDN との兼ね合いで、
-静的HTMLを配信してJavaScriptで書き換えるアプローチが重要になりそうです。&lt;/p&gt;
-
-&lt;h1 id=&#34;サーバサイドで動的なhtml生成を行なうアプローチ&#34;&gt;サーバサイドで動的なHTML生成を行なうアプローチ&lt;/h1&gt;
-
-&lt;p&gt;ここで想定しているのは WordPress のようなCMSです。
-コンテンツをデータベースに保存しておき、
-リクエストに応じて PHP などのスクリプトで動的に HTML を生成します。
-いわゆる LAMP スタックの構成となります。&lt;/p&gt;
-
-&lt;h1 id=&#34;クライアントサイドで動的なhtml生成を行なうアプローチ&#34;&gt;クライアントサイドで動的なHTML生成を行なうアプローチ&lt;/h1&gt;
-
-&lt;p&gt;タイトルでは静的サイトジェネレータと言ってますが、静的サイトだけでなく、動的なコンテンツも対象です。
-つまり、HTML と JavaScript コードを静的ファイルとしてユーザに配信したのち、
-JavaScript コードによりコメントなどの動的なコンテンツを取得して表示を切り替えるという手法です。
-いわゆる MEAN スタックのような構成で、データベースや API サーバを含むものも想定しています。&lt;/p&gt;
-
-&lt;h1 id=&#34;サーバサイドでの動的な-html-生成の問題点&#34;&gt;サーバサイドでの動的な HTML 生成の問題点&lt;/h1&gt;
-
-&lt;h2 id=&#34;cdnと相性が悪い&#34;&gt;CDNと相性が悪い&lt;/h2&gt;
-
-&lt;p&gt;たとえばログインが必要なコンテンツでは、ユーザのログイン状態に応じてレスポンスが異なります。
-また、コメント機能のついたサイトでは、誰かがコメントするたびに返却されるレスポンスが変わることになります。
-このように、サーバサイド動的HTML生成では、
-ある URL に対して返却されるレスポンスがデータベースや Cookie の状態などに依存するため、
-CDN を利用しようと思うと、キャッシュの管理が非常に難しくなります。&lt;/p&gt;
-
-&lt;p&gt;一方クライアントサイド動的HTML生成では、ある URL に対応するレスポンスは一意であり、
-デプロイのタイミングで CDN のキャッシュを更新すればよいため、管理が容易です。&lt;/p&gt;
-
-&lt;h2 id=&#34;遅い&#34;&gt;遅い&lt;/h2&gt;
-
-&lt;p&gt;結局のところサーバサイド動的HTML生成のアプローチで
-どんなにパフォーマンスチューニングを施しても静的なHTML配信にはおよびません。
-ただし、ここで重視しているのはファーストビューが表示されるまでの時間で、
-すべてのコンテンツが読み込まれるまでの時間ではないことに注意してください。&lt;/p&gt;
-
-&lt;p&gt;また、先に述べたようにサーバサイド動的HTML生成でのキャッシュ管理には難しい問題があり、
-パフォーマンスチューニングには多大なコストがかかります。&lt;/p&gt;
-
-&lt;p&gt;パフォーマンスの重要性については
-&lt;a href=&#34;http://news.mynavi.jp/news/2012/12/11/025/&#34;&gt;ページが表示されるまでに3秒かかると57%のユーザが離脱する&lt;/a&gt;
-(&lt;a href=&#34;http://blog.smartbear.com/web-performance/the-cost-of-poor-web-performance-infographic/&#34;&gt;元記事&lt;/a&gt;)
-という調査に言及しています。
-スマートフォンで貧弱なネットワークを介しての閲覧が増えているため、配信の速さは昔よりも重要です。&lt;/p&gt;
-
-&lt;h1 id=&#34;歴史的経緯&#34;&gt;歴史的経緯&lt;/h1&gt;
-
-&lt;p&gt;WordPress が登場した当時は Ajax や DHTML が市民権を勝ち得ていませんでしたが、状況が変わりました。
-データベースの情報に応じてコンテンツを生成するために、
-従来はサーバサイドのスクリプトを利用する必要がありましたが、現在ではクライアントサイドで実現できます。&lt;/p&gt;
-
-&lt;h1 id=&#34;静的サイトジェネレータ普及のために何が足りないか&#34;&gt;静的サイトジェネレータ普及のために何が足りないか？&lt;/h1&gt;
-
-&lt;p&gt;現在、静的サイトジェネレータと呼ばれるツールはざっくり言って
-Markdown 形式で記述したコンテンツからHTMLを生成してGithubPagesで公開するためのものです(出力形式や公開先で違いはありますが)。
-エンジニアが黒い画面を見つめて使うもので、
-非エンジニアでもブラウザ上で使えるリッチなエディタや、
-複数ユーザを管理するための認証機構などは含まれていません。
-あるいは、好みのデザインを探せるマーケットプレイスのようなコミュニティも欲しいところです。&lt;/p&gt;
-
-&lt;h1 id=&#34;静的html配信に向かないもの&#34;&gt;静的HTML配信に向かないもの&lt;/h1&gt;
-
-&lt;p&gt;大量のデータから検索とフィルタリングで生成されるコンテンツでは、
-ユーザに配信してから処理するわけにもいかないので、
-サーバサイドでの処理が必要になります。&lt;/p&gt;
-
-&lt;p&gt;また、リアルタイム性が高く頻繁に更新されるようなコンテンツでも、
-更新のたびに HTML を生成し直すことは現実的でないため、
-静的HTMLでの配信ではなく API 経由でデータベースを参照するような形になるでしょう。&lt;/p&gt;
-
-&lt;h1 id=&#34;まとめ&#34;&gt;まとめ&lt;/h1&gt;
-
-&lt;p&gt;静的サイトジェネレータというツール群にはまだ足りない部分がありますが、
-静的サイト配信という手法は速度や CDN を利用したスケーラビリティの面で有利なので、
-今後ますます重要になりそうです。&lt;/p&gt;
-
-&lt;!--
-未調査ですが[Dato](http://www.leanpanda.com/blog/2015/10/13/dato-cms-static-website/)というのもあります。
-スケーラビリティは期間限定のキャンペーンサイトなどで必要になります。
---&gt;</description>
     </item>
     
   </channel>

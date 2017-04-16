@@ -9,6 +9,46 @@
     <atom:link href="https://tmrtmhr.info/tags/go/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Go言語の json.Unmarshal で読み込んだデータをテストするときは数値の型に注意する</title>
+      <link>https://tmrtmhr.info/tech/golang-unmarshal-to-nil-interface/</link>
+      <pubDate>Sun, 16 Apr 2017 15:01:48 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/golang-unmarshal-to-nil-interface/</guid>
+      <description>&lt;p&gt;以下のようなコードで &lt;code&gt;interface{}&lt;/code&gt; に対し数値を読み込んだ際、
+数値の型は &lt;code&gt;float64&lt;/code&gt; になります。
+(参考: &lt;a href=&#34;https://golang.org/pkg/encoding/json/#Unmarshal&#34;&gt;公式ドキュメント&lt;/a&gt;)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var got []interface{}
+json.Unmarshal([]byte(&amp;quot;[1,2,null]&amp;quot;, &amp;amp;got)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;しかし、これをテストするために比較対象のデータをリテラルとして用意すると、&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;want := []interface{}{1,2,nil}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;定数のデフォルト型の宿命で数値の型が &lt;code&gt;int&lt;/code&gt; になってしまうため、&lt;code&gt;reflect.DeepEqual&lt;/code&gt; などの比較において失敗してしまいます。&lt;/p&gt;
+
+&lt;h1 id=&#34;解決策&#34;&gt;解決策&lt;/h1&gt;
+
+&lt;p&gt;解決策としては以下の2つかな、と考えており、(2)のほうは煩雑なので今のところ(1)でやっています。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;テストデータも &lt;code&gt;json.Unmarshal&lt;/code&gt; で作る&lt;/li&gt;
+&lt;li&gt;明示的に &lt;code&gt;float64(1)&lt;/code&gt; として変換する&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;コードの挙動確認&#34;&gt;コードの挙動確認&lt;/h1&gt;
+
+&lt;p&gt;以下でコードの挙動を確認できます。
+&lt;a href=&#34;https://play.golang.org/p/7U2AtxLORC&#34;&gt;The Go Playground&lt;/a&gt;&lt;/p&gt;
+
+&lt;script src=&#34;//gist.github.com/tmrtmhr/197cf8ed967cc97c0388464b315cfda0.js&#34;&gt;&lt;/script&gt;</description>
+    </item>
+    
+    <item>
       <title>Go言語でアプリケーション・ハンガリアン記法的なことを型で表現する</title>
       <link>https://tmrtmhr.info/tech/golang-hungarian-notation/</link>
       <pubDate>Mon, 03 Apr 2017 17:35:08 +0900</pubDate>

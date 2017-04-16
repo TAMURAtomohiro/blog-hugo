@@ -54,6 +54,71 @@ ga('send', 'pageview');
           <div class="card-title indigo darken-3 castaway-card-title">
             <div class="card-content">
               <div class="white-text" itemprop="headline">
+                Go言語の json.Unmarshal で読み込んだデータをテストするときは数値の型に注意する
+              </div>
+            </div>
+          </div>
+            
+          <div class="card-content castaway-card-summary blue-grey-text">
+            
+            <div class="row">
+              <div class="col castaway-date-published">
+                <span>公開日: </span>
+                <i class="material-icons" style="vertical-align: middle;">today</i>
+                <time itemprop="datePublished" datetime="2017-04-16">2017/04/16</time>
+                <span style="margin-left: 10px;"> タグ: </span>
+                
+                <a href="/tags/go">
+                  <div class="tag-go waves-effect waves-teal chip">
+                    go
+                  </div>
+                </a>
+                
+              </div>
+            </div>
+            <p>以下のようなコードで <code>interface{}</code> に対し数値を読み込んだ際、
+数値の型は <code>float64</code> になります。
+(参考: <a href="https://golang.org/pkg/encoding/json/#Unmarshal">公式ドキュメント</a>)</p>
+
+<pre><code>var got []interface{}
+json.Unmarshal([]byte(&quot;[1,2,null]&quot;, &amp;got)
+</code></pre>
+
+<p>しかし、これをテストするために比較対象のデータをリテラルとして用意すると、</p>
+
+<pre><code>want := []interface{}{1,2,nil}
+</code></pre>
+
+<p>定数のデフォルト型の宿命で数値の型が <code>int</code> になってしまうため、<code>reflect.DeepEqual</code> などの比較において失敗してしまいます。</p>
+
+<h1 id="解決策">解決策</h1>
+
+<p>解決策としては以下の2つかな、と考えており、(2)のほうは煩雑なので今のところ(1)でやっています。</p>
+
+<ol>
+<li>テストデータも <code>json.Unmarshal</code> で作る</li>
+<li>明示的に <code>float64(1)</code> として変換する</li>
+</ol>
+
+<p></p>
+          </div>
+
+          <div class="card-action castaway-card-footer">
+            <a class="btn waves-effect waves-light" href="/tech/golang-unmarshal-to-nil-interface/">この記事を読む</a>
+          </div>
+		    </article>
+      </div>
+    </div>
+      
+    
+
+    <div class="row">
+      <div class="col s12 m12 l6 offset-l3">
+        <article itemscope itemtype="http://schema.org/Blog" class="card castaway-card-link">
+
+          <div class="card-title indigo darken-3 castaway-card-title">
+            <div class="card-content">
+              <div class="white-text" itemprop="headline">
                 JavaScript でプリミティブ値のプロパティを参照すると対応するオブジェクトが一時的に作られる
               </div>
             </div>
