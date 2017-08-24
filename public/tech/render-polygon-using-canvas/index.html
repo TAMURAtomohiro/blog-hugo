@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.18.1" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+
+  
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+
+<link rel="stylesheet" href="/css/base.css">
+
+<link rel="alternate" href="/index.xml" type="application/rss+xml" title="嵐の小舟より">
+<title>Canvas(Fabric.js)でポリゴンを描画する - 嵐の小舟より</title>
+</head>
+<body>
+  
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-92780964-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+  <div class="">
+  <header class="castaway-header-bar">
+    <nav>
+      <div class="nav-wrapper castaway-site-logo">
+        <div>
+          <a href="/" class="brand-logo right">
+            <i class="material-icons" style="margin-right: 5px;">rowing</i>
+            <span class="castaway-site-title">嵐の小舟より</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+
+<section id="main">
+  <div class="row">
+    <div class="col s12 m12 l6 offset-l3">
+
+      <article itemscope itemtype="http://schema.org/Blog" class="card castaway-card">
+
+        <div class="card-title indigo darken-3 castaway-card-title">
+          <div class="card-content">
+            <div class="white-text" itemprop="headline">
+              Canvas(Fabric.js)でポリゴンを描画する
+            </div>
+          </div>
+        </div>
+
+        <div class="card-content">
+          <div class="row">
+            <div class="castaway-date-published">
+              <span>公開日：</span>
+              <i class="material-icons" style="vertical-align: middle;">today</i>
+              <time itemprop="datePublished" datetime="2017-06-21">2017/06/21</time>
+              <span style="margin-left: 10px;"> タグ: </span>
+              
+              <a href="/tags/javascript">
+                <div class="tag-JavaScript waves-effect waves-teal chip">
+                  JavaScript
+                </div>
+              </a>
+              
+            </div>
+          </div>
+          
+          
+          <div class="castaway-card-content mdl-card__supporting-text mdl-color-text--grey-700">
+            <p>「プログラミング言語 Go」の練習問題に <code>sin(r) / r</code> で表される面を描画するというものがあります(ここで、<code>r</code>は原点からの距離)。
+SVGで描画するとこんな感じです。</p>
+
+<p><img src="/img/surface-mono.svg"></img></p>
+
+<p>基本的には原点から離れるほど振幅が小さくなりますが、<code>r &lt; 1</code> の部分では大きくなるという図です。</p>
+
+<p>SVGでは、要素が文書中に現れた順に描画され、領域が被っていれば上書きされます。
+ここではこれを利用して、奥側のポリゴンからSVG上に配置することで、手前の高くなっている部分が奥側を上書きするようにし、
+立体的に描画しています。</p>
+
+<p>本記事は同じことを HTML5 の Canvas でやってみたサンプルです(<code>Fabric.js</code>を利用してます)。</p>
+
+<p>知見としては以下のような感じです。</p>
+
+<ul>
+<li>1個ずつ <code>canvas.add</code> すると重い</li>
+<li><code>canvas.add.apply(canvas, polygons)</code> のようにまとめて <code>apply</code> で描画するときは配列の長さに注意するべし</li>
+</ul>
+
+<p></p>
+
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.7.11/fabric.min.js"></script>
+<script type="text/javascript" src="/js/canvas-surface.js"></script>
+
+<p><a href="/js/canvas-surface.js">コード例</a></p>
+
+<canvas id="canvas-surface" width="640" height="320"> </canvas>
+
+<h1 id="uncaught-rangeerror-maximum-call-stack-size-exceeded-というエラーが出る場合について">&ldquo;Uncaught RangeError: Maximum call stack size exceeded&rdquo; というエラーが出る場合について</h1>
+
+<p>上のコード例では 1 辺に 100 個のポリゴンとしています。
+全体では 100 * 100 で 10000 個のポリゴンです。</p>
+
+<p>コードの構造としては以下のような感じです。</p>
+
+<pre><code>  var canvas = new fabric.Canvas('canvas-surface');
+  var polygons = [];
+  for (var i = 0; i &lt; cells; i++) {
+    for (var j = 0; j &lt; cells; j++) {
+      ...
+      var polygon = new fabric.Polygon([pa, pb, pc, pd]);
+      ...
+      polygons.push(polygon);
+    }
+  }
+  canvas.add.apply(canvas,polygons);
+</code></pre>
+
+<p>二重ループの中で<code>canvas.add</code>をしていないのは、1個ごとに描画するのが重いためです。
+30 * 30 でも 5 秒とかになってしまうので、100 * 100 ともなると待てませんでした。</p>
+
+<p>なのでいったん配列にまとめて <code>apply</code> で渡すことにしました。
+この場合 100 * 100 でも手元の環境(CPU 3.1GHz, Google Chrome バージョン: 59.0.3071.104)では 800 ms くらいの実行時間で、
+余裕がありそうだったので数を増やしていったのですが、
+251 * 251 で <code>Maximum call stack size exceeded</code> エラーとなりました。</p>
+
+<p><a href="https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Function/apply">Mozilla のドキュメント</a>でも言及されていますが、
+<code>apply</code> に配列として渡した引数群は、スタックに積み直されるため、長すぎる場合はスタックがあふれてエラーとなるわけです。
+上限は処理系によって異なるため、適度に分割して渡す必要が出てきます。</p>
+          </div>
+        </div>
+          
+          <div class="card-action castaway-card-footer">
+            <a class="btn waves-effect waves-light" href="/">サイトトップ</a>
+          </div>            
+
+      </article>
+        
+    </div>
+
+    </div>
+  </div>
+</section>
+
+
+</div>
+</body>
+</html>
+

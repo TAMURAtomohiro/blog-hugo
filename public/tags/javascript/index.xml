@@ -9,6 +9,74 @@
     <atom:link href="https://tmrtmhr.info/tags/javascript/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Canvas(Fabric.js)でポリゴンを描画する</title>
+      <link>https://tmrtmhr.info/tech/render-polygon-using-canvas/</link>
+      <pubDate>Wed, 21 Jun 2017 10:28:21 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/render-polygon-using-canvas/</guid>
+      <description>&lt;p&gt;「プログラミング言語 Go」の練習問題に &lt;code&gt;sin(r) / r&lt;/code&gt; で表される面を描画するというものがあります(ここで、&lt;code&gt;r&lt;/code&gt;は原点からの距離)。
+SVGで描画するとこんな感じです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://tmrtmhr.info/img/surface-mono.svg&#34;&gt;&lt;/img&gt;&lt;/p&gt;
+
+&lt;p&gt;基本的には原点から離れるほど振幅が小さくなりますが、&lt;code&gt;r &amp;lt; 1&lt;/code&gt; の部分では大きくなるという図です。&lt;/p&gt;
+
+&lt;p&gt;SVGでは、要素が文書中に現れた順に描画され、領域が被っていれば上書きされます。
+ここではこれを利用して、奥側のポリゴンからSVG上に配置することで、手前の高くなっている部分が奥側を上書きするようにし、
+立体的に描画しています。&lt;/p&gt;
+
+&lt;p&gt;本記事は同じことを HTML5 の Canvas でやってみたサンプルです(&lt;code&gt;Fabric.js&lt;/code&gt;を利用してます)。&lt;/p&gt;
+
+&lt;p&gt;知見としては以下のような感じです。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;1個ずつ &lt;code&gt;canvas.add&lt;/code&gt; すると重い&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;canvas.add.apply(canvas, polygons)&lt;/code&gt; のようにまとめて &lt;code&gt;apply&lt;/code&gt; で描画するときは配列の長さに注意するべし&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;script type=&#34;text/javascript&#34; src=&#34;http://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.7.11/fabric.min.js&#34;&gt;&lt;/script&gt;
+&lt;script type=&#34;text/javascript&#34; src=&#34;https://tmrtmhr.info/js/canvas-surface.js&#34;&gt;&lt;/script&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://tmrtmhr.info/js/canvas-surface.js&#34;&gt;コード例&lt;/a&gt;&lt;/p&gt;
+
+&lt;canvas id=&#34;canvas-surface&#34; width=&#34;640&#34; height=&#34;320&#34;&gt; &lt;/canvas&gt;
+
+&lt;h1 id=&#34;uncaught-rangeerror-maximum-call-stack-size-exceeded-というエラーが出る場合について&#34;&gt;&amp;ldquo;Uncaught RangeError: Maximum call stack size exceeded&amp;rdquo; というエラーが出る場合について&lt;/h1&gt;
+
+&lt;p&gt;上のコード例では 1 辺に 100 個のポリゴンとしています。
+全体では 100 * 100 で 10000 個のポリゴンです。&lt;/p&gt;
+
+&lt;p&gt;コードの構造としては以下のような感じです。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;  var canvas = new fabric.Canvas(&#39;canvas-surface&#39;);
+  var polygons = [];
+  for (var i = 0; i &amp;lt; cells; i++) {
+    for (var j = 0; j &amp;lt; cells; j++) {
+      ...
+      var polygon = new fabric.Polygon([pa, pb, pc, pd]);
+      ...
+      polygons.push(polygon);
+    }
+  }
+  canvas.add.apply(canvas,polygons);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;二重ループの中で&lt;code&gt;canvas.add&lt;/code&gt;をしていないのは、1個ごとに描画するのが重いためです。
+30 * 30 でも 5 秒とかになってしまうので、100 * 100 ともなると待てませんでした。&lt;/p&gt;
+
+&lt;p&gt;なのでいったん配列にまとめて &lt;code&gt;apply&lt;/code&gt; で渡すことにしました。
+この場合 100 * 100 でも手元の環境(CPU 3.1GHz, Google Chrome バージョン: 59.0.3071.104)では 800 ms くらいの実行時間で、
+余裕がありそうだったので数を増やしていったのですが、
+251 * 251 で &lt;code&gt;Maximum call stack size exceeded&lt;/code&gt; エラーとなりました。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Function/apply&#34;&gt;Mozilla のドキュメント&lt;/a&gt;でも言及されていますが、
+&lt;code&gt;apply&lt;/code&gt; に配列として渡した引数群は、スタックに積み直されるため、長すぎる場合はスタックがあふれてエラーとなるわけです。
+上限は処理系によって異なるため、適度に分割して渡す必要が出てきます。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
       <title>JavaScript でプリミティブ値のプロパティを参照すると対応するオブジェクトが一時的に作られる</title>
       <link>https://tmrtmhr.info/tech/javascript-property-of-primitive-value/</link>
       <pubDate>Sat, 15 Apr 2017 22:46:29 +0900</pubDate>
