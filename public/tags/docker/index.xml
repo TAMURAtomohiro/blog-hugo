@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Docker on 嵐の小舟より</title>
+    <link>https://tmrtmhr.info/tags/docker/index.xml</link>
+    <description>Recent content in Docker on 嵐の小舟より</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja-JP</language>
+    <atom:link href="https://tmrtmhr.info/tags/docker/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>docker-compose 環境の ElasticSearch &#43; Kibana を 5.3.0 から 5.5.2 にしたときつまづいたところ</title>
+      <link>https://tmrtmhr.info/tech/trouble-upgrading-on-elasticsearch-and-kibana/</link>
+      <pubDate>Mon, 28 Aug 2017 17:17:00 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/trouble-upgrading-on-elasticsearch-and-kibana/</guid>
+      <description>&lt;p&gt;しばらくぶりに ElasticSearch を触ることになったため、以前 Docker コンテナで作ってあった環境を見直してみました。
+すると ElasticSearch + Kibana の新バージョンとして 5.5.2 が出ていたので、
+せっかくなので更新するかとバージョンを上げてみたところ素直に動作しませんでした。&lt;/p&gt;
+
+&lt;p&gt;結論から言えば ElasticSearch + Kibana に起因するものではなく、
+&lt;code&gt;docker-compose.yml&lt;/code&gt; のコンテナ間ネットワークの設定を間違えたことが原因です。&lt;/p&gt;
+
+&lt;p&gt;結論としては以下のような感じです。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;5.3.0 の頃にあった &lt;code&gt;links&lt;/code&gt; によるコンテナ間接続は不要&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;networks&lt;/code&gt; 指定により ElasticSearch と Kibana コンテナを同一ネットワークに置く&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;公式ドキュメント(&lt;a href=&#34;https://www.elastic.co/guide/en/elasticsearch/reference/5.5/docker.html&#34;&gt;Install Elasticsearch with Docker&lt;/a&gt;)を見て
+ElasticSearch の設定だけを修正しても動かないので注意してください。&lt;/p&gt;
+
+&lt;p&gt;最終的な &lt;code&gt;docker-compose.yml&lt;/code&gt; については &lt;a href=&#34;http://christina04.hatenablog.com/entry/2017/04/12/013556&#34;&gt;docker-compose で Kibana 5.x を使う&lt;/a&gt; を参考にしました。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;5.3.0 の頃に使用していた &lt;code&gt;docker-compose.yml&lt;/code&gt; では kibana コンテナに以下のように設定していました。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;services:
+  kibana:
+    links:
+      - elasticsearch
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;で、今回 5.5.2 に切り替えるにあたり、&lt;a href=&#34;https://www.elastic.co/guide/en/elasticsearch/reference/5.5/docker.html&#34;&gt;Install Elasticsearch with Docker&lt;/a&gt;
+を参考にして「&lt;strong&gt;ElasticSearch コンテナ&lt;/strong&gt;」の設定に以下のような記述を加えました。
+また、トップレベルにネットワーク設定を(よく理解しないまま)追加しました。
+(厳密に言うと他の設定も色々変わっていますが、今回のトラブルとは無関係なので割愛します。)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;services:
+  elasticsearch:
+    networks:
+      - esnet
+
+networks:
+  esnet:
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;それで &lt;code&gt;docker-compose up&lt;/code&gt; してみると起動しません。
+症状としては以下のようなログが出ており、どうも kibana から elasticsearch への接続ができていないようでした。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;kibana_1         | {&amp;quot;type&amp;quot;:&amp;quot;log&amp;quot;,&amp;quot;@timestamp&amp;quot;:&amp;quot;2017-08-28T06:45:01Z&amp;quot;,&amp;quot;tags&amp;quot;:[&amp;quot;warning&amp;quot;,&amp;quot;elasticsearch&amp;quot;,&amp;quot;admin&amp;quot;],&amp;quot;pid&amp;quot;:7,&amp;quot;message&amp;quot;:&amp;quot;Unable to revive connection: http://elasticsearch:9200/&amp;quot;}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;kibana コンテナの &lt;code&gt;/etc/hosts&lt;/code&gt; や環境変数を確認すると &lt;code&gt;elasticsearch&lt;/code&gt; の登録がありません。
+自分の理解は &lt;code&gt;links&lt;/code&gt; に指定した内容がこのあたりに書き込まれることでコンテナ間のエイリアスによるアクセスができる、
+というところで止まっていたので、はて……？と混乱しました。&lt;/p&gt;
+
+&lt;p&gt;で、そもそも &lt;code&gt;networks&lt;/code&gt; って何ぞや、と &lt;a href=&#34;http://docs.docker.jp/engine/userguide/networking/dockernetworks.html&#34;&gt;Docker コンテナ・ネットワークの理解&lt;/a&gt; を見て気づきました。
+上記の設定では ElasticSearch コンテナと Kibana コンテナが違うネットワークにいるため &lt;code&gt;elasticsearch&lt;/code&gt; というドメイン名ではアクセスできないというわけです。&lt;/p&gt;
+
+&lt;p&gt;正しい設定は以下のどちらかです。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ElasticSearch と Kibana コンテナの両方で &lt;code&gt;networks&lt;/code&gt; を指定する&lt;/li&gt;
+&lt;li&gt;ElasticSearch と Kibana コンテナの両方で &lt;code&gt;networks&lt;/code&gt; を指定せず、Kibana コンテナに &lt;code&gt;links&lt;/code&gt; を設定する&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;ただし、&lt;code&gt;links&lt;/code&gt;は廃止予定のようなので、&lt;code&gt;networks&lt;/code&gt;を指定するのが良いでしょう。&lt;/p&gt;
+
+&lt;p&gt;じゃあユーザ定義ネットワークの外部からアクセスするにはどう設定するのかというところは未調査です。すみません。&lt;/p&gt;
+
+&lt;h2 id=&#34;参考&#34;&gt;参考&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://christina04.hatenablog.com/entry/2017/04/12/013556&#34;&gt;docker-compose で Kibana 5.x を使う&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://docs.docker.jp/engine/userguide/networking/dockernetworks.html&#34;&gt;Docker コンテナ・ネットワークの理解&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

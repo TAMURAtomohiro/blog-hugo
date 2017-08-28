@@ -6,8 +6,89 @@
     <description>Recent content in Teches on 嵐の小舟より</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <lastBuildDate>Wed, 21 Jun 2017 10:28:21 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 28 Aug 2017 17:17:00 +0900</lastBuildDate>
     <atom:link href="https://tmrtmhr.info/tech/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>docker-compose 環境の ElasticSearch &#43; Kibana を 5.3.0 から 5.5.2 にしたときつまづいたところ</title>
+      <link>https://tmrtmhr.info/tech/trouble-upgrading-on-elasticsearch-and-kibana/</link>
+      <pubDate>Mon, 28 Aug 2017 17:17:00 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/trouble-upgrading-on-elasticsearch-and-kibana/</guid>
+      <description>&lt;p&gt;しばらくぶりに ElasticSearch を触ることになったため、以前 Docker コンテナで作ってあった環境を見直してみました。
+すると ElasticSearch + Kibana の新バージョンとして 5.5.2 が出ていたので、
+せっかくなので更新するかとバージョンを上げてみたところ素直に動作しませんでした。&lt;/p&gt;
+
+&lt;p&gt;結論から言えば ElasticSearch + Kibana に起因するものではなく、
+&lt;code&gt;docker-compose.yml&lt;/code&gt; のコンテナ間ネットワークの設定を間違えたことが原因です。&lt;/p&gt;
+
+&lt;p&gt;結論としては以下のような感じです。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;5.3.0 の頃にあった &lt;code&gt;links&lt;/code&gt; によるコンテナ間接続は不要&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;networks&lt;/code&gt; 指定により ElasticSearch と Kibana コンテナを同一ネットワークに置く&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;公式ドキュメント(&lt;a href=&#34;https://www.elastic.co/guide/en/elasticsearch/reference/5.5/docker.html&#34;&gt;Install Elasticsearch with Docker&lt;/a&gt;)を見て
+ElasticSearch の設定だけを修正しても動かないので注意してください。&lt;/p&gt;
+
+&lt;p&gt;最終的な &lt;code&gt;docker-compose.yml&lt;/code&gt; については &lt;a href=&#34;http://christina04.hatenablog.com/entry/2017/04/12/013556&#34;&gt;docker-compose で Kibana 5.x を使う&lt;/a&gt; を参考にしました。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;5.3.0 の頃に使用していた &lt;code&gt;docker-compose.yml&lt;/code&gt; では kibana コンテナに以下のように設定していました。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;services:
+  kibana:
+    links:
+      - elasticsearch
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;で、今回 5.5.2 に切り替えるにあたり、&lt;a href=&#34;https://www.elastic.co/guide/en/elasticsearch/reference/5.5/docker.html&#34;&gt;Install Elasticsearch with Docker&lt;/a&gt;
+を参考にして「&lt;strong&gt;ElasticSearch コンテナ&lt;/strong&gt;」の設定に以下のような記述を加えました。
+また、トップレベルにネットワーク設定を(よく理解しないまま)追加しました。
+(厳密に言うと他の設定も色々変わっていますが、今回のトラブルとは無関係なので割愛します。)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;services:
+  elasticsearch:
+    networks:
+      - esnet
+
+networks:
+  esnet:
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;それで &lt;code&gt;docker-compose up&lt;/code&gt; してみると起動しません。
+症状としては以下のようなログが出ており、どうも kibana から elasticsearch への接続ができていないようでした。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;kibana_1         | {&amp;quot;type&amp;quot;:&amp;quot;log&amp;quot;,&amp;quot;@timestamp&amp;quot;:&amp;quot;2017-08-28T06:45:01Z&amp;quot;,&amp;quot;tags&amp;quot;:[&amp;quot;warning&amp;quot;,&amp;quot;elasticsearch&amp;quot;,&amp;quot;admin&amp;quot;],&amp;quot;pid&amp;quot;:7,&amp;quot;message&amp;quot;:&amp;quot;Unable to revive connection: http://elasticsearch:9200/&amp;quot;}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;kibana コンテナの &lt;code&gt;/etc/hosts&lt;/code&gt; や環境変数を確認すると &lt;code&gt;elasticsearch&lt;/code&gt; の登録がありません。
+自分の理解は &lt;code&gt;links&lt;/code&gt; に指定した内容がこのあたりに書き込まれることでコンテナ間のエイリアスによるアクセスができる、
+というところで止まっていたので、はて……？と混乱しました。&lt;/p&gt;
+
+&lt;p&gt;で、そもそも &lt;code&gt;networks&lt;/code&gt; って何ぞや、と &lt;a href=&#34;http://docs.docker.jp/engine/userguide/networking/dockernetworks.html&#34;&gt;Docker コンテナ・ネットワークの理解&lt;/a&gt; を見て気づきました。
+上記の設定では ElasticSearch コンテナと Kibana コンテナが違うネットワークにいるため &lt;code&gt;elasticsearch&lt;/code&gt; というドメイン名ではアクセスできないというわけです。&lt;/p&gt;
+
+&lt;p&gt;正しい設定は以下のどちらかです。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ElasticSearch と Kibana コンテナの両方で &lt;code&gt;networks&lt;/code&gt; を指定する&lt;/li&gt;
+&lt;li&gt;ElasticSearch と Kibana コンテナの両方で &lt;code&gt;networks&lt;/code&gt; を指定せず、Kibana コンテナに &lt;code&gt;links&lt;/code&gt; を設定する&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;ただし、&lt;code&gt;links&lt;/code&gt;は廃止予定のようなので、&lt;code&gt;networks&lt;/code&gt;を指定するのが良いでしょう。&lt;/p&gt;
+
+&lt;p&gt;じゃあユーザ定義ネットワークの外部からアクセスするにはどう設定するのかというところは未調査です。すみません。&lt;/p&gt;
+
+&lt;h2 id=&#34;参考&#34;&gt;参考&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://christina04.hatenablog.com/entry/2017/04/12/013556&#34;&gt;docker-compose で Kibana 5.x を使う&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://docs.docker.jp/engine/userguide/networking/dockernetworks.html&#34;&gt;Docker コンテナ・ネットワークの理解&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
     
     <item>
       <title>Canvas(Fabric.js)でポリゴンを描画する</title>
@@ -1147,173 +1228,6 @@ grep &#39;class=&amp;quot;stat&amp;quot;&#39; ${REPORT_DIR}/index.html | tail -n
 
 &lt;p&gt;標準入出力という偉大なインタフェースのおかげで Emacs Lisp 内で完結させる必要がなく、
 他言語のモジュールを利用できるのが素晴らしいです。&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Angular2 から Web Components を使う</title>
-      <link>https://tmrtmhr.info/tech/angular2-web-components/</link>
-      <pubDate>Mon, 22 Feb 2016 16:08:13 +0900</pubDate>
-      
-      <guid>https://tmrtmhr.info/tech/angular2-web-components/</guid>
-      <description>&lt;p&gt;&lt;a href=&#34;https://angular.io/&#34;&gt;Angular2&lt;/a&gt;が
-&lt;a href=&#34;http://angularjs.blogspot.jp/2015/12/angular-2-beta.html&#34;&gt;昨年12月に Beta リリース&lt;/a&gt;されたため、
-色々触りながら調べています。&lt;/p&gt;
-
-&lt;p&gt;Angular2 の設計ドキュメントのひとつ(&lt;a href=&#34;https://docs.google.com/document/d/1kpuR512G1b0D8egl9245OHaG0cFh0ST0ekhD_g8sxtI/edit#heading=h.ptbnyo3pqsmq&#34;&gt;Data Binding with Web Components&lt;/a&gt;)
-を見かけ、Web Components との併用を考慮しているようだったので、
-使い方を調べてみることにしました。
-&lt;/p&gt;
-
-&lt;p&gt;この記事の&lt;a href=&#34;https://github.com/TAMURAtomohiro/angular2-with-web-components&#34;&gt;サンプルコード(TypeScript)&lt;/a&gt;をGitHubで公開しています。&lt;/p&gt;
-
-&lt;h1 id=&#34;題材&#34;&gt;題材&lt;/h1&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://elements.polymer-project.org/elements/google-map&#34;&gt;Google Map Web Component&lt;/a&gt;(以下 google-map と表記) を Angular2 から使用します。
-やりたいことは以下の三種類です。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;DOM のプロパティを介して Web Components に値を渡す&lt;/li&gt;
-&lt;li&gt;DOM のメソッドを呼ぶ&lt;/li&gt;
-&lt;li&gt;DOM から上がってくるイベントを捕捉する&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&#34;コンポーネントの構成&#34;&gt;コンポーネントの構成&lt;/h1&gt;
-
-&lt;p&gt;Angular2 では Component(コンポーネント)という単位でモジュールを分けるようになりました。
-ざっくり言うとテンプレートHTMLを持つ Directive を Component と呼びます。&lt;/p&gt;
-
-&lt;p&gt;今回のコードでは &lt;code&gt;AppComponent&lt;/code&gt;(&lt;code&gt;app.component.ts&lt;/code&gt;) と &lt;code&gt;GoogleMapWebComponent&lt;/code&gt;(&lt;code&gt;googlemap.component.ts&lt;/code&gt;) の二種類です。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;AppComponent&lt;/code&gt; では google-map に渡す値やイベントハンドラを定義します。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;GoogleMapWebComponent&lt;/code&gt; は Angular2 から google-map を触るために DOM 要素を保持します。&lt;/p&gt;
-
-&lt;h1 id=&#34;dom-のプロパティを介して-web-components-に値を渡す&#34;&gt;DOM のプロパティを介して Web Components に値を渡す&lt;/h1&gt;
-
-&lt;p&gt;&lt;code&gt;AppComponent&lt;/code&gt; のテンプレートにある &lt;code&gt;[latitude]=&amp;quot;lat&amp;quot;&lt;/code&gt; のような記述により google-map に Angular の値を渡すことができます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;google-map [latitude]=&amp;quot;lat&amp;quot; [longitude]=&amp;quot;lng&amp;quot;&amp;gt;&amp;lt;/google-map&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;値は同じく &lt;code&gt;AppComponent&lt;/code&gt; で以下のように定義してあります。右辺の &lt;code&gt;lat&lt;/code&gt;、&lt;code&gt;lng&lt;/code&gt; はこれを参照しています。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;constructor() {
-    this.lat = 35.71;
-    this.lng = 139.98;
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;記法&#34;&gt;[ ] 記法&lt;/h2&gt;
-
-&lt;p&gt;&lt;code&gt;[latitude]=&amp;quot;lat&amp;quot;&lt;/code&gt; は property binding と呼ばれ、
-DOM のプロパティに右辺の式を一方向バインディングするという意味を持ちます。&lt;/p&gt;
-
-&lt;p&gt;つまり、以下のようなコードで Angular2 のプロパティを更新すると、
-&lt;code&gt;google-map&lt;/code&gt; HTML要素の &lt;code&gt;longitude&lt;/code&gt; プロパティも合わせて更新されます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;goWest() {
-    this.lng = this.lng - 0.1; // Angular 側のプロパティ更新が Web Components に反映される
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;しかし、地図をドラッグして移動しても、Angular2 の &lt;code&gt;lat&lt;/code&gt;、&lt;code&gt;lng&lt;/code&gt; プロパティは更新されません。
-追従するためには &lt;code&gt;google-map-dragend&lt;/code&gt; のイベントを捕捉し、明示的に更新処理を書く必要があります。&lt;/p&gt;
-
-&lt;p&gt;ここで、&lt;code&gt;GoogleMapWebComponent&lt;/code&gt; に &lt;code&gt;@Input&lt;/code&gt; デコレータを「書かない」ことに注意しましょう。
-&lt;code&gt;@Input&lt;/code&gt; デコレータを書くとコンポーネントのプロパティに設定するようになり、
-DOM のプロパティに設定されなくなってしまいます。&lt;/p&gt;
-
-&lt;h1 id=&#34;dom-のメソッドを呼ぶ&#34;&gt;DOM のメソッドを呼ぶ&lt;/h1&gt;
-
-&lt;h2 id=&#34;dom-を取得する&#34;&gt;DOM を取得する&lt;/h2&gt;
-
-&lt;p&gt;DOM のメソッドを呼ぶにはまず DOM を取得する必要があります。
-(一休さんで言うところの、虎を捕まえるからまず屏風から虎を追い出してくれ、みたいな話です)&lt;/p&gt;
-
-&lt;p&gt;古文書によればこれは &lt;code&gt;document.getElementById(...)&lt;/code&gt; などで実現できますが、
-今風の書き方だと &lt;code&gt;GoogleMapWebComponent&lt;/code&gt; 内の以下のような記述になります。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;constructor(elRef:ElementRef) {
-    this.elem = elRef.nativeElement;
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;ルート要素が取得できるため、これをコンポーネントのプロパティに保持しておきます。&lt;/p&gt;
-
-&lt;h2 id=&#34;子コンポーネントのプロパティに触る&#34;&gt;子コンポーネントのプロパティに触る&lt;/h2&gt;
-
-&lt;p&gt;子コンポーネントにアクセスするには
-&lt;a href=&#34;https://angular.io/docs/js/latest/api/core/ViewChild-var.html&#34;&gt;ViewChild&lt;/a&gt; などを使います。
-適切に import などを行った上で、&lt;code&gt;AppComponent&lt;/code&gt; のプロパティとして以下のように宣言します。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;@ViewChild(GoogleMapWebComponent)
-googlemap: GoogleMapWebComponent;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;使えるようになるタイミングには注意が必要で、
-子コンポーネントの作成が親コンポーネントよりあとに起こるため、
-&lt;code&gt;ngAfterViewInit&lt;/code&gt; というメソッドが呼ばれた時点で &lt;code&gt;googlemap&lt;/code&gt; にセットされます。&lt;/p&gt;
-
-&lt;h1 id=&#34;dom-から上がってくるイベントを捕捉する&#34;&gt;DOM から上がってくるイベントを捕捉する&lt;/h1&gt;
-
-&lt;p&gt;&lt;code&gt;( )&lt;/code&gt;記法でイベント名を指定し、対応する処理を右辺に書きます。
-たとえば &lt;code&gt;google-map-dragend&lt;/code&gt; イベントを捕捉するには以下のように書きます。
-&lt;code&gt;[dragEvents]=&amp;quot;true&amp;quot;&lt;/code&gt; はドラッグ関係のイベントを ON にするための設定です。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;[dragEvents]=&amp;quot;true&amp;quot; (google-map-dragend)=&amp;quot;dragendHandler($event)&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;あとはハンドラで Angular のプロパティを更新しましょう。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;dragendHandler(event) {
-    console.log(&#39;dragend&#39;);
-    this.lat = event.target.latitude;
-    this.lng = event.target.longitude;
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&#34;プロパティバインディングの捕捉&#34;&gt;プロパティバインディングの捕捉&lt;/h1&gt;
-
-&lt;h2 id=&#34;記法の変換&#34;&gt;{{ }} 記法の変換&lt;/h2&gt;
-
-&lt;p&gt;Angular.js に慣れていると以下のように書きたくなるかもしれません。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;latitude=&amp;quot;{{lat}}&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;この書き方でも問題なく動作します。
-Angular2 は &lt;code&gt;{{ }}&lt;/code&gt; 記法を以下のように &lt;code&gt;[ ]&lt;/code&gt;記法へ変換します。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;[latitude]=&amp;quot;lat&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;これは以下のようなテキストコンテンツでも同様です。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;div&amp;gt; My Name is {{ name }} &amp;lt;/div&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;以下のようになります。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;div [textContent]=&amp;quot;&#39;My Name is &#39; + name&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;属性の削除&#34;&gt;属性の削除&lt;/h2&gt;
-
-&lt;p&gt;&lt;code&gt;[latitude]&lt;/code&gt; や &lt;code&gt;(google-map-dragend)&lt;/code&gt; などの属性は Angular2 によって削除されるため、
-ブラウザの開発コンソールで HTML を見ても載っていません。&lt;/p&gt;
-
-&lt;h1 id=&#34;まとめ&#34;&gt;まとめ&lt;/h1&gt;
-
-&lt;p&gt;Angular2 から Web Components を使ってみました。
-対応するコンポーネントを作って DOM 要素に触れるようにしておけば、
-あとはコンポーネント間のやりとりで実現できます。&lt;/p&gt;
-
-&lt;h1 id=&#34;参照&#34;&gt;参照&lt;/h1&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://angular.io/docs/ts/latest/guide/template-syntax.html&#34;&gt;Angular2: Template Syntax&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://blog.mgechev.com/2016/01/23/angular2-viewchildren-contentchildren-difference-viewproviders&#34;&gt;ViewChildren and ContentChildren in Angular 2&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</description>
     </item>
     
   </channel>
