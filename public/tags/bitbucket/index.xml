@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Bitbucket on 嵐の小舟より</title>
+    <link>https://tmrtmhr.info/tags/bitbucket/index.xml</link>
+    <description>Recent content in Bitbucket on 嵐の小舟より</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja-JP</language>
+    <atom:link href="https://tmrtmhr.info/tags/bitbucket/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>BitBucket Pipelines で Angular の Unit Tes tを動かす</title>
+      <link>https://tmrtmhr.info/tech/run-angular-ut-on-bitbucket-pipelines/</link>
+      <pubDate>Sat, 28 Oct 2017 15:01:39 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/run-angular-ut-on-bitbucket-pipelines/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://github.com/mgechev/angular-seed&#34;&gt;angular-seed&lt;/a&gt;では、
+デフォルトで &lt;code&gt;Chrome&lt;/code&gt; を使って Unit Test を動かすよう設定されていますが、
+BitBucket Pipelines の環境には Chrome がインストールされていないので、
+&lt;code&gt;PhantomJS&lt;/code&gt; で実行するよう修正する必要があります。&lt;/p&gt;
+
+&lt;p&gt;本記事はそのためのメモです。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;karma.conf.js&lt;/code&gt; の &lt;code&gt;files&lt;/code&gt; に以下を追加。これは &lt;code&gt;&#39;node_modules/intl/dist/Intl.min.js&#39;&lt;/code&gt;よりもあとに追加する必要があります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;files: [
+  ...
+  // for UT on BitBucket, Intl の読み込みの下に書くこと
+  &#39;node_modules/intl/locale-data/jsonp/ja-JP.js&#39;,
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;BitBucket 上での実行時のみ &lt;code&gt;PhatomJS&lt;/code&gt; を使うよう環境変数によって切り替えます。
+( 参考：&lt;a href=&#34;https://confluence.atlassian.com/bitbucket/environment-variables-794502608.html&#34;&gt;BitBucket の Environment Variables&lt;/a&gt;)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;if (process.env.CI) {
+  config.browsers = [ &#39;PhantomJS&#39; ];
+}
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

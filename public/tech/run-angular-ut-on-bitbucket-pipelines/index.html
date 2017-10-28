@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.18.1" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+
+  
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+
+<link rel="stylesheet" href="/css/base.css">
+
+<link rel="alternate" href="/index.xml" type="application/rss+xml" title="嵐の小舟より">
+<title>BitBucket Pipelines で Angular の Unit Tes tを動かす - 嵐の小舟より</title>
+</head>
+<body>
+  
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-92780964-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+  <div class="">
+  <header class="castaway-header-bar">
+    <nav>
+      <div class="nav-wrapper castaway-site-logo">
+        <div>
+          <a href="/" class="brand-logo right">
+            <i class="material-icons" style="margin-right: 5px;">rowing</i>
+            <span class="castaway-site-title">嵐の小舟より</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+
+<section id="main">
+  <div class="row">
+    <div class="col s12 m12 l6 offset-l3">
+
+      <article itemscope itemtype="http://schema.org/Blog" class="card castaway-card">
+
+        <div class="card-title indigo darken-3 castaway-card-title">
+          <div class="card-content">
+            <div class="white-text" itemprop="headline">
+              BitBucket Pipelines で Angular の Unit Tes tを動かす
+            </div>
+          </div>
+        </div>
+
+        <div class="card-content">
+          <div class="row">
+            <div class="castaway-date-published">
+              <span>公開日：</span>
+              <i class="material-icons" style="vertical-align: middle;">today</i>
+              <time itemprop="datePublished" datetime="2017-10-28">2017/10/28</time>
+              <span style="margin-left: 10px;"> タグ: </span>
+              
+              <a href="/tags/javascript">
+                <div class="tag-JavaScript waves-effect waves-teal chip">
+                  JavaScript
+                </div>
+              </a>
+              
+              <a href="/tags/angular">
+                <div class="tag-angular waves-effect waves-teal chip">
+                  angular
+                </div>
+              </a>
+              
+              <a href="/tags/bitbucket">
+                <div class="tag-bitbucket waves-effect waves-teal chip">
+                  bitbucket
+                </div>
+              </a>
+              
+            </div>
+          </div>
+          
+          
+          <div class="castaway-card-content mdl-card__supporting-text mdl-color-text--grey-700">
+            <p><a href="https://github.com/mgechev/angular-seed">angular-seed</a>では、
+デフォルトで <code>Chrome</code> を使って Unit Test を動かすよう設定されていますが、
+BitBucket Pipelines の環境には Chrome がインストールされていないので、
+<code>PhantomJS</code> で実行するよう修正する必要があります。</p>
+
+<p>本記事はそのためのメモです。</p>
+
+<p></p>
+
+<p><code>karma.conf.js</code> の <code>files</code> に以下を追加。これは <code>'node_modules/intl/dist/Intl.min.js'</code>よりもあとに追加する必要があります。</p>
+
+<pre><code>files: [
+  ...
+  // for UT on BitBucket, Intl の読み込みの下に書くこと
+  'node_modules/intl/locale-data/jsonp/ja-JP.js',
+</code></pre>
+
+<p>BitBucket 上での実行時のみ <code>PhatomJS</code> を使うよう環境変数によって切り替えます。
+( 参考：<a href="https://confluence.atlassian.com/bitbucket/environment-variables-794502608.html">BitBucket の Environment Variables</a>)</p>
+
+<pre><code>if (process.env.CI) {
+  config.browsers = [ 'PhantomJS' ];
+}
+</code></pre>
+          </div>
+        </div>
+          
+          <div class="card-action castaway-card-footer">
+            <a class="btn waves-effect waves-light" href="/">サイトトップ</a>
+          </div>            
+
+      </article>
+        
+    </div>
+
+    </div>
+  </div>
+</section>
+
+
+</div>
+</body>
+</html>
+

@@ -749,3 +749,14 @@ title = "ShadowDOM における JavaScript の挙動"
 
 参考文献
 [](http://robdodson.me/shadow-dom-javascript/)
+
+
+# Elasticsearch
+
+
+https://www.elastic.co/blog/strings-are-dead-long-live-strings
+
+ElasticSearch の文字列フィールドには二種類ある。
+
+* analyzed: トークナイズして全文検索ができる
+* not_analyzed: トークナイズしていないため完全一致
