@@ -10,7 +10,7 @@
     <atom:link href="https://tmrtmhr.info/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
-      <title>BitBucket Pipelines で Angular の Unit Tes tを動かす</title>
+      <title>BitBucket Pipelines で Angular の Unit Test を動かす</title>
       <link>https://tmrtmhr.info/tech/run-angular-ut-on-bitbucket-pipelines/</link>
       <pubDate>Sat, 28 Oct 2017 15:01:39 +0900</pubDate>
       

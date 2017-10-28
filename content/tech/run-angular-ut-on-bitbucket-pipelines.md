@@ -1,6 +1,6 @@
 +++
 draft = false
-title = "BitBucket Pipelines で Angular の Unit Tes tを動かす"
+title = "BitBucket Pipelines で Angular の Unit Test を動かす"
 tags = ['JavaScript','angular','bitbucket']
 date = "2017-10-28T15:01:39+09:00"
 +++
