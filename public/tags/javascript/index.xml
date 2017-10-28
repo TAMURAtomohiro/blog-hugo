@@ -37,7 +37,32 @@ BitBucket Pipelines の環境には Chrome がインストールされていな�
 &lt;pre&gt;&lt;code&gt;if (process.env.CI) {
   config.browsers = [ &#39;PhantomJS&#39; ];
 }
-&lt;/code&gt;&lt;/pre&gt;</description>
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;その他つまづいたところ&#34;&gt;その他つまづいたところ&lt;/h1&gt;
+
+&lt;h2 id=&#34;rx-js-のビルドエラー&#34;&gt;Rx.js のビルドエラー&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;Error on fetch for rxjs/operators at file:///opt/atlassian/pipelines/agent/build/frontend/node_modules/rxjs/operators.js`
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;参考：&lt;a href=&#34;https://github.com/mgechev/angular-seed/issues/2105&#34;&gt;angular-seed の Issue #2105&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;package.json&lt;/code&gt; の &lt;code&gt;rxjs&lt;/code&gt; を &lt;code&gt;^5.4.3&lt;/code&gt; から &lt;code&gt;5.4.3&lt;/code&gt; に修正。&lt;/p&gt;
+
+&lt;h2 id=&#34;tools-utils-seed-clean-ts-で型エラー&#34;&gt;&lt;code&gt;tools/utils/seed/clean.ts&lt;/code&gt; で型エラー&lt;/h2&gt;
+
+&lt;p&gt;以下のようなエラーが出て TypeScript のコンパイルに失敗するケース。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;TSError: ⨯ Unable to compile TypeScript
+tools/utils/seed/clean.ts (24,32): Property &#39;bgRed&#39; does not exist on type &#39;typeof &amp;quot;/opt/atlassian/pipelines/agent/build/frontend/node_modules/@types/gulp-util/node_modules/...&#39;. (2339)
+tools/utils/seed/clean.ts (31,47): Property &#39;yellow&#39; does not exist on type &#39;typeof &amp;quot;/opt/atlassian/pipelines/agent/build/frontend/node_modules/@types/gulp-util/node_modules/...&#39;. (2339)
+tools/utils/seed/clean.ts (39,40): Property &#39;red&#39; does not exist on type &#39;typeof &amp;quot;/opt/atlassian/pipelines/agent/build/frontend/node_modules/@types/gulp-util/node_modules/...&#39;. (2339)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/DefinitelyTyped/DefinitelyTyped/issues/21004&#34;&gt;DefinitelyTyped の issue #21004&lt;/a&gt;を見ると
+&lt;code&gt;chalk@2.2.0&lt;/code&gt;から自前で型定義ファイルを提供するようになり、DefinitelyTyped で提供していたものと不整合が……という話のようでした。
+取り急ぎ &lt;code&gt;clean.ts&lt;/code&gt; で &lt;code&gt;bgRed&lt;/code&gt; などを使わないよう修正して対処しました。&lt;/p&gt;</description>
     </item>
     
     <item>

@@ -112,6 +112,31 @@ BitBucket Pipelines の環境には Chrome がインストールされていな�
   config.browsers = [ 'PhantomJS' ];
 }
 </code></pre>
+
+<h1 id="その他つまづいたところ">その他つまづいたところ</h1>
+
+<h2 id="rx-js-のビルドエラー">Rx.js のビルドエラー</h2>
+
+<pre><code>Error on fetch for rxjs/operators at file:///opt/atlassian/pipelines/agent/build/frontend/node_modules/rxjs/operators.js`
+</code></pre>
+
+<p>参考：<a href="https://github.com/mgechev/angular-seed/issues/2105">angular-seed の Issue #2105</a></p>
+
+<p><code>package.json</code> の <code>rxjs</code> を <code>^5.4.3</code> から <code>5.4.3</code> に修正。</p>
+
+<h2 id="tools-utils-seed-clean-ts-で型エラー"><code>tools/utils/seed/clean.ts</code> で型エラー</h2>
+
+<p>以下のようなエラーが出て TypeScript のコンパイルに失敗するケース。</p>
+
+<pre><code>TSError: ⨯ Unable to compile TypeScript
+tools/utils/seed/clean.ts (24,32): Property 'bgRed' does not exist on type 'typeof &quot;/opt/atlassian/pipelines/agent/build/frontend/node_modules/@types/gulp-util/node_modules/...'. (2339)
+tools/utils/seed/clean.ts (31,47): Property 'yellow' does not exist on type 'typeof &quot;/opt/atlassian/pipelines/agent/build/frontend/node_modules/@types/gulp-util/node_modules/...'. (2339)
+tools/utils/seed/clean.ts (39,40): Property 'red' does not exist on type 'typeof &quot;/opt/atlassian/pipelines/agent/build/frontend/node_modules/@types/gulp-util/node_modules/...'. (2339)
+</code></pre>
+
+<p><a href="https://github.com/DefinitelyTyped/DefinitelyTyped/issues/21004">DefinitelyTyped の issue #21004</a>を見ると
+<code>chalk@2.2.0</code>から自前で型定義ファイルを提供するようになり、DefinitelyTyped で提供していたものと不整合が……という話のようでした。
+取り急ぎ <code>clean.ts</code> で <code>bgRed</code> などを使わないよう修正して対処しました。</p>
           </div>
         </div>
           
