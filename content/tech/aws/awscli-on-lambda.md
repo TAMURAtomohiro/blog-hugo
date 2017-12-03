@@ -41,7 +41,7 @@ AMI (`amzn-ami-hvm-2017.03.1.20170812-x86_64-gp2`) を使用しました。
 
 手順の差分は以下の通りです。
 
-* 事前に `sudo yum instal libyaml-devel` が必要(`PyYAML`のため)
+* 事前に `sudo yum install libyaml-devel` が必要(`PyYAML`のため)
 * PyYAML が `lib64` 以下にインストールされるので、そのあたりをパッケージに含めることが必要 ( `(cd $virtualenv/lib64/python2.7/site-packages; zip -r9 $zipfile .)` )
 
 # その他のアプローチ
@@ -53,5 +53,5 @@ AMI (`amzn-ami-hvm-2017.03.1.20170812-x86_64-gp2`) を使用しました。
 * DataPipeline を使う
 
 DataPipeline から EC2 インスタンスを起動して AWS CLI を走らせることもできます。
-EC2インスタンスの料金も秒単位になったので悪くないと思います。
+EC2インスタンスの料金も秒単位になったので小規模データでもコスト的に悪くないと思います。
 そもそも Lambda だと実行時間の上限(300秒)があるので大規模データの場合は DataPipeline を使うことになるでしょう。

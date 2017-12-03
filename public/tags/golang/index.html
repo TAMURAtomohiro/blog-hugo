@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.18.1" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+
+  
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+
+<link rel="stylesheet" href="/css/base.css">
+
+<link rel="alternate" href="/index.xml" type="application/rss+xml" title="嵐の小舟より">
+<title>Golang - 嵐の小舟より</title>
+</head>
+<body>
+  
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-92780964-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+  <div class="">
+  <header class="castaway-header-bar">
+    <nav>
+      <div class="nav-wrapper castaway-site-logo">
+        <div>
+          <a href="/" class="brand-logo right">
+            <i class="material-icons" style="margin-right: 5px;">rowing</i>
+            <span class="castaway-site-title">嵐の小舟より</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+
+	<main role="main">
+    
+    
+
+    <div class="row">
+      <div class="col s12 m12 l6 offset-l3">
+        <article itemscope itemtype="http://schema.org/Blog" class="card castaway-card-link">
+
+          <div class="card-title indigo darken-3 castaway-card-title">
+            <div class="card-content">
+              <div class="white-text" itemprop="headline">
+                AWS Lambda で xmlsec を利用する
+              </div>
+            </div>
+          </div>
+            
+          <div class="card-content castaway-card-summary blue-grey-text">
+            
+            <div class="row">
+              <div class="col castaway-date-published">
+                <span>公開日: </span>
+                <i class="material-icons" style="vertical-align: middle;">today</i>
+                <time itemprop="datePublished" datetime="2017-12-03">2017/12/03</time>
+                <span style="margin-left: 10px;"> タグ: </span>
+                
+                <a href="/tags/aws">
+                  <div class="tag-aws waves-effect waves-teal chip">
+                    aws
+                  </div>
+                </a>
+                
+                <a href="/tags/golang">
+                  <div class="tag-golang waves-effect waves-teal chip">
+                    golang
+                  </div>
+                </a>
+                
+              </div>
+            </div>
+            <p>AWS Lambda 上で、署名された XML 文書の検証をしたい、とふと思いました。
+もっと言うと SAML2 のサービスプロバイダとして AuthResponse の検証を
+サーバレスでやってみよう、というところから出発して、
+まずは XML 文書の署名が検証できないことにはお話になりませんね、ということです。</p>
+
+<p>本記事は以下のことをやるための手順メモです。</p>
+
+<ul>
+<li><a href="https://github.com/apex/apex">apex</a>、<a href="https://github.com/apex/go-apex">go-apex</a>、<a href="https://github.com/crewjam/go-xmlsec">go-xmlsec</a> を使って GO 言語でプログラムを書く</li>
+<li>xmlsec を静的リンクしたバイナリを作る</li>
+</ul>
+
+<p>より一般的には、AWS Lambda の実行環境に入っていないネイティブライブラリを使いたい場合は静的リンクして持ち込む、という話です。</p>
+
+<p></p>
+          </div>
+
+          <div class="card-action castaway-card-footer">
+            <a class="btn waves-effect waves-light" href="/tech/aws/using-xmlsec-on-lambda/">この記事を読む</a>
+          </div>
+		    </article>
+      </div>
+    </div>
+      
+    
+
+	</main>
+
+
+</div>
+</body>
+</html>
+

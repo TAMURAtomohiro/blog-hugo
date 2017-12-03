@@ -9,6 +9,70 @@
     <atom:link href="https://tmrtmhr.info/tags/angular/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>SPA(シングルページアプリケーション)をS3で動かす</title>
+      <link>https://tmrtmhr.info/tech/aws/single-page-application-on-s3/</link>
+      <pubDate>Thu, 09 Nov 2017 10:07:21 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/aws/single-page-application-on-s3/</guid>
+      <description>&lt;p&gt;静的コンテンツについては S3 だけでサーブできます。
+ですので、たとえば&lt;a href=&#34;https://angular.io/&#34;&gt;Angular&lt;/a&gt;で作成したフロントエンドのコードは S3 に置けばいいよ、という話になります。&lt;/p&gt;
+
+&lt;p&gt;しかし Single Page Application の場合、表示内容とともに URL を書き換えます。
+なので &lt;code&gt;https://example.com/blog&lt;/code&gt; のような URL でページが表示されていたとしても、
+対応するファイルがないためブラウザリロードすると &lt;code&gt;404&lt;/code&gt; エラーになってしまいます。
+認証が必要で、別ページに callback URL を持って遷移して認証後に戻ってくる、みたいなケースでもこのことが問題になります。&lt;/p&gt;
+
+&lt;p&gt;調べてみると以下のやり方が良いようです。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;CloudFront のカスタムエラーレスポンスで、S3 の &lt;code&gt;404&lt;/code&gt; エラーに対し &lt;code&gt;/index.html&lt;/code&gt; へ転送するよう設定する&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;英語ですが、以下のブログにスクリーンショット付きで手順が載っていました。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;参考：&lt;a href=&#34;https://keita.blog/2015/11/24/hosting-a-single-page-app-on-s3-with-proper-urls/&#34;&gt;Hosting a Single-Page App on S3, with proper URLs&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;s3-に存在しないファイルをリクエストした際-access-denied-403-エラーになる場合&#34;&gt;S3 に存在しないファイルをリクエストした際 Access Denied (403) エラーになる場合&lt;/h1&gt;
+
+&lt;p&gt;バケットポリシーのミスでした。&lt;code&gt;GetObject&lt;/code&gt; だけでなく &lt;code&gt;ListBucket&lt;/code&gt; の権限が必要です。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;バケットポリシーのサンプル&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;{
+  &amp;quot;Version&amp;quot;: &amp;quot;2012-10-17&amp;quot;,
+  &amp;quot;Statement&amp;quot;: [
+    {
+      &amp;quot;Sid&amp;quot;: &amp;quot;S3ListBucket&amp;quot;,
+      &amp;quot;Effect&amp;quot;: &amp;quot;Allow&amp;quot;,
+      &amp;quot;Action&amp;quot;: [
+        &amp;quot;s3:ListBucket&amp;quot;
+      ],
+      &amp;quot;Principal&amp;quot;: {
+        &amp;quot;AWS&amp;quot;: &amp;quot;arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity XXX&amp;quot;
+      },
+      &amp;quot;Resource&amp;quot;: &amp;quot;arn:aws:s3:::your.domain&amp;quot;
+    },
+    {
+      &amp;quot;Sid&amp;quot;: &amp;quot;S3GetObject&amp;quot;,
+      &amp;quot;Effect&amp;quot;: &amp;quot;Allow&amp;quot;,
+      &amp;quot;Principal&amp;quot;: {
+        &amp;quot;AWS&amp;quot;: &amp;quot;arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity XXX&amp;quot;
+      },
+      &amp;quot;Action&amp;quot;: &amp;quot;s3:GetObject&amp;quot;,
+      &amp;quot;Resource&amp;quot;: &amp;quot;arn:aws:s3:::your.domain/*&amp;quot;
+    }
+  ]
+}
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
       <title>BitBucket Pipelines で Angular の Unit Test を動かす</title>
       <link>https://tmrtmhr.info/tech/run-angular-ut-on-bitbucket-pipelines/</link>
       <pubDate>Sat, 28 Oct 2017 15:01:39 +0900</pubDate>

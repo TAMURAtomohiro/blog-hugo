@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Golang on 嵐の小舟より</title>
+    <link>https://tmrtmhr.info/tags/golang/index.xml</link>
+    <description>Recent content in Golang on 嵐の小舟より</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja-JP</language>
+    <atom:link href="https://tmrtmhr.info/tags/golang/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>AWS Lambda で xmlsec を利用する</title>
+      <link>https://tmrtmhr.info/tech/aws/using-xmlsec-on-lambda/</link>
+      <pubDate>Sun, 03 Dec 2017 16:41:17 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/aws/using-xmlsec-on-lambda/</guid>
+      <description>&lt;p&gt;AWS Lambda 上で、署名された XML 文書の検証をしたい、とふと思いました。
+もっと言うと SAML2 のサービスプロバイダとして AuthResponse の検証を
+サーバレスでやってみよう、というところから出発して、
+まずは XML 文書の署名が検証できないことにはお話になりませんね、ということです。&lt;/p&gt;
+
+&lt;p&gt;本記事は以下のことをやるための手順メモです。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/apex/apex&#34;&gt;apex&lt;/a&gt;、&lt;a href=&#34;https://github.com/apex/go-apex&#34;&gt;go-apex&lt;/a&gt;、&lt;a href=&#34;https://github.com/crewjam/go-xmlsec&#34;&gt;go-xmlsec&lt;/a&gt; を使って GO 言語でプログラムを書く&lt;/li&gt;
+&lt;li&gt;xmlsec を静的リンクしたバイナリを作る&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;より一般的には、AWS Lambda の実行環境に入っていないネイティブライブラリを使いたい場合は静的リンクして持ち込む、という話です。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;lambda-とec2-インスタンスの作成&#34;&gt;Lambda とEC2 インスタンスの作成&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://docs.aws.amazon.com/ja_jp/lambda/latest/dg/current-supported-versions.html&#34;&gt;Lambda の実行環境のAMIを調べ&lt;/a&gt;、
+EC2インスタンスを作ります。
+たとえば &lt;code&gt;amzn-ami-hvm-2017.03.1.20170812-x86_64-gp2&lt;/code&gt; という AMI ID のものを Community AMI から探して起動します。&lt;/p&gt;
+
+&lt;h1 id=&#34;go言語環境のセットアップ&#34;&gt;Go言語環境のセットアップ&lt;/h1&gt;
+
+&lt;p&gt;参考： &lt;a href=&#34;https://dev.classmethod.jp/cloud/aws/amazon-linux-go-setup/&#34;&gt;Go開発環境/ビルド環境としてAmazon Linuxをセットアップする手順&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo yum install golang
+mkdir $HOME/go
+echo &#39;export GOPATH=$HOME/go&#39; &amp;gt;&amp;gt; .bashrc
+source .bashrc
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;各種ライブラリのインストール&#34;&gt;各種ライブラリのインストール&lt;/h1&gt;
+
+&lt;p&gt;&lt;code&gt;configure&lt;/code&gt;のオプションについては&lt;a href=&#34;https://github.com/crewjam/go-xmlsec&#34;&gt;crewjam/go-xmlsec&lt;/a&gt;のまま。
+途中で失敗するところがいくつかあったので手順を足しています。&lt;/p&gt;
+
+&lt;h2 id=&#34;静的リンク用-glibc-のインストール&#34;&gt;静的リンク用 glibc のインストール&lt;/h2&gt;
+
+&lt;p&gt;これは go-xmlsec には出てこなかった手順です。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo yum install glibc-static.x86_64
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;libxml2-のインストール&#34;&gt;libxml2 のインストール&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;cd
+curl -sL ftp://xmlsoft.org/libxml2/libxml2-2.9.6.tar.gz | tar -xzf -
+cd libxml2-2.9.6
+./configure --enable-static --disable-shared --without-gnu-ld --with-c14n --without-catalog --without-debug --without-docbook  --without-fexceptions  --without-ftp --without-history --without-html --without-http --without-iconv --without-icu --without-iso8859x --without-legacy --without-mem-debug --without-minimum --with-output --without-pattern --with-push --without-python --without-reader --without-readline --without-regexps --without-run-debug --with-sax1 --without-schemas --without-schematron --without-threads --without-thread-alloc --with-tree --without-valid --without-writer --without-xinclude --without-xpath --with-xptr --without-modules --without-zlib --without-lzma --without-coverage
+sudo make install
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;openssl-のインストール&#34;&gt;openssl のインストール&lt;/h2&gt;
+
+&lt;p&gt;go-xmlsec の手順だけでは &lt;code&gt;libcrypto.a&lt;/code&gt; が配置されなかったため、それを追加しています。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;cd
+curl -sL ftp://ftp.openssl.org/source/openssl-1.1.0f.tar.gz | tar -xzf -
+cd openssl-1.1.0f
+./config no-shared no-weak-ssl-ciphers no-ssl2 no-ssl3 no-comp no-idea no-dtls no-hw no-threads no-dso
+sudo make depend install
+sudo mkdir /usr/local/ssl/lib
+sudo cp ./libcrypto.a /usr/local/ssl/lib/
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;xmlsec-のインストール&#34;&gt;xmlsec のインストール&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;cd
+curl -sL http://www.aleksey.com/xmlsec/download/xmlsec1-1.2.25.tar.gz | tar -xzf -
+cd xmlsec1-1.2.25/
+./configure --enable-static --disable-shared --disable-crypto-dl --disable-apps-crypto-dl --enable-static-linking --without-gnu-ld --with-default-crypto=openssl --with-openssl=/usr/local/ssl --with-libxml=/usr/local --without-nss --without-nspr --without-gcrypt --without-gnutls --without-libxslt
+sudo make -C src install
+sudo make -C include install
+sudo make install-pkgconfigDATA
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;pkg-config-path-に色々追加&#34;&gt;&lt;code&gt;PKG_CONFIG_PATH&lt;/code&gt; に色々追加&lt;/h2&gt;
+
+&lt;p&gt;これも go-xmlsec にはない手順です。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;cd
+echo &#39;export PKG_CONFIG_PATH=/usr/lib64/pkgconfig:/usr/local/lib64/pkgconfig:/usr/share/pkgconfig:/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH&#39; &amp;gt;&amp;gt; ~/.bashrc
+source .bashrc
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;ビルドの動作確認&#34;&gt;ビルドの動作確認&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;go get github.com/crewjam/go-xmlsec
+cd go/src/github.com/crewjam/go-xmlsec
+go build -tags static -ldflags &#39;-s -extldflags &amp;quot;-static&amp;quot;&#39; -o ~/xmldsig-static.bin ./examples/xmldsig.go
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;xmlsec-の使い方&#34;&gt;xmlsec の使い方&lt;/h1&gt;
+
+&lt;p&gt;諸々説明できるほど理解していないので取り急ぎコマンドだけ掲載しますと以下のような感じです。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;xmlsec1 verify --id-attr:ID &amp;quot;urn:oasis:names:tc:SAML:2.0:protocol:Response&amp;quot; --trusted-pem x509.cert SamlResponse.xml
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

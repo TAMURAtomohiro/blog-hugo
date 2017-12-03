@@ -54,6 +54,73 @@ ga('send', 'pageview');
           <div class="card-title indigo darken-3 castaway-card-title">
             <div class="card-content">
               <div class="white-text" itemprop="headline">
+                SPA(シングルページアプリケーション)をS3で動かす
+              </div>
+            </div>
+          </div>
+            
+          <div class="card-content castaway-card-summary blue-grey-text">
+            
+            <div class="row">
+              <div class="col castaway-date-published">
+                <span>公開日: </span>
+                <i class="material-icons" style="vertical-align: middle;">today</i>
+                <time itemprop="datePublished" datetime="2017-11-09">2017/11/09</time>
+                <span style="margin-left: 10px;"> タグ: </span>
+                
+                <a href="/tags/aws">
+                  <div class="tag-aws waves-effect waves-teal chip">
+                    aws
+                  </div>
+                </a>
+                
+                <a href="/tags/angular">
+                  <div class="tag-angular waves-effect waves-teal chip">
+                    angular
+                  </div>
+                </a>
+                
+              </div>
+            </div>
+            <p>静的コンテンツについては S3 だけでサーブできます。
+ですので、たとえば<a href="https://angular.io/">Angular</a>で作成したフロントエンドのコードは S3 に置けばいいよ、という話になります。</p>
+
+<p>しかし Single Page Application の場合、表示内容とともに URL を書き換えます。
+なので <code>https://example.com/blog</code> のような URL でページが表示されていたとしても、
+対応するファイルがないためブラウザリロードすると <code>404</code> エラーになってしまいます。
+認証が必要で、別ページに callback URL を持って遷移して認証後に戻ってくる、みたいなケースでもこのことが問題になります。</p>
+
+<p>調べてみると以下のやり方が良いようです。</p>
+
+<ul>
+<li>CloudFront のカスタムエラーレスポンスで、S3 の <code>404</code> エラーに対し <code>/index.html</code> へ転送するよう設定する</li>
+</ul>
+
+<p>英語ですが、以下のブログにスクリーンショット付きで手順が載っていました。</p>
+
+<ul>
+<li>参考：<a href="https://keita.blog/2015/11/24/hosting-a-single-page-app-on-s3-with-proper-urls/">Hosting a Single-Page App on S3, with proper URLs</a></li>
+</ul>
+
+<p></p>
+          </div>
+
+          <div class="card-action castaway-card-footer">
+            <a class="btn waves-effect waves-light" href="/tech/aws/single-page-application-on-s3/">この記事を読む</a>
+          </div>
+		    </article>
+      </div>
+    </div>
+      
+    
+
+    <div class="row">
+      <div class="col s12 m12 l6 offset-l3">
+        <article itemscope itemtype="http://schema.org/Blog" class="card castaway-card-link">
+
+          <div class="card-title indigo darken-3 castaway-card-title">
+            <div class="card-content">
+              <div class="white-text" itemprop="headline">
                 BitBucket Pipelines で Angular の Unit Test を動かす
               </div>
             </div>
