@@ -9,6 +9,72 @@
     <atom:link href="https://tmrtmhr.info/tags/aws/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>AWS Lambda 上で AWS CLI を動かして S3 sync する</title>
+      <link>https://tmrtmhr.info/tech/aws/awscli-on-lambda/</link>
+      <pubDate>Sun, 03 Dec 2017 16:11:45 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/aws/awscli-on-lambda/</guid>
+      <description>&lt;p&gt;発端は S3 バケット間を &lt;code&gt;sync&lt;/code&gt; したいという要件です。
+基本は日次実行ですが、アドホックな実行もサポートしたいので、
+コピー元の特定ファイルアップロードをトリガーに Lambda で &lt;code&gt;aws s3 sync&lt;/code&gt; できるとうれしいのです。&lt;/p&gt;
+
+&lt;p&gt;AWS Lambda の実行環境には AWS CLI が用意されていません。
+まあ外部プロセス呼び出しでコマンドを実行して……とかやろうとするためには
+実行環境に何のコマンドが入っているか気にかけなければいけなくなるので、
+自分たちの機能コードだけ持ちこめばいいという Lambda の思想にも反すると思います。
+コンテナも肥大化しますし。
+そんなわけで AWS Lambda の実行環境に AWS CLI が用意されることは将来的にも望み薄でしょう。&lt;/p&gt;
+
+&lt;p&gt;じゃあ SDK で実装するか……とざっと調べたところ AWS SDK には &lt;code&gt;s3 sync&lt;/code&gt; がありません(ないよね？)。
+したがって、差分だけアップロードするとか、コピー元で削除されているものはコピー先でも削除するなどの機能は、
+SDK を使って自分たちで再実装するなどしないといけません。&lt;/p&gt;
+
+&lt;p&gt;それはちょっとねぇ……というわけで紆余曲折あって作成した AWS Lambda 上で AWS CLI を実行できるパッケージ(&lt;a href=&#34;https://github.com/tmrtmhr/awscli-on-lambda&#34;&gt;awscli-on-lambda&lt;/a&gt;)を置いておきます。&lt;/p&gt;
+
+&lt;p&gt;注意点ですが、このパッケージは Lambda の実行環境が変更されることでいきなり動かなくなる可能性があります。
+たとえば、&lt;code&gt;aws&lt;/code&gt; コマンドが &lt;code&gt;/usr/bin/python&lt;/code&gt; を見に行くため、このへんを変更されるとアウトです。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;aws-cli-が動く-lambda-パッケージ作成手順について&#34;&gt;AWS CLI が動く Lambda パッケージ作成手順について&lt;/h1&gt;
+
+&lt;p&gt;AWS CLI は Python で実装されているため、&lt;code&gt;aws&lt;/code&gt; コマンドに必要なライブラリを
+すべて Lambda パッケージに含めて適切にロードされるようにすれば Lambda 上で動きます。&lt;/p&gt;
+
+&lt;p&gt;作成環境としては &lt;a href=&#34;http://docs.aws.amazon.com/ja_jp/lambda/latest/dg/current-supported-versions.html&#34;&gt;Lambda環境と実行できるライブラリ&lt;/a&gt; にある
+AMI (&lt;code&gt;amzn-ami-hvm-2017.03.1.20170812-x86_64-gp2&lt;/code&gt;) を使用しました。&lt;/p&gt;
+
+&lt;p&gt;また、作成手順としては以下のブログを参考にさせていただきました。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://alestic.com/2016/11/aws-lambda-awscli/&#34;&gt;Running aws-cli Commands Inside An AWS Lambda Function&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;手順の差分は以下の通りです。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;事前に &lt;code&gt;sudo yum instal libyaml-devel&lt;/code&gt; が必要(&lt;code&gt;PyYAML&lt;/code&gt;のため)&lt;/li&gt;
+&lt;li&gt;PyYAML が &lt;code&gt;lib64&lt;/code&gt; 以下にインストールされるので、そのあたりをパッケージに含めることが必要 ( &lt;code&gt;(cd $virtualenv/lib64/python2.7/site-packages; zip -r9 $zipfile .)&lt;/code&gt; )&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&#34;その他のアプローチ&#34;&gt;その他のアプローチ&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;AWS CLI の該当部分を &lt;code&gt;import&lt;/code&gt; して使う&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code&gt;sync&lt;/code&gt; が実装されている部分を特定するのが面倒そうだったので保留。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;DataPipeline を使う&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;DataPipeline から EC2 インスタンスを起動して AWS CLI を走らせることもできます。
+EC2インスタンスの料金も秒単位になったので悪くないと思います。
+そもそも Lambda だと実行時間の上限(300秒)があるので大規模データの場合は DataPipeline を使うことになるでしょう。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
       <title>AWS Lambda (Node.js v6.10) から DynamoDB に入れた Gzip バイナリデータを展開する</title>
       <link>https://tmrtmhr.info/tech/aws/using-binary-data-in-dynamodb/</link>
       <pubDate>Tue, 11 Apr 2017 21:37:09 +0900</pubDate>

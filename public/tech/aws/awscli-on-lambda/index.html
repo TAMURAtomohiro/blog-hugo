@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.18.1" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+
+  
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+
+<link rel="stylesheet" href="/css/base.css">
+
+<link rel="alternate" href="/index.xml" type="application/rss+xml" title="嵐の小舟より">
+<title>AWS Lambda 上で AWS CLI を動かして S3 sync する - 嵐の小舟より</title>
+</head>
+<body>
+  
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-92780964-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+  <div class="">
+  <header class="castaway-header-bar">
+    <nav>
+      <div class="nav-wrapper castaway-site-logo">
+        <div>
+          <a href="/" class="brand-logo right">
+            <i class="material-icons" style="margin-right: 5px;">rowing</i>
+            <span class="castaway-site-title">嵐の小舟より</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+
+<section id="main">
+  <div class="row">
+    <div class="col s12 m12 l6 offset-l3">
+
+      <article itemscope itemtype="http://schema.org/Blog" class="card castaway-card">
+
+        <div class="card-title indigo darken-3 castaway-card-title">
+          <div class="card-content">
+            <div class="white-text" itemprop="headline">
+              AWS Lambda 上で AWS CLI を動かして S3 sync する
+            </div>
+          </div>
+        </div>
+
+        <div class="card-content">
+          <div class="row">
+            <div class="castaway-date-published">
+              <span>公開日：</span>
+              <i class="material-icons" style="vertical-align: middle;">today</i>
+              <time itemprop="datePublished" datetime="2017-12-03">2017/12/03</time>
+              <span style="margin-left: 10px;"> タグ: </span>
+              
+              <a href="/tags/aws">
+                <div class="tag-aws waves-effect waves-teal chip">
+                  aws
+                </div>
+              </a>
+              
+            </div>
+          </div>
+          
+          
+          <div class="castaway-card-content mdl-card__supporting-text mdl-color-text--grey-700">
+            <p>発端は S3 バケット間を <code>sync</code> したいという要件です。
+基本は日次実行ですが、アドホックな実行もサポートしたいので、
+コピー元の特定ファイルアップロードをトリガーに Lambda で <code>aws s3 sync</code> できるとうれしいのです。</p>
+
+<p>AWS Lambda の実行環境には AWS CLI が用意されていません。
+まあ外部プロセス呼び出しでコマンドを実行して……とかやろうとするためには
+実行環境に何のコマンドが入っているか気にかけなければいけなくなるので、
+自分たちの機能コードだけ持ちこめばいいという Lambda の思想にも反すると思います。
+コンテナも肥大化しますし。
+そんなわけで AWS Lambda の実行環境に AWS CLI が用意されることは将来的にも望み薄でしょう。</p>
+
+<p>じゃあ SDK で実装するか……とざっと調べたところ AWS SDK には <code>s3 sync</code> がありません(ないよね？)。
+したがって、差分だけアップロードするとか、コピー元で削除されているものはコピー先でも削除するなどの機能は、
+SDK を使って自分たちで再実装するなどしないといけません。</p>
+
+<p>それはちょっとねぇ……というわけで紆余曲折あって作成した AWS Lambda 上で AWS CLI を実行できるパッケージ(<a href="https://github.com/tmrtmhr/awscli-on-lambda">awscli-on-lambda</a>)を置いておきます。</p>
+
+<p>注意点ですが、このパッケージは Lambda の実行環境が変更されることでいきなり動かなくなる可能性があります。
+たとえば、<code>aws</code> コマンドが <code>/usr/bin/python</code> を見に行くため、このへんを変更されるとアウトです。</p>
+
+<p></p>
+
+<h1 id="aws-cli-が動く-lambda-パッケージ作成手順について">AWS CLI が動く Lambda パッケージ作成手順について</h1>
+
+<p>AWS CLI は Python で実装されているため、<code>aws</code> コマンドに必要なライブラリを
+すべて Lambda パッケージに含めて適切にロードされるようにすれば Lambda 上で動きます。</p>
+
+<p>作成環境としては <a href="http://docs.aws.amazon.com/ja_jp/lambda/latest/dg/current-supported-versions.html">Lambda環境と実行できるライブラリ</a> にある
+AMI (<code>amzn-ami-hvm-2017.03.1.20170812-x86_64-gp2</code>) を使用しました。</p>
+
+<p>また、作成手順としては以下のブログを参考にさせていただきました。</p>
+
+<ul>
+<li><a href="https://alestic.com/2016/11/aws-lambda-awscli/">Running aws-cli Commands Inside An AWS Lambda Function</a></li>
+</ul>
+
+<p>手順の差分は以下の通りです。</p>
+
+<ul>
+<li>事前に <code>sudo yum instal libyaml-devel</code> が必要(<code>PyYAML</code>のため)</li>
+<li>PyYAML が <code>lib64</code> 以下にインストールされるので、そのあたりをパッケージに含めることが必要 ( <code>(cd $virtualenv/lib64/python2.7/site-packages; zip -r9 $zipfile .)</code> )</li>
+</ul>
+
+<h1 id="その他のアプローチ">その他のアプローチ</h1>
+
+<ul>
+<li>AWS CLI の該当部分を <code>import</code> して使う</li>
+</ul>
+
+<p><code>sync</code> が実装されている部分を特定するのが面倒そうだったので保留。</p>
+
+<ul>
+<li>DataPipeline を使う</li>
+</ul>
+
+<p>DataPipeline から EC2 インスタンスを起動して AWS CLI を走らせることもできます。
+EC2インスタンスの料金も秒単位になったので悪くないと思います。
+そもそも Lambda だと実行時間の上限(300秒)があるので大規模データの場合は DataPipeline を使うことになるでしょう。</p>
+          </div>
+        </div>
+          
+          <div class="card-action castaway-card-footer">
+            <a class="btn waves-effect waves-light" href="/">サイトトップ</a>
+          </div>            
+
+      </article>
+        
+    </div>
+
+    </div>
+  </div>
+</section>
+
+
+</div>
+</body>
+</html>
+

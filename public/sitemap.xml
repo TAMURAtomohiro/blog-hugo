@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://tmrtmhr.info/tech/aws/awscli-on-lambda/</loc>
+    <lastmod>2017-12-03T16:11:45+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://tmrtmhr.info/tech/run-angular-ut-on-bitbucket-pipelines/</loc>
     <lastmod>2017-10-28T15:01:39+09:00</lastmod>
   </url>
@@ -104,7 +109,7 @@
   
   <url>
     <loc>https://tmrtmhr.info/tags/aws/</loc>
-    <lastmod>2017-04-11T21:37:09+09:00</lastmod>
+    <lastmod>2017-12-03T16:11:45+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -169,7 +174,7 @@
   
   <url>
     <loc>https://tmrtmhr.info/tech/</loc>
-    <lastmod>2017-10-28T15:01:39+09:00</lastmod>
+    <lastmod>2017-12-03T16:11:45+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -181,7 +186,7 @@
   
   <url>
     <loc>https://tmrtmhr.info/</loc>
-    <lastmod>2017-10-28T15:01:39+09:00</lastmod>
+    <lastmod>2017-12-03T16:11:45+09:00</lastmod>
     <priority>0</priority>
   </url>
   

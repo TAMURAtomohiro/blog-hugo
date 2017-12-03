@@ -54,6 +54,67 @@ ga('send', 'pageview');
           <div class="card-title indigo darken-3 castaway-card-title">
             <div class="card-content">
               <div class="white-text" itemprop="headline">
+                AWS Lambda 上で AWS CLI を動かして S3 sync する
+              </div>
+            </div>
+          </div>
+            
+          <div class="card-content castaway-card-summary blue-grey-text">
+            
+            <div class="row">
+              <div class="col castaway-date-published">
+                <span>公開日: </span>
+                <i class="material-icons" style="vertical-align: middle;">today</i>
+                <time itemprop="datePublished" datetime="2017-12-03">2017/12/03</time>
+                <span style="margin-left: 10px;"> タグ: </span>
+                
+                <a href="/tags/aws">
+                  <div class="tag-aws waves-effect waves-teal chip">
+                    aws
+                  </div>
+                </a>
+                
+              </div>
+            </div>
+            <p>発端は S3 バケット間を <code>sync</code> したいという要件です。
+基本は日次実行ですが、アドホックな実行もサポートしたいので、
+コピー元の特定ファイルアップロードをトリガーに Lambda で <code>aws s3 sync</code> できるとうれしいのです。</p>
+
+<p>AWS Lambda の実行環境には AWS CLI が用意されていません。
+まあ外部プロセス呼び出しでコマンドを実行して……とかやろうとするためには
+実行環境に何のコマンドが入っているか気にかけなければいけなくなるので、
+自分たちの機能コードだけ持ちこめばいいという Lambda の思想にも反すると思います。
+コンテナも肥大化しますし。
+そんなわけで AWS Lambda の実行環境に AWS CLI が用意されることは将来的にも望み薄でしょう。</p>
+
+<p>じゃあ SDK で実装するか……とざっと調べたところ AWS SDK には <code>s3 sync</code> がありません(ないよね？)。
+したがって、差分だけアップロードするとか、コピー元で削除されているものはコピー先でも削除するなどの機能は、
+SDK を使って自分たちで再実装するなどしないといけません。</p>
+
+<p>それはちょっとねぇ……というわけで紆余曲折あって作成した AWS Lambda 上で AWS CLI を実行できるパッケージ(<a href="https://github.com/tmrtmhr/awscli-on-lambda">awscli-on-lambda</a>)を置いておきます。</p>
+
+<p>注意点ですが、このパッケージは Lambda の実行環境が変更されることでいきなり動かなくなる可能性があります。
+たとえば、<code>aws</code> コマンドが <code>/usr/bin/python</code> を見に行くため、このへんを変更されるとアウトです。</p>
+
+<p></p>
+          </div>
+
+          <div class="card-action castaway-card-footer">
+            <a class="btn waves-effect waves-light" href="/tech/aws/awscli-on-lambda/">この記事を読む</a>
+          </div>
+		    </article>
+      </div>
+    </div>
+      
+    
+
+    <div class="row">
+      <div class="col s12 m12 l6 offset-l3">
+        <article itemscope itemtype="http://schema.org/Blog" class="card castaway-card-link">
+
+          <div class="card-title indigo darken-3 castaway-card-title">
+            <div class="card-content">
+              <div class="white-text" itemprop="headline">
                 BitBucket Pipelines で Angular の Unit Test を動かす
               </div>
             </div>
