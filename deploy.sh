@@ -30,4 +30,4 @@ cat json/cloudfront-invalidation.json |
   filljson string InvalidationBatch.CallerReference <(date +"osone3-%Y/%m/%d-%H:%k:%m" | tr -d '\n') |
   jq . > request.json
 
-# aws --profile osone3 cloudfront create-invalidation --cli-input-json file://request.json
+aws --profile osone3 cloudfront create-invalidation --cli-input-json file://request.json
