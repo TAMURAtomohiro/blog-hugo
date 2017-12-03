@@ -25,7 +25,7 @@ SVGでは、要素が文書中に現れた順に描画され、領域が被っ�
 
 <!--more-->
 
-<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.7.11/fabric.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.7.11/fabric.min.js"></script>
 <script type="text/javascript" src="/js/canvas-surface.js"></script>
 
 <a href="/js/canvas-surface.js">コード例</a>

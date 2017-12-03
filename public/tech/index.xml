@@ -241,7 +241,7 @@ SVGで描画するとこんな感じです。&lt;/p&gt;
 
 &lt;p&gt;&lt;/p&gt;
 
-&lt;script type=&#34;text/javascript&#34; src=&#34;http://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.7.11/fabric.min.js&#34;&gt;&lt;/script&gt;
+&lt;script type=&#34;text/javascript&#34; src=&#34;https://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.7.11/fabric.min.js&#34;&gt;&lt;/script&gt;
 &lt;script type=&#34;text/javascript&#34; src=&#34;https://tmrtmhr.info/js/canvas-surface.js&#34;&gt;&lt;/script&gt;
 
 &lt;p&gt;&lt;a href=&#34;https://tmrtmhr.info/js/canvas-surface.js&#34;&gt;コード例&lt;/a&gt;&lt;/p&gt;
