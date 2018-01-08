@@ -19,8 +19,8 @@ date = "2017-03-14T17:03:40+09:00"
 * 2018/01/08 追記:
 
 Certificate Manager で SSL証明書を取得する際、
-メールではなく DNS レコードによってドメイン所有を検証することが可能になっていました。
-([Use DNS to Validate Domain Ownership](https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-validate-dns.html))
+メールではなく DNS レコードによってドメイン所有を検証することが可能になっていました
+([Use DNS to Validate Domain Ownership](https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-validate-dns.html))。
 なので SES の設定は不要かと思います。
 
 <!--more-->

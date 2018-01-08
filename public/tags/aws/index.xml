@@ -521,8 +521,8 @@ JSON を構築することにします。&lt;/p&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;Certificate Manager で SSL証明書を取得する際、
-メールではなく DNS レコードによってドメイン所有を検証することが可能になっていました。
-(&lt;a href=&#34;https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-validate-dns.html&#34;&gt;Use DNS to Validate Domain Ownership&lt;/a&gt;)
+メールではなく DNS レコードによってドメイン所有を検証することが可能になっていました
+(&lt;a href=&#34;https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-validate-dns.html&#34;&gt;Use DNS to Validate Domain Ownership&lt;/a&gt;)。
 なので SES の設定は不要かと思います。&lt;/p&gt;
 
 &lt;p&gt;&lt;/p&gt;
