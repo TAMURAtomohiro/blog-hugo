@@ -44,7 +44,7 @@ ga('send', 'pageview');
 
 
 	<main role="main">
-    
+
     
 
     <div class="row">
@@ -58,9 +58,9 @@ ga('send', 'pageview');
               </div>
             </div>
           </div>
-            
+
           <div class="card-content castaway-card-summary blue-grey-text">
-            
+
             <div class="row">
               <div class="col castaway-date-published">
                 <span>公開日: </span>
@@ -82,20 +82,7 @@ ga('send', 'pageview');
                 
               </div>
             </div>
-            <p>HTML要素をドラッグアンドドロップ(以降 D&amp;D)で移動させようと思ったときは、
-対象要素に対する <code>mousedown</code>、<code>mousemove</code>、<code>mouseup</code> のイベントを使って実装するかと思います。</p>
-
-<p>しかしながらウィンドウ外では対象要素の <code>mouseup</code> を捕捉できないため、
-単純な実装ではウィンドウ外でD&amp;Dをやめて戻った際、再度クリックなどして<code>mouseup</code>が発生するまで要素が追従してしまいます。</p>
-
-<p>本記事では以下の挙動を <a href="https://github.com/ReactiveX/rxjs">RxJS</a> で実装してみた例です。</p>
-
-<ul>
-<li>D&amp;D 終了時は初期位置に移動する</li>
-<li>ウィンドウ外で D&amp;D 終了(<code>mouseup</code>)を検知する</li>
-</ul>
-
-<p></p>
+            
           </div>
 
           <div class="card-action castaway-card-footer">
@@ -104,7 +91,7 @@ ga('send', 'pageview');
 		    </article>
       </div>
     </div>
-      
+
     
 
 	</main>

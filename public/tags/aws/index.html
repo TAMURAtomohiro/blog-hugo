@@ -44,7 +44,7 @@ ga('send', 'pageview');
 
 
 	<main role="main">
-    
+
     
 
     <div class="row">
@@ -58,9 +58,9 @@ ga('send', 'pageview');
               </div>
             </div>
           </div>
-            
+
           <div class="card-content castaway-card-summary blue-grey-text">
-            
+
             <div class="row">
               <div class="col castaway-date-published">
                 <span>公開日: </span>
@@ -82,21 +82,7 @@ ga('send', 'pageview');
                 
               </div>
             </div>
-            <p>AWS Lambda 上で、署名された XML 文書の検証をしたい、とふと思いました。
-もっと言うと SAML2 のサービスプロバイダとして AuthResponse の検証を
-サーバレスでやってみよう、というところから出発して、
-まずは XML 文書の署名が検証できないことにはお話になりませんね、ということです。</p>
-
-<p>本記事は以下のことをやるための手順メモです。</p>
-
-<ul>
-<li><a href="https://github.com/apex/apex">apex</a>、<a href="https://github.com/apex/go-apex">go-apex</a>、<a href="https://github.com/crewjam/go-xmlsec">go-xmlsec</a> を使って GO 言語でプログラムを書く</li>
-<li>xmlsec を静的リンクしたバイナリを作る</li>
-</ul>
-
-<p>より一般的には、AWS Lambda の実行環境に入っていないネイティブライブラリを使いたい場合は静的リンクして持ち込む、という話です。</p>
-
-<p></p>
+            
           </div>
 
           <div class="card-action castaway-card-footer">
@@ -105,7 +91,7 @@ ga('send', 'pageview');
 		    </article>
       </div>
     </div>
-      
+
     
 
     <div class="row">
@@ -119,9 +105,9 @@ ga('send', 'pageview');
               </div>
             </div>
           </div>
-            
+
           <div class="card-content castaway-card-summary blue-grey-text">
-            
+
             <div class="row">
               <div class="col castaway-date-published">
                 <span>公開日: </span>
@@ -137,27 +123,7 @@ ga('send', 'pageview');
                 
               </div>
             </div>
-            <p>発端は S3 バケット間を <code>sync</code> したいという要件です。
-基本は日次実行ですが、アドホックな実行もサポートしたいので、
-コピー元の特定ファイルアップロードをトリガーに Lambda で <code>aws s3 sync</code> できるとうれしいのです。</p>
-
-<p>AWS Lambda の実行環境には AWS CLI が用意されていません。
-まあ外部プロセス呼び出しでコマンドを実行して……とかやろうとするためには
-実行環境に何のコマンドが入っているか気にかけなければいけなくなるので、
-自分たちの機能コードだけ持ちこめばいいという Lambda の思想にも反すると思います。
-コンテナも肥大化しますし。
-そんなわけで AWS Lambda の実行環境に AWS CLI が用意されることは将来的にも望み薄でしょう。</p>
-
-<p>じゃあ SDK で実装するか……とざっと調べたところ AWS SDK には <code>s3 sync</code> がありません(ないよね？)。
-したがって、差分だけアップロードするとか、コピー元で削除されているものはコピー先でも削除するなどの機能は、
-SDK を使って自分たちで再実装するなどしないといけません。</p>
-
-<p>それはちょっとねぇ……というわけで紆余曲折あって作成した AWS Lambda 上で AWS CLI を実行できるパッケージ(<a href="https://github.com/tmrtmhr/awscli-on-lambda">awscli-on-lambda</a>)を置いておきます。</p>
-
-<p>注意点ですが、このパッケージは Lambda の実行環境が変更されることでいきなり動かなくなる可能性があります。
-たとえば、<code>aws</code> コマンドが <code>/usr/bin/python</code> を見に行くため、このへんを変更されるとアウトです。</p>
-
-<p></p>
+            
           </div>
 
           <div class="card-action castaway-card-footer">
@@ -166,7 +132,7 @@ SDK を使って自分たちで再実装するなどしないといけません�
 		    </article>
       </div>
     </div>
-      
+
     
 
     <div class="row">
@@ -180,9 +146,9 @@ SDK を使って自分たちで再実装するなどしないといけません�
               </div>
             </div>
           </div>
-            
+
           <div class="card-content castaway-card-summary blue-grey-text">
-            
+
             <div class="row">
               <div class="col castaway-date-published">
                 <span>公開日: </span>
@@ -204,27 +170,7 @@ SDK を使って自分たちで再実装するなどしないといけません�
                 
               </div>
             </div>
-            <p>静的コンテンツについては S3 だけでサーブできます。
-ですので、たとえば<a href="https://angular.io/">Angular</a>で作成したフロントエンドのコードは S3 に置けばいいよ、という話になります。</p>
-
-<p>しかし Single Page Application の場合、表示内容とともに URL を書き換えます。
-なので <code>https://example.com/blog</code> のような URL でページが表示されていたとしても、
-対応するファイルがないためブラウザリロードすると <code>404</code> エラーになってしまいます。
-認証が必要で、別ページに callback URL を持って遷移して認証後に戻ってくる、みたいなケースでもこのことが問題になります。</p>
-
-<p>調べてみると以下のやり方が良いようです。</p>
-
-<ul>
-<li>CloudFront のカスタムエラーレスポンスで、S3 の <code>404</code> エラーに対し <code>/index.html</code> へ転送するよう設定する</li>
-</ul>
-
-<p>英語ですが、以下のブログにスクリーンショット付きで手順が載っていました。</p>
-
-<ul>
-<li>参考：<a href="https://keita.blog/2015/11/24/hosting-a-single-page-app-on-s3-with-proper-urls/">Hosting a Single-Page App on S3, with proper URLs</a></li>
-</ul>
-
-<p></p>
+            
           </div>
 
           <div class="card-action castaway-card-footer">
@@ -233,7 +179,7 @@ SDK を使って自分たちで再実装するなどしないといけません�
 		    </article>
       </div>
     </div>
-      
+
     
 
     <div class="row">
@@ -247,9 +193,9 @@ SDK を使って自分たちで再実装するなどしないといけません�
               </div>
             </div>
           </div>
-            
+
           <div class="card-content castaway-card-summary blue-grey-text">
-            
+
             <div class="row">
               <div class="col castaway-date-published">
                 <span>公開日: </span>
@@ -271,14 +217,7 @@ SDK を使って自分たちで再実装するなどしないといけません�
                 
               </div>
             </div>
-            <p>AWS DynamoDB では指定した IO 性能に応じて料金が発生するため、
-クエリなどで使用しないプロパティについては gzip 圧縮などを施してバイナリデータとして格納したほうが、
-必要な IO 性能が少なくなるためお得です(参考：<a href="http://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/GuidelinesForItems.html#GuidelinesForItems.CompressingLargeAttributeValues">大量の属性値を圧縮する</a>)。</p>
-
-<p>本記事は、AWS Lambda (Node.js 6.10) から DynamoDB のデータを取得し、
-展開する処理のメモです。</p>
-
-<p></p>
+            
           </div>
 
           <div class="card-action castaway-card-footer">
@@ -287,7 +226,7 @@ SDK を使って自分たちで再実装するなどしないといけません�
 		    </article>
       </div>
     </div>
-      
+
     
 
     <div class="row">
@@ -301,9 +240,9 @@ SDK を使って自分たちで再実装するなどしないといけません�
               </div>
             </div>
           </div>
-            
+
           <div class="card-content castaway-card-summary blue-grey-text">
-            
+
             <div class="row">
               <div class="col castaway-date-published">
                 <span>公開日: </span>
@@ -337,33 +276,7 @@ SDK を使って自分たちで再実装するなどしないといけません�
                 
               </div>
             </div>
-            <p>AWS CLI によりコマンドラインから制御したりする際、リクエストパラメータとして JSON ファイルが必要になることがあります。
-<a href="https://tmrtmhr.info/tech/aws/delete-updated-file-cache-on-cloudfront/">CloudFront のキャッシュを削除したいとき</a>なんかがそうです。</p>
-
-<p>AWS CLI のコマンドごとに、リクエストJSONを生成する専用スクリプトを書くという手もありますが、
-シェル上でパイプやらリダイレクトやらを駆使していい感じに JSON を生成できるある程度汎用的なスクリプトにならんものか、
-という思いから試してみた結果をここに記します。
-どこかに既にあるものでしたらすみません。</p>
-
-<p>コマンド引数は以下のようになっていて、JSON ファイルは標準入力から与えます。</p>
-
-<pre><code>filljson ${入力の型} ${キーパス} ${入力ファイル名}
-</code></pre>
-
-<p>標準入出力で JSON をやりとりするので以下のようにパイプでつなげることで
-中間ファイルを作ることなく最終的なリクエスト JSON が得られます。
-入力ファイル名のところには <code>bash</code> や <code>zsh</code> のプロセス置換機能を利用しています。
-プロセス置換機能を使うとプログラム側からは単にファイルパスが渡ってくるように見えるので、
-ファイルIOとして処理すればOKです。</p>
-
-<pre><code>cat json/cloudfront-invalidation.json |
-  filljson int InvalidationBatch.Paths.Quantity &lt;(git diff --ignore-all-space --diff-filter=M --name-only HEAD^ HEAD  public | wc -l) |
-  filljson [string] InvalidationBatch.Paths.Items &lt;(git diff --ignore-all-space --diff-filter=M --name-only HEAD^ HEAD  public | sed -e 's/^public//g') |
-  filljson string InvalidationBatch.CallerReference &lt;(date +&quot;osone3-%Y/%m/%d-%H:%k:%m&quot; | tr -d '\n') |
-  jq . &gt; request.json
-</code></pre>
-
-<p></p>
+            
           </div>
 
           <div class="card-action castaway-card-footer">
@@ -372,7 +285,7 @@ SDK を使って自分たちで再実装するなどしないといけません�
 		    </article>
       </div>
     </div>
-      
+
     
 
     <div class="row">
@@ -386,9 +299,9 @@ SDK を使って自分たちで再実装するなどしないといけません�
               </div>
             </div>
           </div>
-            
+
           <div class="card-content castaway-card-summary blue-grey-text">
-            
+
             <div class="row">
               <div class="col castaway-date-published">
                 <span>公開日: </span>
@@ -410,23 +323,7 @@ SDK を使って自分たちで再実装するなどしないといけません�
                 
               </div>
             </div>
-            <p>本サイトは Hugo で生成したものを GitHub Pages に push して公開し、
-CloudFront を利用して配信しています。
-CloudFront はキャッシュサーバとして働くので、
-何もしなければ TTL が切れるまでは古いコンテンツが表示されます。</p>
-
-<p>単純にキャッシュ全削除という手もありますが、
-せっかくなので更新のあったファイルのみキャッシュを削除してみました。</p>
-
-<p>やっていることは以下のような感じです。</p>
-
-<ul>
-<li><code>git diff</code> で更新のあったファイル一覧を取得</li>
-<li>一覧を加工して AWS CLI 用の JSON ファイルを生成</li>
-<li>AWS CLI の <code>aws cloudfront create-invalidation</code> でキャッシュ削除</li>
-</ul>
-
-<p></p>
+            
           </div>
 
           <div class="card-action castaway-card-footer">
@@ -435,7 +332,7 @@ CloudFront はキャッシュサーバとして働くので、
 		    </article>
       </div>
     </div>
-      
+
     
 
     <div class="row">
@@ -449,9 +346,9 @@ CloudFront はキャッシュサーバとして働くので、
               </div>
             </div>
           </div>
-            
+
           <div class="card-content castaway-card-summary blue-grey-text">
-            
+
             <div class="row">
               <div class="col castaway-date-published">
                 <span>公開日: </span>
@@ -467,20 +364,7 @@ CloudFront はキャッシュサーバとして働くので、
                 
               </div>
             </div>
-            <p>せっかくなので本サイトのドメインを AWS Route53 で管理するようにした際のメモです。</p>
-
-<p>やったことは以下の通り。</p>
-
-<ul>
-<li><a href="https://aws.amazon.com/jp/route53/">Route 53</a> でドメインを取得</li>
-<li><a href="https://aws.amazon.com/jp/ses/">SES</a> で対象ドメインのメールアドレスにて受信</li>
-<li><a href="https://aws.amazon.com/jp/certificate-manager/">Certificate Manager</a> で対象ドメインのSSL証明書を取得</li>
-<li><a href="https://aws.amazon.com/jp/cloudfront/">CloudFront</a> に取得したSSL証明書を設定</li>
-</ul>
-
-<p>なお、今のところ CloudFront のオリジンサーバとしては <a href="https://aws.amazon.com/jp/s3/">S3</a> ではなく <a href="https://pages.github.com/">GitHub Pages</a> を使用しています。</p>
-
-<p></p>
+            
           </div>
 
           <div class="card-action castaway-card-footer">
@@ -489,7 +373,7 @@ CloudFront はキャッシュサーバとして働くので、
 		    </article>
       </div>
     </div>
-      
+
     
 
 	</main>

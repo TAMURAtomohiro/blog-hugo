@@ -1,7 +1,7 @@
 {{ partial "header.html" . }}
 
 	<main role="main">
-    
+
     {{ range .Data.Pages }}
 
     <div class="row">
@@ -15,9 +15,9 @@
               </div>
             </div>
           </div>
-            
+
           <div class="card-content castaway-card-summary blue-grey-text">
-            
+
             <div class="row">
               <div class="col castaway-date-published">
                 <span>公開日: </span>
@@ -33,7 +33,7 @@
                 {{ end }}
               </div>
             </div>
-            {{ .Summary }}
+            <!--{{ .Summary }}-->
           </div>
 
           <div class="card-action castaway-card-footer">
@@ -42,7 +42,7 @@
 		    </article>
       </div>
     </div>
-      
+
     {{ end }}
 
 	</main>

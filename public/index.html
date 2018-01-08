@@ -44,7 +44,7 @@ ga('send', 'pageview');
 
 
 	<main role="main">
-    
+
     
 
     <div class="row">
@@ -58,9 +58,9 @@ ga('send', 'pageview');
               </div>
             </div>
           </div>
-            
+
           <div class="card-content castaway-card-summary blue-grey-text">
-            
+
             <div class="row">
               <div class="col castaway-date-published">
                 <span>公開日: </span>
@@ -82,21 +82,7 @@ ga('send', 'pageview');
                 
               </div>
             </div>
-            <p>AWS Lambda 上で、署名された XML 文書の検証をしたい、とふと思いました。
-もっと言うと SAML2 のサービスプロバイダとして AuthResponse の検証を
-サーバレスでやってみよう、というところから出発して、
-まずは XML 文書の署名が検証できないことにはお話になりませんね、ということです。</p>
-
-<p>本記事は以下のことをやるための手順メモです。</p>
-
-<ul>
-<li><a href="https://github.com/apex/apex">apex</a>、<a href="https://github.com/apex/go-apex">go-apex</a>、<a href="https://github.com/crewjam/go-xmlsec">go-xmlsec</a> を使って GO 言語でプログラムを書く</li>
-<li>xmlsec を静的リンクしたバイナリを作る</li>
-</ul>
-
-<p>より一般的には、AWS Lambda の実行環境に入っていないネイティブライブラリを使いたい場合は静的リンクして持ち込む、という話です。</p>
-
-<p></p>
+            
           </div>
 
           <div class="card-action castaway-card-footer">
@@ -105,7 +91,7 @@ ga('send', 'pageview');
 		    </article>
       </div>
     </div>
-      
+
     
 
     <div class="row">
@@ -119,9 +105,9 @@ ga('send', 'pageview');
               </div>
             </div>
           </div>
-            
+
           <div class="card-content castaway-card-summary blue-grey-text">
-            
+
             <div class="row">
               <div class="col castaway-date-published">
                 <span>公開日: </span>
@@ -137,27 +123,7 @@ ga('send', 'pageview');
                 
               </div>
             </div>
-            <p>発端は S3 バケット間を <code>sync</code> したいという要件です。
-基本は日次実行ですが、アドホックな実行もサポートしたいので、
-コピー元の特定ファイルアップロードをトリガーに Lambda で <code>aws s3 sync</code> できるとうれしいのです。</p>
-
-<p>AWS Lambda の実行環境には AWS CLI が用意されていません。
-まあ外部プロセス呼び出しでコマンドを実行して……とかやろうとするためには
-実行環境に何のコマンドが入っているか気にかけなければいけなくなるので、
-自分たちの機能コードだけ持ちこめばいいという Lambda の思想にも反すると思います。
-コンテナも肥大化しますし。
-そんなわけで AWS Lambda の実行環境に AWS CLI が用意されることは将来的にも望み薄でしょう。</p>
-
-<p>じゃあ SDK で実装するか……とざっと調べたところ AWS SDK には <code>s3 sync</code> がありません(ないよね？)。
-したがって、差分だけアップロードするとか、コピー元で削除されているものはコピー先でも削除するなどの機能は、
-SDK を使って自分たちで再実装するなどしないといけません。</p>
-
-<p>それはちょっとねぇ……というわけで紆余曲折あって作成した AWS Lambda 上で AWS CLI を実行できるパッケージ(<a href="https://github.com/tmrtmhr/awscli-on-lambda">awscli-on-lambda</a>)を置いておきます。</p>
-
-<p>注意点ですが、このパッケージは Lambda の実行環境が変更されることでいきなり動かなくなる可能性があります。
-たとえば、<code>aws</code> コマンドが <code>/usr/bin/python</code> を見に行くため、このへんを変更されるとアウトです。</p>
-
-<p></p>
+            
           </div>
 
           <div class="card-action castaway-card-footer">
@@ -166,7 +132,7 @@ SDK を使って自分たちで再実装するなどしないといけません�
 		    </article>
       </div>
     </div>
-      
+
     
 
     <div class="row">
@@ -180,9 +146,9 @@ SDK を使って自分たちで再実装するなどしないといけません�
               </div>
             </div>
           </div>
-            
+
           <div class="card-content castaway-card-summary blue-grey-text">
-            
+
             <div class="row">
               <div class="col castaway-date-published">
                 <span>公開日: </span>
@@ -204,27 +170,7 @@ SDK を使って自分たちで再実装するなどしないといけません�
                 
               </div>
             </div>
-            <p>静的コンテンツについては S3 だけでサーブできます。
-ですので、たとえば<a href="https://angular.io/">Angular</a>で作成したフロントエンドのコードは S3 に置けばいいよ、という話になります。</p>
-
-<p>しかし Single Page Application の場合、表示内容とともに URL を書き換えます。
-なので <code>https://example.com/blog</code> のような URL でページが表示されていたとしても、
-対応するファイルがないためブラウザリロードすると <code>404</code> エラーになってしまいます。
-認証が必要で、別ページに callback URL を持って遷移して認証後に戻ってくる、みたいなケースでもこのことが問題になります。</p>
-
-<p>調べてみると以下のやり方が良いようです。</p>
-
-<ul>
-<li>CloudFront のカスタムエラーレスポンスで、S3 の <code>404</code> エラーに対し <code>/index.html</code> へ転送するよう設定する</li>
-</ul>
-
-<p>英語ですが、以下のブログにスクリーンショット付きで手順が載っていました。</p>
-
-<ul>
-<li>参考：<a href="https://keita.blog/2015/11/24/hosting-a-single-page-app-on-s3-with-proper-urls/">Hosting a Single-Page App on S3, with proper URLs</a></li>
-</ul>
-
-<p></p>
+            
           </div>
 
           <div class="card-action castaway-card-footer">
@@ -233,7 +179,7 @@ SDK を使って自分たちで再実装するなどしないといけません�
 		    </article>
       </div>
     </div>
-      
+
     
 
     <div class="row">
@@ -247,9 +193,9 @@ SDK を使って自分たちで再実装するなどしないといけません�
               </div>
             </div>
           </div>
-            
+
           <div class="card-content castaway-card-summary blue-grey-text">
-            
+
             <div class="row">
               <div class="col castaway-date-published">
                 <span>公開日: </span>
@@ -277,14 +223,7 @@ SDK を使って自分たちで再実装するなどしないといけません�
                 
               </div>
             </div>
-            <p><a href="https://github.com/mgechev/angular-seed">angular-seed</a>では、
-デフォルトで <code>Chrome</code> を使って Unit Test を動かすよう設定されていますが、
-BitBucket Pipelines の環境には Chrome がインストールされていないので、
-<code>PhantomJS</code> で実行するよう修正する必要があります。</p>
-
-<p>本記事はそのためのメモです。</p>
-
-<p></p>
+            
           </div>
 
           <div class="card-action castaway-card-footer">
@@ -293,7 +232,7 @@ BitBucket Pipelines の環境には Chrome がインストールされていな�
 		    </article>
       </div>
     </div>
-      
+
     
 
     <div class="row">
@@ -307,9 +246,9 @@ BitBucket Pipelines の環境には Chrome がインストールされていな�
               </div>
             </div>
           </div>
-            
+
           <div class="card-content castaway-card-summary blue-grey-text">
-            
+
             <div class="row">
               <div class="col castaway-date-published">
                 <span>公開日: </span>
@@ -325,26 +264,7 @@ BitBucket Pipelines の環境には Chrome がインストールされていな�
                 
               </div>
             </div>
-            <p>しばらくぶりに ElasticSearch を触ることになったため、以前 Docker コンテナで作ってあった環境を見直してみました。
-すると ElasticSearch + Kibana の新バージョンとして 5.5.2 が出ていたので、
-せっかくなので更新するかとバージョンを上げてみたところ素直に動作しませんでした。</p>
-
-<p>結論から言えば ElasticSearch + Kibana に起因するものではなく、
-<code>docker-compose.yml</code> のコンテナ間ネットワークの設定を間違えたことが原因です。</p>
-
-<p>結論としては以下のような感じです。</p>
-
-<ul>
-<li>5.3.0 の頃にあった <code>links</code> によるコンテナ間接続は不要</li>
-<li><code>networks</code> 指定により ElasticSearch と Kibana コンテナを同一ネットワークに置く</li>
-</ul>
-
-<p>公式ドキュメント(<a href="https://www.elastic.co/guide/en/elasticsearch/reference/5.5/docker.html">Install Elasticsearch with Docker</a>)を見て
-ElasticSearch の設定だけを修正しても動かないので注意してください。</p>
-
-<p>最終的な <code>docker-compose.yml</code> については <a href="http://christina04.hatenablog.com/entry/2017/04/12/013556">docker-compose で Kibana 5.x を使う</a> を参考にしました。</p>
-
-<p></p>
+            
           </div>
 
           <div class="card-action castaway-card-footer">
@@ -353,7 +273,7 @@ ElasticSearch の設定だけを修正しても動かないので注意してく
 		    </article>
       </div>
     </div>
-      
+
     
 
     <div class="row">
@@ -367,9 +287,9 @@ ElasticSearch の設定だけを修正しても動かないので注意してく
               </div>
             </div>
           </div>
-            
+
           <div class="card-content castaway-card-summary blue-grey-text">
-            
+
             <div class="row">
               <div class="col castaway-date-published">
                 <span>公開日: </span>
@@ -385,27 +305,7 @@ ElasticSearch の設定だけを修正しても動かないので注意してく
                 
               </div>
             </div>
-            <p>「プログラミング言語 Go」の練習問題に <code>sin(r) / r</code> で表される面を描画するというものがあります(ここで、<code>r</code>は原点からの距離)。
-SVGで描画するとこんな感じです。</p>
-
-<p><img src="/img/surface-mono.svg"></img></p>
-
-<p>基本的には原点から離れるほど振幅が小さくなりますが、<code>r &lt; 1</code> の部分では大きくなるという図です。</p>
-
-<p>SVGでは、要素が文書中に現れた順に描画され、領域が被っていれば上書きされます。
-ここではこれを利用して、奥側のポリゴンからSVG上に配置することで、手前の高くなっている部分が奥側を上書きするようにし、
-立体的に描画しています。</p>
-
-<p>本記事は同じことを HTML5 の Canvas でやってみたサンプルです(<code>Fabric.js</code>を利用してます)。</p>
-
-<p>知見としては以下のような感じです。</p>
-
-<ul>
-<li>1個ずつ <code>canvas.add</code> すると重い</li>
-<li><code>canvas.add.apply(canvas, polygons)</code> のようにまとめて <code>apply</code> で描画するときは配列の長さに注意するべし</li>
-</ul>
-
-<p></p>
+            
           </div>
 
           <div class="card-action castaway-card-footer">
@@ -414,7 +314,7 @@ SVGで描画するとこんな感じです。</p>
 		    </article>
       </div>
     </div>
-      
+
     
 
     <div class="row">
@@ -428,9 +328,9 @@ SVGで描画するとこんな感じです。</p>
               </div>
             </div>
           </div>
-            
+
           <div class="card-content castaway-card-summary blue-grey-text">
-            
+
             <div class="row">
               <div class="col castaway-date-published">
                 <span>公開日: </span>
@@ -446,31 +346,7 @@ SVGで描画するとこんな感じです。</p>
                 
               </div>
             </div>
-            <p>以下のようなコードで <code>interface{}</code> に対し数値を読み込んだ際、
-数値の型は <code>float64</code> になります。
-(参考: <a href="https://golang.org/pkg/encoding/json/#Unmarshal">公式ドキュメント</a>)</p>
-
-<pre><code>var got []interface{}
-json.Unmarshal([]byte(&quot;[1,2,null]&quot;, &amp;got)
-</code></pre>
-
-<p>しかし、これをテストするために比較対象のデータをリテラルとして用意すると、</p>
-
-<pre><code>want := []interface{}{1,2,nil}
-</code></pre>
-
-<p>定数のデフォルト型の宿命で数値の型が <code>int</code> になってしまうため、<code>reflect.DeepEqual</code> などの比較において失敗してしまいます。</p>
-
-<h1 id="解決策">解決策</h1>
-
-<p>解決策としては以下の2つかな、と考えており、(2)のほうは煩雑なので今のところ(1)でやっています。</p>
-
-<ol>
-<li>テストデータも <code>json.Unmarshal</code> で作る</li>
-<li>明示的に <code>float64(1)</code> として変換する</li>
-</ol>
-
-<p></p>
+            
           </div>
 
           <div class="card-action castaway-card-footer">
@@ -479,7 +355,7 @@ json.Unmarshal([]byte(&quot;[1,2,null]&quot;, &amp;got)
 		    </article>
       </div>
     </div>
-      
+
     
 
     <div class="row">
@@ -493,9 +369,9 @@ json.Unmarshal([]byte(&quot;[1,2,null]&quot;, &amp;got)
               </div>
             </div>
           </div>
-            
+
           <div class="card-content castaway-card-summary blue-grey-text">
-            
+
             <div class="row">
               <div class="col castaway-date-published">
                 <span>公開日: </span>
@@ -511,32 +387,7 @@ json.Unmarshal([]byte(&quot;[1,2,null]&quot;, &amp;got)
                 
               </div>
             </div>
-            <p>JavaScript では以下のように数値のプロパティを参照することはできません。</p>
-
-<pre><code class="language-javascript">0.foo
-// 構文エラー
-</code></pre>
-
-<p>変数に入れると構文上は正しいため参照できます。</p>
-
-<pre><code class="language-javascript">var x = 0;
-console.log(x.foo);
-// =&gt; undefined
-</code></pre>
-
-<p>あるいは文字列の <code>length</code> プロパティを参照することも。</p>
-
-<pre><code class="language-javascript">&quot;bar&quot;.length
-// =&gt; 3
-</code></pre>
-
-<p>しかしながらプリミティブ値はオブジェクトではないため、プロパティもプロトタイプチェーンもありません。
-ではプリミティブ値のプロパティにアクセスしようとしたときに何が起こるかというと、
-<code>Number</code> などの対応するオブジェクトが生成されます。</p>
-
-<p>本記事は、この挙動が言語仕様のどの部分で言及されているのかのメモです。</p>
-
-<p></p>
+            
           </div>
 
           <div class="card-action castaway-card-footer">
@@ -545,7 +396,7 @@ console.log(x.foo);
 		    </article>
       </div>
     </div>
-      
+
     
 
     <div class="row">
@@ -559,9 +410,9 @@ console.log(x.foo);
               </div>
             </div>
           </div>
-            
+
           <div class="card-content castaway-card-summary blue-grey-text">
-            
+
             <div class="row">
               <div class="col castaway-date-published">
                 <span>公開日: </span>
@@ -583,14 +434,7 @@ console.log(x.foo);
                 
               </div>
             </div>
-            <p>AWS DynamoDB では指定した IO 性能に応じて料金が発生するため、
-クエリなどで使用しないプロパティについては gzip 圧縮などを施してバイナリデータとして格納したほうが、
-必要な IO 性能が少なくなるためお得です(参考：<a href="http://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/GuidelinesForItems.html#GuidelinesForItems.CompressingLargeAttributeValues">大量の属性値を圧縮する</a>)。</p>
-
-<p>本記事は、AWS Lambda (Node.js 6.10) から DynamoDB のデータを取得し、
-展開する処理のメモです。</p>
-
-<p></p>
+            
           </div>
 
           <div class="card-action castaway-card-footer">
@@ -599,7 +443,7 @@ console.log(x.foo);
 		    </article>
       </div>
     </div>
-      
+
     
 
     <div class="row">
@@ -613,9 +457,9 @@ console.log(x.foo);
               </div>
             </div>
           </div>
-            
+
           <div class="card-content castaway-card-summary blue-grey-text">
-            
+
             <div class="row">
               <div class="col castaway-date-published">
                 <span>公開日: </span>
@@ -637,13 +481,7 @@ console.log(x.foo);
                 
               </div>
             </div>
-            <h1 id="結論">結論</h1>
-
-<ul>
-<li>Google Chrome の起動オプションに <code>--disable-infobars</code> を渡す</li>
-</ul>
-
-<p></p>
+            
           </div>
 
           <div class="card-action castaway-card-footer">
@@ -652,7 +490,7 @@ console.log(x.foo);
 		    </article>
       </div>
     </div>
-      
+
     
 
     <div class="row">
@@ -666,9 +504,9 @@ console.log(x.foo);
               </div>
             </div>
           </div>
-            
+
           <div class="card-content castaway-card-summary blue-grey-text">
-            
+
             <div class="row">
               <div class="col castaway-date-published">
                 <span>公開日: </span>
@@ -690,20 +528,7 @@ console.log(x.foo);
                 
               </div>
             </div>
-            <p>HTML要素をドラッグアンドドロップ(以降 D&amp;D)で移動させようと思ったときは、
-対象要素に対する <code>mousedown</code>、<code>mousemove</code>、<code>mouseup</code> のイベントを使って実装するかと思います。</p>
-
-<p>しかしながらウィンドウ外では対象要素の <code>mouseup</code> を捕捉できないため、
-単純な実装ではウィンドウ外でD&amp;Dをやめて戻った際、再度クリックなどして<code>mouseup</code>が発生するまで要素が追従してしまいます。</p>
-
-<p>本記事では以下の挙動を <a href="https://github.com/ReactiveX/rxjs">RxJS</a> で実装してみた例です。</p>
-
-<ul>
-<li>D&amp;D 終了時は初期位置に移動する</li>
-<li>ウィンドウ外で D&amp;D 終了(<code>mouseup</code>)を検知する</li>
-</ul>
-
-<p></p>
+            
           </div>
 
           <div class="card-action castaway-card-footer">
@@ -712,7 +537,7 @@ console.log(x.foo);
 		    </article>
       </div>
     </div>
-      
+
     
 
     <div class="row">
@@ -726,9 +551,9 @@ console.log(x.foo);
               </div>
             </div>
           </div>
-            
+
           <div class="card-content castaway-card-summary blue-grey-text">
-            
+
             <div class="row">
               <div class="col castaway-date-published">
                 <span>公開日: </span>
@@ -744,20 +569,7 @@ console.log(x.foo);
                 
               </div>
             </div>
-            <p><a href="http://local.joelonsoftware.com/wiki/%E9%96%93%E9%81%95%E3%81%A3%E3%81%9F%E3%82%B3%E3%83%BC%E3%83%89%E3%81%AF%E9%96%93%E9%81%95%E3%81%A3%E3%81%A6%E8%A6%8B%E3%81%88%E3%82%8B%E3%82%88%E3%81%86%E3%81%AB%E3%81%99%E3%82%8B">間違ったコードは間違って見えるようにする</a>
-で説明されている「アプリケーションハンガリアン記法」とは、</p>
-
-<ul>
-<li>同じデータ型の変数を区別するために、内容を示す名前をつける</li>
-</ul>
-
-<p>というものです。
-先のページで挙げられている例では、行と列の最大値に <code>rowMax</code> <code>colMax</code> と名前をつけることで取り違えを防ぐ、といった感じです。
-これらはともに整数なので相互に代入できてしまいますが、バグなので、命名規則で気づきやすくする、という意図です。</p>
-
-<p>Go 言語では型に別名をつけることができ、コンパイル時の型チェックで違う型として扱われるため、取り違えを防ぐのに有効です。</p>
-
-<p></p>
+            
           </div>
 
           <div class="card-action castaway-card-footer">
@@ -766,7 +578,7 @@ console.log(x.foo);
 		    </article>
       </div>
     </div>
-      
+
     
 
     <div class="row">
@@ -780,9 +592,9 @@ console.log(x.foo);
               </div>
             </div>
           </div>
-            
+
           <div class="card-content castaway-card-summary blue-grey-text">
-            
+
             <div class="row">
               <div class="col castaway-date-published">
                 <span>公開日: </span>
@@ -798,44 +610,7 @@ console.log(x.foo);
                 
               </div>
             </div>
-            <p><a href="http://golang.jp/go_faq#exceptions">Go言語 FAQ</a>より引用すると</p>
-
-<blockquote>
-<p>例外(exception)がない理由は?</p>
-
-<p>我々は、処理構造を制御するためのtry-catch-finally形式の例外処理機構によって、コードが入り組んでしまうと考えています。</p>
-</blockquote>
-
-<p>とのことです。</p>
-
-<p>うーん、これだけじゃよく分かりません。</p>
-
-<p>知りたいのは、</p>
-
-<ul>
-<li>「例外機構が有用な場面」についてGo言語ではどのように対処するのか？
-はたしてGo言語の他の機能を組み合わせることでカバーできるのか？</li>
-<li>「例外機構ではコードが入り組んでしまう」というのはどういうことを指しているのか？</li>
-</ul>
-
-<p>自分の探し方が悪かったら申し訳ないですが、
-講演やら Effective Go やらでこういったことに言及している部分を見つけられなかったので、
-調べた内容と自分の推測をまとめてみます。</p>
-
-<p>結論としては</p>
-
-<ul>
-<li>例外機構が欲しい場面は Go 言語の他の機能でカバーできそう</li>
-<li>例外機構によるエラー返却では、関数の出口が増えるため制御フローが複雑になる</li>
-<li>エラー値返却の手段としての例外機構は、並行プログラムにそぐわない</li>
-</ul>
-
-<p>ということです。</p>
-
-<p>Go言語の他の機能というのは多値返却、<code>goto</code>、<code>defer</code>、<code>panic</code>、<code>recover</code> です。
-具体的にエラーハンドリングのコードがどうなるかについては別の記事にまとめたいです。</p>
-
-<p></p>
+            
           </div>
 
           <div class="card-action castaway-card-footer">
@@ -844,7 +619,7 @@ console.log(x.foo);
 		    </article>
       </div>
     </div>
-      
+
     
 
     <div class="row">
@@ -858,9 +633,9 @@ console.log(x.foo);
               </div>
             </div>
           </div>
-            
+
           <div class="card-content castaway-card-summary blue-grey-text">
-            
+
             <div class="row">
               <div class="col castaway-date-published">
                 <span>公開日: </span>
@@ -876,44 +651,7 @@ console.log(x.foo);
                 
               </div>
             </div>
-            <p>たとえば Haskell では以下のようなデータ型を定義できます。</p>
-
-<pre><code>data Tree = Leaf | Branch Tree Tree
-</code></pre>
-
-<p>C言語で言えばタグ付き共用体(union)のような感じです。</p>
-
-<!-- ``` -->
-
-<!-- union Tree { -->
-
-<!--   struct Leaf { -->
-
-<!--     tag int; -->
-
-<!--   } leaf; -->
-
-<!--   struct Branch { -->
-
-<!--     tag int; -->
-
-<!--     left *Tree; -->
-
-<!--     right *Tree; -->
-
-<!--   } branch; -->
-
-<!-- } -->
-
-<!-- ``` -->
-
-<p>この記事は、こんな感じで木構造などを表現したい時
-Go 言語ではどうするのか？という点について調べてみたメモです。
-結論としては<code>type Tree interface{ ... }</code>を定義します。</p>
-
-<p><code>data Tree a</code> のように汎用的なコンテナを作る方法については言及しません。</p>
-
-<p></p>
+            
           </div>
 
           <div class="card-action castaway-card-footer">
@@ -922,7 +660,7 @@ Go 言語ではどうするのか？という点について調べてみたメ�
 		    </article>
       </div>
     </div>
-      
+
     
 
     <div class="row">
@@ -936,9 +674,9 @@ Go 言語ではどうするのか？という点について調べてみたメ�
               </div>
             </div>
           </div>
-            
+
           <div class="card-content castaway-card-summary blue-grey-text">
-            
+
             <div class="row">
               <div class="col castaway-date-published">
                 <span>公開日: </span>
@@ -972,33 +710,7 @@ Go 言語ではどうするのか？という点について調べてみたメ�
                 
               </div>
             </div>
-            <p>AWS CLI によりコマンドラインから制御したりする際、リクエストパラメータとして JSON ファイルが必要になることがあります。
-<a href="https://tmrtmhr.info/tech/aws/delete-updated-file-cache-on-cloudfront/">CloudFront のキャッシュを削除したいとき</a>なんかがそうです。</p>
-
-<p>AWS CLI のコマンドごとに、リクエストJSONを生成する専用スクリプトを書くという手もありますが、
-シェル上でパイプやらリダイレクトやらを駆使していい感じに JSON を生成できるある程度汎用的なスクリプトにならんものか、
-という思いから試してみた結果をここに記します。
-どこかに既にあるものでしたらすみません。</p>
-
-<p>コマンド引数は以下のようになっていて、JSON ファイルは標準入力から与えます。</p>
-
-<pre><code>filljson ${入力の型} ${キーパス} ${入力ファイル名}
-</code></pre>
-
-<p>標準入出力で JSON をやりとりするので以下のようにパイプでつなげることで
-中間ファイルを作ることなく最終的なリクエスト JSON が得られます。
-入力ファイル名のところには <code>bash</code> や <code>zsh</code> のプロセス置換機能を利用しています。
-プロセス置換機能を使うとプログラム側からは単にファイルパスが渡ってくるように見えるので、
-ファイルIOとして処理すればOKです。</p>
-
-<pre><code>cat json/cloudfront-invalidation.json |
-  filljson int InvalidationBatch.Paths.Quantity &lt;(git diff --ignore-all-space --diff-filter=M --name-only HEAD^ HEAD  public | wc -l) |
-  filljson [string] InvalidationBatch.Paths.Items &lt;(git diff --ignore-all-space --diff-filter=M --name-only HEAD^ HEAD  public | sed -e 's/^public//g') |
-  filljson string InvalidationBatch.CallerReference &lt;(date +&quot;osone3-%Y/%m/%d-%H:%k:%m&quot; | tr -d '\n') |
-  jq . &gt; request.json
-</code></pre>
-
-<p></p>
+            
           </div>
 
           <div class="card-action castaway-card-footer">
@@ -1007,7 +719,7 @@ Go 言語ではどうするのか？という点について調べてみたメ�
 		    </article>
       </div>
     </div>
-      
+
     
 
     <div class="row">
@@ -1021,9 +733,9 @@ Go 言語ではどうするのか？という点について調べてみたメ�
               </div>
             </div>
           </div>
-            
+
           <div class="card-content castaway-card-summary blue-grey-text">
-            
+
             <div class="row">
               <div class="col castaway-date-published">
                 <span>公開日: </span>
@@ -1045,23 +757,7 @@ Go 言語ではどうするのか？という点について調べてみたメ�
                 
               </div>
             </div>
-            <p>本サイトは Hugo で生成したものを GitHub Pages に push して公開し、
-CloudFront を利用して配信しています。
-CloudFront はキャッシュサーバとして働くので、
-何もしなければ TTL が切れるまでは古いコンテンツが表示されます。</p>
-
-<p>単純にキャッシュ全削除という手もありますが、
-せっかくなので更新のあったファイルのみキャッシュを削除してみました。</p>
-
-<p>やっていることは以下のような感じです。</p>
-
-<ul>
-<li><code>git diff</code> で更新のあったファイル一覧を取得</li>
-<li>一覧を加工して AWS CLI 用の JSON ファイルを生成</li>
-<li>AWS CLI の <code>aws cloudfront create-invalidation</code> でキャッシュ削除</li>
-</ul>
-
-<p></p>
+            
           </div>
 
           <div class="card-action castaway-card-footer">
@@ -1070,7 +766,7 @@ CloudFront はキャッシュサーバとして働くので、
 		    </article>
       </div>
     </div>
-      
+
     
 
     <div class="row">
@@ -1084,9 +780,9 @@ CloudFront はキャッシュサーバとして働くので、
               </div>
             </div>
           </div>
-            
+
           <div class="card-content castaway-card-summary blue-grey-text">
-            
+
             <div class="row">
               <div class="col castaway-date-published">
                 <span>公開日: </span>
@@ -1102,20 +798,7 @@ CloudFront はキャッシュサーバとして働くので、
                 
               </div>
             </div>
-            <p>せっかくなので本サイトのドメインを AWS Route53 で管理するようにした際のメモです。</p>
-
-<p>やったことは以下の通り。</p>
-
-<ul>
-<li><a href="https://aws.amazon.com/jp/route53/">Route 53</a> でドメインを取得</li>
-<li><a href="https://aws.amazon.com/jp/ses/">SES</a> で対象ドメインのメールアドレスにて受信</li>
-<li><a href="https://aws.amazon.com/jp/certificate-manager/">Certificate Manager</a> で対象ドメインのSSL証明書を取得</li>
-<li><a href="https://aws.amazon.com/jp/cloudfront/">CloudFront</a> に取得したSSL証明書を設定</li>
-</ul>
-
-<p>なお、今のところ CloudFront のオリジンサーバとしては <a href="https://aws.amazon.com/jp/s3/">S3</a> ではなく <a href="https://pages.github.com/">GitHub Pages</a> を使用しています。</p>
-
-<p></p>
+            
           </div>
 
           <div class="card-action castaway-card-footer">
@@ -1124,7 +807,7 @@ CloudFront はキャッシュサーバとして働くので、
 		    </article>
       </div>
     </div>
-      
+
     
 
     <div class="row">
@@ -1138,9 +821,9 @@ CloudFront はキャッシュサーバとして働くので、
               </div>
             </div>
           </div>
-            
+
           <div class="card-content castaway-card-summary blue-grey-text">
-            
+
             <div class="row">
               <div class="col castaway-date-published">
                 <span>公開日: </span>
@@ -1156,11 +839,7 @@ CloudFront はキャッシュサーバとして働くので、
                 
               </div>
             </div>
-            <p><a href="https://gohugo.io/">Hugo</a> で任意の HTML を生成したい場合は <a href="https://gohugo.io/extras/shortcodes/">ShortCode</a> を書くことになります。</p>
-
-<p>本サイトでは使い道はさておきマテリアルアイコンを読み込んでいるので、
-ShortCode で使えるようにしてみました。
-</p>
+            
           </div>
 
           <div class="card-action castaway-card-footer">
@@ -1169,7 +848,7 @@ ShortCode で使えるようにしてみました。
 		    </article>
       </div>
     </div>
-      
+
     
 
     <div class="row">
@@ -1183,9 +862,9 @@ ShortCode で使えるようにしてみました。
               </div>
             </div>
           </div>
-            
+
           <div class="card-content castaway-card-summary blue-grey-text">
-            
+
             <div class="row">
               <div class="col castaway-date-published">
                 <span>公開日: </span>
@@ -1201,13 +880,7 @@ ShortCode で使えるようにしてみました。
                 
               </div>
             </div>
-            <p>学生時代からの習慣と宗教上の理由から普段使いのエディタは Emacs
-(ここでは <a href="http://emacsformacosx.com/">GNU Emacs for Mac OS X</a>)
-です。</p>
-
-<p>設定ファイルを除いて自分で Emacs Lisp を書いて機能を追加したことはこれまで無かったのですが、
-このたび必要にかられて追加いたしました。
-</p>
+            
           </div>
 
           <div class="card-action castaway-card-footer">
@@ -1216,7 +889,7 @@ ShortCode で使えるようにしてみました。
 		    </article>
       </div>
     </div>
-      
+
     
 
     <div class="row">
@@ -1230,9 +903,9 @@ ShortCode で使えるようにしてみました。
               </div>
             </div>
           </div>
-            
+
           <div class="card-content castaway-card-summary blue-grey-text">
-            
+
             <div class="row">
               <div class="col castaway-date-published">
                 <span>公開日: </span>
@@ -1242,14 +915,7 @@ ShortCode で使えるようにしてみました。
                 
               </div>
             </div>
-            <p><a href="https://angular.io/">Angular2</a>が
-<a href="http://angularjs.blogspot.jp/2015/12/angular-2-beta.html">昨年12月に Beta リリース</a>されたため、
-色々触りながら調べています。</p>
-
-<p>Angular2 の設計ドキュメントのひとつ(<a href="https://docs.google.com/document/d/1kpuR512G1b0D8egl9245OHaG0cFh0ST0ekhD_g8sxtI/edit#heading=h.ptbnyo3pqsmq">Data Binding with Web Components</a>)
-を見かけ、Web Components との併用を考慮しているようだったので、
-使い方を調べてみることにしました。
-</p>
+            
           </div>
 
           <div class="card-action castaway-card-footer">
@@ -1258,7 +924,7 @@ ShortCode で使えるようにしてみました。
 		    </article>
       </div>
     </div>
-      
+
     
 
     <div class="row">
@@ -1272,9 +938,9 @@ ShortCode で使えるようにしてみました。
               </div>
             </div>
           </div>
-            
+
           <div class="card-content castaway-card-summary blue-grey-text">
-            
+
             <div class="row">
               <div class="col castaway-date-published">
                 <span>公開日: </span>
@@ -1290,9 +956,7 @@ ShortCode で使えるようにしてみました。
                 
               </div>
             </div>
-            <p>エンジニア界隈ではどうもブログを作る目的で静的サイトジェネレータというものが使われている、
-と聞いたため、せっかくなので使ってみることにしました。
-</p>
+            
           </div>
 
           <div class="card-action castaway-card-footer">
@@ -1301,7 +965,7 @@ ShortCode で使えるようにしてみました。
 		    </article>
       </div>
     </div>
-      
+
     
 
     <div class="row">
@@ -1315,9 +979,9 @@ ShortCode で使えるようにしてみました。
               </div>
             </div>
           </div>
-            
+
           <div class="card-content castaway-card-summary blue-grey-text">
-            
+
             <div class="row">
               <div class="col castaway-date-published">
                 <span>公開日: </span>
@@ -1333,11 +997,7 @@ ShortCode で使えるようにしてみました。
                 
               </div>
             </div>
-            <p>Smashing Magazine の
-<a href="http://www.smashingmagazine.com/2015/11/modern-static-website-generators-next-big-thing/">Why Static Website Generators Are The Next Big Thing</a>
-という記事を読んでの、自分の理解のためのメモです。
-直訳というわけでもなく、独自研究が含まれる恐れがあります。
-</p>
+            
           </div>
 
           <div class="card-action castaway-card-footer">
@@ -1346,7 +1006,7 @@ ShortCode で使えるようにしてみました。
 		    </article>
       </div>
     </div>
-      
+
     
 
 	</main>

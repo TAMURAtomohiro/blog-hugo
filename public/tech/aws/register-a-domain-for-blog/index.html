@@ -89,6 +89,15 @@ ga('send', 'pageview');
 
 <p>なお、今のところ CloudFront のオリジンサーバとしては <a href="https://aws.amazon.com/jp/s3/">S3</a> ではなく <a href="https://pages.github.com/">GitHub Pages</a> を使用しています。</p>
 
+<ul>
+<li>2018/01/08 追記:</li>
+</ul>
+
+<p>Certificate Manager で SSL証明書を取得する際、
+メールではなく DNS レコードによってドメイン所有を検証することが可能になっていました。
+(<a href="https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-validate-dns.html">Use DNS to Validate Domain Ownership</a>)
+なので SES の設定は不要かと思います。</p>
+
 <p></p>
 
 <h1 id="なぜ-aws-でドメインを取得したか">なぜ AWS でドメインを取得したか</h1>

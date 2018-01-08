@@ -1,8 +1,8 @@
 +++
-date = "2017-03-14T17:03:40+09:00"
 draft = false
 title = "ブログに使うドメインを AWS で取得する"
 tags = ["aws"]
+date = "2017-03-14T17:03:40+09:00"
 +++
 
 せっかくなので本サイトのドメインを AWS Route53 で管理するようにした際のメモです。
@@ -15,6 +15,13 @@ tags = ["aws"]
 * [CloudFront](https://aws.amazon.com/jp/cloudfront/) に取得したSSL証明書を設定
 
 なお、今のところ CloudFront のオリジンサーバとしては [S3](https://aws.amazon.com/jp/s3/) ではなく [GitHub Pages](https://pages.github.com/) を使用しています。
+
+* 2018/01/08 追記:
+
+Certificate Manager で SSL証明書を取得する際、
+メールではなく DNS レコードによってドメイン所有を検証することが可能になっていました。
+([Use DNS to Validate Domain Ownership](https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-validate-dns.html))
+なので SES の設定は不要かと思います。
 
 <!--more-->
 

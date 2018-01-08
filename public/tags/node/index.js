@@ -44,7 +44,7 @@ ga('send', 'pageview');
 
 
 	<main role="main">
-    
+
     
 
     <div class="row">
@@ -58,9 +58,9 @@ ga('send', 'pageview');
               </div>
             </div>
           </div>
-            
+
           <div class="card-content castaway-card-summary blue-grey-text">
-            
+
             <div class="row">
               <div class="col castaway-date-published">
                 <span>公開日: </span>
@@ -82,14 +82,7 @@ ga('send', 'pageview');
                 
               </div>
             </div>
-            <p>AWS DynamoDB では指定した IO 性能に応じて料金が発生するため、
-クエリなどで使用しないプロパティについては gzip 圧縮などを施してバイナリデータとして格納したほうが、
-必要な IO 性能が少なくなるためお得です(参考：<a href="http://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/GuidelinesForItems.html#GuidelinesForItems.CompressingLargeAttributeValues">大量の属性値を圧縮する</a>)。</p>
-
-<p>本記事は、AWS Lambda (Node.js 6.10) から DynamoDB のデータを取得し、
-展開する処理のメモです。</p>
-
-<p></p>
+            
           </div>
 
           <div class="card-action castaway-card-footer">
@@ -98,7 +91,7 @@ ga('send', 'pageview');
 		    </article>
       </div>
     </div>
-      
+
     
 
     <div class="row">
@@ -112,9 +105,9 @@ ga('send', 'pageview');
               </div>
             </div>
           </div>
-            
+
           <div class="card-content castaway-card-summary blue-grey-text">
-            
+
             <div class="row">
               <div class="col castaway-date-published">
                 <span>公開日: </span>
@@ -136,13 +129,7 @@ ga('send', 'pageview');
                 
               </div>
             </div>
-            <h1 id="結論">結論</h1>
-
-<ul>
-<li>Google Chrome の起動オプションに <code>--disable-infobars</code> を渡す</li>
-</ul>
-
-<p></p>
+            
           </div>
 
           <div class="card-action castaway-card-footer">
@@ -151,7 +138,7 @@ ga('send', 'pageview');
 		    </article>
       </div>
     </div>
-      
+
     
 
     <div class="row">
@@ -165,9 +152,9 @@ ga('send', 'pageview');
               </div>
             </div>
           </div>
-            
+
           <div class="card-content castaway-card-summary blue-grey-text">
-            
+
             <div class="row">
               <div class="col castaway-date-published">
                 <span>公開日: </span>
@@ -201,33 +188,7 @@ ga('send', 'pageview');
                 
               </div>
             </div>
-            <p>AWS CLI によりコマンドラインから制御したりする際、リクエストパラメータとして JSON ファイルが必要になることがあります。
-<a href="https://tmrtmhr.info/tech/aws/delete-updated-file-cache-on-cloudfront/">CloudFront のキャッシュを削除したいとき</a>なんかがそうです。</p>
-
-<p>AWS CLI のコマンドごとに、リクエストJSONを生成する専用スクリプトを書くという手もありますが、
-シェル上でパイプやらリダイレクトやらを駆使していい感じに JSON を生成できるある程度汎用的なスクリプトにならんものか、
-という思いから試してみた結果をここに記します。
-どこかに既にあるものでしたらすみません。</p>
-
-<p>コマンド引数は以下のようになっていて、JSON ファイルは標準入力から与えます。</p>
-
-<pre><code>filljson ${入力の型} ${キーパス} ${入力ファイル名}
-</code></pre>
-
-<p>標準入出力で JSON をやりとりするので以下のようにパイプでつなげることで
-中間ファイルを作ることなく最終的なリクエスト JSON が得られます。
-入力ファイル名のところには <code>bash</code> や <code>zsh</code> のプロセス置換機能を利用しています。
-プロセス置換機能を使うとプログラム側からは単にファイルパスが渡ってくるように見えるので、
-ファイルIOとして処理すればOKです。</p>
-
-<pre><code>cat json/cloudfront-invalidation.json |
-  filljson int InvalidationBatch.Paths.Quantity &lt;(git diff --ignore-all-space --diff-filter=M --name-only HEAD^ HEAD  public | wc -l) |
-  filljson [string] InvalidationBatch.Paths.Items &lt;(git diff --ignore-all-space --diff-filter=M --name-only HEAD^ HEAD  public | sed -e 's/^public//g') |
-  filljson string InvalidationBatch.CallerReference &lt;(date +&quot;osone3-%Y/%m/%d-%H:%k:%m&quot; | tr -d '\n') |
-  jq . &gt; request.json
-</code></pre>
-
-<p></p>
+            
           </div>
 
           <div class="card-action castaway-card-footer">
@@ -236,7 +197,7 @@ ga('send', 'pageview');
 		    </article>
       </div>
     </div>
-      
+
     
 
 	</main>

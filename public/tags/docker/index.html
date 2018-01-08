@@ -44,7 +44,7 @@ ga('send', 'pageview');
 
 
 	<main role="main">
-    
+
     
 
     <div class="row">
@@ -58,9 +58,9 @@ ga('send', 'pageview');
               </div>
             </div>
           </div>
-            
+
           <div class="card-content castaway-card-summary blue-grey-text">
-            
+
             <div class="row">
               <div class="col castaway-date-published">
                 <span>公開日: </span>
@@ -76,26 +76,7 @@ ga('send', 'pageview');
                 
               </div>
             </div>
-            <p>しばらくぶりに ElasticSearch を触ることになったため、以前 Docker コンテナで作ってあった環境を見直してみました。
-すると ElasticSearch + Kibana の新バージョンとして 5.5.2 が出ていたので、
-せっかくなので更新するかとバージョンを上げてみたところ素直に動作しませんでした。</p>
-
-<p>結論から言えば ElasticSearch + Kibana に起因するものではなく、
-<code>docker-compose.yml</code> のコンテナ間ネットワークの設定を間違えたことが原因です。</p>
-
-<p>結論としては以下のような感じです。</p>
-
-<ul>
-<li>5.3.0 の頃にあった <code>links</code> によるコンテナ間接続は不要</li>
-<li><code>networks</code> 指定により ElasticSearch と Kibana コンテナを同一ネットワークに置く</li>
-</ul>
-
-<p>公式ドキュメント(<a href="https://www.elastic.co/guide/en/elasticsearch/reference/5.5/docker.html">Install Elasticsearch with Docker</a>)を見て
-ElasticSearch の設定だけを修正しても動かないので注意してください。</p>
-
-<p>最終的な <code>docker-compose.yml</code> については <a href="http://christina04.hatenablog.com/entry/2017/04/12/013556">docker-compose で Kibana 5.x を使う</a> を参考にしました。</p>
-
-<p></p>
+            
           </div>
 
           <div class="card-action castaway-card-footer">
@@ -104,7 +85,7 @@ ElasticSearch の設定だけを修正しても動かないので注意してく
 		    </article>
       </div>
     </div>
-      
+
     
 
 	</main>
