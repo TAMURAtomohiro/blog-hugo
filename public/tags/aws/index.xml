@@ -9,6 +9,31 @@
     <atom:link href="https://tmrtmhr.info/tags/aws/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>API Gateway で 502 Internal Server Error が出たときにすること</title>
+      <link>https://tmrtmhr.info/tech/aws/502-error-on-api-gateway/</link>
+      <pubDate>Sat, 27 Jan 2018 16:54:01 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/aws/502-error-on-api-gateway/</guid>
+      <description>&lt;p&gt;API Gateway にカスタムオーサライザを設定して新しいステージ作って……
+とやっていたときに &amp;ldquo;502 Internal Server Error&amp;rdquo; が出ました。&lt;/p&gt;
+
+&lt;p&gt;こんな時はとりあえずログを見ましょう。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;ステージ選択 &amp;gt; ログ のタブから Cloud Watch ログを有効にして実行ログを出力&lt;/li&gt;
+&lt;li&gt;Cloud Watch のログから &amp;ldquo;API-Gateway-Execution-Logs_xxx&amp;rdquo; という名前のものを見る&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;自分のケースでは、呼ぶ Lambda をステージ変数によって切り替えていましたが、
+新しいステージではこの変数が未設定だったことによりエラーとなっていました。&lt;/p&gt;
+
+&lt;p&gt;まあこういうミスが起こりうるので諸々の作業はなるべく自動化しましょうという戒めとして
+ここにメモしておきます。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
       <title>AWS Lambda で xmlsec を利用する</title>
       <link>https://tmrtmhr.info/tech/aws/using-xmlsec-on-lambda/</link>
       <pubDate>Sun, 03 Dec 2017 16:41:17 +0900</pubDate>
@@ -523,7 +548,7 @@ JSON を構築することにします。&lt;/p&gt;
 &lt;p&gt;Certificate Manager で SSL証明書を取得する際、
 メールではなく DNS レコードによってドメイン所有を検証することが可能になっていました
 (&lt;a href=&#34;https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-validate-dns.html&#34;&gt;Use DNS to Validate Domain Ownership&lt;/a&gt;)。
-なので SES の設定は不要かと思います。&lt;/p&gt;
+なので SSL 証明書の取得の際には SES の設定が不要になっています。&lt;/p&gt;
 
 &lt;p&gt;&lt;/p&gt;
 
@@ -573,6 +598,10 @@ Certificate Manager でもドメイン認証のためにメールが発信され
 
 &lt;p&gt;管理者情報を秘匿した場合は &lt;code&gt;whois&lt;/code&gt; で取得できるメールアドレスがドメインレジストラのものになりますので、
 (2)のアドレスのどれかを登録しておきます。&lt;/p&gt;
+
+&lt;h1 id=&#34;ses-でメールを受信するための-mx-レコードについて&#34;&gt;SES でメールを受信するための MX レコードについて&lt;/h1&gt;
+
+&lt;p&gt;たとえばオレゴンの場合、MX レコードとして &lt;code&gt;10 inbound-smtp.us-west-2.amazonaws.com&lt;/code&gt; を登録します。&lt;/p&gt;
 
 &lt;h1 id=&#34;ses-で受信したメールに対するアクションについて&#34;&gt;SES で受信したメールに対するアクションについて&lt;/h1&gt;
 

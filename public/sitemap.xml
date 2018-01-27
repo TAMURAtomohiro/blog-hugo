@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://tmrtmhr.info/tech/aws/502-error-on-api-gateway/</loc>
+    <lastmod>2018-01-27T16:54:01+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://tmrtmhr.info/tech/aws/using-xmlsec-on-lambda/</loc>
     <lastmod>2017-12-03T16:41:17+09:00</lastmod>
   </url>
@@ -119,7 +124,7 @@
   
   <url>
     <loc>https://tmrtmhr.info/tags/aws/</loc>
-    <lastmod>2017-12-03T16:41:17+09:00</lastmod>
+    <lastmod>2018-01-27T16:54:01+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -190,7 +195,7 @@
   
   <url>
     <loc>https://tmrtmhr.info/tech/</loc>
-    <lastmod>2017-12-03T16:41:17+09:00</lastmod>
+    <lastmod>2018-01-27T16:54:01+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -202,7 +207,7 @@
   
   <url>
     <loc>https://tmrtmhr.info/</loc>
-    <lastmod>2017-12-03T16:41:17+09:00</lastmod>
+    <lastmod>2018-01-27T16:54:01+09:00</lastmod>
     <priority>0</priority>
   </url>
   

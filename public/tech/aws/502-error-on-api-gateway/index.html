@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.18.1" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+
+  
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+
+<link rel="stylesheet" href="/css/base.css">
+
+<link rel="alternate" href="/index.xml" type="application/rss+xml" title="嵐の小舟より">
+<title>API Gateway で 502 Internal Server Error が出たときにすること - 嵐の小舟より</title>
+</head>
+<body>
+  
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-92780964-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+  <div class="">
+  <header class="castaway-header-bar">
+    <nav>
+      <div class="nav-wrapper castaway-site-logo">
+        <div>
+          <a href="/" class="brand-logo right">
+            <i class="material-icons" style="margin-right: 5px;">rowing</i>
+            <span class="castaway-site-title">嵐の小舟より</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+
+<section id="main">
+  <div class="row">
+    <div class="col s12 m12 l6 offset-l3">
+
+      <article itemscope itemtype="http://schema.org/Blog" class="card castaway-card">
+
+        <div class="card-title indigo darken-3 castaway-card-title">
+          <div class="card-content">
+            <div class="white-text" itemprop="headline">
+              API Gateway で 502 Internal Server Error が出たときにすること
+            </div>
+          </div>
+        </div>
+
+        <div class="card-content">
+          <div class="row">
+            <div class="castaway-date-published">
+              <span>公開日：</span>
+              <i class="material-icons" style="vertical-align: middle;">today</i>
+              <time itemprop="datePublished" datetime="2018-01-27">2018/01/27</time>
+              <span style="margin-left: 10px;"> タグ: </span>
+              
+              <a href="/tags/aws">
+                <div class="tag-aws waves-effect waves-teal chip">
+                  aws
+                </div>
+              </a>
+              
+            </div>
+          </div>
+          
+          
+          <div class="castaway-card-content mdl-card__supporting-text mdl-color-text--grey-700">
+            <p>API Gateway にカスタムオーサライザを設定して新しいステージ作って……
+とやっていたときに &ldquo;502 Internal Server Error&rdquo; が出ました。</p>
+
+<p>こんな時はとりあえずログを見ましょう。</p>
+
+<ol>
+<li>ステージ選択 &gt; ログ のタブから Cloud Watch ログを有効にして実行ログを出力</li>
+<li>Cloud Watch のログから &ldquo;API-Gateway-Execution-Logs_xxx&rdquo; という名前のものを見る</li>
+</ol>
+
+<p>自分のケースでは、呼ぶ Lambda をステージ変数によって切り替えていましたが、
+新しいステージではこの変数が未設定だったことによりエラーとなっていました。</p>
+
+<p>まあこういうミスが起こりうるので諸々の作業はなるべく自動化しましょうという戒めとして
+ここにメモしておきます。</p>
+
+<p></p>
+          </div>
+        </div>
+          
+          <div class="card-action castaway-card-footer">
+            <a class="btn waves-effect waves-light" href="/">サイトトップ</a>
+          </div>            
+
+      </article>
+        
+    </div>
+
+    </div>
+  </div>
+</section>
+
+
+</div>
+</body>
+</html>
+

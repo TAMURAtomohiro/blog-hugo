@@ -96,7 +96,7 @@ ga('send', 'pageview');
 <p>Certificate Manager で SSL証明書を取得する際、
 メールではなく DNS レコードによってドメイン所有を検証することが可能になっていました
 (<a href="https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-validate-dns.html">Use DNS to Validate Domain Ownership</a>)。
-なので SES の設定は不要かと思います。</p>
+なので SSL 証明書の取得の際には SES の設定が不要になっています。</p>
 
 <p></p>
 
@@ -146,6 +146,10 @@ Certificate Manager でもドメイン認証のためにメールが発信され
 
 <p>管理者情報を秘匿した場合は <code>whois</code> で取得できるメールアドレスがドメインレジストラのものになりますので、
 (2)のアドレスのどれかを登録しておきます。</p>
+
+<h1 id="ses-でメールを受信するための-mx-レコードについて">SES でメールを受信するための MX レコードについて</h1>
+
+<p>たとえばオレゴンの場合、MX レコードとして <code>10 inbound-smtp.us-west-2.amazonaws.com</code> を登録します。</p>
 
 <h1 id="ses-で受信したメールに対するアクションについて">SES で受信したメールに対するアクションについて</h1>
 
