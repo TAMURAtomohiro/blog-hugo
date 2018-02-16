@@ -1,5 +1,5 @@
 +++
-date = "2018-01-24T00:47:24+09:00"
+date = "2018-02-06T12:38:14+09:00"
 draft = true
 title = "Unity メモ"
 tags = ["Unity"]
@@ -83,3 +83,14 @@ https://qiita.com/lycoris102/items/1c792c4ba78e564a1b21
 # Tango で DynamicMesh を追加
 TangoManager で Enable 3D Reconstraction を ON
 サンプルの DynamicMesh GameObject をコピーして Scene に追加する
+
+[UnityでUIを消したスクリーンショットを撮る方法](https://qiita.com/SARU_KABUTO/items/5a7d5178797614df896b)
+
+[yield return null と WaitForEndOfFrame の違い](http://robamemo.hatenablog.com/entry/2017/09/13/111843)
+[【Unityシェーダ入門】円やリングをかっこよく動かす方法](http://nn-hokuson.hatenablog.com/entry/2016/11/14/203745)
+
+[floatの値が0〜1の範囲内に収まっているかif文を使わずに判断する](http://ina-amagami.hatenablog.jp/entry/2016/10/06/221454)
+[Render Textureでカメラの映像をスクリーンに映す](http://mikasa.hatenablog.jp/entry/2015/05/05/051008)
+[Tango Dynamic Meshでキャラクターの移動を制限する](https://qiita.com/jyuko/items/0735a6cc3971750de0ff)
+
+[Google Tango UnityのNavMeshで経路表示](https://www.youtube.com/watch?v=CRRIO4J-X_E)

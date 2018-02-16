@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.18.1" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+
+  
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+
+<link rel="stylesheet" href="/css/base.css">
+
+<link rel="alternate" href="/index.xml" type="application/rss+xml" title="嵐の小舟より">
+<title>API Gateway から名前にドットを含む S3 バケットへアクセスしたときの SSL 証明書エラー - 嵐の小舟より</title>
+</head>
+<body>
+  
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-92780964-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+  <div class="">
+  <header class="castaway-header-bar">
+    <nav>
+      <div class="nav-wrapper castaway-site-logo">
+        <div>
+          <a href="/" class="brand-logo right">
+            <i class="material-icons" style="margin-right: 5px;">rowing</i>
+            <span class="castaway-site-title">嵐の小舟より</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+
+<section id="main">
+  <div class="row">
+    <div class="col s12 m12 l6 offset-l3">
+
+      <article itemscope itemtype="http://schema.org/Blog" class="card castaway-card">
+
+        <div class="card-title indigo darken-3 castaway-card-title">
+          <div class="card-content">
+            <div class="white-text" itemprop="headline">
+              API Gateway から名前にドットを含む S3 バケットへアクセスしたときの SSL 証明書エラー
+            </div>
+          </div>
+        </div>
+
+        <div class="card-content">
+          <div class="row">
+            <div class="castaway-date-published">
+              <span>公開日：</span>
+              <i class="material-icons" style="vertical-align: middle;">today</i>
+              <time itemprop="datePublished" datetime="2018-01-27">2018/01/27</time>
+              <span style="margin-left: 10px;"> タグ: </span>
+              
+              <a href="/tags/aws">
+                <div class="tag-aws waves-effect waves-teal chip">
+                  aws
+                </div>
+              </a>
+              
+            </div>
+          </div>
+          
+          
+          <div class="castaway-card-content mdl-card__supporting-text mdl-color-text--grey-700">
+            <p>API Gateway では統合リクエストのところで&rdquo;AWS サービス&rdquo;として設定することで
+S3 のデータを読み書きするようにできます。</p>
+
+<p>たとえば以下のように設定することで S3 オブジェクトを GET することができます。
+API Gateway のカスタムオーサライザ機能でのちのち認証を追加したりできるので、
+とりあえず間に API Gateway をはさんでおくと便利です。</p>
+
+<ul>
+<li>AWS サービス： S3</li>
+<li>AWS サブドメイン： バケット名</li>
+<li>HTTP メソッド： <code>GET</code></li>
+<li>パス上書き： <code>/path/to/resource</code></li>
+</ul>
+
+<p>ここで、バケット名にドット(<code>.</code>)を含む場合は注意が必要です。
+バケット名が <code>my.bucket.domain</code> のようになっていると、
+S3 へのアクセスの際に <code>https://my.bucket.domain.s3.amazonaws.com</code> というドメインが使われ、
+S3 側では <code>*.s3.amazonaws.com</code> という SSL 証明書を用いているため <code>my.bucket.domain</code> のような多段階のサブドメインにマッチせず、
+怒られます。</p>
+
+<p>そんなわけで、ドメイン名にドットを含む場合は以下のように設定する必要があります。</p>
+
+<ul>
+<li>AWS サブドメイン： 空欄</li>
+<li>パス上書き： <code>my.bucket.domain/path/to/resource</code></li>
+</ul>
+
+<p>個人的には、トラブルが起きがちなドット混じりのバケット名は避けようかな、という気持ちになってきました。</p>
+
+<p>参考：<a href="https://stackoverflow.com/questions/26744696/ssl-multilevel-subdomain-wildcard">SSL Multilevel Subdomain Wildcard</a></p>
+
+<p></p>
+          </div>
+        </div>
+          
+          <div class="card-action castaway-card-footer">
+            <a class="btn waves-effect waves-light" href="/">サイトトップ</a>
+          </div>            
+
+      </article>
+        
+    </div>
+
+    </div>
+  </div>
+</section>
+
+
+</div>
+</body>
+</html>
+

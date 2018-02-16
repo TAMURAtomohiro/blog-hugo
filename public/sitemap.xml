@@ -2,6 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://tmrtmhr.info/tech/aws/error-on-api-gateway-unable-to-base64-decode-the-body/</loc>
+    <lastmod>2018-02-17T01:02:32+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tmrtmhr.info/tech/aws/s3-ssl-error-on-api-gateway/</loc>
+    <lastmod>2018-01-27T17:27:31+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://tmrtmhr.info/tech/aws/502-error-on-api-gateway/</loc>
     <lastmod>2018-01-27T16:54:01+09:00</lastmod>
   </url>
@@ -124,7 +134,7 @@
   
   <url>
     <loc>https://tmrtmhr.info/tags/aws/</loc>
-    <lastmod>2018-01-27T16:54:01+09:00</lastmod>
+    <lastmod>2018-02-17T01:02:32+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -195,7 +205,7 @@
   
   <url>
     <loc>https://tmrtmhr.info/tech/</loc>
-    <lastmod>2018-01-27T16:54:01+09:00</lastmod>
+    <lastmod>2018-02-17T01:02:32+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -207,7 +217,7 @@
   
   <url>
     <loc>https://tmrtmhr.info/</loc>
-    <lastmod>2018-01-27T16:54:01+09:00</lastmod>
+    <lastmod>2018-02-17T01:02:32+09:00</lastmod>
     <priority>0</priority>
   </url>
   
