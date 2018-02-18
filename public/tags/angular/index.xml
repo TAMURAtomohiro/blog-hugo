@@ -2,11 +2,14 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Angular on 嵐の小舟より</title>
-    <link>https://tmrtmhr.info/tags/angular/index.xml</link>
+    <link>https://tmrtmhr.info/tags/angular/</link>
     <description>Recent content in Angular on 嵐の小舟より</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <atom:link href="https://tmrtmhr.info/tags/angular/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 09 Nov 2017 10:07:21 +0900</lastBuildDate>
+    
+	<atom:link href="https://tmrtmhr.info/tags/angular/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>SPA(シングルページアプリケーション)をS3で動かす</title>
@@ -34,42 +37,7 @@
 &lt;li&gt;参考：&lt;a href=&#34;https://keita.blog/2015/11/24/hosting-a-single-page-app-on-s3-with-proper-urls/&#34;&gt;Hosting a Single-Page App on S3, with proper URLs&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;s3-に存在しないファイルをリクエストした際-access-denied-403-エラーになる場合&#34;&gt;S3 に存在しないファイルをリクエストした際 Access Denied (403) エラーになる場合&lt;/h1&gt;
-
-&lt;p&gt;バケットポリシーのミスでした。&lt;code&gt;GetObject&lt;/code&gt; だけでなく &lt;code&gt;ListBucket&lt;/code&gt; の権限が必要です。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;バケットポリシーのサンプル&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;pre&gt;&lt;code&gt;{
-  &amp;quot;Version&amp;quot;: &amp;quot;2012-10-17&amp;quot;,
-  &amp;quot;Statement&amp;quot;: [
-    {
-      &amp;quot;Sid&amp;quot;: &amp;quot;S3ListBucket&amp;quot;,
-      &amp;quot;Effect&amp;quot;: &amp;quot;Allow&amp;quot;,
-      &amp;quot;Action&amp;quot;: [
-        &amp;quot;s3:ListBucket&amp;quot;
-      ],
-      &amp;quot;Principal&amp;quot;: {
-        &amp;quot;AWS&amp;quot;: &amp;quot;arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity XXX&amp;quot;
-      },
-      &amp;quot;Resource&amp;quot;: &amp;quot;arn:aws:s3:::your.domain&amp;quot;
-    },
-    {
-      &amp;quot;Sid&amp;quot;: &amp;quot;S3GetObject&amp;quot;,
-      &amp;quot;Effect&amp;quot;: &amp;quot;Allow&amp;quot;,
-      &amp;quot;Principal&amp;quot;: {
-        &amp;quot;AWS&amp;quot;: &amp;quot;arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity XXX&amp;quot;
-      },
-      &amp;quot;Action&amp;quot;: &amp;quot;s3:GetObject&amp;quot;,
-      &amp;quot;Resource&amp;quot;: &amp;quot;arn:aws:s3:::your.domain/*&amp;quot;
-    }
-  ]
-}
-&lt;/code&gt;&lt;/pre&gt;</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -85,48 +53,7 @@ BitBucket Pipelines の環境には Chrome がインストールされていな�
 
 &lt;p&gt;本記事はそのためのメモです。&lt;/p&gt;
 
-&lt;p&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;karma.conf.js&lt;/code&gt; の &lt;code&gt;files&lt;/code&gt; に以下を追加。これは &lt;code&gt;&#39;node_modules/intl/dist/Intl.min.js&#39;&lt;/code&gt;よりもあとに追加する必要があります。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;files: [
-  ...
-  // for UT on BitBucket, Intl の読み込みの下に書くこと
-  &#39;node_modules/intl/locale-data/jsonp/ja-JP.js&#39;,
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;BitBucket 上での実行時のみ &lt;code&gt;PhatomJS&lt;/code&gt; を使うよう環境変数によって切り替えます。
-( 参考：&lt;a href=&#34;https://confluence.atlassian.com/bitbucket/environment-variables-794502608.html&#34;&gt;BitBucket の Environment Variables&lt;/a&gt;)&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;if (process.env.CI) {
-  config.browsers = [ &#39;PhantomJS&#39; ];
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&#34;その他つまづいたところ&#34;&gt;その他つまづいたところ&lt;/h1&gt;
-
-&lt;h2 id=&#34;rx-js-のビルドエラー&#34;&gt;Rx.js のビルドエラー&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code&gt;Error on fetch for rxjs/operators at file:///opt/atlassian/pipelines/agent/build/frontend/node_modules/rxjs/operators.js`
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;参考：&lt;a href=&#34;https://github.com/mgechev/angular-seed/issues/2105&#34;&gt;angular-seed の Issue #2105&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;package.json&lt;/code&gt; の &lt;code&gt;rxjs&lt;/code&gt; を &lt;code&gt;^5.4.3&lt;/code&gt; から &lt;code&gt;5.4.3&lt;/code&gt; に修正。&lt;/p&gt;
-
-&lt;h2 id=&#34;tools-utils-seed-clean-ts-で型エラー&#34;&gt;&lt;code&gt;tools/utils/seed/clean.ts&lt;/code&gt; で型エラー&lt;/h2&gt;
-
-&lt;p&gt;以下のようなエラーが出て TypeScript のコンパイルに失敗するケース。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;TSError: ⨯ Unable to compile TypeScript
-tools/utils/seed/clean.ts (24,32): Property &#39;bgRed&#39; does not exist on type &#39;typeof &amp;quot;/opt/atlassian/pipelines/agent/build/frontend/node_modules/@types/gulp-util/node_modules/...&#39;. (2339)
-tools/utils/seed/clean.ts (31,47): Property &#39;yellow&#39; does not exist on type &#39;typeof &amp;quot;/opt/atlassian/pipelines/agent/build/frontend/node_modules/@types/gulp-util/node_modules/...&#39;. (2339)
-tools/utils/seed/clean.ts (39,40): Property &#39;red&#39; does not exist on type &#39;typeof &amp;quot;/opt/atlassian/pipelines/agent/build/frontend/node_modules/@types/gulp-util/node_modules/...&#39;. (2339)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://github.com/DefinitelyTyped/DefinitelyTyped/issues/21004&#34;&gt;DefinitelyTyped の issue #21004&lt;/a&gt;を見ると
-&lt;code&gt;chalk@2.2.0&lt;/code&gt;から自前で型定義ファイルを提供するようになり、DefinitelyTyped で提供していたものと不整合が……という話のようでした。
-取り急ぎ &lt;code&gt;clean.ts&lt;/code&gt; で &lt;code&gt;bgRed&lt;/code&gt; などを使わないよう修正して対処しました。&lt;/p&gt;</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -141,55 +68,7 @@ tools/utils/seed/clean.ts (39,40): Property &#39;red&#39; does not exist on type
 &lt;li&gt;Google Chrome の起動オプションに &lt;code&gt;--disable-infobars&lt;/code&gt; を渡す&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;経緯&#34;&gt;経緯&lt;/h1&gt;
-
-&lt;p&gt;バージョン 57.0.2987.133(64-bit) あたりの Google Chrome と
-Selenium Chrome driver 2.28 でE2Eテストを実行すると
-&amp;ldquo;Chrome is being controlled by automated test software&amp;rdquo; とか
-&amp;ldquo;Chrome は自動テスト ソフトウェアによって制御されています&amp;rdquo; とかいう黄色い通知バーが出てくるようになりました。&lt;/p&gt;
-
-&lt;p&gt;まあ画面キャプチャには入らないですし、出てくること自体はいいんですけれども、
-そのせいで失敗する E2E テストが出てきて、おいおい誰だよこんなコード書いたの、やろう、ぶっころしてやる、
-と込み上げてくる怒りを糧に調べた解決法をこの記事へ記す次第です。&lt;/p&gt;
-
-&lt;p&gt;結局 Google Chrome の起動オプションに &lt;code&gt;--disable-infobars&lt;/code&gt; を渡して表示しないようにしました。&lt;/p&gt;
-
-&lt;p&gt;protorator を仕様する場合は設定ファイルに以下のような内容があれば OK です。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;capabilities: [
-  chromeOptions: {
-    args: [&#39;disable-infobars&#39;],
-  },
-]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&#34;mac-で-google-chrome-に-自動テストが云々-の通知バーを出す方法&#34;&gt;Mac で Google Chrome に&amp;rdquo;自動テストが云々&amp;rdquo;の通知バーを出す方法&lt;/h1&gt;
-
-&lt;p&gt;ターミナルで以下のように打つと起動している Chrome すべてに通知バーが出てきて嫌な気持ちになります。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --enable-automation
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&#34;通知バーが出ているときの-window-の高さ&#34;&gt;通知バーが出ているときの window の高さ&lt;/h1&gt;
-
-&lt;p&gt;以下のコードで高さを見てみると、通知バーの有無で 40px 違っていました。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;angular.element(window).height()
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&#34;e2e-テスト失敗の原因&#34;&gt;E2E テスト失敗の原因&lt;/h1&gt;
-
-&lt;ul&gt;
-&lt;li&gt;E2Eテストのコードがウィンドウの高さに強く依存していた(スクロール量がピクセル値でハードコーディングされている、など)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;参考：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://sqa.stackexchange.com/questions/26051/chrome-driver-2-28-chrome-is-being-controlled-by-automated-test-software-notif&#34;&gt;Chrome driver 2.28 “Chrome is being controlled by automated test software” notification .Can it be removed?&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
   </channel>

@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Node.Js on 嵐の小舟より</title>
-    <link>https://tmrtmhr.info/tags/node.js/index.xml</link>
-    <description>Recent content in Node.Js on 嵐の小舟より</description>
+    <title>Node.js on 嵐の小舟より</title>
+    <link>https://tmrtmhr.info/tags/node.js/</link>
+    <description>Recent content in Node.js on 嵐の小舟より</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <atom:link href="https://tmrtmhr.info/tags/node.js/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 11 Apr 2017 21:37:09 +0900</lastBuildDate>
+    
+	<atom:link href="https://tmrtmhr.info/tags/node.js/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>AWS Lambda (Node.js v6.10) から DynamoDB に入れた Gzip バイナリデータを展開する</title>
@@ -21,48 +24,7 @@
 &lt;p&gt;本記事は、AWS Lambda (Node.js 6.10) から DynamoDB のデータを取得し、
 展開する処理のメモです。&lt;/p&gt;
 
-&lt;p&gt;&lt;/p&gt;
-
-&lt;p&gt;DynamoDB に以下のような形式でデータが入っているとします。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;{ &amp;quot;hash_id&amp;quot;: &amp;quot;string&amp;quot;,
-  &amp;quot;body&amp;quot;: JSON データ文字列を gzip 圧縮したバイナリ }
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;ここでは &lt;code&gt;hash_id&lt;/code&gt; を partition key として指定しています。
-なので以下のように &lt;code&gt;hash_id&lt;/code&gt; を指定して GET するとデータが取得できます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;var dynamodb = new AWS.DynamoDB.DocumentClient();
-var params = { TableName: &#39;dynamedb_table_name&#39;, Key: { &#39;hash_id&#39;: &#39;xxx&#39; } };
-dynamodb.get(params, function(err, data) { ... }
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;JSON 形式ではバイナリデータを扱えないので、Base64 形式に直してやりとりします。
-しかし、受信した段階で &lt;code&gt;data.Item.body&lt;/code&gt; は &lt;code&gt;Buffer&lt;/code&gt; データとなっているようです。
-(参考：&lt;a href=&#34;http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#get-property&#34;&gt;AWS SDK for Javascript のドキュメント&lt;/a&gt;)&lt;/p&gt;
-
-&lt;!--
-そのため、DynamoDB からのレスポンスである `data.Item.body` は「Base64 エンコードされたバイナリデータのバイト列(`Buffer`)」という状態です。
-
-なのでこれをデコードしたバイト列を作り、
-
-```
-var binary = Buffer.from(data.Item.body.toString(), &#39;base64&#39;);
-```
---&gt;
-
-&lt;p&gt;なのでこれを展開します。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;var body = zlib.gunzipSync(data.Item.body);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;これも &lt;code&gt;Buffer&lt;/code&gt; なので、文字列に変換して parse することでようやく元の JSON データとなります。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;JSON.parse(body.toString())
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;最後に以上の処理を行う AWS Lambda のサンプルを置いておきます。
-&lt;script src=&#34;//gist.github.com/tmrtmhr/3b8b9630ad01a5768c4a8b93ae6a814c.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -77,55 +39,7 @@ var binary = Buffer.from(data.Item.body.toString(), &#39;base64&#39;);
 &lt;li&gt;Google Chrome の起動オプションに &lt;code&gt;--disable-infobars&lt;/code&gt; を渡す&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;経緯&#34;&gt;経緯&lt;/h1&gt;
-
-&lt;p&gt;バージョン 57.0.2987.133(64-bit) あたりの Google Chrome と
-Selenium Chrome driver 2.28 でE2Eテストを実行すると
-&amp;ldquo;Chrome is being controlled by automated test software&amp;rdquo; とか
-&amp;ldquo;Chrome は自動テスト ソフトウェアによって制御されています&amp;rdquo; とかいう黄色い通知バーが出てくるようになりました。&lt;/p&gt;
-
-&lt;p&gt;まあ画面キャプチャには入らないですし、出てくること自体はいいんですけれども、
-そのせいで失敗する E2E テストが出てきて、おいおい誰だよこんなコード書いたの、やろう、ぶっころしてやる、
-と込み上げてくる怒りを糧に調べた解決法をこの記事へ記す次第です。&lt;/p&gt;
-
-&lt;p&gt;結局 Google Chrome の起動オプションに &lt;code&gt;--disable-infobars&lt;/code&gt; を渡して表示しないようにしました。&lt;/p&gt;
-
-&lt;p&gt;protorator を仕様する場合は設定ファイルに以下のような内容があれば OK です。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;capabilities: [
-  chromeOptions: {
-    args: [&#39;disable-infobars&#39;],
-  },
-]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&#34;mac-で-google-chrome-に-自動テストが云々-の通知バーを出す方法&#34;&gt;Mac で Google Chrome に&amp;rdquo;自動テストが云々&amp;rdquo;の通知バーを出す方法&lt;/h1&gt;
-
-&lt;p&gt;ターミナルで以下のように打つと起動している Chrome すべてに通知バーが出てきて嫌な気持ちになります。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --enable-automation
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&#34;通知バーが出ているときの-window-の高さ&#34;&gt;通知バーが出ているときの window の高さ&lt;/h1&gt;
-
-&lt;p&gt;以下のコードで高さを見てみると、通知バーの有無で 40px 違っていました。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;angular.element(window).height()
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&#34;e2e-テスト失敗の原因&#34;&gt;E2E テスト失敗の原因&lt;/h1&gt;
-
-&lt;ul&gt;
-&lt;li&gt;E2Eテストのコードがウィンドウの高さに強く依存していた(スクロール量がピクセル値でハードコーディングされている、など)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;参考：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://sqa.stackexchange.com/questions/26051/chrome-driver-2-28-chrome-is-being-controlled-by-automated-test-software-notif&#34;&gt;Chrome driver 2.28 “Chrome is being controlled by automated test software” notification .Can it be removed?&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -160,36 +74,7 @@ Selenium Chrome driver 2.28 でE2Eテストを実行すると
   jq . &amp;gt; request.json
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;プログラムの内容&#34;&gt;プログラムの内容&lt;/h1&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://github.com/tmrtmhr/filljson&#34;&gt;コードはここ&lt;/a&gt;で、
-Go 言語で書いたので &lt;code&gt;go get github.com/tmrtmhr/filljson&lt;/code&gt; でコマンドをインストールできます。
-リポジトリの &lt;code&gt;js/filljson.js&lt;/code&gt; に node.js で実装したものもあります。&lt;/p&gt;
-
-&lt;p&gt;どこかでエラーが出たら死にます(&lt;code&gt;os.Exit(1)&lt;/code&gt;)。
-テストコードは少しだけ書きました。&lt;/p&gt;
-
-&lt;p&gt;入力としては配列を想定しておらず、オブジェクトのみなので &lt;code&gt;map[string]interface{}&lt;/code&gt; 型を &lt;code&gt;json.Unmarshal&lt;/code&gt; に渡します。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;var jsonData map[string]interface{}
-err = json.Unmarshal(jsonStr, &amp;amp;jsonData)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;取り出した値が &lt;code&gt;interface{}&lt;/code&gt; となっているので再度 &lt;code&gt;map[string]interface{}&lt;/code&gt;として型アサーションをつけます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;finger = finger[propName].(map[string]interface{})
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;参考：&lt;a href=&#34;https://www.kaoriya.net/blog/2016/06/25/&#34;&gt;golang は ゆるふわに JSON を扱えまぁす!&lt;/a&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;雑感&#34;&gt;雑感&lt;/h1&gt;
-
-&lt;p&gt;標準入出力は偉大です。&lt;/p&gt;
-
-&lt;p&gt;GO言語的には特化した(たとえばCloudFront専用のJSON生成専用)コマンドを作ってきっちり型検査したほうが良さそうですが、
-まあこういう書き方もできるということで御参考いただければ幸いです。&lt;/p&gt;</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
   </channel>

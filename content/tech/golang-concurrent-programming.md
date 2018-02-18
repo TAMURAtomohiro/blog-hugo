@@ -1,5 +1,5 @@
 +++
-date = "2017-06-21T11:30:08+09:00"
+date = "2018-02-18T19:17:39+09:00"
 draft = true
 title = "Go 言語における並行プログラムのすすめ"
 tags = ["golang"]
@@ -12,7 +12,7 @@ Go言語は `goroutine` と呼ばれるグリーンスレッドと、
 [Rob Pike氏の講演: "Concurrency is not Parallerism"](https://talks.golang.org/2012/waza.slide#1)
 に使われている図を以下に転載します。
 
-{{< figure src="http://talks.golang.org/2012/waza/gophercomplex5.jpg" width="100%")
+{{< figure src="http://talks.golang.org/2012/waza/gophercomplex5.jpg" width="100%" >}}
 
 なぜ並行プログラムにするか？その理由について自分なりにまとめると
 

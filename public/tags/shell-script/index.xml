@@ -2,11 +2,14 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Shell Script on 嵐の小舟より</title>
-    <link>https://tmrtmhr.info/tags/shell-script/index.xml</link>
+    <link>https://tmrtmhr.info/tags/shell-script/</link>
     <description>Recent content in Shell Script on 嵐の小舟より</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <atom:link href="https://tmrtmhr.info/tags/shell-script/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 14 Mar 2017 18:04:09 +0900</lastBuildDate>
+    
+	<atom:link href="https://tmrtmhr.info/tags/shell-script/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>GO言語で雛形JSONの内容をコマンド出力の内容で置換する</title>
@@ -40,36 +43,7 @@
   jq . &amp;gt; request.json
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;プログラムの内容&#34;&gt;プログラムの内容&lt;/h1&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://github.com/tmrtmhr/filljson&#34;&gt;コードはここ&lt;/a&gt;で、
-Go 言語で書いたので &lt;code&gt;go get github.com/tmrtmhr/filljson&lt;/code&gt; でコマンドをインストールできます。
-リポジトリの &lt;code&gt;js/filljson.js&lt;/code&gt; に node.js で実装したものもあります。&lt;/p&gt;
-
-&lt;p&gt;どこかでエラーが出たら死にます(&lt;code&gt;os.Exit(1)&lt;/code&gt;)。
-テストコードは少しだけ書きました。&lt;/p&gt;
-
-&lt;p&gt;入力としては配列を想定しておらず、オブジェクトのみなので &lt;code&gt;map[string]interface{}&lt;/code&gt; 型を &lt;code&gt;json.Unmarshal&lt;/code&gt; に渡します。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;var jsonData map[string]interface{}
-err = json.Unmarshal(jsonStr, &amp;amp;jsonData)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;取り出した値が &lt;code&gt;interface{}&lt;/code&gt; となっているので再度 &lt;code&gt;map[string]interface{}&lt;/code&gt;として型アサーションをつけます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;finger = finger[propName].(map[string]interface{})
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;参考：&lt;a href=&#34;https://www.kaoriya.net/blog/2016/06/25/&#34;&gt;golang は ゆるふわに JSON を扱えまぁす!&lt;/a&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;雑感&#34;&gt;雑感&lt;/h1&gt;
-
-&lt;p&gt;標準入出力は偉大です。&lt;/p&gt;
-
-&lt;p&gt;GO言語的には特化した(たとえばCloudFront専用のJSON生成専用)コマンドを作ってきっちり型検査したほうが良さそうですが、
-まあこういう書き方もできるということで御参考いただければ幸いです。&lt;/p&gt;</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
   </channel>

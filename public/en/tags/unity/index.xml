@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Unity on from the boat in the angry ocean</title>
+    <link>https://tmrtmhr.info/en/tags/unity/</link>
+    <description>Recent content in Unity on from the boat in the angry ocean</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja-JP</language>
+    <lastBuildDate>Sun, 18 Feb 2018 19:52:44 +0900</lastBuildDate>
+    
+	<atom:link href="https://tmrtmhr.info/en/tags/unity/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Unity: add Exif to Screenshot JPEG</title>
+      <link>https://tmrtmhr.info/en/tech/unity/add-exif-to-screenshot/</link>
+      <pubDate>Sun, 18 Feb 2018 19:52:44 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/en/tech/unity/add-exif-to-screenshot/</guid>
+      <description>&lt;p&gt;at 2018-02, Unity has no Exif Library.
+and I can&amp;rsquo;t find Unity Exif Assets.&lt;/p&gt;
+
+&lt;p&gt;So, if we want to add Exif to screenshot image, we should call Android Library.
+(This article shows only how to handle Exif on Android/Unity.
+But I think that the same method can be used on iOS/Unity.)&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

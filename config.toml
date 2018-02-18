@@ -1,7 +1,7 @@
 baseurl = "https://tmrtmhr.info/"
 description = "個人ブログです。"
-languagecode = "ja-JP"
-title = "嵐の小舟より"
+DefaultContentLanguage = "ja"
+languageCode = "ja-JP"
 theme = "castaway"
 paginate = 10
 googleAnalytics = "UA-92780964-1"
@@ -10,3 +10,11 @@ headerCover = "img/logo.jpg"
 
 [taxonomies]
 tag = "tags"
+
+[languages]
+[languages.ja]
+title = "嵐の小舟より"
+weight = 1
+
+[languages.en]
+title = "from the boat in the angry ocean"

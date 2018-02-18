@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.36.1" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+
+  
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+
+<link rel="stylesheet" href="/css/base.css">
+
+<link rel="alternate" href="/index.xml" type="application/rss+xml" title="from the boat in the angry ocean">
+<title>Unity: add Exif to Screenshot JPEG - from the boat in the angry ocean</title>
+</head>
+<body>
+  
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-92780964-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+  <div class="">
+  <header class="castaway-header-bar">
+    <nav>
+      <div class="nav-wrapper castaway-site-logo">
+        <div>
+          <a href="/" class="brand-logo right">
+            <i class="material-icons" style="margin-right: 5px;">rowing</i>
+            <span class="castaway-site-title">from the boat in the angry ocean</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+
+<section id="main">
+  <div class="row">
+    <div class="col s12 m12 l6 offset-l3">
+
+      <article itemscope itemtype="http://schema.org/Blog" class="card castaway-card">
+
+        <div class="card-title indigo darken-3 castaway-card-title">
+          <div class="card-content">
+            <div class="white-text" itemprop="headline">
+              Unity: add Exif to Screenshot JPEG
+            </div>
+          </div>
+        </div>
+
+        <div class="card-content">
+          <div class="row">
+            <div class="castaway-date-published">
+              <span>公開日：</span>
+              <i class="material-icons" style="vertical-align: middle;">today</i>
+              <time itemprop="datePublished" datetime="2018-02-18">2018/02/18</time>
+              <span style="margin-left: 10px;"> タグ: </span>
+              
+              <a href="/en/tags/unity">
+                <div class="tag-unity waves-effect waves-teal chip">
+                  unity
+                </div>
+              </a>
+              
+              <a href="/en/tags/android">
+                <div class="tag-android waves-effect waves-teal chip">
+                  android
+                </div>
+              </a>
+              
+            </div>
+          </div>
+          
+          
+          <div class="castaway-card-content mdl-card__supporting-text mdl-color-text--grey-700">
+            <p>at 2018-02, Unity has no Exif Library.
+and I can&rsquo;t find Unity Exif Assets.</p>
+
+<p>So, if we want to add Exif to screenshot image, we should call Android Library.
+(This article shows only how to handle Exif on Android/Unity.
+But I think that the same method can be used on iOS/Unity.)</p>
+
+<p></p>
+
+<p>We use <a href="https://docs.unity3d.com/560/Documentation/Manual/PluginsForAndroid.html">Android Helper Class</a>.
+Sample Code (Unity 5.6.5, C#) is following.</p>
+
+<pre><code>ExifLocation exifLocation = new ExifLocation(Input.location.lastData);
+AndroidJavaObject ex = new AndroidJavaObject(&quot;android.media.ExifInterface&quot;, path);
+ex.Call(&quot;setAttribute&quot;,&quot;GPSLatitudeRef&quot;, exifLocation.latitudeRef);
+ex.Call(&quot;setAttribute&quot;,&quot;GPSLatitude&quot;, exifLocation.latitude);
+ex.Call(&quot;setAttribute&quot;,&quot;GPSLongitudeRef&quot;, exifLocation.longitudeRef);
+ex.Call(&quot;setAttribute&quot;,&quot;GPSLongitude&quot;,exifLocation.longitude);
+ex.Call(&quot;saveAttributes&quot;);
+</code></pre>
+
+<p><code>ExifLocation</code> is conversion logic, from <code>LocationInfo</code> to Exif format.
+I&rsquo;ll present sample code later.
+<code>path</code> is image file path.</p>
+
+<p>We can get Android Object (&ldquo;android.media.ExifInterface&rdquo;) by following code.</p>
+
+<pre><code>AndroidJavaObject ex = new AndroidJavaObject(&quot;android.media.ExifInterface&quot;, path);
+</code></pre>
+
+<p>This object handle the image placed on the <code>path</code>.
+So we just use</p>
+
+<pre><code>ex.Call(&quot;setAttribute&quot;,...);
+</code></pre>
+
+<p>to set arbitrary attributes.
+Finally, you write</p>
+
+<pre><code>ex.Call(&quot;saveAttributes&quot;);
+</code></pre>
+
+<p>and save it all.</p>
+
+<p>Exif attribute name (e.g. &ldquo;GPSLatitude&rdquo;) defined at ExifInterface class on Android ( static constant <code>TAG_GPS_LATITUDE</code> ),
+but you can pass it as C# String.</p>
+
+<p>Here is sample code (convesion logic to Exif format).</p>
+
+<pre><code>internal class ExifLocation {
+    public String longitudeRef;
+    public String longitude;
+    public String latitudeRef;
+    public String latitude;
+
+    public ExifLocation(LocationInfo location) {
+        String[] lonDMS = Convert(location.longitude);
+        if (lonDMS[0].IndexOf(&quot;-&quot;) == 0) {
+            this.longitudeRef = &quot;W&quot;;
+        } else {
+            this.longitudeRef = &quot;E&quot;;
+        }
+
+        this.longitude = ToExifFormat(lonDMS);
+
+        String[] latDMS = Convert(location.latitude);
+        if (latDMS[0].IndexOf(&quot;-&quot;) == 0) {
+            this.latitudeRef = &quot;S&quot;;
+        } else {
+            this.latitudeRef = &quot;N&quot;;
+        }
+        this.latitude = ToExifFormat(latDMS);
+    }
+
+    public String ToExifFormat(String[] nums) {
+        StringBuilder sb = new StringBuilder();
+        sb.Append(nums[0].Replace(&quot;-&quot;, &quot;&quot;));
+        sb.Append(&quot;/1,&quot;);
+        sb.Append(nums[1]);
+        sb.Append(&quot;/1,&quot;);
+        int index = nums[2].IndexOf('.');
+        if (index == -1) {
+            sb.Append(nums[2]);
+            sb.Append(&quot;/1&quot;);
+        } else {
+            int digit = nums[2].Substring(index + 1).Length;
+            int second = (int)(Double.Parse(nums[2]) * Math.Pow(10, digit));
+            sb.Append(second.ToString());
+            sb.Append(&quot;/1&quot;);
+            for (int i = 0; i &lt; digit; i++) {
+                sb.Append(&quot;0&quot;);
+            }
+        }
+        return sb.ToString();
+    }
+
+    public String[] Convert(float coord) {
+        int degree = (int)coord;
+        int minute = (int)((coord - degree) * 60);
+        float second = (coord - degree - (minute / 60f)) * 3600;
+        return new String[]{ degree.ToString(), minute.ToString(), second.ToString(&quot;F7&quot;) };
+    }
+}
+</code></pre>
+          </div>
+        </div>
+          
+          <div class="card-action castaway-card-footer">
+            <a class="btn waves-effect waves-light" href="/">サイトトップ</a>
+          </div>            
+
+      </article>
+        
+    </div>
+
+    </div>
+  </div>
+</section>
+
+
+</div>
+</body>
+</html>
+

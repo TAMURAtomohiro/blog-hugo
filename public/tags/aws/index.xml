@@ -2,11 +2,14 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Aws on 嵐の小舟より</title>
-    <link>https://tmrtmhr.info/tags/aws/index.xml</link>
+    <link>https://tmrtmhr.info/tags/aws/</link>
     <description>Recent content in Aws on 嵐の小舟より</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <atom:link href="https://tmrtmhr.info/tags/aws/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 17 Feb 2018 01:02:32 +0900</lastBuildDate>
+    
+	<atom:link href="https://tmrtmhr.info/tags/aws/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>API Gateway の &#39;Unable to base64 decode the body&#39; エラー</title>
@@ -26,18 +29,7 @@ S3 からは正常に取得できているようでしたが、
 結果的に AWS 統合から Lambda 統合に変えて S3 オブジェクトを取得するようにしたら直ったのですが、
 こういう挙動をする理由についての公式ドキュメントなどは見つけられていません。&lt;/p&gt;
 
-&lt;p&gt;&lt;/p&gt;
-
-&lt;p&gt;最初はメタデータの Content-Type がおかしいのかと思いましたが、
-確認してみても &lt;code&gt;text/html&lt;/code&gt; だったので混乱しつつまずはエラーメッセージで検索してみました。
-見つけたのは Stack overflow の以下の記事。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://stackoverflow.com/questions/43325993/api-gateway-unable-to-decode-base64&#34;&gt;API Gateway unable to decode base64&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;AWS 統合だと API Gateway はレスポンスが Base64 エンコードされていることを期待するよ、
-とか書いてあるように見えたので Lambda 統合にして Lambda を経由するようにしたら直りました。&lt;/p&gt;
-
-&lt;p&gt;謎です。&lt;/p&gt;</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -125,91 +117,7 @@ S3 側では &lt;code&gt;*.s3.amazonaws.com&lt;/code&gt; という SSL 証明書
 
 &lt;p&gt;より一般的には、AWS Lambda の実行環境に入っていないネイティブライブラリを使いたい場合は静的リンクして持ち込む、という話です。&lt;/p&gt;
 
-&lt;p&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;lambda-とec2-インスタンスの作成&#34;&gt;Lambda とEC2 インスタンスの作成&lt;/h1&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://docs.aws.amazon.com/ja_jp/lambda/latest/dg/current-supported-versions.html&#34;&gt;Lambda の実行環境のAMIを調べ&lt;/a&gt;、
-EC2インスタンスを作ります。
-たとえば &lt;code&gt;amzn-ami-hvm-2017.03.1.20170812-x86_64-gp2&lt;/code&gt; という AMI ID のものを Community AMI から探して起動します。&lt;/p&gt;
-
-&lt;h1 id=&#34;go言語環境のセットアップ&#34;&gt;Go言語環境のセットアップ&lt;/h1&gt;
-
-&lt;p&gt;参考： &lt;a href=&#34;https://dev.classmethod.jp/cloud/aws/amazon-linux-go-setup/&#34;&gt;Go開発環境/ビルド環境としてAmazon Linuxをセットアップする手順&lt;/a&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;sudo yum install golang
-mkdir $HOME/go
-echo &#39;export GOPATH=$HOME/go&#39; &amp;gt;&amp;gt; .bashrc
-source .bashrc
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&#34;各種ライブラリのインストール&#34;&gt;各種ライブラリのインストール&lt;/h1&gt;
-
-&lt;p&gt;&lt;code&gt;configure&lt;/code&gt;のオプションについては&lt;a href=&#34;https://github.com/crewjam/go-xmlsec&#34;&gt;crewjam/go-xmlsec&lt;/a&gt;のまま。
-途中で失敗するところがいくつかあったので手順を足しています。&lt;/p&gt;
-
-&lt;h2 id=&#34;静的リンク用-glibc-のインストール&#34;&gt;静的リンク用 glibc のインストール&lt;/h2&gt;
-
-&lt;p&gt;これは go-xmlsec には出てこなかった手順です。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;sudo yum install glibc-static.x86_64
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;libxml2-のインストール&#34;&gt;libxml2 のインストール&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code&gt;cd
-curl -sL ftp://xmlsoft.org/libxml2/libxml2-2.9.6.tar.gz | tar -xzf -
-cd libxml2-2.9.6
-./configure --enable-static --disable-shared --without-gnu-ld --with-c14n --without-catalog --without-debug --without-docbook  --without-fexceptions  --without-ftp --without-history --without-html --without-http --without-iconv --without-icu --without-iso8859x --without-legacy --without-mem-debug --without-minimum --with-output --without-pattern --with-push --without-python --without-reader --without-readline --without-regexps --without-run-debug --with-sax1 --without-schemas --without-schematron --without-threads --without-thread-alloc --with-tree --without-valid --without-writer --without-xinclude --without-xpath --with-xptr --without-modules --without-zlib --without-lzma --without-coverage
-sudo make install
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;openssl-のインストール&#34;&gt;openssl のインストール&lt;/h2&gt;
-
-&lt;p&gt;go-xmlsec の手順だけでは &lt;code&gt;libcrypto.a&lt;/code&gt; が配置されなかったため、それを追加しています。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;cd
-curl -sL ftp://ftp.openssl.org/source/openssl-1.1.0f.tar.gz | tar -xzf -
-cd openssl-1.1.0f
-./config no-shared no-weak-ssl-ciphers no-ssl2 no-ssl3 no-comp no-idea no-dtls no-hw no-threads no-dso
-sudo make depend install
-sudo mkdir /usr/local/ssl/lib
-sudo cp ./libcrypto.a /usr/local/ssl/lib/
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;xmlsec-のインストール&#34;&gt;xmlsec のインストール&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code&gt;cd
-curl -sL http://www.aleksey.com/xmlsec/download/xmlsec1-1.2.25.tar.gz | tar -xzf -
-cd xmlsec1-1.2.25/
-./configure --enable-static --disable-shared --disable-crypto-dl --disable-apps-crypto-dl --enable-static-linking --without-gnu-ld --with-default-crypto=openssl --with-openssl=/usr/local/ssl --with-libxml=/usr/local --without-nss --without-nspr --without-gcrypt --without-gnutls --without-libxslt
-sudo make -C src install
-sudo make -C include install
-sudo make install-pkgconfigDATA
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;pkg-config-path-に色々追加&#34;&gt;&lt;code&gt;PKG_CONFIG_PATH&lt;/code&gt; に色々追加&lt;/h2&gt;
-
-&lt;p&gt;これも go-xmlsec にはない手順です。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;cd
-echo &#39;export PKG_CONFIG_PATH=/usr/lib64/pkgconfig:/usr/local/lib64/pkgconfig:/usr/share/pkgconfig:/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH&#39; &amp;gt;&amp;gt; ~/.bashrc
-source .bashrc
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;ビルドの動作確認&#34;&gt;ビルドの動作確認&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code&gt;go get github.com/crewjam/go-xmlsec
-cd go/src/github.com/crewjam/go-xmlsec
-go build -tags static -ldflags &#39;-s -extldflags &amp;quot;-static&amp;quot;&#39; -o ~/xmldsig-static.bin ./examples/xmldsig.go
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&#34;xmlsec-の使い方&#34;&gt;xmlsec の使い方&lt;/h1&gt;
-
-&lt;p&gt;諸々説明できるほど理解していないので取り急ぎコマンドだけ掲載しますと以下のような感じです。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;xmlsec1 verify --id-attr:ID &amp;quot;urn:oasis:names:tc:SAML:2.0:protocol:Response&amp;quot; --trusted-pem x509.cert SamlResponse.xml
-&lt;/code&gt;&lt;/pre&gt;</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -238,44 +146,7 @@ SDK を使って自分たちで再実装するなどしないといけません�
 &lt;p&gt;注意点ですが、このパッケージは Lambda の実行環境が変更されることでいきなり動かなくなる可能性があります。
 たとえば、&lt;code&gt;aws&lt;/code&gt; コマンドが &lt;code&gt;/usr/bin/python&lt;/code&gt; を見に行くため、このへんを変更されるとアウトです。&lt;/p&gt;
 
-&lt;p&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;aws-cli-が動く-lambda-パッケージ作成手順について&#34;&gt;AWS CLI が動く Lambda パッケージ作成手順について&lt;/h1&gt;
-
-&lt;p&gt;AWS CLI は Python で実装されているため、&lt;code&gt;aws&lt;/code&gt; コマンドに必要なライブラリを
-すべて Lambda パッケージに含めて適切にロードされるようにすれば Lambda 上で動きます。&lt;/p&gt;
-
-&lt;p&gt;作成環境としては &lt;a href=&#34;http://docs.aws.amazon.com/ja_jp/lambda/latest/dg/current-supported-versions.html&#34;&gt;Lambda環境と実行できるライブラリ&lt;/a&gt; にある
-AMI (&lt;code&gt;amzn-ami-hvm-2017.03.1.20170812-x86_64-gp2&lt;/code&gt;) を使用しました。&lt;/p&gt;
-
-&lt;p&gt;また、作成手順としては以下のブログを参考にさせていただきました。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://alestic.com/2016/11/aws-lambda-awscli/&#34;&gt;Running aws-cli Commands Inside An AWS Lambda Function&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;手順の差分は以下の通りです。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;事前に &lt;code&gt;sudo yum install libyaml-devel&lt;/code&gt; が必要(&lt;code&gt;PyYAML&lt;/code&gt;のため)&lt;/li&gt;
-&lt;li&gt;PyYAML が &lt;code&gt;lib64&lt;/code&gt; 以下にインストールされるので、そのあたりをパッケージに含めることが必要 ( &lt;code&gt;(cd $virtualenv/lib64/python2.7/site-packages; zip -r9 $zipfile .)&lt;/code&gt; )&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&#34;その他のアプローチ&#34;&gt;その他のアプローチ&lt;/h1&gt;
-
-&lt;ul&gt;
-&lt;li&gt;AWS CLI の該当部分を &lt;code&gt;import&lt;/code&gt; して使う&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;code&gt;sync&lt;/code&gt; が実装されている部分を特定するのが面倒そうだったので保留。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;DataPipeline を使う&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;DataPipeline から EC2 インスタンスを起動して AWS CLI を走らせることもできます。
-EC2インスタンスの料金も秒単位になったので小規模データでもコスト的に悪くないと思います。
-そもそも Lambda だと実行時間の上限(300秒)があるので大規模データの場合は DataPipeline を使うことになるでしょう。&lt;/p&gt;</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -304,42 +175,7 @@ EC2インスタンスの料金も秒単位になったので小規模データ�
 &lt;li&gt;参考：&lt;a href=&#34;https://keita.blog/2015/11/24/hosting-a-single-page-app-on-s3-with-proper-urls/&#34;&gt;Hosting a Single-Page App on S3, with proper URLs&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;s3-に存在しないファイルをリクエストした際-access-denied-403-エラーになる場合&#34;&gt;S3 に存在しないファイルをリクエストした際 Access Denied (403) エラーになる場合&lt;/h1&gt;
-
-&lt;p&gt;バケットポリシーのミスでした。&lt;code&gt;GetObject&lt;/code&gt; だけでなく &lt;code&gt;ListBucket&lt;/code&gt; の権限が必要です。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;バケットポリシーのサンプル&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;pre&gt;&lt;code&gt;{
-  &amp;quot;Version&amp;quot;: &amp;quot;2012-10-17&amp;quot;,
-  &amp;quot;Statement&amp;quot;: [
-    {
-      &amp;quot;Sid&amp;quot;: &amp;quot;S3ListBucket&amp;quot;,
-      &amp;quot;Effect&amp;quot;: &amp;quot;Allow&amp;quot;,
-      &amp;quot;Action&amp;quot;: [
-        &amp;quot;s3:ListBucket&amp;quot;
-      ],
-      &amp;quot;Principal&amp;quot;: {
-        &amp;quot;AWS&amp;quot;: &amp;quot;arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity XXX&amp;quot;
-      },
-      &amp;quot;Resource&amp;quot;: &amp;quot;arn:aws:s3:::your.domain&amp;quot;
-    },
-    {
-      &amp;quot;Sid&amp;quot;: &amp;quot;S3GetObject&amp;quot;,
-      &amp;quot;Effect&amp;quot;: &amp;quot;Allow&amp;quot;,
-      &amp;quot;Principal&amp;quot;: {
-        &amp;quot;AWS&amp;quot;: &amp;quot;arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity XXX&amp;quot;
-      },
-      &amp;quot;Action&amp;quot;: &amp;quot;s3:GetObject&amp;quot;,
-      &amp;quot;Resource&amp;quot;: &amp;quot;arn:aws:s3:::your.domain/*&amp;quot;
-    }
-  ]
-}
-&lt;/code&gt;&lt;/pre&gt;</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -355,48 +191,7 @@ EC2インスタンスの料金も秒単位になったので小規模データ�
 &lt;p&gt;本記事は、AWS Lambda (Node.js 6.10) から DynamoDB のデータを取得し、
 展開する処理のメモです。&lt;/p&gt;
 
-&lt;p&gt;&lt;/p&gt;
-
-&lt;p&gt;DynamoDB に以下のような形式でデータが入っているとします。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;{ &amp;quot;hash_id&amp;quot;: &amp;quot;string&amp;quot;,
-  &amp;quot;body&amp;quot;: JSON データ文字列を gzip 圧縮したバイナリ }
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;ここでは &lt;code&gt;hash_id&lt;/code&gt; を partition key として指定しています。
-なので以下のように &lt;code&gt;hash_id&lt;/code&gt; を指定して GET するとデータが取得できます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;var dynamodb = new AWS.DynamoDB.DocumentClient();
-var params = { TableName: &#39;dynamedb_table_name&#39;, Key: { &#39;hash_id&#39;: &#39;xxx&#39; } };
-dynamodb.get(params, function(err, data) { ... }
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;JSON 形式ではバイナリデータを扱えないので、Base64 形式に直してやりとりします。
-しかし、受信した段階で &lt;code&gt;data.Item.body&lt;/code&gt; は &lt;code&gt;Buffer&lt;/code&gt; データとなっているようです。
-(参考：&lt;a href=&#34;http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#get-property&#34;&gt;AWS SDK for Javascript のドキュメント&lt;/a&gt;)&lt;/p&gt;
-
-&lt;!--
-そのため、DynamoDB からのレスポンスである `data.Item.body` は「Base64 エンコードされたバイナリデータのバイト列(`Buffer`)」という状態です。
-
-なのでこれをデコードしたバイト列を作り、
-
-```
-var binary = Buffer.from(data.Item.body.toString(), &#39;base64&#39;);
-```
---&gt;
-
-&lt;p&gt;なのでこれを展開します。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;var body = zlib.gunzipSync(data.Item.body);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;これも &lt;code&gt;Buffer&lt;/code&gt; なので、文字列に変換して parse することでようやく元の JSON データとなります。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;JSON.parse(body.toString())
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;最後に以上の処理を行う AWS Lambda のサンプルを置いておきます。
-&lt;script src=&#34;//gist.github.com/tmrtmhr/3b8b9630ad01a5768c4a8b93ae6a814c.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -431,36 +226,7 @@ var binary = Buffer.from(data.Item.body.toString(), &#39;base64&#39;);
   jq . &amp;gt; request.json
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;プログラムの内容&#34;&gt;プログラムの内容&lt;/h1&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://github.com/tmrtmhr/filljson&#34;&gt;コードはここ&lt;/a&gt;で、
-Go 言語で書いたので &lt;code&gt;go get github.com/tmrtmhr/filljson&lt;/code&gt; でコマンドをインストールできます。
-リポジトリの &lt;code&gt;js/filljson.js&lt;/code&gt; に node.js で実装したものもあります。&lt;/p&gt;
-
-&lt;p&gt;どこかでエラーが出たら死にます(&lt;code&gt;os.Exit(1)&lt;/code&gt;)。
-テストコードは少しだけ書きました。&lt;/p&gt;
-
-&lt;p&gt;入力としては配列を想定しておらず、オブジェクトのみなので &lt;code&gt;map[string]interface{}&lt;/code&gt; 型を &lt;code&gt;json.Unmarshal&lt;/code&gt; に渡します。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;var jsonData map[string]interface{}
-err = json.Unmarshal(jsonStr, &amp;amp;jsonData)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;取り出した値が &lt;code&gt;interface{}&lt;/code&gt; となっているので再度 &lt;code&gt;map[string]interface{}&lt;/code&gt;として型アサーションをつけます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;finger = finger[propName].(map[string]interface{})
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;参考：&lt;a href=&#34;https://www.kaoriya.net/blog/2016/06/25/&#34;&gt;golang は ゆるふわに JSON を扱えまぁす!&lt;/a&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;雑感&#34;&gt;雑感&lt;/h1&gt;
-
-&lt;p&gt;標準入出力は偉大です。&lt;/p&gt;
-
-&lt;p&gt;GO言語的には特化した(たとえばCloudFront専用のJSON生成専用)コマンドを作ってきっちり型検査したほうが良さそうですが、
-まあこういう書き方もできるということで御参考いただければ幸いです。&lt;/p&gt;</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -485,113 +251,7 @@ CloudFront はキャッシュサーバとして働くので、
 &lt;li&gt;AWS CLI の &lt;code&gt;aws cloudfront create-invalidation&lt;/code&gt; でキャッシュ削除&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;前提-ブログデータを管理するリポジトリの構成&#34;&gt;前提：ブログデータを管理するリポジトリの構成&lt;/h1&gt;
-
-&lt;p&gt;本サイトの構成では以下の二種類のリポジトリが登場します。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Markdown などを管理するリポジトリ(&lt;code&gt;blog-hugo&lt;/code&gt;)&lt;/li&gt;
-&lt;li&gt;生成したHTMLを GitHub Pages で公開するリポジトリ(&lt;code&gt;tmrtmhr.github.io&lt;/code&gt;)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;code&gt;blog-hugo/public&lt;/code&gt; に &lt;code&gt;tmrtmhr.github.io&lt;/code&gt; を &lt;code&gt;subtree&lt;/code&gt; として取り込んでいます。&lt;/p&gt;
-
-&lt;p&gt;この構成は、昔&lt;a href=&#34;http://gohugo.io/tutorials/github-pages-blog/#hosting-personal-organization-pages&#34;&gt;「Hugo チュートリアル：GitHub Pages で個人ページを公開する」&lt;/a&gt;
-を参考にして言われるがままに構成したのですが、
-現在は &lt;code&gt;submodule&lt;/code&gt; として取り込んで、&lt;code&gt;public&lt;/code&gt; 以下のみ &lt;code&gt;push&lt;/code&gt; するようになっており、
-Markdown のほうの管理には言及がなくなったようです。&lt;/p&gt;
-
-&lt;h1 id=&#34;更新のあったファイル一覧の取得&#34;&gt;更新のあったファイル一覧の取得&lt;/h1&gt;
-
-&lt;p&gt;Hugo で生成した HTML ファイル群は &lt;code&gt;public&lt;/code&gt; ディレクトリ以下に出来上がりますが、
-全記事を再生成するのでタイムスタンプがほぼ同じとなります。
-なので、&lt;code&gt;find public -mmin -5&lt;/code&gt;のようにして5分以内に更新のあったファイルを探して……というアプローチではうまくいきません。&lt;/p&gt;
-
-&lt;p&gt;というわけで &lt;code&gt;git diff&lt;/code&gt; を使います。
-&lt;code&gt;--diff-filter=M&lt;/code&gt; で更新のあったファイルのみの抽出、&lt;code&gt;--name-only&lt;/code&gt;でパスのみの表示、&lt;code&gt;HEAD^ HEAD&lt;/code&gt; で一つ前と最新との比較、&lt;code&gt;public&lt;/code&gt; で対象のディレクトリを指定します。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;git diff --diff-filter=M --name-only HEAD^ HEAD public
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;参考：&lt;a href=&#34;http://qiita.com/kaminaly/items/28f9cb4e680deb700833&#34;&gt;gitで差分ファイルを抽出する&lt;/a&gt;、&lt;a href=&#34;https://git-scm.com/docs/git-diff&#34;&gt;git diff のオプション&lt;/a&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;ファイル一覧を-json-ファイルへ加工&#34;&gt;ファイル一覧を JSON ファイルへ加工&lt;/h1&gt;
-
-&lt;p&gt;AWS CLI で CloudFront にキャッシュ削除したいファイルパスを送る際、
-コマンド引数として &lt;code&gt;--paths&lt;/code&gt; も利用できますが、
-ファイル数が増えてくると&lt;a href=&#34;https://www.ecoop.net/memo/archives/2010-01-26-1.html&#34;&gt;コマンド引数の長さ制限&lt;/a&gt;に引っかかりそうなので、
-JSON を構築することにします。&lt;/p&gt;
-
-&lt;p&gt;AWS CLI から CloudFront にキャッシュ削除リクエストを投げるための雛形JSONが以下のコマンドで得られます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;aws cloudfront create-invalidation --generate-cli-skeleton
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;注： AWS CLI のバージョン &lt;code&gt;aws-cli/1.11.58&lt;/code&gt; においても &lt;code&gt;cloudfront&lt;/code&gt; コマンドはプレビュー版なので
-&lt;code&gt;aws configure set preview.cloudfront true&lt;/code&gt; とコマンドを打って設定ファイルを書き換えてください。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;{
-    &amp;quot;DistributionId&amp;quot;: &amp;quot;&amp;quot;,
-    &amp;quot;InvalidationBatch&amp;quot;: {
-        &amp;quot;Paths&amp;quot;: {
-            &amp;quot;Quantity&amp;quot;: 0,
-            &amp;quot;Items&amp;quot;: [
-                &amp;quot;&amp;quot;
-            ]
-        },
-        &amp;quot;CallerReference&amp;quot;: &amp;quot;&amp;quot;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;DistributionId&lt;/code&gt;: 対象とする CloudFront ディストリビューションID&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;Items&lt;/code&gt;: ファイルパスのリスト&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;Quantity&lt;/code&gt;: ファイルパスの数&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;CallerReference&lt;/code&gt;: こちらで自由に指定するリクエストのID&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;code&gt;CallerReference&lt;/code&gt; は、&lt;a href=&#34;http://docs.aws.amazon.com/cli/latest/reference/cloudfront/create-invalidation.html&#34;&gt;AWS CLI のリファレンス&lt;/a&gt;によると
-「間違って同じリクエストが重複しないよう」に使われます。
-まったく同じリクエストを投げた場合は新しい Invalidation Batch は作られず、
-&lt;code&gt;CallerReference&lt;/code&gt;が重複していて &lt;code&gt;Items&lt;/code&gt; の内容が異なるような場合は &lt;code&gt;InvalidationBatchAlreadyExists&lt;/code&gt; となるようです。
-とりあえず時刻に基いて生成すれば良いかと思います。&lt;/p&gt;
-
-&lt;p&gt;この雛形JSONに対しコマンド出力をはめこんでリクエストを作ります。
-&lt;a href=&#34;https://tmrtmhr.info/tech/replace-a-part-of-json-with-command-output/&#34;&gt;この加工のためのスクリプト&lt;/a&gt;は別記事にしていますので
-詳細についてはそちらをご参照ください。&lt;/p&gt;
-
-&lt;p&gt;こういったスクリプトがあると、以下のようにして、雛形となるJSONにコマンドの出力を当てはめていって最終的なリクエストJSONを得られます。
-(&lt;code&gt;DistributionId&lt;/code&gt; についてはあらかじめ JSON に書いてあります)&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;cat json/cloudfront-invalidation.json |
-  filljson int InvalidationBatch.Paths.Quantity &amp;lt;(git diff --ignore-all-space --diff-filter=M --name-only HEAD^ HEAD  public | wc -l) |
-  filljson [string] InvalidationBatch.Paths.Items &amp;lt;(git diff --ignore-all-space --diff-filter=M --name-only HEAD^ HEAD  public | sed -e &#39;s/^public//g&#39;) |
-  filljson string InvalidationBatch.CallerReference &amp;lt;(date +&amp;quot;tmrtmhr-%Y/%m/%d-%H:%k:%m&amp;quot; | tr -d &#39;\n&#39;) |
-  jq . &amp;gt; request.json
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&#34;aws-cli-を使用した-cloudfront-のキャッシュ削除&#34;&gt;AWS CLI を使用した CloudFront のキャッシュ削除&lt;/h1&gt;
-
-&lt;p&gt;前項でリクエストJSONを生成したので、それを投げます。
-使用する profile については適宜指定してください。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;aws cloudfront create-invalidation --cli-input-json file://request.json
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&#34;invalidation-の注意点&#34;&gt;Invalidation の注意点&lt;/h1&gt;
-
-&lt;p&gt;月間 1000 ファイルパスまでは無料、以降は $0.005 / 1パスとなるようなので、
-更新が頻繁にある・更新ファイル数が多いなどで Invaliation を乱発するケースでは追加で料金が発生します。&lt;/p&gt;
-
-&lt;p&gt;参考：&lt;a href=&#34;http://dev.sukimash.com/aws/cloud-front-invalidation/&#34;&gt;CLOUD FRONT の INVALIDATION が有料だなんて知らんかった&lt;/a&gt;、&lt;a href=&#34;https://aws.amazon.com/jp/cloudfront/pricing/&#34;&gt;CloudFront: 料金&lt;/a&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;まとめ&#34;&gt;まとめ&lt;/h1&gt;
-
-&lt;p&gt;&lt;code&gt;git diff&lt;/code&gt; の結果から CloudFront のキャッシュ削除を行う例を示しました。
-リクエストのための JSON 生成については&lt;a href=&#34;https://tmrtmhr.info/tech/replace-a-part-of-json-with-command-output/&#34;&gt;補助スクリプト&lt;/a&gt;を作って公開しています。&lt;/p&gt;</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -622,88 +282,7 @@ JSON を構築することにします。&lt;/p&gt;
 (&lt;a href=&#34;https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-validate-dns.html&#34;&gt;Use DNS to Validate Domain Ownership&lt;/a&gt;)。
 なので SSL 証明書の取得の際には SES の設定が不要になっています。&lt;/p&gt;
 
-&lt;p&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;なぜ-aws-でドメインを取得したか&#34;&gt;なぜ AWS でドメインを取得したか&lt;/h1&gt;
-
-&lt;p&gt;ドメインの料金だけだと&lt;a href=&#34;www.onamae.com&#34;&gt;お名前.com&lt;/a&gt;などのように Route 53 より安いところもあります。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;取得したドメインでのメール受信設定( MX レコードの登録)を SES がやってくれるため楽&lt;/li&gt;
-&lt;li&gt;SSL証明書が無料かつ自動更新&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;ということで、要するに設定や管理の手間を省くことを重視したためです。&lt;/p&gt;
-
-&lt;h1 id=&#34;route-53-におけるドメイン管理者情報の公開範囲について&#34;&gt;Route 53 におけるドメイン管理者情報の公開範囲について&lt;/h1&gt;
-
-&lt;p&gt;Route 53 でドメインを取得する際、管理者情報を隠すかどうかのチェックボックスがありますが、
-トップレベルドメインによって秘匿できる項目が異なります。
-(参考：&lt;a href=&#34;http://dev.classmethod.jp/cloud/aws/route53-privacy-protection/&#34;&gt;Route 53で管理するドメインでプライバシー保護できるWHOIS項目は、ドメインによって違うので注意&lt;/a&gt; )&lt;/p&gt;
-
-&lt;p&gt;本サイトのような&lt;a href=&#34;http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/registrar-tld-list.html#info&#34;&gt;.info ドメイン&lt;/a&gt; の場合は
-名前だけが公開されます。
-残りの項目はドメインレジストラである &lt;a href=&#34;https://www.gandi.net/&#34;&gt;Gandi&lt;/a&gt; の情報に置換されます。&lt;/p&gt;
-
-&lt;h1 id=&#34;ドメイン取得時に登録するメールアドレスについて&#34;&gt;ドメイン取得時に登録するメールアドレスについて&lt;/h1&gt;
-
-&lt;p&gt;今回、ドメイン取得時に登録するメールアドレスについても該当ドメインを使用することにしました( a&amp;#100;mi&amp;#110;&amp;#64;&amp;#116;m&amp;#114;tmhr.in&amp;#102;o )。
-当然ながらドメイン取得申請の段階ではこのメールアドレスで受信することはできません。
-ドメインを申請すると Route 53 からメールが送信され、本文中の URL にアクセスすることで取得完了となりますが、
-期限に猶予があるため、その間に SES の設定を済ませることになります。&lt;/p&gt;
-
-&lt;p&gt;Route 53 でドメイン申請 &lt;i class=&#34;material-icons castaway-md-icon&#34;&gt;
-  arrow_forward
-&lt;/i&gt;
- SES で MX レコード登録 &lt;i class=&#34;material-icons castaway-md-icon&#34;&gt;
-  arrow_forward
-&lt;/i&gt;
- Route 53 から送られてくるメール本文の URL にアクセス、という流れです。&lt;/p&gt;
-
-&lt;p&gt;ここで、Certificate Manager での SSL 証明書取得を予定していて、かつドメインの管理者情報を秘匿している場合は注意が必要です。
-Certificate Manager でもドメイン認証のためにメールが発信されますが、宛先は以下のように固定されます。&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;&lt;code&gt;whois&lt;/code&gt; で取得できる管理者メールアドレス&lt;/li&gt;
-&lt;li&gt;ドメインに次の接頭辞をつけた 5 個のメールアドレス: &lt;code&gt;admin@&lt;/code&gt;, &lt;code&gt;administrator@&lt;/code&gt;,&lt;code&gt;hostmaster@&lt;/code&gt;, &lt;code&gt;webmaster@&lt;/code&gt;, &lt;code&gt;postmaster@&lt;/code&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;管理者情報を秘匿した場合は &lt;code&gt;whois&lt;/code&gt; で取得できるメールアドレスがドメインレジストラのものになりますので、
-(2)のアドレスのどれかを登録しておきます。&lt;/p&gt;
-
-&lt;h1 id=&#34;ses-でメールを受信するための-mx-レコードについて&#34;&gt;SES でメールを受信するための MX レコードについて&lt;/h1&gt;
-
-&lt;p&gt;たとえばオレゴンの場合、MX レコードとして &lt;code&gt;10 inbound-smtp.us-west-2.amazonaws.com&lt;/code&gt; を登録します。&lt;/p&gt;
-
-&lt;h1 id=&#34;ses-で受信したメールに対するアクションについて&#34;&gt;SES で受信したメールに対するアクションについて&lt;/h1&gt;
-
-&lt;p&gt;認証のための URL がわかれば十分であり、
-Route 53 と Certificate Manager から送られる二通を読めればよいので、
-今回は単純に S3 へ保存しました。&lt;/p&gt;
-
-&lt;h1 id=&#34;ssl証明書を取得するリージョンについて&#34;&gt;SSL証明書を取得するリージョンについて&lt;/h1&gt;
-
-&lt;p&gt;Certificate Manager で取得した SSL 証明書は、取得したリージョンでのみ利用することができます。
-CloudFront はグローバルなサービスのため、Webコンソール上でリージョンを選択できませんが、
-便宜的に &lt;code&gt;US East(N. Virginia)&lt;/code&gt; で設定するという扱いのためSSL 証明書もここで取得します。&lt;/p&gt;
-
-&lt;h1 id=&#34;料金について&#34;&gt;料金について&lt;/h1&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://docs.aws.amazon.com/ja_jp/Route53/latest/DeveloperGuide/domain-transfer-to-route-53.html&#34;&gt;ドメインの料金は AWS クレジットでは支払えない&lt;/a&gt;ため、
-クレジットが残っていても料金が発生することに注意が必要です。&lt;/p&gt;
-
-&lt;h1 id=&#34;cloudfront-が持つキャッシュについて&#34;&gt;CloudFront が持つキャッシュについて&lt;/h1&gt;
-
-&lt;p&gt;デフォルトのままの設定だと TTL が 86400 秒となるので、GitHub Pages にデプロイしてから
-最大一日程度は古いコンテンツが表示されます。
-デプロイの際にスクリプトからキャッシュ削除リクエストを発行するようにすれば良いと思います。
-&lt;a href=&#34;https://tmrtmhr.info/tech/aws/delete-updated-file-cache-on-cloudfront/&#34;&gt;実装はこちら。&lt;/a&gt;&lt;/p&gt;
-
-&lt;!-- 詰まったところ --&gt;
-
-&lt;!-- CloudFront に Alternate CNAME 設定し忘れ --&gt;
-
-&lt;!-- http://blog.ybbo.net/2015/04/11/how-to-fix-error-of-error-the-request-could-not-be-satisfied-generated-by-cloudfront-cloudfront-on-aws-cloud-front/ --&gt;</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
   </channel>

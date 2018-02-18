@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Android on 嵐の小舟より</title>
+    <link>https://tmrtmhr.info/tags/android/</link>
+    <description>Recent content in Android on 嵐の小舟より</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja-JP</language>
+    <lastBuildDate>Sun, 18 Feb 2018 19:54:05 +0900</lastBuildDate>
+    
+	<atom:link href="https://tmrtmhr.info/tags/android/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Unity でスクリーンショット画像に Exif 情報を追加する</title>
+      <link>https://tmrtmhr.info/tech/unity/add-exif-to-screenshot/</link>
+      <pubDate>Sun, 18 Feb 2018 19:54:05 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/unity/add-exif-to-screenshot/</guid>
+      <description>&lt;p&gt;2018-02 時点では Unity に Exif を扱えるライブラリがないようです。&lt;/p&gt;
+
+&lt;p&gt;なので Android ライブラリを呼び出して実装します。
+(iOS では試していないですが、同様のアプローチでいけるんじゃないでしょうか)&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -2,11 +2,14 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Bitbucket on 嵐の小舟より</title>
-    <link>https://tmrtmhr.info/tags/bitbucket/index.xml</link>
+    <link>https://tmrtmhr.info/tags/bitbucket/</link>
     <description>Recent content in Bitbucket on 嵐の小舟より</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <atom:link href="https://tmrtmhr.info/tags/bitbucket/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 28 Oct 2017 15:01:39 +0900</lastBuildDate>
+    
+	<atom:link href="https://tmrtmhr.info/tags/bitbucket/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>BitBucket Pipelines で Angular の Unit Test を動かす</title>
@@ -21,48 +24,7 @@ BitBucket Pipelines の環境には Chrome がインストールされていな�
 
 &lt;p&gt;本記事はそのためのメモです。&lt;/p&gt;
 
-&lt;p&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;karma.conf.js&lt;/code&gt; の &lt;code&gt;files&lt;/code&gt; に以下を追加。これは &lt;code&gt;&#39;node_modules/intl/dist/Intl.min.js&#39;&lt;/code&gt;よりもあとに追加する必要があります。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;files: [
-  ...
-  // for UT on BitBucket, Intl の読み込みの下に書くこと
-  &#39;node_modules/intl/locale-data/jsonp/ja-JP.js&#39;,
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;BitBucket 上での実行時のみ &lt;code&gt;PhatomJS&lt;/code&gt; を使うよう環境変数によって切り替えます。
-( 参考：&lt;a href=&#34;https://confluence.atlassian.com/bitbucket/environment-variables-794502608.html&#34;&gt;BitBucket の Environment Variables&lt;/a&gt;)&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;if (process.env.CI) {
-  config.browsers = [ &#39;PhantomJS&#39; ];
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&#34;その他つまづいたところ&#34;&gt;その他つまづいたところ&lt;/h1&gt;
-
-&lt;h2 id=&#34;rx-js-のビルドエラー&#34;&gt;Rx.js のビルドエラー&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code&gt;Error on fetch for rxjs/operators at file:///opt/atlassian/pipelines/agent/build/frontend/node_modules/rxjs/operators.js`
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;参考：&lt;a href=&#34;https://github.com/mgechev/angular-seed/issues/2105&#34;&gt;angular-seed の Issue #2105&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;package.json&lt;/code&gt; の &lt;code&gt;rxjs&lt;/code&gt; を &lt;code&gt;^5.4.3&lt;/code&gt; から &lt;code&gt;5.4.3&lt;/code&gt; に修正。&lt;/p&gt;
-
-&lt;h2 id=&#34;tools-utils-seed-clean-ts-で型エラー&#34;&gt;&lt;code&gt;tools/utils/seed/clean.ts&lt;/code&gt; で型エラー&lt;/h2&gt;
-
-&lt;p&gt;以下のようなエラーが出て TypeScript のコンパイルに失敗するケース。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;TSError: ⨯ Unable to compile TypeScript
-tools/utils/seed/clean.ts (24,32): Property &#39;bgRed&#39; does not exist on type &#39;typeof &amp;quot;/opt/atlassian/pipelines/agent/build/frontend/node_modules/@types/gulp-util/node_modules/...&#39;. (2339)
-tools/utils/seed/clean.ts (31,47): Property &#39;yellow&#39; does not exist on type &#39;typeof &amp;quot;/opt/atlassian/pipelines/agent/build/frontend/node_modules/@types/gulp-util/node_modules/...&#39;. (2339)
-tools/utils/seed/clean.ts (39,40): Property &#39;red&#39; does not exist on type &#39;typeof &amp;quot;/opt/atlassian/pipelines/agent/build/frontend/node_modules/@types/gulp-util/node_modules/...&#39;. (2339)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://github.com/DefinitelyTyped/DefinitelyTyped/issues/21004&#34;&gt;DefinitelyTyped の issue #21004&lt;/a&gt;を見ると
-&lt;code&gt;chalk@2.2.0&lt;/code&gt;から自前で型定義ファイルを提供するようになり、DefinitelyTyped で提供していたものと不整合が……という話のようでした。
-取り急ぎ &lt;code&gt;clean.ts&lt;/code&gt; で &lt;code&gt;bgRed&lt;/code&gt; などを使わないよう修正して対処しました。&lt;/p&gt;</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
   </channel>

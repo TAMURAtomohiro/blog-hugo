@@ -2,11 +2,14 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Javascript on 嵐の小舟より</title>
-    <link>https://tmrtmhr.info/tags/javascript/index.xml</link>
+    <link>https://tmrtmhr.info/tags/javascript/</link>
     <description>Recent content in Javascript on 嵐の小舟より</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <atom:link href="https://tmrtmhr.info/tags/javascript/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 28 Oct 2017 15:01:39 +0900</lastBuildDate>
+    
+	<atom:link href="https://tmrtmhr.info/tags/javascript/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>BitBucket Pipelines で Angular の Unit Test を動かす</title>
@@ -21,48 +24,7 @@ BitBucket Pipelines の環境には Chrome がインストールされていな�
 
 &lt;p&gt;本記事はそのためのメモです。&lt;/p&gt;
 
-&lt;p&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;karma.conf.js&lt;/code&gt; の &lt;code&gt;files&lt;/code&gt; に以下を追加。これは &lt;code&gt;&#39;node_modules/intl/dist/Intl.min.js&#39;&lt;/code&gt;よりもあとに追加する必要があります。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;files: [
-  ...
-  // for UT on BitBucket, Intl の読み込みの下に書くこと
-  &#39;node_modules/intl/locale-data/jsonp/ja-JP.js&#39;,
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;BitBucket 上での実行時のみ &lt;code&gt;PhatomJS&lt;/code&gt; を使うよう環境変数によって切り替えます。
-( 参考：&lt;a href=&#34;https://confluence.atlassian.com/bitbucket/environment-variables-794502608.html&#34;&gt;BitBucket の Environment Variables&lt;/a&gt;)&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;if (process.env.CI) {
-  config.browsers = [ &#39;PhantomJS&#39; ];
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&#34;その他つまづいたところ&#34;&gt;その他つまづいたところ&lt;/h1&gt;
-
-&lt;h2 id=&#34;rx-js-のビルドエラー&#34;&gt;Rx.js のビルドエラー&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code&gt;Error on fetch for rxjs/operators at file:///opt/atlassian/pipelines/agent/build/frontend/node_modules/rxjs/operators.js`
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;参考：&lt;a href=&#34;https://github.com/mgechev/angular-seed/issues/2105&#34;&gt;angular-seed の Issue #2105&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;package.json&lt;/code&gt; の &lt;code&gt;rxjs&lt;/code&gt; を &lt;code&gt;^5.4.3&lt;/code&gt; から &lt;code&gt;5.4.3&lt;/code&gt; に修正。&lt;/p&gt;
-
-&lt;h2 id=&#34;tools-utils-seed-clean-ts-で型エラー&#34;&gt;&lt;code&gt;tools/utils/seed/clean.ts&lt;/code&gt; で型エラー&lt;/h2&gt;
-
-&lt;p&gt;以下のようなエラーが出て TypeScript のコンパイルに失敗するケース。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;TSError: ⨯ Unable to compile TypeScript
-tools/utils/seed/clean.ts (24,32): Property &#39;bgRed&#39; does not exist on type &#39;typeof &amp;quot;/opt/atlassian/pipelines/agent/build/frontend/node_modules/@types/gulp-util/node_modules/...&#39;. (2339)
-tools/utils/seed/clean.ts (31,47): Property &#39;yellow&#39; does not exist on type &#39;typeof &amp;quot;/opt/atlassian/pipelines/agent/build/frontend/node_modules/@types/gulp-util/node_modules/...&#39;. (2339)
-tools/utils/seed/clean.ts (39,40): Property &#39;red&#39; does not exist on type &#39;typeof &amp;quot;/opt/atlassian/pipelines/agent/build/frontend/node_modules/@types/gulp-util/node_modules/...&#39;. (2339)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://github.com/DefinitelyTyped/DefinitelyTyped/issues/21004&#34;&gt;DefinitelyTyped の issue #21004&lt;/a&gt;を見ると
-&lt;code&gt;chalk@2.2.0&lt;/code&gt;から自前で型定義ファイルを提供するようになり、DefinitelyTyped で提供していたものと不整合が……という話のようでした。
-取り急ぎ &lt;code&gt;clean.ts&lt;/code&gt; で &lt;code&gt;bgRed&lt;/code&gt; などを使わないよう修正して対処しました。&lt;/p&gt;</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -91,46 +53,7 @@ SVGで描画するとこんな感じです。&lt;/p&gt;
 &lt;li&gt;&lt;code&gt;canvas.add.apply(canvas, polygons)&lt;/code&gt; のようにまとめて &lt;code&gt;apply&lt;/code&gt; で描画するときは配列の長さに注意するべし&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;/p&gt;
-
-&lt;script type=&#34;text/javascript&#34; src=&#34;https://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.7.11/fabric.min.js&#34;&gt;&lt;/script&gt;
-&lt;script type=&#34;text/javascript&#34; src=&#34;https://tmrtmhr.info/js/canvas-surface.js&#34;&gt;&lt;/script&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://tmrtmhr.info/js/canvas-surface.js&#34;&gt;コード例&lt;/a&gt;&lt;/p&gt;
-
-&lt;canvas id=&#34;canvas-surface&#34; width=&#34;640&#34; height=&#34;320&#34;&gt; &lt;/canvas&gt;
-
-&lt;h1 id=&#34;uncaught-rangeerror-maximum-call-stack-size-exceeded-というエラーが出る場合について&#34;&gt;&amp;ldquo;Uncaught RangeError: Maximum call stack size exceeded&amp;rdquo; というエラーが出る場合について&lt;/h1&gt;
-
-&lt;p&gt;上のコード例では 1 辺に 100 個のポリゴンとしています。
-全体では 100 * 100 で 10000 個のポリゴンです。&lt;/p&gt;
-
-&lt;p&gt;コードの構造としては以下のような感じです。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;  var canvas = new fabric.Canvas(&#39;canvas-surface&#39;);
-  var polygons = [];
-  for (var i = 0; i &amp;lt; cells; i++) {
-    for (var j = 0; j &amp;lt; cells; j++) {
-      ...
-      var polygon = new fabric.Polygon([pa, pb, pc, pd]);
-      ...
-      polygons.push(polygon);
-    }
-  }
-  canvas.add.apply(canvas,polygons);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;二重ループの中で&lt;code&gt;canvas.add&lt;/code&gt;をしていないのは、1個ごとに描画するのが重いためです。
-30 * 30 でも 5 秒とかになってしまうので、100 * 100 ともなると待てませんでした。&lt;/p&gt;
-
-&lt;p&gt;なのでいったん配列にまとめて &lt;code&gt;apply&lt;/code&gt; で渡すことにしました。
-この場合 100 * 100 でも手元の環境(CPU 3.1GHz, Google Chrome バージョン: 59.0.3071.104)では 800 ms くらいの実行時間で、
-余裕がありそうだったので数を増やしていったのですが、
-251 * 251 で &lt;code&gt;Maximum call stack size exceeded&lt;/code&gt; エラーとなりました。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Function/apply&#34;&gt;Mozilla のドキュメント&lt;/a&gt;でも言及されていますが、
-&lt;code&gt;apply&lt;/code&gt; に配列として渡した引数群は、スタックに積み直されるため、長すぎる場合はスタックがあふれてエラーとなるわけです。
-上限は処理系によって異なるため、適度に分割して渡す必要が出てきます。&lt;/p&gt;</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -164,34 +87,7 @@ console.log(x.foo);
 
 &lt;p&gt;本記事は、この挙動が言語仕様のどの部分で言及されているのかのメモです。&lt;/p&gt;
 
-&lt;p&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;プリミティブ値のプロパティ参照をするときの挙動&#34;&gt;プリミティブ値のプロパティ参照をするときの挙動&lt;/h1&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://www.ecma-international.org/ecma-262/6.0/index.html#sec-getvalue&#34;&gt;ECMAScript 2015言語仕様 6.2.3.1節 GetValue(V)&lt;/a&gt;
-の以下の部分です。&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;If HasPrimitiveBase(V) is true, then&lt;/p&gt;
-
-&lt;p&gt;Assert: In this case, base will never be null or undefined.&lt;/p&gt;
-
-&lt;p&gt;Let base be ToObject(base).&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;ということで言語仕様としてプリミティブ値のプロパティ参照はエラーじゃないと分かり安心しました。
-夜もぐっすり眠れそうです(納期が近くなければ)。&lt;/p&gt;
-
-&lt;p&gt;ただし、ここで生成されたオブジェクトはその場限りのものなので、
-&lt;strong&gt;プリミティブ値がオブジェクトのように扱えるわけではない&lt;/strong&gt;ことには注意が必要です。
-具体的には以下のように数値のプロパティに対して代入をしたとしても、
-その結果が残りません。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;var x = 0;
-x.foo = 1;
-console.log(x.foo);
-// =&amp;gt; undefined
-&lt;/code&gt;&lt;/pre&gt;</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -213,47 +109,7 @@ console.log(x.foo);
 &lt;li&gt;ウィンドウ外で D&amp;amp;D 終了(&lt;code&gt;mouseup&lt;/code&gt;)を検知する&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;/p&gt;
-
-&lt;p&gt;とりあえず触ってみてください。Google Chrome 57.0.2987.133 (64-bit) でしか動作確認してません。&lt;/p&gt;
-
-&lt;script src=&#34;https://code.jquery.com/jquery-3.2.0.min.js&#34;
-  integrity=&#34;sha256-JAW99MJVpJBGcbzEuXk4Az05s/XyDdBomFqNlM3ic+I=&#34;
-  crossorigin=&#34;anonymous&#34;&gt;&lt;/script&gt;
-&lt;script type=&#34;text/javascript&#34; src=&#34;https://unpkg.com/rxjs/bundles/Rx.min.js&#34;&gt;&lt;/script&gt;
-&lt;script type=&#34;text/javascript&#34; src=&#34;https://tmrtmhr.info/js/drag-and-drop.js&#34;&gt;&lt;/script&gt;
-
-&lt;div id=&#34;dnd-container&#34; style=&#34;position: relative; width: 512px; height:64px;&#34;&gt;
-&lt;div id=&#34;dnd-target&#34; class=&#34;z-depth-2&#34; style=&#34;width:32px; height: 32px; background-color: blue; position:absolute; top: 16px; left: 240px; z-index: 999;&#34;&gt;&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://liginc.co.jp/web/js/151272&#34;&gt;「RxJS」初心者入門 – JavaScriptの非同期処理の常識を変えるライブラリ&lt;/a&gt;
-にあるコードとほぼ同じですが、終了条件のストリームを &lt;code&gt;mouseup&lt;/code&gt; だけでなく &lt;code&gt;$(window)&lt;/code&gt; の &lt;code&gt;mouseup&lt;/code&gt; からも作っています。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;  // 終了条件を表すストリーム
-  var terminateDndStream = Rx.Observable.merge(
-    mouseUpStream,
-    Rx.Observable.fromEvent($(window), &#39;mouseup&#39;)
-  );
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;今回用いた技術的なポイントは以下の通りです。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;window&lt;/code&gt; 内でドラッグを開始した場合、ウィンドウ外での &lt;code&gt;mouseup&lt;/code&gt; や &lt;code&gt;mousemove&lt;/code&gt; を捕捉できる&lt;/li&gt;
-&lt;li&gt;イベントストリームをマージして OR 条件を表現する&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;参考：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://liginc.co.jp/web/js/151272&#34;&gt;「RxJS」初心者入門 – JavaScriptの非同期処理の常識を変えるライブラリ&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://qiita.com/tyfkda/items/228934160b0951a8e732&#34;&gt;マウスをウィンドウ外で離されてもイベントを受け取る&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://stackoverflow.com/questions/14912515/how-to-detect-a-mouseup-event-outside-the-window&#34;&gt;How to detect a MouseUp event outside the window?&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Gist も貼っておきます。
-&lt;script src=&#34;//gist.github.com/tmrtmhr/d02aaa74e54a6fa684137ae8d4d8b16e.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
   </channel>

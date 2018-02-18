@@ -1,5 +1,5 @@
 +++
-date = "2018-02-06T12:38:14+09:00"
+date = "2018-02-18T01:30:06+09:00"
 draft = true
 title = "Unity メモ"
 tags = ["Unity"]
@@ -94,3 +94,19 @@ TangoManager で Enable 3D Reconstraction を ON
 [Tango Dynamic Meshでキャラクターの移動を制限する](https://qiita.com/jyuko/items/0735a6cc3971750de0ff)
 
 [Google Tango UnityのNavMeshで経路表示](https://www.youtube.com/watch?v=CRRIO4J-X_E)
+
+# 3D Text Occulusion
+http://wiki.unity3d.com/index.php?title=3DText
+
+
+[What kind of precision can the Tango acheive?](https://stackoverflow.com/questions/34672723/what-kind-of-precision-can-the-tango-acheive)
+
+https://developers.google.com/tango/overview/depth-perception?hl=ja
+0.5m-4m
+必要電力と精度のバランスのため。
+赤外線を使うため、太陽光や白熱球の影響を受ける。
+および色の黒い赤外線を反射しない物体に対する使用は正確に測定できないため推奨されません。
+
+[やはりUNITYでAndroidプラグインを作るにはAndroidJavaClassが便利だ](https://qiita.com/YukiMiyatake/items/c8c2ef396fbf4457ba4f)
+
+[Android開発 | 画像のExif属性に位置情報や撮影日時を保存する方法](http://mussyu1204.myhome.cx/wordpress/it/?p=161)

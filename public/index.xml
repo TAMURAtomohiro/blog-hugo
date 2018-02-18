@@ -2,12 +2,28 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>嵐の小舟より</title>
-    <link>https://tmrtmhr.info/index.xml</link>
+    <link>https://tmrtmhr.info/</link>
     <description>Recent content on 嵐の小舟より</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <lastBuildDate>Sat, 17 Feb 2018 01:02:32 +0900</lastBuildDate>
-    <atom:link href="https://tmrtmhr.info/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 18 Feb 2018 19:54:05 +0900</lastBuildDate>
+    
+	<atom:link href="https://tmrtmhr.info/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Unity でスクリーンショット画像に Exif 情報を追加する</title>
+      <link>https://tmrtmhr.info/tech/unity/add-exif-to-screenshot/</link>
+      <pubDate>Sun, 18 Feb 2018 19:54:05 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/unity/add-exif-to-screenshot/</guid>
+      <description>&lt;p&gt;2018-02 時点では Unity に Exif を扱えるライブラリがないようです。&lt;/p&gt;
+
+&lt;p&gt;なので Android ライブラリを呼び出して実装します。
+(iOS では試していないですが、同様のアプローチでいけるんじゃないでしょうか)&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>API Gateway の &#39;Unable to base64 decode the body&#39; エラー</title>
@@ -27,18 +43,7 @@ S3 からは正常に取得できているようでしたが、
 結果的に AWS 統合から Lambda 統合に変えて S3 オブジェクトを取得するようにしたら直ったのですが、
 こういう挙動をする理由についての公式ドキュメントなどは見つけられていません。&lt;/p&gt;
 
-&lt;p&gt;&lt;/p&gt;
-
-&lt;p&gt;最初はメタデータの Content-Type がおかしいのかと思いましたが、
-確認してみても &lt;code&gt;text/html&lt;/code&gt; だったので混乱しつつまずはエラーメッセージで検索してみました。
-見つけたのは Stack overflow の以下の記事。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://stackoverflow.com/questions/43325993/api-gateway-unable-to-decode-base64&#34;&gt;API Gateway unable to decode base64&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;AWS 統合だと API Gateway はレスポンスが Base64 エンコードされていることを期待するよ、
-とか書いてあるように見えたので Lambda 統合にして Lambda を経由するようにしたら直りました。&lt;/p&gt;
-
-&lt;p&gt;謎です。&lt;/p&gt;</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -126,91 +131,7 @@ S3 側では &lt;code&gt;*.s3.amazonaws.com&lt;/code&gt; という SSL 証明書
 
 &lt;p&gt;より一般的には、AWS Lambda の実行環境に入っていないネイティブライブラリを使いたい場合は静的リンクして持ち込む、という話です。&lt;/p&gt;
 
-&lt;p&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;lambda-とec2-インスタンスの作成&#34;&gt;Lambda とEC2 インスタンスの作成&lt;/h1&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://docs.aws.amazon.com/ja_jp/lambda/latest/dg/current-supported-versions.html&#34;&gt;Lambda の実行環境のAMIを調べ&lt;/a&gt;、
-EC2インスタンスを作ります。
-たとえば &lt;code&gt;amzn-ami-hvm-2017.03.1.20170812-x86_64-gp2&lt;/code&gt; という AMI ID のものを Community AMI から探して起動します。&lt;/p&gt;
-
-&lt;h1 id=&#34;go言語環境のセットアップ&#34;&gt;Go言語環境のセットアップ&lt;/h1&gt;
-
-&lt;p&gt;参考： &lt;a href=&#34;https://dev.classmethod.jp/cloud/aws/amazon-linux-go-setup/&#34;&gt;Go開発環境/ビルド環境としてAmazon Linuxをセットアップする手順&lt;/a&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;sudo yum install golang
-mkdir $HOME/go
-echo &#39;export GOPATH=$HOME/go&#39; &amp;gt;&amp;gt; .bashrc
-source .bashrc
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&#34;各種ライブラリのインストール&#34;&gt;各種ライブラリのインストール&lt;/h1&gt;
-
-&lt;p&gt;&lt;code&gt;configure&lt;/code&gt;のオプションについては&lt;a href=&#34;https://github.com/crewjam/go-xmlsec&#34;&gt;crewjam/go-xmlsec&lt;/a&gt;のまま。
-途中で失敗するところがいくつかあったので手順を足しています。&lt;/p&gt;
-
-&lt;h2 id=&#34;静的リンク用-glibc-のインストール&#34;&gt;静的リンク用 glibc のインストール&lt;/h2&gt;
-
-&lt;p&gt;これは go-xmlsec には出てこなかった手順です。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;sudo yum install glibc-static.x86_64
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;libxml2-のインストール&#34;&gt;libxml2 のインストール&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code&gt;cd
-curl -sL ftp://xmlsoft.org/libxml2/libxml2-2.9.6.tar.gz | tar -xzf -
-cd libxml2-2.9.6
-./configure --enable-static --disable-shared --without-gnu-ld --with-c14n --without-catalog --without-debug --without-docbook  --without-fexceptions  --without-ftp --without-history --without-html --without-http --without-iconv --without-icu --without-iso8859x --without-legacy --without-mem-debug --without-minimum --with-output --without-pattern --with-push --without-python --without-reader --without-readline --without-regexps --without-run-debug --with-sax1 --without-schemas --without-schematron --without-threads --without-thread-alloc --with-tree --without-valid --without-writer --without-xinclude --without-xpath --with-xptr --without-modules --without-zlib --without-lzma --without-coverage
-sudo make install
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;openssl-のインストール&#34;&gt;openssl のインストール&lt;/h2&gt;
-
-&lt;p&gt;go-xmlsec の手順だけでは &lt;code&gt;libcrypto.a&lt;/code&gt; が配置されなかったため、それを追加しています。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;cd
-curl -sL ftp://ftp.openssl.org/source/openssl-1.1.0f.tar.gz | tar -xzf -
-cd openssl-1.1.0f
-./config no-shared no-weak-ssl-ciphers no-ssl2 no-ssl3 no-comp no-idea no-dtls no-hw no-threads no-dso
-sudo make depend install
-sudo mkdir /usr/local/ssl/lib
-sudo cp ./libcrypto.a /usr/local/ssl/lib/
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;xmlsec-のインストール&#34;&gt;xmlsec のインストール&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code&gt;cd
-curl -sL http://www.aleksey.com/xmlsec/download/xmlsec1-1.2.25.tar.gz | tar -xzf -
-cd xmlsec1-1.2.25/
-./configure --enable-static --disable-shared --disable-crypto-dl --disable-apps-crypto-dl --enable-static-linking --without-gnu-ld --with-default-crypto=openssl --with-openssl=/usr/local/ssl --with-libxml=/usr/local --without-nss --without-nspr --without-gcrypt --without-gnutls --without-libxslt
-sudo make -C src install
-sudo make -C include install
-sudo make install-pkgconfigDATA
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;pkg-config-path-に色々追加&#34;&gt;&lt;code&gt;PKG_CONFIG_PATH&lt;/code&gt; に色々追加&lt;/h2&gt;
-
-&lt;p&gt;これも go-xmlsec にはない手順です。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;cd
-echo &#39;export PKG_CONFIG_PATH=/usr/lib64/pkgconfig:/usr/local/lib64/pkgconfig:/usr/share/pkgconfig:/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH&#39; &amp;gt;&amp;gt; ~/.bashrc
-source .bashrc
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;ビルドの動作確認&#34;&gt;ビルドの動作確認&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code&gt;go get github.com/crewjam/go-xmlsec
-cd go/src/github.com/crewjam/go-xmlsec
-go build -tags static -ldflags &#39;-s -extldflags &amp;quot;-static&amp;quot;&#39; -o ~/xmldsig-static.bin ./examples/xmldsig.go
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&#34;xmlsec-の使い方&#34;&gt;xmlsec の使い方&lt;/h1&gt;
-
-&lt;p&gt;諸々説明できるほど理解していないので取り急ぎコマンドだけ掲載しますと以下のような感じです。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;xmlsec1 verify --id-attr:ID &amp;quot;urn:oasis:names:tc:SAML:2.0:protocol:Response&amp;quot; --trusted-pem x509.cert SamlResponse.xml
-&lt;/code&gt;&lt;/pre&gt;</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -239,44 +160,7 @@ SDK を使って自分たちで再実装するなどしないといけません�
 &lt;p&gt;注意点ですが、このパッケージは Lambda の実行環境が変更されることでいきなり動かなくなる可能性があります。
 たとえば、&lt;code&gt;aws&lt;/code&gt; コマンドが &lt;code&gt;/usr/bin/python&lt;/code&gt; を見に行くため、このへんを変更されるとアウトです。&lt;/p&gt;
 
-&lt;p&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;aws-cli-が動く-lambda-パッケージ作成手順について&#34;&gt;AWS CLI が動く Lambda パッケージ作成手順について&lt;/h1&gt;
-
-&lt;p&gt;AWS CLI は Python で実装されているため、&lt;code&gt;aws&lt;/code&gt; コマンドに必要なライブラリを
-すべて Lambda パッケージに含めて適切にロードされるようにすれば Lambda 上で動きます。&lt;/p&gt;
-
-&lt;p&gt;作成環境としては &lt;a href=&#34;http://docs.aws.amazon.com/ja_jp/lambda/latest/dg/current-supported-versions.html&#34;&gt;Lambda環境と実行できるライブラリ&lt;/a&gt; にある
-AMI (&lt;code&gt;amzn-ami-hvm-2017.03.1.20170812-x86_64-gp2&lt;/code&gt;) を使用しました。&lt;/p&gt;
-
-&lt;p&gt;また、作成手順としては以下のブログを参考にさせていただきました。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://alestic.com/2016/11/aws-lambda-awscli/&#34;&gt;Running aws-cli Commands Inside An AWS Lambda Function&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;手順の差分は以下の通りです。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;事前に &lt;code&gt;sudo yum install libyaml-devel&lt;/code&gt; が必要(&lt;code&gt;PyYAML&lt;/code&gt;のため)&lt;/li&gt;
-&lt;li&gt;PyYAML が &lt;code&gt;lib64&lt;/code&gt; 以下にインストールされるので、そのあたりをパッケージに含めることが必要 ( &lt;code&gt;(cd $virtualenv/lib64/python2.7/site-packages; zip -r9 $zipfile .)&lt;/code&gt; )&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&#34;その他のアプローチ&#34;&gt;その他のアプローチ&lt;/h1&gt;
-
-&lt;ul&gt;
-&lt;li&gt;AWS CLI の該当部分を &lt;code&gt;import&lt;/code&gt; して使う&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;code&gt;sync&lt;/code&gt; が実装されている部分を特定するのが面倒そうだったので保留。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;DataPipeline を使う&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;DataPipeline から EC2 インスタンスを起動して AWS CLI を走らせることもできます。
-EC2インスタンスの料金も秒単位になったので小規模データでもコスト的に悪くないと思います。
-そもそも Lambda だと実行時間の上限(300秒)があるので大規模データの場合は DataPipeline を使うことになるでしょう。&lt;/p&gt;</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -305,42 +189,7 @@ EC2インスタンスの料金も秒単位になったので小規模データ�
 &lt;li&gt;参考：&lt;a href=&#34;https://keita.blog/2015/11/24/hosting-a-single-page-app-on-s3-with-proper-urls/&#34;&gt;Hosting a Single-Page App on S3, with proper URLs&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;s3-に存在しないファイルをリクエストした際-access-denied-403-エラーになる場合&#34;&gt;S3 に存在しないファイルをリクエストした際 Access Denied (403) エラーになる場合&lt;/h1&gt;
-
-&lt;p&gt;バケットポリシーのミスでした。&lt;code&gt;GetObject&lt;/code&gt; だけでなく &lt;code&gt;ListBucket&lt;/code&gt; の権限が必要です。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;バケットポリシーのサンプル&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;pre&gt;&lt;code&gt;{
-  &amp;quot;Version&amp;quot;: &amp;quot;2012-10-17&amp;quot;,
-  &amp;quot;Statement&amp;quot;: [
-    {
-      &amp;quot;Sid&amp;quot;: &amp;quot;S3ListBucket&amp;quot;,
-      &amp;quot;Effect&amp;quot;: &amp;quot;Allow&amp;quot;,
-      &amp;quot;Action&amp;quot;: [
-        &amp;quot;s3:ListBucket&amp;quot;
-      ],
-      &amp;quot;Principal&amp;quot;: {
-        &amp;quot;AWS&amp;quot;: &amp;quot;arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity XXX&amp;quot;
-      },
-      &amp;quot;Resource&amp;quot;: &amp;quot;arn:aws:s3:::your.domain&amp;quot;
-    },
-    {
-      &amp;quot;Sid&amp;quot;: &amp;quot;S3GetObject&amp;quot;,
-      &amp;quot;Effect&amp;quot;: &amp;quot;Allow&amp;quot;,
-      &amp;quot;Principal&amp;quot;: {
-        &amp;quot;AWS&amp;quot;: &amp;quot;arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity XXX&amp;quot;
-      },
-      &amp;quot;Action&amp;quot;: &amp;quot;s3:GetObject&amp;quot;,
-      &amp;quot;Resource&amp;quot;: &amp;quot;arn:aws:s3:::your.domain/*&amp;quot;
-    }
-  ]
-}
-&lt;/code&gt;&lt;/pre&gt;</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -356,48 +205,7 @@ BitBucket Pipelines の環境には Chrome がインストールされていな�
 
 &lt;p&gt;本記事はそのためのメモです。&lt;/p&gt;
 
-&lt;p&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;karma.conf.js&lt;/code&gt; の &lt;code&gt;files&lt;/code&gt; に以下を追加。これは &lt;code&gt;&#39;node_modules/intl/dist/Intl.min.js&#39;&lt;/code&gt;よりもあとに追加する必要があります。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;files: [
-  ...
-  // for UT on BitBucket, Intl の読み込みの下に書くこと
-  &#39;node_modules/intl/locale-data/jsonp/ja-JP.js&#39;,
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;BitBucket 上での実行時のみ &lt;code&gt;PhatomJS&lt;/code&gt; を使うよう環境変数によって切り替えます。
-( 参考：&lt;a href=&#34;https://confluence.atlassian.com/bitbucket/environment-variables-794502608.html&#34;&gt;BitBucket の Environment Variables&lt;/a&gt;)&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;if (process.env.CI) {
-  config.browsers = [ &#39;PhantomJS&#39; ];
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&#34;その他つまづいたところ&#34;&gt;その他つまづいたところ&lt;/h1&gt;
-
-&lt;h2 id=&#34;rx-js-のビルドエラー&#34;&gt;Rx.js のビルドエラー&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code&gt;Error on fetch for rxjs/operators at file:///opt/atlassian/pipelines/agent/build/frontend/node_modules/rxjs/operators.js`
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;参考：&lt;a href=&#34;https://github.com/mgechev/angular-seed/issues/2105&#34;&gt;angular-seed の Issue #2105&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;package.json&lt;/code&gt; の &lt;code&gt;rxjs&lt;/code&gt; を &lt;code&gt;^5.4.3&lt;/code&gt; から &lt;code&gt;5.4.3&lt;/code&gt; に修正。&lt;/p&gt;
-
-&lt;h2 id=&#34;tools-utils-seed-clean-ts-で型エラー&#34;&gt;&lt;code&gt;tools/utils/seed/clean.ts&lt;/code&gt; で型エラー&lt;/h2&gt;
-
-&lt;p&gt;以下のようなエラーが出て TypeScript のコンパイルに失敗するケース。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;TSError: ⨯ Unable to compile TypeScript
-tools/utils/seed/clean.ts (24,32): Property &#39;bgRed&#39; does not exist on type &#39;typeof &amp;quot;/opt/atlassian/pipelines/agent/build/frontend/node_modules/@types/gulp-util/node_modules/...&#39;. (2339)
-tools/utils/seed/clean.ts (31,47): Property &#39;yellow&#39; does not exist on type &#39;typeof &amp;quot;/opt/atlassian/pipelines/agent/build/frontend/node_modules/@types/gulp-util/node_modules/...&#39;. (2339)
-tools/utils/seed/clean.ts (39,40): Property &#39;red&#39; does not exist on type &#39;typeof &amp;quot;/opt/atlassian/pipelines/agent/build/frontend/node_modules/@types/gulp-util/node_modules/...&#39;. (2339)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://github.com/DefinitelyTyped/DefinitelyTyped/issues/21004&#34;&gt;DefinitelyTyped の issue #21004&lt;/a&gt;を見ると
-&lt;code&gt;chalk@2.2.0&lt;/code&gt;から自前で型定義ファイルを提供するようになり、DefinitelyTyped で提供していたものと不整合が……という話のようでした。
-取り急ぎ &lt;code&gt;clean.ts&lt;/code&gt; で &lt;code&gt;bgRed&lt;/code&gt; などを使わないよう修正して対処しました。&lt;/p&gt;</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -425,60 +233,7 @@ ElasticSearch の設定だけを修正しても動かないので注意してく
 
 &lt;p&gt;最終的な &lt;code&gt;docker-compose.yml&lt;/code&gt; については &lt;a href=&#34;http://christina04.hatenablog.com/entry/2017/04/12/013556&#34;&gt;docker-compose で Kibana 5.x を使う&lt;/a&gt; を参考にしました。&lt;/p&gt;
 
-&lt;p&gt;&lt;/p&gt;
-
-&lt;p&gt;5.3.0 の頃に使用していた &lt;code&gt;docker-compose.yml&lt;/code&gt; では kibana コンテナに以下のように設定していました。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;services:
-  kibana:
-    links:
-      - elasticsearch
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;で、今回 5.5.2 に切り替えるにあたり、&lt;a href=&#34;https://www.elastic.co/guide/en/elasticsearch/reference/5.5/docker.html&#34;&gt;Install Elasticsearch with Docker&lt;/a&gt;
-を参考にして「&lt;strong&gt;ElasticSearch コンテナ&lt;/strong&gt;」の設定に以下のような記述を加えました。
-また、トップレベルにネットワーク設定を(よく理解しないまま)追加しました。
-(厳密に言うと他の設定も色々変わっていますが、今回のトラブルとは無関係なので割愛します。)&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;services:
-  elasticsearch:
-    networks:
-      - esnet
-
-networks:
-  esnet:
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;それで &lt;code&gt;docker-compose up&lt;/code&gt; してみると起動しません。
-症状としては以下のようなログが出ており、どうも kibana から elasticsearch への接続ができていないようでした。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;kibana_1         | {&amp;quot;type&amp;quot;:&amp;quot;log&amp;quot;,&amp;quot;@timestamp&amp;quot;:&amp;quot;2017-08-28T06:45:01Z&amp;quot;,&amp;quot;tags&amp;quot;:[&amp;quot;warning&amp;quot;,&amp;quot;elasticsearch&amp;quot;,&amp;quot;admin&amp;quot;],&amp;quot;pid&amp;quot;:7,&amp;quot;message&amp;quot;:&amp;quot;Unable to revive connection: http://elasticsearch:9200/&amp;quot;}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;kibana コンテナの &lt;code&gt;/etc/hosts&lt;/code&gt; や環境変数を確認すると &lt;code&gt;elasticsearch&lt;/code&gt; の登録がありません。
-自分の理解は &lt;code&gt;links&lt;/code&gt; に指定した内容がこのあたりに書き込まれることでコンテナ間のエイリアスによるアクセスができる、
-というところで止まっていたので、はて……？と混乱しました。&lt;/p&gt;
-
-&lt;p&gt;で、そもそも &lt;code&gt;networks&lt;/code&gt; って何ぞや、と &lt;a href=&#34;http://docs.docker.jp/engine/userguide/networking/dockernetworks.html&#34;&gt;Docker コンテナ・ネットワークの理解&lt;/a&gt; を見て気づきました。
-上記の設定では ElasticSearch コンテナと Kibana コンテナが違うネットワークにいるため &lt;code&gt;elasticsearch&lt;/code&gt; というドメイン名ではアクセスできないというわけです。&lt;/p&gt;
-
-&lt;p&gt;正しい設定は以下のどちらかです。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;ElasticSearch と Kibana コンテナの両方で &lt;code&gt;networks&lt;/code&gt; を指定する&lt;/li&gt;
-&lt;li&gt;ElasticSearch と Kibana コンテナの両方で &lt;code&gt;networks&lt;/code&gt; を指定せず、Kibana コンテナに &lt;code&gt;links&lt;/code&gt; を設定する&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;ただし、&lt;code&gt;links&lt;/code&gt;は廃止予定のようなので、&lt;code&gt;networks&lt;/code&gt;を指定するのが良いでしょう。&lt;/p&gt;
-
-&lt;p&gt;じゃあユーザ定義ネットワークの外部からアクセスするにはどう設定するのかというところは未調査です。すみません。&lt;/p&gt;
-
-&lt;h2 id=&#34;参考&#34;&gt;参考&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://christina04.hatenablog.com/entry/2017/04/12/013556&#34;&gt;docker-compose で Kibana 5.x を使う&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://docs.docker.jp/engine/userguide/networking/dockernetworks.html&#34;&gt;Docker コンテナ・ネットワークの理解&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -507,46 +262,7 @@ SVGで描画するとこんな感じです。&lt;/p&gt;
 &lt;li&gt;&lt;code&gt;canvas.add.apply(canvas, polygons)&lt;/code&gt; のようにまとめて &lt;code&gt;apply&lt;/code&gt; で描画するときは配列の長さに注意するべし&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;/p&gt;
-
-&lt;script type=&#34;text/javascript&#34; src=&#34;https://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.7.11/fabric.min.js&#34;&gt;&lt;/script&gt;
-&lt;script type=&#34;text/javascript&#34; src=&#34;https://tmrtmhr.info/js/canvas-surface.js&#34;&gt;&lt;/script&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://tmrtmhr.info/js/canvas-surface.js&#34;&gt;コード例&lt;/a&gt;&lt;/p&gt;
-
-&lt;canvas id=&#34;canvas-surface&#34; width=&#34;640&#34; height=&#34;320&#34;&gt; &lt;/canvas&gt;
-
-&lt;h1 id=&#34;uncaught-rangeerror-maximum-call-stack-size-exceeded-というエラーが出る場合について&#34;&gt;&amp;ldquo;Uncaught RangeError: Maximum call stack size exceeded&amp;rdquo; というエラーが出る場合について&lt;/h1&gt;
-
-&lt;p&gt;上のコード例では 1 辺に 100 個のポリゴンとしています。
-全体では 100 * 100 で 10000 個のポリゴンです。&lt;/p&gt;
-
-&lt;p&gt;コードの構造としては以下のような感じです。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;  var canvas = new fabric.Canvas(&#39;canvas-surface&#39;);
-  var polygons = [];
-  for (var i = 0; i &amp;lt; cells; i++) {
-    for (var j = 0; j &amp;lt; cells; j++) {
-      ...
-      var polygon = new fabric.Polygon([pa, pb, pc, pd]);
-      ...
-      polygons.push(polygon);
-    }
-  }
-  canvas.add.apply(canvas,polygons);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;二重ループの中で&lt;code&gt;canvas.add&lt;/code&gt;をしていないのは、1個ごとに描画するのが重いためです。
-30 * 30 でも 5 秒とかになってしまうので、100 * 100 ともなると待てませんでした。&lt;/p&gt;
-
-&lt;p&gt;なのでいったん配列にまとめて &lt;code&gt;apply&lt;/code&gt; で渡すことにしました。
-この場合 100 * 100 でも手元の環境(CPU 3.1GHz, Google Chrome バージョン: 59.0.3071.104)では 800 ms くらいの実行時間で、
-余裕がありそうだったので数を増やしていったのですが、
-251 * 251 で &lt;code&gt;Maximum call stack size exceeded&lt;/code&gt; エラーとなりました。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Function/apply&#34;&gt;Mozilla のドキュメント&lt;/a&gt;でも言及されていますが、
-&lt;code&gt;apply&lt;/code&gt; に配列として渡した引数群は、スタックに積み直されるため、長すぎる場合はスタックがあふれてエラーとなるわけです。
-上限は処理系によって異なるため、適度に分割して渡す必要が出てきます。&lt;/p&gt;</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -579,14 +295,7 @@ json.Unmarshal([]byte(&amp;quot;[1,2,null]&amp;quot;, &amp;amp;got)
 &lt;li&gt;明示的に &lt;code&gt;float64(1)&lt;/code&gt; として変換する&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;コードの挙動確認&#34;&gt;コードの挙動確認&lt;/h1&gt;
-
-&lt;p&gt;以下でコードの挙動を確認できます。
-&lt;a href=&#34;https://play.golang.org/p/7U2AtxLORC&#34;&gt;The Go Playground&lt;/a&gt;&lt;/p&gt;
-
-&lt;script src=&#34;//gist.github.com/tmrtmhr/197cf8ed967cc97c0388464b315cfda0.js&#34;&gt;&lt;/script&gt;</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -620,34 +329,7 @@ console.log(x.foo);
 
 &lt;p&gt;本記事は、この挙動が言語仕様のどの部分で言及されているのかのメモです。&lt;/p&gt;
 
-&lt;p&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;プリミティブ値のプロパティ参照をするときの挙動&#34;&gt;プリミティブ値のプロパティ参照をするときの挙動&lt;/h1&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://www.ecma-international.org/ecma-262/6.0/index.html#sec-getvalue&#34;&gt;ECMAScript 2015言語仕様 6.2.3.1節 GetValue(V)&lt;/a&gt;
-の以下の部分です。&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;If HasPrimitiveBase(V) is true, then&lt;/p&gt;
-
-&lt;p&gt;Assert: In this case, base will never be null or undefined.&lt;/p&gt;
-
-&lt;p&gt;Let base be ToObject(base).&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;ということで言語仕様としてプリミティブ値のプロパティ参照はエラーじゃないと分かり安心しました。
-夜もぐっすり眠れそうです(納期が近くなければ)。&lt;/p&gt;
-
-&lt;p&gt;ただし、ここで生成されたオブジェクトはその場限りのものなので、
-&lt;strong&gt;プリミティブ値がオブジェクトのように扱えるわけではない&lt;/strong&gt;ことには注意が必要です。
-具体的には以下のように数値のプロパティに対して代入をしたとしても、
-その結果が残りません。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;var x = 0;
-x.foo = 1;
-console.log(x.foo);
-// =&amp;gt; undefined
-&lt;/code&gt;&lt;/pre&gt;</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -663,48 +345,7 @@ console.log(x.foo);
 &lt;p&gt;本記事は、AWS Lambda (Node.js 6.10) から DynamoDB のデータを取得し、
 展開する処理のメモです。&lt;/p&gt;
 
-&lt;p&gt;&lt;/p&gt;
-
-&lt;p&gt;DynamoDB に以下のような形式でデータが入っているとします。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;{ &amp;quot;hash_id&amp;quot;: &amp;quot;string&amp;quot;,
-  &amp;quot;body&amp;quot;: JSON データ文字列を gzip 圧縮したバイナリ }
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;ここでは &lt;code&gt;hash_id&lt;/code&gt; を partition key として指定しています。
-なので以下のように &lt;code&gt;hash_id&lt;/code&gt; を指定して GET するとデータが取得できます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;var dynamodb = new AWS.DynamoDB.DocumentClient();
-var params = { TableName: &#39;dynamedb_table_name&#39;, Key: { &#39;hash_id&#39;: &#39;xxx&#39; } };
-dynamodb.get(params, function(err, data) { ... }
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;JSON 形式ではバイナリデータを扱えないので、Base64 形式に直してやりとりします。
-しかし、受信した段階で &lt;code&gt;data.Item.body&lt;/code&gt; は &lt;code&gt;Buffer&lt;/code&gt; データとなっているようです。
-(参考：&lt;a href=&#34;http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#get-property&#34;&gt;AWS SDK for Javascript のドキュメント&lt;/a&gt;)&lt;/p&gt;
-
-&lt;!--
-そのため、DynamoDB からのレスポンスである `data.Item.body` は「Base64 エンコードされたバイナリデータのバイト列(`Buffer`)」という状態です。
-
-なのでこれをデコードしたバイト列を作り、
-
-```
-var binary = Buffer.from(data.Item.body.toString(), &#39;base64&#39;);
-```
---&gt;
-
-&lt;p&gt;なのでこれを展開します。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;var body = zlib.gunzipSync(data.Item.body);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;これも &lt;code&gt;Buffer&lt;/code&gt; なので、文字列に変換して parse することでようやく元の JSON データとなります。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;JSON.parse(body.toString())
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;最後に以上の処理を行う AWS Lambda のサンプルを置いておきます。
-&lt;script src=&#34;//gist.github.com/tmrtmhr/3b8b9630ad01a5768c4a8b93ae6a814c.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -719,55 +360,7 @@ var binary = Buffer.from(data.Item.body.toString(), &#39;base64&#39;);
 &lt;li&gt;Google Chrome の起動オプションに &lt;code&gt;--disable-infobars&lt;/code&gt; を渡す&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;経緯&#34;&gt;経緯&lt;/h1&gt;
-
-&lt;p&gt;バージョン 57.0.2987.133(64-bit) あたりの Google Chrome と
-Selenium Chrome driver 2.28 でE2Eテストを実行すると
-&amp;ldquo;Chrome is being controlled by automated test software&amp;rdquo; とか
-&amp;ldquo;Chrome は自動テスト ソフトウェアによって制御されています&amp;rdquo; とかいう黄色い通知バーが出てくるようになりました。&lt;/p&gt;
-
-&lt;p&gt;まあ画面キャプチャには入らないですし、出てくること自体はいいんですけれども、
-そのせいで失敗する E2E テストが出てきて、おいおい誰だよこんなコード書いたの、やろう、ぶっころしてやる、
-と込み上げてくる怒りを糧に調べた解決法をこの記事へ記す次第です。&lt;/p&gt;
-
-&lt;p&gt;結局 Google Chrome の起動オプションに &lt;code&gt;--disable-infobars&lt;/code&gt; を渡して表示しないようにしました。&lt;/p&gt;
-
-&lt;p&gt;protorator を仕様する場合は設定ファイルに以下のような内容があれば OK です。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;capabilities: [
-  chromeOptions: {
-    args: [&#39;disable-infobars&#39;],
-  },
-]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&#34;mac-で-google-chrome-に-自動テストが云々-の通知バーを出す方法&#34;&gt;Mac で Google Chrome に&amp;rdquo;自動テストが云々&amp;rdquo;の通知バーを出す方法&lt;/h1&gt;
-
-&lt;p&gt;ターミナルで以下のように打つと起動している Chrome すべてに通知バーが出てきて嫌な気持ちになります。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --enable-automation
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&#34;通知バーが出ているときの-window-の高さ&#34;&gt;通知バーが出ているときの window の高さ&lt;/h1&gt;
-
-&lt;p&gt;以下のコードで高さを見てみると、通知バーの有無で 40px 違っていました。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;angular.element(window).height()
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&#34;e2e-テスト失敗の原因&#34;&gt;E2E テスト失敗の原因&lt;/h1&gt;
-
-&lt;ul&gt;
-&lt;li&gt;E2Eテストのコードがウィンドウの高さに強く依存していた(スクロール量がピクセル値でハードコーディングされている、など)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;参考：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://sqa.stackexchange.com/questions/26051/chrome-driver-2-28-chrome-is-being-controlled-by-automated-test-software-notif&#34;&gt;Chrome driver 2.28 “Chrome is being controlled by automated test software” notification .Can it be removed?&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -789,47 +382,7 @@ Selenium Chrome driver 2.28 でE2Eテストを実行すると
 &lt;li&gt;ウィンドウ外で D&amp;amp;D 終了(&lt;code&gt;mouseup&lt;/code&gt;)を検知する&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;/p&gt;
-
-&lt;p&gt;とりあえず触ってみてください。Google Chrome 57.0.2987.133 (64-bit) でしか動作確認してません。&lt;/p&gt;
-
-&lt;script src=&#34;https://code.jquery.com/jquery-3.2.0.min.js&#34;
-  integrity=&#34;sha256-JAW99MJVpJBGcbzEuXk4Az05s/XyDdBomFqNlM3ic+I=&#34;
-  crossorigin=&#34;anonymous&#34;&gt;&lt;/script&gt;
-&lt;script type=&#34;text/javascript&#34; src=&#34;https://unpkg.com/rxjs/bundles/Rx.min.js&#34;&gt;&lt;/script&gt;
-&lt;script type=&#34;text/javascript&#34; src=&#34;https://tmrtmhr.info/js/drag-and-drop.js&#34;&gt;&lt;/script&gt;
-
-&lt;div id=&#34;dnd-container&#34; style=&#34;position: relative; width: 512px; height:64px;&#34;&gt;
-&lt;div id=&#34;dnd-target&#34; class=&#34;z-depth-2&#34; style=&#34;width:32px; height: 32px; background-color: blue; position:absolute; top: 16px; left: 240px; z-index: 999;&#34;&gt;&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://liginc.co.jp/web/js/151272&#34;&gt;「RxJS」初心者入門 – JavaScriptの非同期処理の常識を変えるライブラリ&lt;/a&gt;
-にあるコードとほぼ同じですが、終了条件のストリームを &lt;code&gt;mouseup&lt;/code&gt; だけでなく &lt;code&gt;$(window)&lt;/code&gt; の &lt;code&gt;mouseup&lt;/code&gt; からも作っています。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;  // 終了条件を表すストリーム
-  var terminateDndStream = Rx.Observable.merge(
-    mouseUpStream,
-    Rx.Observable.fromEvent($(window), &#39;mouseup&#39;)
-  );
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;今回用いた技術的なポイントは以下の通りです。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;window&lt;/code&gt; 内でドラッグを開始した場合、ウィンドウ外での &lt;code&gt;mouseup&lt;/code&gt; や &lt;code&gt;mousemove&lt;/code&gt; を捕捉できる&lt;/li&gt;
-&lt;li&gt;イベントストリームをマージして OR 条件を表現する&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;参考：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://liginc.co.jp/web/js/151272&#34;&gt;「RxJS」初心者入門 – JavaScriptの非同期処理の常識を変えるライブラリ&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://qiita.com/tyfkda/items/228934160b0951a8e732&#34;&gt;マウスをウィンドウ外で離されてもイベントを受け取る&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://stackoverflow.com/questions/14912515/how-to-detect-a-mouseup-event-outside-the-window&#34;&gt;How to detect a MouseUp event outside the window?&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Gist も貼っておきます。
-&lt;script src=&#34;//gist.github.com/tmrtmhr/d02aaa74e54a6fa684137ae8d4d8b16e.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -851,11 +404,258 @@ Selenium Chrome driver 2.28 でE2Eテストを実行すると
 
 &lt;p&gt;Go 言語では型に別名をつけることができ、コンパイル時の型チェックで違う型として扱われるため、取り違えを防ぐのに有効です。&lt;/p&gt;
 
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>なぜGo言語はエラー返却に例外機構を使わないのか</title>
+      <link>https://tmrtmhr.info/tech/why-does-golang-not-have-exceptions/</link>
+      <pubDate>Mon, 03 Apr 2017 17:04:30 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/why-does-golang-not-have-exceptions/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;http://golang.jp/go_faq#exceptions&#34;&gt;Go言語 FAQ&lt;/a&gt;より引用すると&lt;/p&gt;
 
-&lt;p&gt;例えば緯度・経度などはともに実数ですが、それぞれ別の型名を与えておくと型チェックを利用できてうれしいです。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;例外(exception)がない理由は?&lt;/p&gt;
 
-&lt;script src=&#34;//gist.github.com/tmrtmhr/ae1025314c09b102d43189e6232a1cd7.js&#34;&gt;&lt;/script&gt;</description>
+&lt;p&gt;我々は、処理構造を制御するためのtry-catch-finally形式の例外処理機構によって、コードが入り組んでしまうと考えています。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;とのことです。&lt;/p&gt;
+
+&lt;p&gt;うーん、これだけじゃよく分かりません。&lt;/p&gt;
+
+&lt;p&gt;知りたいのは、&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;「例外機構が有用な場面」についてGo言語ではどのように対処するのか？
+はたしてGo言語の他の機能を組み合わせることでカバーできるのか？&lt;/li&gt;
+&lt;li&gt;「例外機構ではコードが入り組んでしまう」というのはどういうことを指しているのか？&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;自分の探し方が悪かったら申し訳ないですが、
+講演やら Effective Go やらでこういったことに言及している部分を見つけられなかったので、
+調べた内容と自分の推測をまとめてみます。&lt;/p&gt;
+
+&lt;p&gt;結論としては&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;例外機構が欲しい場面は Go 言語の他の機能でカバーできそう&lt;/li&gt;
+&lt;li&gt;例外機構によるエラー返却では、関数の出口が増えるため制御フローが複雑になる&lt;/li&gt;
+&lt;li&gt;エラー値返却の手段としての例外機構は、並行プログラムにそぐわない&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;ということです。&lt;/p&gt;
+
+&lt;p&gt;Go言語の他の機能というのは多値返却、&lt;code&gt;goto&lt;/code&gt;、&lt;code&gt;defer&lt;/code&gt;、&lt;code&gt;panic&lt;/code&gt;、&lt;code&gt;recover&lt;/code&gt; です。
+具体的にエラーハンドリングのコードがどうなるかについては別の記事にまとめたいです。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Go言語で union とか直和型のようなデータを表現したいときは interface を使う</title>
+      <link>https://tmrtmhr.info/tech/sum-type-in-golang/</link>
+      <pubDate>Wed, 29 Mar 2017 22:46:34 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/sum-type-in-golang/</guid>
+      <description>&lt;p&gt;たとえば Haskell では以下のようなデータ型を定義できます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;data Tree = Leaf | Branch Tree Tree
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;C言語で言えばタグ付き共用体(union)のような感じです。&lt;/p&gt;
+
+&lt;!-- ``` --&gt;
+
+&lt;!-- union Tree { --&gt;
+
+&lt;!--   struct Leaf { --&gt;
+
+&lt;!--     tag int; --&gt;
+
+&lt;!--   } leaf; --&gt;
+
+&lt;!--   struct Branch { --&gt;
+
+&lt;!--     tag int; --&gt;
+
+&lt;!--     left *Tree; --&gt;
+
+&lt;!--     right *Tree; --&gt;
+
+&lt;!--   } branch; --&gt;
+
+&lt;!-- } --&gt;
+
+&lt;!-- ``` --&gt;
+
+&lt;p&gt;この記事は、こんな感じで木構造などを表現したい時
+Go 言語ではどうするのか？という点について調べてみたメモです。
+結論としては&lt;code&gt;type Tree interface{ ... }&lt;/code&gt;を定義します。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;data Tree a&lt;/code&gt; のように汎用的なコンテナを作る方法については言及しません。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>GO言語で雛形JSONの内容をコマンド出力の内容で置換する</title>
+      <link>https://tmrtmhr.info/tech/replace-a-part-of-json-with-command-output/</link>
+      <pubDate>Tue, 14 Mar 2017 18:04:09 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/replace-a-part-of-json-with-command-output/</guid>
+      <description>&lt;p&gt;AWS CLI によりコマンドラインから制御したりする際、リクエストパラメータとして JSON ファイルが必要になることがあります。
+&lt;a href=&#34;https://tmrtmhr.info/tech/aws/delete-updated-file-cache-on-cloudfront/&#34;&gt;CloudFront のキャッシュを削除したいとき&lt;/a&gt;なんかがそうです。&lt;/p&gt;
+
+&lt;p&gt;AWS CLI のコマンドごとに、リクエストJSONを生成する専用スクリプトを書くという手もありますが、
+シェル上でパイプやらリダイレクトやらを駆使していい感じに JSON を生成できるある程度汎用的なスクリプトにならんものか、
+という思いから試してみた結果をここに記します。
+どこかに既にあるものでしたらすみません。&lt;/p&gt;
+
+&lt;p&gt;コマンド引数は以下のようになっていて、JSON ファイルは標準入力から与えます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;filljson ${入力の型} ${キーパス} ${入力ファイル名}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;標準入出力で JSON をやりとりするので以下のようにパイプでつなげることで
+中間ファイルを作ることなく最終的なリクエスト JSON が得られます。
+入力ファイル名のところには &lt;code&gt;bash&lt;/code&gt; や &lt;code&gt;zsh&lt;/code&gt; のプロセス置換機能を利用しています。
+プロセス置換機能を使うとプログラム側からは単にファイルパスが渡ってくるように見えるので、
+ファイルIOとして処理すればOKです。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;cat json/cloudfront-invalidation.json |
+  filljson int InvalidationBatch.Paths.Quantity &amp;lt;(git diff --ignore-all-space --diff-filter=M --name-only HEAD^ HEAD  public | wc -l) |
+  filljson [string] InvalidationBatch.Paths.Items &amp;lt;(git diff --ignore-all-space --diff-filter=M --name-only HEAD^ HEAD  public | sed -e &#39;s/^public//g&#39;) |
+  filljson string InvalidationBatch.CallerReference &amp;lt;(date +&amp;quot;osone3-%Y/%m/%d-%H:%k:%m&amp;quot; | tr -d &#39;\n&#39;) |
+  jq . &amp;gt; request.json
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>git diff を利用して更新のあったファイルのみ CloudFront のキャッシュを削除する</title>
+      <link>https://tmrtmhr.info/tech/aws/delete-updated-file-cache-on-cloudfront/</link>
+      <pubDate>Tue, 14 Mar 2017 17:15:21 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/aws/delete-updated-file-cache-on-cloudfront/</guid>
+      <description>&lt;p&gt;本サイトは Hugo で生成したものを GitHub Pages に push して公開し、
+CloudFront を利用して配信しています。
+CloudFront はキャッシュサーバとして働くので、
+何もしなければ TTL が切れるまでは古いコンテンツが表示されます。&lt;/p&gt;
+
+&lt;p&gt;単純にキャッシュ全削除という手もありますが、
+せっかくなので更新のあったファイルのみキャッシュを削除してみました。&lt;/p&gt;
+
+&lt;p&gt;やっていることは以下のような感じです。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;git diff&lt;/code&gt; で更新のあったファイル一覧を取得&lt;/li&gt;
+&lt;li&gt;一覧を加工して AWS CLI 用の JSON ファイルを生成&lt;/li&gt;
+&lt;li&gt;AWS CLI の &lt;code&gt;aws cloudfront create-invalidation&lt;/code&gt; でキャッシュ削除&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>ブログに使うドメインを AWS で取得する</title>
+      <link>https://tmrtmhr.info/tech/aws/register-a-domain-for-blog/</link>
+      <pubDate>Tue, 14 Mar 2017 17:03:40 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/aws/register-a-domain-for-blog/</guid>
+      <description>&lt;p&gt;せっかくなので本サイトのドメインを AWS Route53 で管理するようにした際のメモです。&lt;/p&gt;
+
+&lt;p&gt;やったことは以下の通り。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://aws.amazon.com/jp/route53/&#34;&gt;Route 53&lt;/a&gt; でドメインを取得&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://aws.amazon.com/jp/ses/&#34;&gt;SES&lt;/a&gt; で対象ドメインのメールアドレスにて受信&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://aws.amazon.com/jp/certificate-manager/&#34;&gt;Certificate Manager&lt;/a&gt; で対象ドメインのSSL証明書を取得&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://aws.amazon.com/jp/cloudfront/&#34;&gt;CloudFront&lt;/a&gt; に取得したSSL証明書を設定&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;なお、今のところ CloudFront のオリジンサーバとしては &lt;a href=&#34;https://aws.amazon.com/jp/s3/&#34;&gt;S3&lt;/a&gt; ではなく &lt;a href=&#34;https://pages.github.com/&#34;&gt;GitHub Pages&lt;/a&gt; を使用しています。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;2018/01/08 追記:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Certificate Manager で SSL証明書を取得する際、
+メールではなく DNS レコードによってドメイン所有を検証することが可能になっていました
+(&lt;a href=&#34;https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-validate-dns.html&#34;&gt;Use DNS to Validate Domain Ownership&lt;/a&gt;)。
+なので SSL 証明書の取得の際には SES の設定が不要になっています。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Hugo でマテリアルアイコンを使うための ShortCode</title>
+      <link>https://tmrtmhr.info/tech/hugo-with-material-icon/</link>
+      <pubDate>Wed, 08 Mar 2017 08:52:50 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/hugo-with-material-icon/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://gohugo.io/&#34;&gt;Hugo&lt;/a&gt; で任意の HTML を生成したい場合は &lt;a href=&#34;https://gohugo.io/extras/shortcodes/&#34;&gt;ShortCode&lt;/a&gt; を書くことになります。&lt;/p&gt;
+
+&lt;p&gt;本サイトでは使い道はさておきマテリアルアイコンを読み込んでいるので、
+ShortCode で使えるようにしてみました。
+&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Emacs から外部プロセスを呼び出して結果をエコーエリアに表示する</title>
+      <link>https://tmrtmhr.info/tech/call-process-on-emacs/</link>
+      <pubDate>Mon, 22 Feb 2016 16:16:21 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/call-process-on-emacs/</guid>
+      <description>&lt;p&gt;学生時代からの習慣と宗教上の理由から普段使いのエディタは Emacs
+(ここでは &lt;a href=&#34;http://emacsformacosx.com/&#34;&gt;GNU Emacs for Mac OS X&lt;/a&gt;)
+です。&lt;/p&gt;
+
+&lt;p&gt;設定ファイルを除いて自分で Emacs Lisp を書いて機能を追加したことはこれまで無かったのですが、
+このたび必要にかられて追加いたしました。
+&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Angular2 から Web Components を使う</title>
+      <link>https://tmrtmhr.info/tech/angular2-web-components/</link>
+      <pubDate>Mon, 22 Feb 2016 16:08:13 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/angular2-web-components/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://angular.io/&#34;&gt;Angular2&lt;/a&gt;が
+&lt;a href=&#34;http://angularjs.blogspot.jp/2015/12/angular-2-beta.html&#34;&gt;昨年12月に Beta リリース&lt;/a&gt;されたため、
+色々触りながら調べています。&lt;/p&gt;
+
+&lt;p&gt;Angular2 の設計ドキュメントのひとつ(&lt;a href=&#34;https://docs.google.com/document/d/1kpuR512G1b0D8egl9245OHaG0cFh0ST0ekhD_g8sxtI/edit#heading=h.ptbnyo3pqsmq&#34;&gt;Data Binding with Web Components&lt;/a&gt;)
+を見かけ、Web Components との併用を考慮しているようだったので、
+使い方を調べてみることにしました。
+&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>静的サイトジェネレータの生成時間比較</title>
+      <link>https://tmrtmhr.info/tech/static-site-generator-comparison/</link>
+      <pubDate>Tue, 08 Dec 2015 15:08:00 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/static-site-generator-comparison/</guid>
+      <description>&lt;p&gt;エンジニア界隈ではどうもブログを作る目的で静的サイトジェネレータというものが使われている、
+と聞いたため、せっかくなので使ってみることにしました。
+&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>なぜ静的サイト配信が重要となるか</title>
+      <link>https://tmrtmhr.info/tech/why-static-website-generators-are-the-next-big-thing/</link>
+      <pubDate>Mon, 30 Nov 2015 14:20:55 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/why-static-website-generators-are-the-next-big-thing/</guid>
+      <description>&lt;p&gt;Smashing Magazine の
+&lt;a href=&#34;http://www.smashingmagazine.com/2015/11/modern-static-website-generators-next-big-thing/&#34;&gt;Why Static Website Generators Are The Next Big Thing&lt;/a&gt;
+という記事を読んでの、自分の理解のためのメモです。
+直訳というわけでもなく、独自研究が含まれる恐れがあります。
+&lt;/p&gt;</description>
     </item>
     
   </channel>

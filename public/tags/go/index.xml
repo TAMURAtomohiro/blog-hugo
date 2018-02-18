@@ -2,11 +2,14 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Go on 嵐の小舟より</title>
-    <link>https://tmrtmhr.info/tags/go/index.xml</link>
+    <link>https://tmrtmhr.info/tags/go/</link>
     <description>Recent content in Go on 嵐の小舟より</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <atom:link href="https://tmrtmhr.info/tags/go/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 16 Apr 2017 15:01:48 +0900</lastBuildDate>
+    
+	<atom:link href="https://tmrtmhr.info/tags/go/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>Go言語の json.Unmarshal で読み込んだデータをテストするときは数値の型に注意する</title>
@@ -38,14 +41,7 @@ json.Unmarshal([]byte(&amp;quot;[1,2,null]&amp;quot;, &amp;amp;got)
 &lt;li&gt;明示的に &lt;code&gt;float64(1)&lt;/code&gt; として変換する&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;コードの挙動確認&#34;&gt;コードの挙動確認&lt;/h1&gt;
-
-&lt;p&gt;以下でコードの挙動を確認できます。
-&lt;a href=&#34;https://play.golang.org/p/7U2AtxLORC&#34;&gt;The Go Playground&lt;/a&gt;&lt;/p&gt;
-
-&lt;script src=&#34;//gist.github.com/tmrtmhr/197cf8ed967cc97c0388464b315cfda0.js&#34;&gt;&lt;/script&gt;</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -67,11 +63,7 @@ json.Unmarshal([]byte(&amp;quot;[1,2,null]&amp;quot;, &amp;amp;got)
 
 &lt;p&gt;Go 言語では型に別名をつけることができ、コンパイル時の型チェックで違う型として扱われるため、取り違えを防ぐのに有効です。&lt;/p&gt;
 
-&lt;p&gt;&lt;/p&gt;
-
-&lt;p&gt;例えば緯度・経度などはともに実数ですが、それぞれ別の型名を与えておくと型チェックを利用できてうれしいです。&lt;/p&gt;
-
-&lt;script src=&#34;//gist.github.com/tmrtmhr/ae1025314c09b102d43189e6232a1cd7.js&#34;&gt;&lt;/script&gt;</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -117,210 +109,7 @@ json.Unmarshal([]byte(&amp;quot;[1,2,null]&amp;quot;, &amp;amp;got)
 &lt;p&gt;Go言語の他の機能というのは多値返却、&lt;code&gt;goto&lt;/code&gt;、&lt;code&gt;defer&lt;/code&gt;、&lt;code&gt;panic&lt;/code&gt;、&lt;code&gt;recover&lt;/code&gt; です。
 具体的にエラーハンドリングのコードがどうなるかについては別の記事にまとめたいです。&lt;/p&gt;
 
-&lt;p&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;例外機構にいたった歴史&#34;&gt;例外機構にいたった歴史&lt;/h1&gt;
-
-&lt;p&gt;まず例外機構というのが何を目的に生まれたのかおさらいしてみました。&lt;/p&gt;
-
-&lt;p&gt;たまたま手元にあった「Concepts in Programming Languages(CIPL)」によると例外機構については「8章 Control in Sequential Languages」の中にあります。
-つまり例外機構とは制御フローを記述するものです。&lt;/p&gt;
-
-&lt;h2 id=&#34;行番号ベースのジャンプ-例-fortran&#34;&gt;行番号ベースのジャンプ(例：Fortran)&lt;/h2&gt;
-
-&lt;p&gt;以下、CIPL p.204-205 から引用したコードです。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;10 IF (X .GT. 0.000001) GO TO 20
-   X = -X
-11 Y = X*X - SIN(Y)/(X+1)
-   IF (X .LT. 0.000001) GO TO 50
-20 IF (X*Y .LT. 0.00001) GO TO 30
-   X = X - Y -Y
-30 X = X+Y
-   ...
-50 CONTINUE
-   X = A
-   Y = B - A + C * C
-   GO TO 11
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;引用終わり。&lt;/p&gt;
-
-&lt;p&gt;条件分岐の際、実行するコードを選ぶために明示的に行番号を指定してジャンプしています。
-このコードでは、50 から 11 に戻ることでループを作っています。
-フラットなコードなので、どこがループしているのがよく読まないとわかりません。
-さらにはループの途中にジャンプする、のようなことも書けてしまうため、複雑に入り組んだスパゲティコードを量産することが可能でした&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:1&#34;&gt;&lt;a rel=&#34;footnote&#34; href=&#34;#fn:1&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;。
-そのため、無制限なジャンプを許さないようにプログラム言語が発展します。&lt;/p&gt;
-
-&lt;h2 id=&#34;コードブロックベースのジャンプ&#34;&gt;コードブロックベースのジャンプ&lt;/h2&gt;
-
-&lt;p&gt;昨今の言語では条件分岐やループの際に &lt;code&gt;{ }&lt;/code&gt; やインデントルールでコードブロックを示すことで、
-言語処理系がいい感じにジャンプしてくれます。
-また、&lt;code&gt;break&lt;/code&gt;や&lt;code&gt;continue&lt;/code&gt;のような、やはりコードブロックベースのジャンプが広く採用されています。&lt;/p&gt;
-
-&lt;h2 id=&#34;例外機構&#34;&gt;例外機構&lt;/h2&gt;
-
-&lt;p&gt;&lt;code&gt;if-then-else&lt;/code&gt;などで記述できないパターンのジャンプとして例外機構が生まれます。
-その名の通り例外的なケースに際してコードブロックや関数呼び出しを抜けるためのものですが、
-それが実際に例外的なケースであるかどうかまで処理系がチェックするわけではありません。&lt;/p&gt;
-
-&lt;p&gt;そのため、例外機構というのは言語が提供する機能としては「値を渡せるジャンプ」です。
-典型的には&lt;code&gt;try { ... } catch(e) { ... }&lt;/code&gt;のような構文で、&lt;code&gt;try&lt;/code&gt;ブロックの実行中に例外が投げられると、対応する&lt;code&gt;catch&lt;/code&gt;ブロックへ移動します。
-注意が必要なのは、対応する&lt;code&gt;catch&lt;/code&gt;ブロックが見つかるまでコールスタックを戻りつつ探す点です。
-つまり、&lt;code&gt;try-catch&lt;/code&gt; に辿り着くたび &lt;code&gt;catch&lt;/code&gt; ブロックの情報がスタックに積まれ、ジャンプ先は実行時の関数呼び出し履歴に基いて決まります。&lt;/p&gt;
-
-&lt;h1 id=&#34;例外機構を使いたいケース&#34;&gt;例外機構を使いたいケース&lt;/h1&gt;
-
-&lt;p&gt;例外機構によってできることは以下の通りです。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;エラー値返却の表現&lt;/li&gt;
-&lt;li&gt;処理の中止および制御フローの移動&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;また、これによって生まれるメリットは以下のようになります。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;ネストした処理(多重ループ、再帰呼び出しなど)をまとめて中止できる&lt;/li&gt;
-&lt;li&gt;事前のエラーチェックを省ける&lt;/li&gt;
-&lt;li&gt;エラー処理を一箇所にまとめられる&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;ネストした処理をまとめて中止できることの例&#34;&gt;ネストした処理をまとめて中止できることの例&lt;/h2&gt;
-
-&lt;p&gt;CIPL p.214 の例を示します。&lt;/p&gt;
-
-&lt;p&gt;木構造の中にある数値をすべて掛け合わせる &lt;code&gt;prod&lt;/code&gt; を考えます。
-乗算なのでどこかにゼロが存在すると結果もゼロになるため、残りの計算が無駄です。
-再帰呼び出しで木を辿っているとコールスタックが伸びていきますが、
-例外機構を使えば処理を中止してまとめてスタックを戻り、ゼロを返すということが可能です。&lt;/p&gt;
-
-&lt;h2 id=&#34;事前のエラーチェックを省ける例&#34;&gt;事前のエラーチェックを省ける例&lt;/h2&gt;
-
-&lt;p&gt;CIPL p.208 の例を示します。&lt;/p&gt;
-
-&lt;p&gt;A の逆行列を求める関数 &lt;code&gt;invert&lt;/code&gt; を考えます。
-まず行列式 &lt;code&gt;det(A)&lt;/code&gt; を求め、これを利用することで逆行列が得られますが、&lt;code&gt;det(A)&lt;/code&gt;がゼロの場合には逆行列が存在しません。
-しかしながら &lt;code&gt;invert&lt;/code&gt; を使う前に、&lt;code&gt;det(A)&lt;/code&gt; を計算して値をチェックするのは&lt;code&gt;invert&lt;/code&gt;での処理と重複してしまいイマイチです。&lt;/p&gt;
-
-&lt;p&gt;なのでとりあえず &lt;code&gt;invert&lt;/code&gt; 内でとりあえず det(A) を計算し、ゼロであれば例外を投げてエラー値を表現し、処理を中止するということが可能です。&lt;/p&gt;
-
-&lt;h2 id=&#34;エラー処理を一箇所にまとめたいケース&#34;&gt;エラー処理を一箇所にまとめたいケース&lt;/h2&gt;
-
-&lt;p&gt;CIPL には載っていないですが例外機構の利用例としてよく見かけるものです。
-&lt;code&gt;try&lt;/code&gt;ブロックで複数種類のエラーが発生し得る、エラー処理が長い、などの状況では、
-正常系の機能コードとエラー処理のコードが混在するのが好ましくありません。
-これらを分離するために例外を利用し、エラー処理については&lt;code&gt;catch&lt;/code&gt;ブロックにまとめることができます。&lt;/p&gt;
-
-&lt;h1 id=&#34;例外機構を使うべきでないケース&#34;&gt;例外機構を使うべきでないケース&lt;/h1&gt;
-
-&lt;p&gt;個人的に面白いなと思ったのでメモしておきます。&lt;/p&gt;
-
-&lt;p&gt;「catch ブロックを探すためのスタック巻きとりにかかる時間を予測しにくいため、リアルタイム性が損なわれる」というもの。
-組込み機器で計算機資源が乏しかったり、あるいは処理時間について厳密に予測しなければならないケースには、例外機構は向いていません。&lt;/p&gt;
-
-&lt;p&gt;参考：&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://softwareengineering.stackexchange.com/questions/258012/why-design-a-modern-language-without-an-exception-handling-mechanism&#34;&gt;Why design a modern language without an exception-handling mechanism?&lt;/a&gt;&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;In embedded programming, exceptions were traditionally not allowed, because the overhead of the stack unwinding you have to do was deemed an unacceptable variability when trying to maintain real-time performance.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://qiita.com/MasayaMizuhara/items/98c0d490f1633d9b636f&#34;&gt;もう少し例外を使用しても良いのではないか&amp;hellip;&lt;/a&gt;&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;例えば 組み込みシステムのような厳しい処理速度が要求されるケース では例外を使用すべきではない(例外を throw してから catch するまでの最大時間を正確に測定することが困難なため)。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h1 id=&#34;go言語でのやり方&#34;&gt;Go言語でのやり方&lt;/h1&gt;
-
-&lt;h2 id=&#34;ネストした処理を中止する&#34;&gt;ネストした処理を中止する&lt;/h2&gt;
-
-&lt;p&gt;多重ループであれば &lt;code&gt;return&lt;/code&gt;、&lt;code&gt;break&lt;/code&gt; あるいは &lt;code&gt;goto&lt;/code&gt; が使えます。
-コールスタックを戻りたい場合は &lt;code&gt;defer&lt;/code&gt;、&lt;code&gt;panic&lt;/code&gt;、&lt;code&gt;recover&lt;/code&gt; を使います。&lt;/p&gt;
-
-&lt;h2 id=&#34;エラー値返却の表現&#34;&gt;エラー値返却の表現&lt;/h2&gt;
-
-&lt;p&gt;多値返却できるため、値としてエラーを返します。&lt;/p&gt;
-
-&lt;h2 id=&#34;エラー処理を一箇所にまとめる&#34;&gt;エラー処理を一箇所にまとめる&lt;/h2&gt;
-
-&lt;p&gt;&lt;code&gt;goto&lt;/code&gt;です。これは数少ない &lt;code&gt;goto&lt;/code&gt; が有用なケースのうちのひとつです。
-ただし、&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;if err != nil { goto ErrorHandling; }
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;みたいなコードはあちこちに残ります。&lt;/p&gt;
-
-&lt;h1 id=&#34;例外機構が並行プログラムで使えない理由&#34;&gt;例外機構が並行プログラムで使えない理由&lt;/h1&gt;
-
-&lt;p&gt;スレッド間ではスタックを共有しないためです。
-(参考：&lt;a href=&#34;http://www.lighterra.com/papers/exceptionsharmful/&#34;&gt;Exception Handling Considered Harmful&lt;/a&gt;)&lt;/p&gt;
-
-&lt;p&gt;ここまでの説明では、例外が投げられたとき、対応する &lt;code&gt;catch&lt;/code&gt; ブロックをコールスタックから探すという挙動でした。
-POSIXスレッドにも&lt;a href=&#34;https://www.ibm.com/developerworks/jp/linux/library/l-posix1/#f&#34;&gt;親子の概念がない&lt;/a&gt;ですし、
-スレッド間で暗黙的に例外が伝わるような仕様は難しそうです。&lt;/p&gt;
-
-&lt;p&gt;C++ や Java をちょろっと調べた感じでは、スレッド間で例外の情報を伝える際には何かしら共有メモリ方式を使うようです。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://phst.hateblo.jp/entry/2016/09/10/205618&#34;&gt;マルチスレッドにおける例外処理の受け渡し (VC++)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://minor.hatenablog.com/entry/20101130/1291125150&#34;&gt;スレッドがスローする例外をキャッチする&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;!-- [Erlang と Golang を比較してみる](http://qiita.com/soranoba/items/68d57b4635a2917f3c73) --&gt;
-
-&lt;!-- [Semipredicate problem](https://en.wikipedia.org/wiki/Semipredicate_problem) --&gt;
-
-&lt;!-- [Go, for Distributed System](https://talks.golang.org/2013/distsys.slide#1) --&gt;
-
-&lt;h1 id=&#34;例外機構に対する批判&#34;&gt;例外機構に対する批判&lt;/h1&gt;
-
-&lt;p&gt;前節までに調べたことで、個人的には「例外機構でやりたいことは Go 言語の他の機能でもカバーできそうだ」という気持ちになりました。
-また、「並行プログラムを念頭に置くなら例外機構は筋が悪そう」とも思います。&lt;/p&gt;
-
-&lt;p&gt;ですがそれだけだと「例外機構ではコードが入り組んでしまう」という説明にはならないので、例外機構への批判を探してみました。&lt;/p&gt;
-
-&lt;p&gt;大体「関数の出口が増えるため、制御フローが複雑になる」という感じの指摘でしょうか。
-&lt;a href=&#34;http://local.joelonsoftware.com/wiki/%E9%96%93%E9%81%95%E3%81%A3%E3%81%9F%E3%82%B3%E3%83%BC%E3%83%89%E3%81%AF%E9%96%93%E9%81%95%E3%81%A3%E3%81%A6%E8%A6%8B%E3%81%88%E3%82%8B%E3%82%88%E3%81%86%E3%81%AB%E3%81%99%E3%82%8B&#34;&gt;間違ったコードは間違って見えるようにする&lt;/a&gt;から引用すると、&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;本当の問題は、例外がコロケーションを殺してしまうということだ。コードが正しいことをしているかという質問に答えるためには、どこか別なところを見なければならず、あなたの目の持つまずいコードを見つけ出す能力が生かせないことになる。そこには見えるものがないからだ。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;ということで、明示的に &lt;code&gt;return&lt;/code&gt; が書いてあるのに比べて関数を抜ける可能性に気づきにくく、不正な状態に落ち入りやすくなるのを嫌っているという理解です。&lt;/p&gt;
-
-&lt;p&gt;参考：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://blogs.msdn.microsoft.com/oldnewthing/20040422-00/?p=39683&#34;&gt;Cleaner, more elegant, and wrong&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://blogs.msdn.microsoft.com/oldnewthing/20050114-00/?p=36693&#34;&gt;Cleaner, more elegant, and harder to recognize&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://local.joelonsoftware.com/wiki/%E9%96%93%E9%81%95%E3%81%A3%E3%81%9F%E3%82%B3%E3%83%BC%E3%83%89%E3%81%AF%E9%96%93%E9%81%95%E3%81%A3%E3%81%A6%E8%A6%8B%E3%81%88%E3%82%8B%E3%82%88%E3%81%86%E3%81%AB%E3%81%99%E3%82%8B&#34;&gt;間違ったコードは間違って見えるようにする&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.joelonsoftware.com/2003/10/13/13/&#34;&gt;Joel on software: 2003/10/13&lt;/a&gt;&lt;a href=&#34;http://d.hatena.ne.jp/kmaebashi/20091227/p1&#34;&gt;とその翻訳&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://stackoverflow.com/questions/1736146/why-is-exception-handling-bad&#34;&gt;StackOverflow: Why is exception handling bad&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://xahlee.info/comp/why_i_hate_exceptions.html&#34;&gt;Why I Hate Exceptions&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&#34;まとめ&#34;&gt;まとめ&lt;/h1&gt;
-
-&lt;p&gt;個人の感想です。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;例外機構が欲しい場面は Go 言語の他の機能でカバーできそう&lt;/li&gt;
-&lt;li&gt;例外機構によるエラー返却では、関数の出口が増えるため制御フローが複雑になる&lt;/li&gt;
-&lt;li&gt;エラー値返却の手段としての例外機構は、並行プログラムにそぐわないので Go 言語は例外機構を採用しなかった&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;footnotes&#34;&gt;
-
-&lt;hr /&gt;
-
-&lt;ol&gt;
-&lt;li id=&#34;fn:1&#34;&gt;この時代には、何しろ計算機資源が少ないので、そうしたジャンプを駆使してコードサイズ・命令数を削減することも重要だったようです。
- &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:1&#34;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/div&gt;</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -366,36 +155,7 @@ Go 言語ではどうするのか？という点について調べてみたメ�
 
 &lt;p&gt;&lt;code&gt;data Tree a&lt;/code&gt; のように汎用的なコンテナを作る方法については言及しません。&lt;/p&gt;
 
-&lt;p&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;leaf-と-branch-に対して行いたい操作&#34;&gt;Leaf と Branch に対して行いたい操作&lt;/h1&gt;
-
-&lt;p&gt;ここでは&lt;code&gt;Tree&lt;/code&gt;中の&lt;code&gt;Leaf&lt;/code&gt;を数える&lt;code&gt;Count&lt;/code&gt;という関数を考えてみます。
-Haskell だったらパターンマッチで分岐です。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;count :: Tree -&amp;gt; Int
-count Leaf = 1
-count (Branch l r) = count l + count r
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;今Go言語で実現したいのは以下のような内容です。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;Leaf&lt;/code&gt;か&lt;code&gt;Branch&lt;/code&gt;のどちらかのデータ構造を引数に取る&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;Leaf&lt;/code&gt;か&lt;code&gt;Branch&lt;/code&gt;かによって処理を分岐する&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;そこで登場するのが &lt;code&gt;interface&lt;/code&gt; です。
-ここで&lt;code&gt;Leaf&lt;/code&gt;と&lt;code&gt;Branch&lt;/code&gt;は&lt;code&gt;count&lt;/code&gt;という共通のインタフェースを持っているわけなので、
-そういうふうに書きます。&lt;/p&gt;
-
-&lt;p&gt;そんなわけでコードは以下の通りです。&lt;/p&gt;
-
-&lt;script src=&#34;//gist.github.com/tmrtmhr/3134ee6b7201197471e33f98780e1285.js&#34;&gt;&lt;/script&gt;
-
-&lt;h1 id=&#34;まとめ&#34;&gt;まとめ&lt;/h1&gt;
-
-&lt;p&gt;ということでGo言語で木構造のような直和型のデータ構造を扱う小さな例を示しました。&lt;/p&gt;</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -430,36 +190,7 @@ count (Branch l r) = count l + count r
   jq . &amp;gt; request.json
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;プログラムの内容&#34;&gt;プログラムの内容&lt;/h1&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://github.com/tmrtmhr/filljson&#34;&gt;コードはここ&lt;/a&gt;で、
-Go 言語で書いたので &lt;code&gt;go get github.com/tmrtmhr/filljson&lt;/code&gt; でコマンドをインストールできます。
-リポジトリの &lt;code&gt;js/filljson.js&lt;/code&gt; に node.js で実装したものもあります。&lt;/p&gt;
-
-&lt;p&gt;どこかでエラーが出たら死にます(&lt;code&gt;os.Exit(1)&lt;/code&gt;)。
-テストコードは少しだけ書きました。&lt;/p&gt;
-
-&lt;p&gt;入力としては配列を想定しておらず、オブジェクトのみなので &lt;code&gt;map[string]interface{}&lt;/code&gt; 型を &lt;code&gt;json.Unmarshal&lt;/code&gt; に渡します。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;var jsonData map[string]interface{}
-err = json.Unmarshal(jsonStr, &amp;amp;jsonData)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;取り出した値が &lt;code&gt;interface{}&lt;/code&gt; となっているので再度 &lt;code&gt;map[string]interface{}&lt;/code&gt;として型アサーションをつけます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;finger = finger[propName].(map[string]interface{})
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;参考：&lt;a href=&#34;https://www.kaoriya.net/blog/2016/06/25/&#34;&gt;golang は ゆるふわに JSON を扱えまぁす!&lt;/a&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;雑感&#34;&gt;雑感&lt;/h1&gt;
-
-&lt;p&gt;標準入出力は偉大です。&lt;/p&gt;
-
-&lt;p&gt;GO言語的には特化した(たとえばCloudFront専用のJSON生成専用)コマンドを作ってきっちり型検査したほうが良さそうですが、
-まあこういう書き方もできるということで御参考いただければ幸いです。&lt;/p&gt;</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
   </channel>
