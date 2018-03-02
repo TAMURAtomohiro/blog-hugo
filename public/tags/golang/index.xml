@@ -6,10 +6,62 @@
     <description>Recent content in Golang on 嵐の小舟より</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <lastBuildDate>Sun, 03 Dec 2017 16:41:17 +0900</lastBuildDate>
+    <lastBuildDate>Fri, 02 Mar 2018 16:27:29 +0900</lastBuildDate>
     
 	<atom:link href="https://tmrtmhr.info/tags/golang/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Go言語でCSVをJSONに変換する</title>
+      <link>https://tmrtmhr.info/tech/golang-convert-csv-to-json/</link>
+      <pubDate>Fri, 02 Mar 2018 16:27:29 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/golang-convert-csv-to-json/</guid>
+      <description>&lt;p&gt;たまに、CSV データを JSON 形式に変換したくなることがあります。
+というのも、元データとしていただくのは大抵 Excel ファイルで、
+とりあえず CSV にエクスポートしただけでは使いにくいからです。&lt;/p&gt;
+
+&lt;p&gt;それくらいWeb上のツールであるんじゃないの？
+とちょっと検索してみたところ、セルに改行を含むケースに対応しているものが見つからなかったので、
+&lt;a href=&#34;https://github.com/tmrtmhr/csv2json&#34;&gt;Go 言語で実装&lt;/a&gt;してみました。&lt;/p&gt;
+
+&lt;p&gt;環境を整えてある方なら以下のコマンドで実行ファイルをインストールできます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;go install github.com/tmrtmhr/csv2json
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;入力としては以下のようなものを想定しています。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;col1	col2	col3
+1	2	3
+4	&amp;quot;5
+67&amp;quot;	8
+9	10	11
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;出力は以下のようになります。ヘッダ行がキーになり、値はすべて文字列です。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[
+  {
+    &amp;quot;col1&amp;quot;: &amp;quot;1&amp;quot;,
+    &amp;quot;col2&amp;quot;: &amp;quot;2&amp;quot;,
+    &amp;quot;col3&amp;quot;: &amp;quot;3&amp;quot;
+  },
+  {
+    &amp;quot;col1&amp;quot;: &amp;quot;4&amp;quot;,
+    &amp;quot;col2&amp;quot;: &amp;quot;5\n67&amp;quot;,
+    &amp;quot;col3&amp;quot;: &amp;quot;8&amp;quot;
+  },
+  {
+    &amp;quot;col1&amp;quot;: &amp;quot;9&amp;quot;,
+    &amp;quot;col2&amp;quot;: &amp;quot;10&amp;quot;,
+    &amp;quot;col3&amp;quot;: &amp;quot;11&amp;quot;
+  }
+]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>AWS Lambda で xmlsec を利用する</title>

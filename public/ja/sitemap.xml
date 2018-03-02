@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://tmrtmhr.info/tech/golang-convert-csv-to-json/</loc>
+    <lastmod>2018-03-02T16:27:29+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://tmrtmhr.info/tech/unity/add-exif-to-screenshot/</loc>
     <lastmod>2018-02-18T19:54:05+09:00</lastmod>
     <xhtml:link
@@ -196,7 +201,7 @@
   
   <url>
     <loc>https://tmrtmhr.info/tags/golang/</loc>
-    <lastmod>2017-12-03T16:41:17+09:00</lastmod>
+    <lastmod>2018-03-02T16:27:29+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -248,7 +253,7 @@
   
   <url>
     <loc>https://tmrtmhr.info/tech/</loc>
-    <lastmod>2018-02-18T19:54:05+09:00</lastmod>
+    <lastmod>2018-03-02T16:27:29+09:00</lastmod>
     <priority>0</priority>
     <xhtml:link
                 rel="alternate"
@@ -286,7 +291,7 @@
   
   <url>
     <loc>https://tmrtmhr.info/</loc>
-    <lastmod>2018-02-18T19:54:05+09:00</lastmod>
+    <lastmod>2018-03-02T16:27:29+09:00</lastmod>
     <priority>0</priority>
     <xhtml:link
                 rel="alternate"

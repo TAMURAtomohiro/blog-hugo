@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.36.1" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+
+  
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+
+<link rel="stylesheet" href="/css/base.css">
+
+<link rel="alternate" href="/index.xml" type="application/rss+xml" title="嵐の小舟より">
+<title>Go言語でCSVをJSONに変換する - 嵐の小舟より</title>
+</head>
+<body>
+  
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-92780964-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+  <div class="">
+  <header class="castaway-header-bar">
+    <nav>
+      <div class="nav-wrapper castaway-site-logo">
+        <div>
+          <a href="/" class="brand-logo right">
+            <i class="material-icons" style="margin-right: 5px;">rowing</i>
+            <span class="castaway-site-title">嵐の小舟より</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+
+<section id="main">
+  <div class="row">
+    <div class="col s12 m12 l6 offset-l3">
+
+      <article itemscope itemtype="http://schema.org/Blog" class="card castaway-card">
+
+        <div class="card-title indigo darken-3 castaway-card-title">
+          <div class="card-content">
+            <div class="white-text" itemprop="headline">
+              Go言語でCSVをJSONに変換する
+            </div>
+          </div>
+        </div>
+
+        <div class="card-content">
+          <div class="row">
+            <div class="castaway-date-published">
+              <span>公開日：</span>
+              <i class="material-icons" style="vertical-align: middle;">today</i>
+              <time itemprop="datePublished" datetime="2018-03-02">2018/03/02</time>
+              <span style="margin-left: 10px;"> タグ: </span>
+              
+              <a href="/tags/golang">
+                <div class="tag-golang waves-effect waves-teal chip">
+                  golang
+                </div>
+              </a>
+              
+            </div>
+          </div>
+          
+          
+          <div class="castaway-card-content mdl-card__supporting-text mdl-color-text--grey-700">
+            <p>たまに、CSV データを JSON 形式に変換したくなることがあります。
+というのも、元データとしていただくのは大抵 Excel ファイルで、
+とりあえず CSV にエクスポートしただけでは使いにくいからです。</p>
+
+<p>それくらいWeb上のツールであるんじゃないの？
+とちょっと検索してみたところ、セルに改行を含むケースに対応しているものが見つからなかったので、
+<a href="https://github.com/tmrtmhr/csv2json">Go 言語で実装</a>してみました。</p>
+
+<p>環境を整えてある方なら以下のコマンドで実行ファイルをインストールできます。</p>
+
+<pre><code>go install github.com/tmrtmhr/csv2json
+</code></pre>
+
+<p>入力としては以下のようなものを想定しています。</p>
+
+<pre><code>col1	col2	col3
+1	2	3
+4	&quot;5
+67&quot;	8
+9	10	11
+</code></pre>
+
+<p>出力は以下のようになります。ヘッダ行がキーになり、値はすべて文字列です。</p>
+
+<pre><code>[
+  {
+    &quot;col1&quot;: &quot;1&quot;,
+    &quot;col2&quot;: &quot;2&quot;,
+    &quot;col3&quot;: &quot;3&quot;
+  },
+  {
+    &quot;col1&quot;: &quot;4&quot;,
+    &quot;col2&quot;: &quot;5\n67&quot;,
+    &quot;col3&quot;: &quot;8&quot;
+  },
+  {
+    &quot;col1&quot;: &quot;9&quot;,
+    &quot;col2&quot;: &quot;10&quot;,
+    &quot;col3&quot;: &quot;11&quot;
+  }
+]
+</code></pre>
+
+<p></p>
+
+<h1 id="実装上の知見">実装上の知見</h1>
+
+<p>CSV の parse については標準パッケージ <code>encoding/csv</code> に任せられます。
+なので改行を含むセルなどについて自前での実装は不要です。</p>
+
+<p><code>encoding/csv</code>のCSVリーダでは区切り文字を<code>Comma</code>で指定できますが、ここには <code>rune</code> を設定する必要があります。
+コマンド引数<code>-delimiter=&quot;\t&quot;</code>で区切り文字を渡した場合、
+Go 上では <code>\</code> と <code>t</code> の二文字として得られるため、
+<code>strconv.UnquoteChar</code> を用いて変換します。</p>
+          </div>
+        </div>
+          
+          <div class="card-action castaway-card-footer">
+            <a class="btn waves-effect waves-light" href="/">サイトトップ</a>
+          </div>            
+
+      </article>
+        
+    </div>
+
+    </div>
+  </div>
+</section>
+
+
+</div>
+</body>
+</html>
+
