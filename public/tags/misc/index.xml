@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Misc on 嵐の小舟より</title>
+    <link>https://tmrtmhr.info/tags/misc/</link>
+    <description>Recent content in Misc on 嵐の小舟より</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja-JP</language>
+    <lastBuildDate>Wed, 07 Mar 2018 20:38:41 +0900</lastBuildDate>
+    
+	<atom:link href="https://tmrtmhr.info/tags/misc/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>MacBook Pro (Retina, 13inch, Early 2015)でキーボードとトラックパッドが反応しなくなった時のこと</title>
+      <link>https://tmrtmhr.info/misc/macbookpro-trouble-on-keyboard-and-trackpad/</link>
+      <pubDate>Wed, 07 Mar 2018 20:38:41 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/misc/macbookpro-trouble-on-keyboard-and-trackpad/</guid>
+      <description>&lt;p&gt;自分のケースでは NVRAM のリセットで直りました。
+リセットの方法は、電源を入れた直後から Option + Command + P + R を二回目の起動音が鳴るまで押し続けるというものです。
+(&lt;a href=&#34;https://support.apple.com/ja-jp/HT204063&#34;&gt;Mac の NVRAM をリセットする方法&lt;/a&gt;)&lt;/p&gt;
+
+&lt;p&gt;注意点としては、内蔵キーボードが反応しないため、外付けキーボードが別途必要だということです。
+&lt;a href=&#34;https://qiita.com/dynamonda/items/e499b9475021390ddfd2&#34;&gt;MacBook Proでスリープからの復帰時にキーボードやトラックパッドが反応しない不具合&lt;/a&gt;
+にある通り、内蔵キーボードではリセットできません。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>
