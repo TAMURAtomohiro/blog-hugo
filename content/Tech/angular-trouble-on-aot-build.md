@@ -1,7 +1,7 @@
 +++
-date = "2018-03-09T14:20:45+09:00"
+date = "2018-04-29T01:28:34+09:00"
 draft = true
-title = "Angular の AOT ビルドで 'Exported variable 'X' has or is using name 'Y' from external module "/path/to/module" but cannot be named.' エラーが出たときのこと"
+title = "Angular の AOT ビルドで 'Exported variable 'X' has or is using name 'Y' from external module \"/path/to/module\" but cannot be named.' エラーが出たときのこと"
 tags = ['angular', 'typescript']
 +++
 
