@@ -1,8 +1,8 @@
 +++
-date = "2018-01-15T19:12:58+09:00"
+date = "2018-04-29T22:51:08+09:00"
 draft = true
 title = "Go言語で S3 PutObject をした際の「NotImplemented」エラー"
-tags = ["aws","golang"]
+tags = ["aws","go"]
 +++
 
 エラーメッセージは以下の通りです。

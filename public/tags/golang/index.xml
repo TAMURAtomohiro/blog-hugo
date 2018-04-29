@@ -63,28 +63,5 @@
 &lt;p&gt;&lt;/p&gt;</description>
     </item>
     
-    <item>
-      <title>AWS Lambda で xmlsec を利用する</title>
-      <link>https://tmrtmhr.info/tech/aws/using-xmlsec-on-lambda/</link>
-      <pubDate>Sun, 03 Dec 2017 16:41:17 +0900</pubDate>
-      
-      <guid>https://tmrtmhr.info/tech/aws/using-xmlsec-on-lambda/</guid>
-      <description>&lt;p&gt;AWS Lambda 上で、署名された XML 文書の検証をしたい、とふと思いました。
-もっと言うと SAML2 のサービスプロバイダとして AuthResponse の検証を
-サーバレスでやってみよう、というところから出発して、
-まずは XML 文書の署名が検証できないことにはお話になりませんね、ということです。&lt;/p&gt;
-
-&lt;p&gt;本記事は以下のことをやるための手順メモです。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/apex/apex&#34;&gt;apex&lt;/a&gt;、&lt;a href=&#34;https://github.com/apex/go-apex&#34;&gt;go-apex&lt;/a&gt;、&lt;a href=&#34;https://github.com/crewjam/go-xmlsec&#34;&gt;go-xmlsec&lt;/a&gt; を使って GO 言語でプログラムを書く&lt;/li&gt;
-&lt;li&gt;xmlsec を静的リンクしたバイナリを作る&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;より一般的には、AWS Lambda の実行環境に入っていないネイティブライブラリを使いたい場合は静的リンクして持ち込む、という話です。&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
-    </item>
-    
   </channel>
 </rss>

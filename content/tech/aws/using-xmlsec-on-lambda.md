@@ -1,7 +1,7 @@
 +++
 draft = false
 title = "AWS Lambda で xmlsec を利用する"
-tags = ["aws","golang"]
+tags = ["aws","go"]
 date = "2017-12-03T16:41:17+09:00"
 +++
 

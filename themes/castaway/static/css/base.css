@@ -56,7 +56,7 @@ p:not(:first-child) {
 }
 
 .castaway-card {
-  margin: 5px;
+  margin-top: 5px;
   width: 100% !important;
 }
 
