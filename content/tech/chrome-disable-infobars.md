@@ -24,7 +24,7 @@ Selenium Chrome driver 2.28 でE2Eテストを実行すると
 
 結局 Google Chrome の起動オプションに `--disable-infobars` を渡して表示しないようにしました。
 
-protorator を仕様する場合は設定ファイルに以下のような内容があれば OK です。
+protorator を使用する場合は設定ファイルに以下のような内容があれば OK です。
 
 ```
 capabilities: [
