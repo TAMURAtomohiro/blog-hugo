@@ -2,7 +2,7 @@
 
 <section id="main">
   <div class="row">
-    <div class="col s12 m12 l10 offset-l1">
+    <div class="col s12 m12 l6 offset-l3">
 
       <article itemscope itemtype="http://schema.org/Blog" class="card castaway-card">
 
@@ -22,11 +22,11 @@
               <time itemprop="datePublished" datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006/01/02" }}</time>
               <span style="margin-left: 10px;"> タグ: </span>
               {{ range .Params.tags }}
-              <a href="{{ "/tags/" | relLangURL }}{{ . | urlize }}">
-                <div class="tag-{{.}} waves-effect waves-teal chip">
-                  {{ . }}
-                </div>
-              </a>
+                <a href="{{ "/tags/" | relLangURL }}{{ . | urlize }}">
+                  <div class="tag-{{.}} waves-effect waves-teal chip">
+                    {{ . }}
+                  </div>
+                </a>
               {{ end }}
             </div>
           </div>
@@ -35,11 +35,21 @@
           <div class="castaway-card-content mdl-card__supporting-text mdl-color-text--grey-700">
             {{ .Content }}
           </div>
+
+          <!-- tmrtmhr.info Link -->
+          <ins class="adsbygoogle"
+            style="display:block"
+            data-ad-client="ca-pub-1603242475624347"
+            data-ad-slot="4367049913"
+            data-ad-format="link"></ins>
+          <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+          </script>
         </div>
 
-          <div class="card-action castaway-card-footer">
-            <a class="btn waves-effect waves-light" href="/">サイトトップ</a>
-          </div>
+        <div class="card-action castaway-card-footer">
+          <a class="btn waves-effect waves-light" href="/">サイトトップ</a>
+        </div>
 
       </article>
 
