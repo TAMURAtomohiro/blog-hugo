@@ -1,0 +1,7 @@
+st=>start: main
+go=>parallel: go
+end=>end: プログラムの終了
+f=>operation: f の実行
+g=>operation: g の実行
+st->go(path1, right)->f->end
+go(path2,bottom)->g->end

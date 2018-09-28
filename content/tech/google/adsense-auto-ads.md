@@ -1,5 +1,5 @@
 +++
-date = "2018-04-30T12:23:11+09:00"
+date = "2018-05-06T13:18:28+09:00"
 draft = true
 title = "Google AdSense Auto ads を利用して良い記事を書くことに集中する"
 tags = ["google"]

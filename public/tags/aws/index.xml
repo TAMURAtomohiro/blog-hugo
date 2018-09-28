@@ -6,10 +6,35 @@
     <description>Recent content in Aws on 嵐の小舟より</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <lastBuildDate>Sat, 17 Feb 2018 01:02:32 +0900</lastBuildDate>
+    <lastBuildDate>Sat, 29 Sep 2018 00:47:50 +0900</lastBuildDate>
     
 	<atom:link href="https://tmrtmhr.info/tags/aws/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>AWS Lambda と Fargate のCPU時間単価および性能比較</title>
+      <link>https://tmrtmhr.info/tech/aws-lambda-vs-fargate/</link>
+      <pubDate>Sat, 29 Sep 2018 00:47:50 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/aws-lambda-vs-fargate/</guid>
+      <description>&lt;p&gt;東京リージョンでAWSのマネージドコンテナサービス &lt;a href=&#34;https://aws.amazon.com/jp/fargate/pricing/&#34;&gt;Fargateの料金&lt;/a&gt;を見ると
+1 vCPU: $0.0632/h, 2GB メモリ: $0.0316/h で、合わせて $0.0948/h です。
+一方&lt;a href=&#34;https://aws.amazon.com/jp/lambda/pricing/&#34;&gt;Lambdaの料金&lt;/a&gt;は 2GB メモリ: $0.120024/h です。&lt;/p&gt;
+
+&lt;p&gt;あれ、なんか Fargate 安くないですか？&lt;/p&gt;
+
+&lt;p&gt;本記事はこの料金の違いがどういう理由によるものかの筆者の推測、
+および Lambda と Fargate の処理性能の比較について述べるものです。&lt;/p&gt;
+
+&lt;p&gt;結論をまず言うと以下のようになります。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;1 vCPU 2GB の Fargate と 2GB の Lambda であれば Fargate のほうが速い&lt;/li&gt;
+&lt;li&gt;Fargate のほうが安いのはAPIサーバなどの用途で冗長性を持たせようとすると CPU を100%使えないから&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>API Gateway の &#39;Unable to base64 decode the body&#39; エラー</title>

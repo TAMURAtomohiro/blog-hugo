@@ -1,0 +1,9 @@
+graph TD
+  main(main)
+	f[fの実行]
+	g[gの実行]
+  exit(プログラムの終了)
+	main-->|go|f
+	main-->g
+	f-->exit
+	g-->exit

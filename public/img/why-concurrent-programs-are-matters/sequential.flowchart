@@ -1,0 +1,5 @@
+st=>start: main
+end=>end: プログラムの終了
+f=>operation: f の実行
+g=>operation: g の実行
+st->f->g->end

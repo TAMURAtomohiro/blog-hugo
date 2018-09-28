@@ -1,7 +1,7 @@
 +++
 draft = false
 title = "Go言語でCSVをJSONに変換する"
-tags = ['golang']
+tags = ['go']
 date = "2018-03-02T16:27:29+09:00"
 +++
 
