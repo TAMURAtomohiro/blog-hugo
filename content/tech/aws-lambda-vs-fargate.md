@@ -28,7 +28,7 @@ date = "2018-09-29T00:47:50+09:00"
 
 ソースコードは以下の通りです(Lambda, Fargate 共通)。
 フィボナッチ数列の40番目を印字するだけです。
-Lambda では引数を渡すために別モジュールとして読み込まれて(`lambda_fuction.lambda_handler`のように)呼ばれるので
+Lambda では引数を渡すために別モジュールとして読み込まれて `lambda_fuction.lambda_handler`のように呼ばれるので
 `if __name__ == "__main__":` のくだりは実行されません。
 処理系は python 3.6 です。
 
