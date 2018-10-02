@@ -1,5 +1,6 @@
 strong {
   font-weight: bold !important;
+  background: linear-gradient(transparent 60%, pink 40%);
 }
 
 nav {
@@ -87,4 +88,8 @@ p:not(:first-child) {
 
 .castaway-md-icon {
   vertical-align: bottom !important;
+}
+
+#castaway-main {
+  padding: 0px !important; /* .row.col の padding を消す */
 }

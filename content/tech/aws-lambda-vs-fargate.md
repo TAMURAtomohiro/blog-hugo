@@ -49,6 +49,16 @@ if __name__ == "__main__":
     lambda_handler({}, {})
 ```
 
+Dockerfile は以下の通りです。
+```
+FROM python:3.6.6-alpine
+
+WORKDIR /app
+ADD . /app
+
+CMD [ "python", "lambda_function.py" ]
+```
+
 実行時間は以下の通りです。一回しか計測していません。
 
 |計算リソース|実行時間(秒)|
