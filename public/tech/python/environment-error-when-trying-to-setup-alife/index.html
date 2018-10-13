@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+  <head>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-1603242475624347",
+        enable_page_level_ads: true
+      });
+    </script>
+    <meta charset="utf-8">
+    <meta name="generator" content="Hugo 0.47.1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+
+    
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+
+    <link rel="stylesheet" href="/css/base.css">
+
+    <link rel="alternate" href="/index.xml" type="application/rss+xml" title="嵐の小舟より">
+    <title>「作って動かすALife」の実行環境をセットアップしたときのエラー - 嵐の小舟より</title>
+  </head>
+  <body>
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-92780964-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+    <div class="">
+      <header class="castaway-header-bar">
+        <nav>
+          <div class="nav-wrapper castaway-site-logo">
+            <div>
+              <a href="/" class="brand-logo right">
+                <i class="material-icons" style="margin-right: 5px;">rowing</i>
+                <span class="castaway-site-title">嵐の小舟より</span>
+              </a>
+            </div>
+          </div>
+        </nav>
+      </header>
+
+
+<section id="main">
+  <div class="row">
+    <div id="castaway-main" class="col s12 m12 l6 offset-l3">
+
+      <article itemscope itemtype="http://schema.org/Blog" class="card castaway-card">
+
+        <div class="card-title indigo darken-3 castaway-card-title">
+          <div class="card-content">
+            <div class="white-text" itemprop="headline">
+              「作って動かすALife」の実行環境をセットアップしたときのエラー
+            </div>
+          </div>
+        </div>
+
+        <div class="card-content">
+          <div class="row">
+            <div class="castaway-date-published">
+              <span>公開日：</span>
+              <i class="material-icons" style="vertical-align: middle;">today</i>
+              <time itemprop="datePublished" datetime="2018-10-13">2018/10/13</time>
+              <span style="margin-left: 10px;"> タグ: </span>
+              
+                <a href="/tags/python">
+                  <div class="tag-python waves-effect waves-teal chip">
+                    python
+                  </div>
+                </a>
+              
+            </div>
+          </div>
+
+          <div class="castaway-card-content mdl-card__supporting-text mdl-color-text--grey-700">
+            <p>環境は以下の通り。</p>
+
+<ul>
+<li>macOS High Sierra (10.13.6)</li>
+<li>Homebrew でインストールした python 3系 (3.6.4)</li>
+</ul>
+
+<p>以下のようにライブラリをインストールしようとしたところ、</p>
+
+<pre><code>sudo pip install pyglet pymunk vispy keras tensorflow
+</code></pre>
+
+<p>以下のようなエラーが得られました。</p>
+
+<pre><code>Could not install packages due to an EnvironmentError: [Errno 1] Operation not permitted: '/bin/futurize'
+</code></pre>
+
+<p></p>
+
+<p>最近の Mac では <code>/bin</code> 以下にルート権限でもファイルが置けないようで、それに起因したエラーのようです。
+(参考：<a href="https://apple.srad.jp/story/15/09/30/1529213/">OS X 10.11ではrootでも/usrや/bin以下に書き込みできない</a>)</p>
+
+<p>ですので <code>/bin</code> 以下にファイルを置こうとするライブラリなら同様のエラーが発生します。
+実際、<code>pip install --upgrade pip</code> をしようとしても以下のように叱られたので、何か自分の環境がおかしいようです。</p>
+
+<pre><code>Could not install packages due to an EnvironmentError: [Errno 1] Operation not permitted: '/bin/pip'
+</code></pre>
+
+<p>対策としては <code>--user</code> オプションをつけてインストールすることです。</p>
+
+<pre><code>pip install --user pyglet pymunk vispy keras tensorflo
+</code></pre>
+
+<p>これにより以下のような場所へファイルが配置されます。</p>
+
+<pre><code>$ which futurize
+/Users/username/Library/Python/3.6/bin/futurize
+</code></pre>
+
+<p>もし環境変数 PATH へ <code>/Users/username/Library/Python/3.6/bin</code> が追加されていないようであれば、追加しましょう。</p>
+          </div>
+
+          
+          <ins class="adsbygoogle"
+            style="display:block"
+            data-ad-client="ca-pub-1603242475624347"
+            data-ad-slot="4367049913"
+            data-ad-format="link"></ins>
+          <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+          </script>
+        </div>
+
+        <div class="card-action castaway-card-footer">
+          <a class="btn waves-effect waves-light" href="/">サイトトップ</a>
+        </div>
+
+      </article>
+
+    </div>
+
+    </div>
+  </div>
+</section>
+
+
+</div>
+</body>
+</html>
+

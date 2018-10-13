@@ -6,10 +6,36 @@
     <description>Recent content in Teches on 嵐の小舟より</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <lastBuildDate>Sat, 29 Sep 2018 00:47:50 +0900</lastBuildDate>
+    <lastBuildDate>Sat, 13 Oct 2018 21:13:12 +0900</lastBuildDate>
     
 	<atom:link href="https://tmrtmhr.info/tech/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>「作って動かすALife」の実行環境をセットアップしたときのエラー</title>
+      <link>https://tmrtmhr.info/tech/python/environment-error-when-trying-to-setup-alife/</link>
+      <pubDate>Sat, 13 Oct 2018 21:13:12 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/python/environment-error-when-trying-to-setup-alife/</guid>
+      <description>&lt;p&gt;環境は以下の通り。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;macOS High Sierra (10.13.6)&lt;/li&gt;
+&lt;li&gt;Homebrew でインストールした python 3系 (3.6.4)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;以下のようにライブラリをインストールしようとしたところ、&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo pip install pyglet pymunk vispy keras tensorflow
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;以下のようなエラーが得られました。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Could not install packages due to an EnvironmentError: [Errno 1] Operation not permitted: &#39;/bin/futurize&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>AWS Lambda と Fargate のCPU時間単価および性能比較</title>
