@@ -35,7 +35,7 @@ Could not install packages due to an EnvironmentError: [Errno 1] Operation not p
 対策としては `--user` オプションをつけてインストールすることです。
 
 ```
-pip install --user pyglet pymunk vispy keras tensorflo
+pip install --user pyglet pymunk vispy keras tensorflow
 ```
 
 これにより以下のような場所へファイルが配置されます。
