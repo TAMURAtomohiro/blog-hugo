@@ -72,6 +72,32 @@ Certificate Manager でもドメイン認証のためにメールが発信され
 Route 53 と Certificate Manager から送られる二通を読めればよいので、
 今回は単純に S3 へ保存しました。
 
+S3 側のバケットポリシーとして以下のように SES からのアクセスを許可しておく必要があります。
+`BUCKET-NAME` と `AWSACCOUNTID` を差し替えて設定しましょう。
+(参考: [Amazon SES に対する E メール受信に関するアクセス権限の付与](https://docs.aws.amazon.com/ja_jp/ses/latest/DeveloperGuide/receiving-email-permissions.html)
+
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowSESPuts",
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "ses.amazonaws.com"
+            },
+            "Action": "s3:PutObject",
+            "Resource": "arn:aws:s3:::BUCKET-NAME/*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:Referer": "AWSACCOUNTID"
+                }
+            }
+        }
+    ]
+}
+```
+
 # SSL証明書を取得するリージョンについて
 
 Certificate Manager で取得した SSL 証明書は、取得したリージョンでのみ利用することができます。
