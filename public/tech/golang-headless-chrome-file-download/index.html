@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+  <head>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-1603242475624347",
+        enable_page_level_ads: true
+      });
+    </script>
+    <meta charset="utf-8">
+    <meta name="generator" content="Hugo 0.47.1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+
+    
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+
+    <link rel="stylesheet" href="/css/base.css">
+
+    <link rel="alternate" href="/index.xml" type="application/rss+xml" title="嵐の小舟より">
+    <title>Go言語から Headless Chrome を制御してファイルをダウンロードする - 嵐の小舟より</title>
+  </head>
+  <body>
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-92780964-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+    <div class="">
+      <header class="castaway-header-bar">
+        <nav>
+          <div class="nav-wrapper castaway-site-logo">
+            <div>
+              <a href="/" class="brand-logo right">
+                <i class="material-icons" style="margin-right: 5px;">rowing</i>
+                <span class="castaway-site-title">嵐の小舟より</span>
+              </a>
+            </div>
+          </div>
+        </nav>
+      </header>
+
+
+<section id="main">
+  <div class="row">
+    <div id="castaway-main" class="col s12 m12 l6 offset-l3">
+
+      <article itemscope itemtype="http://schema.org/Blog" class="card castaway-card">
+
+        <div class="card-title indigo darken-3 castaway-card-title">
+          <div class="card-content">
+            <div class="white-text" itemprop="headline">
+              Go言語から Headless Chrome を制御してファイルをダウンロードする
+            </div>
+          </div>
+        </div>
+
+        <div class="card-content">
+          <div class="row">
+            <div class="castaway-date-published">
+              <span>公開日：</span>
+              <i class="material-icons" style="vertical-align: middle;">today</i>
+              <time itemprop="datePublished" datetime="2019-04-08">2019/04/08</time>
+              <span style="margin-left: 10px;"> タグ: </span>
+              
+                <a href="/tags/go">
+                  <div class="tag-go waves-effect waves-teal chip">
+                    go
+                  </div>
+                </a>
+              
+            </div>
+          </div>
+
+          <div class="castaway-card-content mdl-card__supporting-text mdl-color-text--grey-700">
+            <p>世の中にはオープンなデータ(たとえば<a href="http://nlftp.mlit.go.jp/ksj/index.html">国土数値情報ダウンロードサービス</a>など、公的機関が公開しているデータ)が色々あるもので、
+せっかくだからダウンロードして活用を考えてみようとするのですが、
+コマンドラインから <code>curl</code> や <code>wget</code> で直接取得できるようになっていない場合もあります。</p>
+
+<p>Google Chrome には<a href="https://developers.google.com/web/updates/2017/04/headless-chrome?hl=ja">ヘッドレスモード</a>があり、
+ウェブページの操作自動化に利用できます。
+実際にブラウザで表示したときと同様に JavaScript を実行してくれるため、
+ボタンをクリックしたときに JavaScript の関数が実行されてファイルのダウンロードが始まる、
+といったページにも対応できます。</p>
+
+<p>しかしながらセキュリティ上の理由で、
+デフォルトではヘッドレスモードにおいてファイルをダウンロードできるようになっていません。</p>
+
+<p>本記事では Go 言語のライブラリ<a href="https://github.com/sclevine/agouti/">Agouti</a>を使ったときに
+ファイルダウンロードを許可するためのコードについて述べます。</p>
+
+<p></p>
+
+<h1 id="デフォルトでファイルのダウンロードができない理由">デフォルトでファイルのダウンロードができない理由</h1>
+
+<p><a href="https://bugs.chromium.org/p/chromium/issues/detail?id=696481">Issue 696481: Headless mode doesn&rsquo;t save file downloads</a></p>
+
+<p>のコメント1がその理由かと思いますが、</p>
+
+<blockquote>
+<p>We most likely want to this to be something you need to either control or enable via DevTools to avoid letting random websites drop files on your disk just because you&rsquo;re running in headless mode.</p>
+</blockquote>
+
+<p>ダウンロードの確認プロンプトなしにファイルをダウンロードできるようになっていると、
+悪意のあるページを開いた際、無限にファイルをダウンロードさせられる、
+といったことが考えられるため、
+デフォルトでは無効にしておき、明示的に有効化するようにしましょう、ということのようです(意訳)。</p>
+
+<h1 id="go言語で-chrome-ヘッドレスモードのファイルダウンロードを許可する方法">Go言語で Chrome ヘッドレスモードのファイルダウンロードを許可する方法</h1>
+
+<p>まず、ページを開くまでのコードが以下のような形です。
+(エラーハンドリングについては適当です)</p>
+
+<pre><code>	driver := agouti.ChromeDriver(
+		agouti.ChromeOptions(&quot;prefs&quot;, map[string]interface{}{
+			//	&quot;download.default_directory&quot;:         &quot;/tmp&quot;, // send_command の downloadPath で指定するため、ここは不要
+			&quot;download.prompt_for_download&quot;:       false,
+			&quot;download.directory_upgrade&quot;:         true,
+			&quot;plugins.plugins_disabled&quot;:           &quot;Chrome PDF Viewer&quot;,
+			&quot;plugins.always_open_pdf_externally&quot;: true,
+		}),
+		agouti.ChromeOptions(&quot;args&quot;, []string{
+			&quot;--headless&quot;,
+		}),
+		agouti.Debug,
+	)
+
+	err := driver.Start()
+	if err != nil {
+		log.Printf(&quot;Failed to start driver: %v&quot;, err)
+	}
+
+	page, err := driver.NewPage(agouti.Browser(&quot;chrome&quot;))
+	if err != nil {
+		log.Printf(&quot;Failed to open page: %v&quot;, err)
+	}
+</code></pre>
+
+<p>開いたページから、セッションを取得し、
+ダウンロードを許可するためのコマンドを送信します。</p>
+
+<pre><code>	var result interface{}
+	params := map[string]interface{}{
+		&quot;cmd&quot;: &quot;Page.setDownloadBehavior&quot;,
+		&quot;params&quot;: map[string]string{
+			&quot;behavior&quot;:     &quot;allow&quot;,
+			&quot;downloadPath&quot;: &quot;/tmp&quot;,
+		},
+	}
+	session := page.Session()
+	if err := session.Send(&quot;POST&quot;, &quot;chromium/send_command&quot;, params, &amp;result); err != nil {
+		log.Printf(&quot;Failed to Send: %v&quot;, err)
+	}
+</code></pre>
+
+<p>あとはダウンロードリンクをクリックするなどでOKです。</p>
+
+<p>(参考: <a href="https://qiita.com/zkangaroo/items/1c4d4c11b06e7823e7fe">Headless Chromeでファイルをダウンロード</a>)
+<!-- [ChromeDriverのダウンロード](http://chromedriver.chromium.org/downloads) --></p>
+          </div>
+
+          
+          <ins class="adsbygoogle"
+            style="display:block"
+            data-ad-client="ca-pub-1603242475624347"
+            data-ad-slot="4367049913"
+            data-ad-format="link"></ins>
+          <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+          </script>
+        </div>
+
+        <div class="card-action castaway-card-footer">
+          <a class="btn waves-effect waves-light" href="/">サイトトップ</a>
+        </div>
+
+      </article>
+
+    </div>
+
+    </div>
+  </div>
+</section>
+
+
+</div>
+</body>
+</html>
+

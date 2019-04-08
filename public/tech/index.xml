@@ -6,10 +6,35 @@
     <description>Recent content in Teches on 嵐の小舟より</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <lastBuildDate>Sat, 13 Oct 2018 21:13:12 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 08 Apr 2019 16:12:36 +0900</lastBuildDate>
     
 	<atom:link href="https://tmrtmhr.info/tech/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Go言語から Headless Chrome を制御してファイルをダウンロードする</title>
+      <link>https://tmrtmhr.info/tech/golang-headless-chrome-file-download/</link>
+      <pubDate>Mon, 08 Apr 2019 16:12:36 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/golang-headless-chrome-file-download/</guid>
+      <description>&lt;p&gt;世の中にはオープンなデータ(たとえば&lt;a href=&#34;http://nlftp.mlit.go.jp/ksj/index.html&#34;&gt;国土数値情報ダウンロードサービス&lt;/a&gt;など、公的機関が公開しているデータ)が色々あるもので、
+せっかくだからダウンロードして活用を考えてみようとするのですが、
+コマンドラインから &lt;code&gt;curl&lt;/code&gt; や &lt;code&gt;wget&lt;/code&gt; で直接取得できるようになっていない場合もあります。&lt;/p&gt;
+
+&lt;p&gt;Google Chrome には&lt;a href=&#34;https://developers.google.com/web/updates/2017/04/headless-chrome?hl=ja&#34;&gt;ヘッドレスモード&lt;/a&gt;があり、
+ウェブページの操作自動化に利用できます。
+実際にブラウザで表示したときと同様に JavaScript を実行してくれるため、
+ボタンをクリックしたときに JavaScript の関数が実行されてファイルのダウンロードが始まる、
+といったページにも対応できます。&lt;/p&gt;
+
+&lt;p&gt;しかしながらセキュリティ上の理由で、
+デフォルトではヘッドレスモードにおいてファイルをダウンロードできるようになっていません。&lt;/p&gt;
+
+&lt;p&gt;本記事では Go 言語のライブラリ&lt;a href=&#34;https://github.com/sclevine/agouti/&#34;&gt;Agouti&lt;/a&gt;を使ったときに
+ファイルダウンロードを許可するためのコードについて述べます。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>「作って動かすALife」の実行環境をセットアップしたときのエラー</title>

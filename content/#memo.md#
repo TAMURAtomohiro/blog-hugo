@@ -5,8 +5,6 @@ date = "2016-02-22T16:06:53+09:00"
 +++
 <!--more-->
 
-# 鹿はどうやって水場を探すか
-
 # 「オープンワールド」という言葉について
 
 https://ja.wikipedia.org/wiki/%E3%82%AA%E3%83%BC%E3%83%97%E3%83%B3%E3%83%AF%E3%83%BC%E3%83%AB%E3%83%89
@@ -762,3 +760,30 @@ ElasticSearch の文字列フィールドには二種類ある。
 
 * analyzed: トークナイズして全文検索ができる
 * not_analyzed: トークナイズしていないため完全一致
+
+
+# VM Import/Export のエラー
+An error occurred (AuthFailure) when calling the CreateInstanceExportTask operation: vm-import-export@amazon.com must have WRITE and READ_ACL permission on the S3 bucket.
+
+
+
+# Serverless セミナー
+
+AWSのサーバーレスコンセプト：
+付加価値を生まない重労働を削減する
+
+Lambda Layers
+複数Lambda間で共通利用するコンポーネントを、ライブラリとして登録し参照できるようになった
+
+Custom Runtime
+bootstrap と呼ばれる実行ファイルを含める必要がある
+
+価値に直結する作業
+
+ブレイクスルーが遠い
+学習曲線が特殊?
+
+Case1 Lambda に触れる
+仮想通貨のバックエンド
+ログインフォームに DoS
+IPを変えてくるため、自動的にWAFへ追加するようLambdaを実装

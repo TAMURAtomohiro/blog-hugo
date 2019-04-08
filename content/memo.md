@@ -760,3 +760,22 @@ ElasticSearch の文字列フィールドには二種類ある。
 
 * analyzed: トークナイズして全文検索ができる
 * not_analyzed: トークナイズしていないため完全一致
+
+
+# VM Import/Export のエラー
+An error occurred (AuthFailure) when calling the CreateInstanceExportTask operation: vm-import-export@amazon.com must have WRITE and READ_ACL permission on the S3 bucket.
+
+
+
+# Serverless セミナー
+
+AWSのサーバーレスコンセプト：
+付加価値を生まない重労働を削減する
+
+Lambda Layers
+複数Lambda間で共通利用するコンポーネントを、ライブラリとして登録し参照できるようになった
+
+Custom Runtime
+bootstrap と呼ばれる実行ファイルを含める必要がある
+
+価値に直結する作業
