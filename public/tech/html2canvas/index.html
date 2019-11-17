@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+  <head>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-1603242475624347",
+        enable_page_level_ads: true
+      });
+    </script>
+    <meta charset="utf-8">
+    <meta name="generator" content="Hugo 0.47.1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+
+    
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+
+    <link rel="stylesheet" href="/css/base.css">
+
+    <link rel="alternate" href="/index.xml" type="application/rss+xml" title="嵐の小舟より">
+    <title>html2canvas を使って見ているページのスクリーンショット画像を生成してみた - 嵐の小舟より</title>
+  </head>
+  <body>
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-92780964-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+    <div class="">
+      <header class="castaway-header-bar">
+        <nav>
+          <div class="nav-wrapper castaway-site-logo">
+            <div>
+              <a href="/" class="brand-logo right">
+                <i class="material-icons" style="margin-right: 5px;">rowing</i>
+                <span class="castaway-site-title">嵐の小舟より</span>
+              </a>
+            </div>
+          </div>
+        </nav>
+      </header>
+
+
+<section id="main">
+  <div class="row">
+    <div id="castaway-main" class="col s12 m12 l6 offset-l3">
+
+      <article itemscope itemtype="http://schema.org/Blog" class="card castaway-card">
+
+        <div class="card-title indigo darken-3 castaway-card-title">
+          <div class="card-content">
+            <div class="white-text" itemprop="headline">
+              html2canvas を使って見ているページのスクリーンショット画像を生成してみた
+            </div>
+          </div>
+        </div>
+
+        <div class="card-content">
+          <div class="row">
+            <div class="castaway-date-published">
+              <span>公開日：</span>
+              <i class="material-icons" style="vertical-align: middle;">today</i>
+              <time itemprop="datePublished" datetime="2019-11-17">2019/11/17</time>
+              <span style="margin-left: 10px;"> タグ: </span>
+              
+                <a href="/tags/javascript">
+                  <div class="tag-JavaScript waves-effect waves-teal chip">
+                    JavaScript
+                  </div>
+                </a>
+              
+            </div>
+          </div>
+
+          <div class="castaway-card-content mdl-card__supporting-text mdl-color-text--grey-700">
+            <h1 id="背景">背景</h1>
+
+<p>だんだんと秋も深くなり、周りではちらほら風邪をひく人も増えてきたそんな折。
+ウェブページをPDFとしてダウンロードできるようにしてほしい、という要望をいただきました。</p>
+
+<p>いやそれはブラウザから印刷しようとしてPDFとして保存すれば&hellip;とか、
+必要な部分だけスクリーンショットを撮れば&hellip;など色々言ってはみましたが、
+使う側のITリテラシーの問題もあり、PDFの生成からは逃れられませんでした。</p>
+
+<p>過去に似たような要望をいただいたときは、
+<strong>「サーバーサイドでブラウザを起動し、対象のウェブページを表示してPDFとして保存する」</strong>
+というアプローチを取りました。
+たとえば <a href="https://phantomjs.org/">PhantomJS</a> を使うとかですね。
+今なら Google Chrome のヘッドレスモードが良いと思います。</p>
+
+<p>で、以前やったときからしばらく経っていたので改めて調べてみると、
+<a href="https://html2canvas.hertzen.com/">html2canvas</a> という JavaScript ライブラリを見つけたので、
+ちょっと使ってみて生まれたのがこの記事です。</p>
+
+<p></p>
+
+<h1 id="html2canvas-の原理">html2canvas の原理</h1>
+
+<p>このライブラリは、指定したDOM以下の内容を canvas 要素にレンダリングしてくれます。
+その後は canvas 側の機能(<code>getImageData</code>など)を使うことで画像データとして取得できたりします。</p>
+
+<p>これは、通常ブラウザが行っているような HTML、CSS の解釈を JavaScript で独自に実装している、ということになります。
+まだ対応していないスタイルがあったりすることもあり、また、
+Chrome などのレンダリングエンジンと結果が一致するとも限らないので、
+今ブラウザで見ている見た目そのままの画像が得られるかというとそうではない点に注意が必要です。</p>
+
+<h1 id="html2canvas-をとりあえず使ってみる">html2canvas をとりあえず使ってみる</h1>
+
+<p>ちゃんとやるなら <code>npm install</code> して&hellip;とかになると思いますが、
+今回はとりあえず<strong>「作ってあるウェブページを html2canvas でレンダリングしたらどうなるか見たい」</strong>という点に絞って確認することにしました。</p>
+
+<p>というわけでレンダリング結果の確認をしたいページを開き、
+開発者コンソールに以下を打ち込んで <code>html2canvas</code> のコードをロードします。</p>
+
+<pre><code>var script = document.createElement('script');
+script.src = &quot;https://html2canvas.hertzen.com/dist/html2canvas.min.js&quot;;
+document.body.appendChild(script);
+</code></pre>
+
+<p>ここでスクリプトがロードされるまで少し待ちます。
+で、以下のコードにより画面全体(このコードでは<code>html</code>タグ以下)を <code>canvas</code> にレンダリングして、
+<code>body</code> の最後に追加します。</p>
+
+<pre><code>html2canvas(document.documentElement).then(canvas =&gt; {
+    document.body.appendChild(canvas)
+});
+</code></pre>
+
+<p>ということでコード実行後に画面をスクロールすると、
+元の画面と大体似たようなものが現れると思います。</p>
+
+<p>ただし、雑に <code>body</code> の最後へ追加しているだけなので、ページの作りによってはうまく2つ並ばなかったりします。</p>
+
+<h1 id="所感">所感</h1>
+
+<p>自分の感想としては以下のような感じです。</p>
+
+<ul>
+<li>ロゴ画像のサイズ指定が効いていないのか崩れたりする(原因未調査)ので、見た目を重視する場合は使いにくい</li>
+<li>何かしらの不具合を報告してもらうエラーレポート機能としては使えるかもしれない</li>
+</ul>
+
+<p><code>canvas</code> にレンダリングする、という試みは面白くて好きです。</p>
+          </div>
+
+          
+          <ins class="adsbygoogle"
+            style="display:block"
+            data-ad-client="ca-pub-1603242475624347"
+            data-ad-slot="4367049913"
+            data-ad-format="link"></ins>
+          <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+          </script>
+        </div>
+
+        <div class="card-action castaway-card-footer">
+          <a class="btn waves-effect waves-light" href="/">サイトトップ</a>
+        </div>
+
+      </article>
+
+    </div>
+
+    </div>
+  </div>
+</section>
+
+
+</div>
+</body>
+</html>
+
