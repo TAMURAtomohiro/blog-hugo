@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+  <head>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-1603242475624347",
+        enable_page_level_ads: true
+      });
+    </script>
+    <meta charset="utf-8">
+    <meta name="generator" content="Hugo 0.47.1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+
+    
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+
+    <link rel="stylesheet" href="/css/base.css">
+
+    <link rel="alternate" href="/index.xml" type="application/rss+xml" title="嵐の小舟より">
+    <title>GCP認定資格 Associate Cloud Engineer と Professional Cloud Architect を取得した感想 - 嵐の小舟より</title>
+  </head>
+  <body>
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-92780964-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+    <div class="">
+      <header class="castaway-header-bar">
+        <nav>
+          <div class="nav-wrapper castaway-site-logo">
+            <div>
+              <a href="/" class="brand-logo right">
+                <i class="material-icons" style="margin-right: 5px;">rowing</i>
+                <span class="castaway-site-title">嵐の小舟より</span>
+              </a>
+            </div>
+          </div>
+        </nav>
+      </header>
+
+
+<section id="main">
+  <div class="row">
+    <div id="castaway-main" class="col s12 m12 l6 offset-l3">
+
+      <article itemscope itemtype="http://schema.org/Blog" class="card castaway-card">
+
+        <div class="card-title indigo darken-3 castaway-card-title">
+          <div class="card-content">
+            <div class="white-text" itemprop="headline">
+              GCP認定資格 Associate Cloud Engineer と Professional Cloud Architect を取得した感想
+            </div>
+          </div>
+        </div>
+
+        <div class="card-content">
+          <div class="row">
+            <div class="castaway-date-published">
+              <span>公開日：</span>
+              <i class="material-icons" style="vertical-align: middle;">today</i>
+              <time itemprop="datePublished" datetime="2019-11-17">2019/11/17</time>
+              <span style="margin-left: 10px;"> タグ: </span>
+              
+                <a href="/tags/gcp">
+                  <div class="tag-gcp waves-effect waves-teal chip">
+                    gcp
+                  </div>
+                </a>
+              
+            </div>
+          </div>
+
+          <div class="castaway-card-content mdl-card__supporting-text mdl-color-text--grey-700">
+            <p>2019年7月、平年よりも長く続く梅雨の最中、
+<a href="https://cloud.google.com/certification/">GCP 認定</a>のひとつである
+Professional Cloud Architect を受験し、
+合格したので顛末を残しておこうと思います。
+有効期限が来たら再度試験を受けることになるため自分用のメモでもあります。
+Associate Cloud Engineer のほうは先んじて 2019 年 5 月に取得しております。</p>
+
+<p><a href="https://cloud.google.com/certification/terms?hl=ja">試験利用規約</a>上、
+試験内容については開示できないので、以下のようなことを書きます。</p>
+
+<ul>
+<li>準備として何をやったか</li>
+<li>試験会場の雰囲気</li>
+<li>知識がない問題に当たったとき考えたこと</li>
+<li>感想</li>
+</ul>
+
+<p></p>
+
+<h1 id="試験準備">試験準備</h1>
+
+<p>前提として、
+AWS 認定資格の「ソリューションアーキテクト – プロフェッショナル」を2017年に取得してありました。
+なのでクラウドサービスを使う際の勘所と言いますか、
+「Webサービスの可用性を上げるには？」とか
+「会社でクラウドを利用するとして、権限の与え方はどうするの？」
+みたいな、どういうことが問題として出るかということについて知見はありました。</p>
+
+<p>Google Cloud Next も参加して色々聞いてました。
+ただ、GCP そのものはほとんど触らないままでした。</p>
+
+<h2 id="coursera">Coursera</h2>
+
+<p><a href="https://ja.coursera.org/learn/gcp-fundamentals-aws">Google Cloud Platform Fundamentals for AWS Professionals</a>
+と
+<a href="https://ja.coursera.org/specializations/gcp-architecture-jp">Architecting with Google Cloud Platform 日本語版</a>
+を受講しました。</p>
+
+<p>Architecting with Google Cloud Platform 日本語版 のほうは中に6コースあります。
+この講座は月額課金なので集中して学習できるなら費用も抑えられます。
+内容としては短かめの動画がたくさんあり、各テーマの終わりに数問の問題を解き、
+Qwiklabs というサービスによる GCP を実際に使う演習をやってみる、という感じです。
+大事な点を網羅的に学べますし、動画を見るだけなら電車移動中などでも可能なので、
+通勤の時間を利用していました。</p>
+
+<p>認定取得後に知ったことですが、<a href="https://ja.coursera.org/learn/preparing-cloud-professional-cloud-architect-exam">Preparing for the Google Cloud Professional Cloud Architect Exam</a>という
+認定試験にフォーカスした講義もあったので、こちらをやってみるのがよいと思います。</p>
+
+<h2 id="ケーススタディ">ケーススタディ</h2>
+
+<p><a href="https://cloud.google.com/certification/guides/professional-cloud-architect/?hl=ja">試験ガイド</a>にある
+ケーススタディのサンプルについて検討しました。</p>
+
+<ul>
+<li><a href="https://cloud.google.com/certification/guides/cloud-architect/casestudy-dress4win-rev2?hl=ja">Dress4Win</a></li>
+<li><a href="https://cloud.google.com/certification/guides/cloud-architect/casestudy-terramearth-rev2?hl=ja">TerramEarth</a></li>
+<li><a href="https://cloud.google.com/certification/guides/cloud-architect/casestudy-mountkirkgames-rev2?hl=ja">MountkirkGames</a></li>
+</ul>
+
+<p>Cloud Architect は、まだクラウドを活用していないお客様に対して
+「こうすればクラウドに移行できて、今抱えている問題を解決できますよ」
+という提案を求められる立場なんじゃないかと思います。</p>
+
+<p>なので上にあるような、現実にありそうなケースに対してクラウドの活用方法を考えるというのは重要です。</p>
+
+<p>聞いた話では<a href="https://ja.coursera.org/learn/preparing-cloud-professional-cloud-architect-exam">Preparing for the Google Cloud Professional Cloud Architect Exam</a>で
+ケーススタディに対するサンプル構成を教えてくれるそうです。</p>
+
+<h2 id="模擬試験">模擬試験</h2>
+
+<p>AWS の模擬試験と違って GCP の模擬試験は何度でも受けられます。
+問題が変わらないので何度も受けて正解を把握できたりもしますが、
+せっかくなので各問題について正解とその理由を答えられるようにしておきました。</p>
+
+<h1 id="試験当日">試験当日</h1>
+
+<h2 id="会場の雰囲気と試験の進め方">会場の雰囲気と試験の進め方</h2>
+
+<p>試験センターにて身分証と試験番号を提示し、
+スマートフォンやカバンはロッカーにしまい、
+身分証と受験票のみを持って試験の部屋に入ります。</p>
+
+<p>受験者ごとの個室ではないので、音が気になる方は耳栓代わりのヘッドホンなどを借りることもできます。</p>
+
+<p>試験はウェブ画面に表示される問題文を読み、選択肢の中から正解だと思うものをチェックして次の問題に進む、という流れです。
+前の問題に戻る、あるいは問題番号一覧画面へ移る、といったことが可能です。
+各問題ではあとで見直すためにマークでき、
+問題番号一覧画面でマークした問題を選んで再度回答し直せます。
+また、画面には残り時間が表示されカウントダウンされています。</p>
+
+<p>自分は、判断に迷う問題が出たときにはとりあえずマークの上で暫定的に選択肢をチェックして次に進みました。
+時間が足りずに後半の問題を解ききれない&hellip;というのを避けるためです。</p>
+
+<p>問題すべてに回答し終わってみると半分近くマークしてしまってましたが、
+時間もかなり余っていたので、いったん御手洗に行った上で一通り再考しました。</p>
+
+<h2 id="知識が足りない問題に当たって考えたこと">知識が足りない問題に当たって考えたこと</h2>
+
+<p>自分がマークした問題は、知識があいまいだったり、あるいはまったく無かったりで即断できないものでした。
+こういった問題に対してどうしたかというと、GCP の試験に限った話ではないですが、<strong>「消去法で解く」</strong>というアプローチを取りました。</p>
+
+<p><strong>「問題文の要件を満たさない選択肢を消す」</strong>という形です。
+たとえば「新規インスタンスを作らずに実現したい」と問題文にあったとして、
+選択肢で「新規インスタンスを作る」となっているものがあったりしたと思います。
+(実際に出た問題の内容は、時間が経ったこともありすべて忘れたので、自分が適当に作った例です)</p>
+
+<p>このように問題文と矛盾しているので消去したものもありましたし、
+自分が持っている拙い知識からの推測で「これは違うんじゃ&hellip;」と消したものもありました。</p>
+
+<p>というわけで、判断に迷う場合でも、自分なりのロジックで正解であろう選択肢を選びました。</p>
+
+<h1 id="感想">感想</h1>
+
+<h2 id="難易度">難易度</h2>
+
+<p>試験時間や問題数が少なかったこともあり、
+AWS の試験よりはやさしかった、という印象です。
+まあロードバランサーの後ろにインスタンスを並べて冗長化する&hellip;などはクラウドプラットフォームによって違いが出る部分ではないので、
+そのあたりの知識が流用できて楽だったというのはあります。</p>
+
+<h2 id="associate-cloud-engineer-と-professional-cloud-architect-の違い">Associate Cloud Engineer と Professional Cloud Architect の違い</h2>
+
+<p>なんとなく Associate Cloud Engineer から取得しましたが、
+Professional Cloud Architect の下位資格かというとそうでもないので、
+いきなり Professional Cloud Architect でも良かったか、と思いました。</p>
+
+<p>というのも Associate Cloud Engineer のほうはかなり実務的な知識、
+たとえば発行するコマンドとして正しいのはどれか？みたいなことまで訊かれます。
+一方で Professional Cloud Architect はどういう構成がよいか？
+という問題になるので、既にクラウドプラットフォームでの構成に慣れ親しんでいるのであれば、
+いきなり Professional Cloud Architect の取得でも良いかと思います。</p>
+
+<h2 id="もっとやっておけば良かったと思うこと">もっとやっておけば良かったと思うこと</h2>
+
+<p>効果があるのは公式ドキュメントの読み込みだと思います。
+自信を持って回答できなかった問題について、
+あとから調べてみるとドキュメントに書いてあったり&hellip;というのは往々にしてあります。</p>
+
+<p>ただ、試験対策として網羅的にドキュメントを読めるかというと、個人的には難しい、という印象です。
+あてもなくドキュメントを読んでいくだけでポイントを覚えていく、というのが自分はどうにも苦手です。</p>
+
+<p>業務で必要になってドキュメントを当たったことで知識として身について&hellip;というのが理想ですが、
+業務だけで試験範囲すべてをカバーするような経験ができるかというとそれも違うでしょう。</p>
+
+<p>必要なことはすべてドキュメントに書いてありますが、
+試験対策としてまとめられているわけではないので、
+現実的には Coursera の講義や、どこかしらの企業が提供しているトレーニングがよろしいかと思います。</p>
+          </div>
+
+          
+          <ins class="adsbygoogle"
+            style="display:block"
+            data-ad-client="ca-pub-1603242475624347"
+            data-ad-slot="4367049913"
+            data-ad-format="link"></ins>
+          <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+          </script>
+        </div>
+
+        <div class="card-action castaway-card-footer">
+          <a class="btn waves-effect waves-light" href="/">サイトトップ</a>
+        </div>
+
+      </article>
+
+    </div>
+
+    </div>
+  </div>
+</section>
+
+
+</div>
+</body>
+</html>
+

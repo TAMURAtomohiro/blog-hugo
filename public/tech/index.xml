@@ -6,15 +6,41 @@
     <description>Recent content in Teches on 嵐の小舟より</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <lastBuildDate>Sun, 17 Nov 2019 17:15:13 +0900</lastBuildDate>
+    <lastBuildDate>Sun, 17 Nov 2019 19:23:56 +0900</lastBuildDate>
     
 	<atom:link href="https://tmrtmhr.info/tech/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
+      <title>GCP認定資格 Associate Cloud Engineer と Professional Cloud Architect を取得した感想</title>
+      <link>https://tmrtmhr.info/tech/gcp/certification-professional-cloud-architect/</link>
+      <pubDate>Sun, 17 Nov 2019 19:23:56 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/gcp/certification-professional-cloud-architect/</guid>
+      <description>&lt;p&gt;2019年7月、平年よりも長く続く梅雨の最中、
+&lt;a href=&#34;https://cloud.google.com/certification/&#34;&gt;GCP 認定&lt;/a&gt;のひとつである
+Professional Cloud Architect を受験し、
+合格したので顛末を残しておこうと思います。
+有効期限が来たら再度試験を受けることになるため自分用のメモでもあります。
+Associate Cloud Engineer のほうは先んじて 2019 年 5 月に取得しております。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://cloud.google.com/certification/terms?hl=ja&#34;&gt;試験利用規約&lt;/a&gt;上、
+試験内容については開示できないので、以下のようなことを書きます。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;準備として何をやったか&lt;/li&gt;
+&lt;li&gt;試験会場の雰囲気&lt;/li&gt;
+&lt;li&gt;知識がない問題に当たったとき考えたこと&lt;/li&gt;
+&lt;li&gt;感想&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
       <title>html2canvas を使って見ているページのスクリーンショット画像を生成してみた</title>
       <link>https://tmrtmhr.info/tech/html2canvas/</link>
-      <pubDate>Sun, 17 Nov 2019 17:15:13 +0900</pubDate>
+      <pubDate>Sun, 17 Nov 2019 17:50:16 +0900</pubDate>
       
       <guid>https://tmrtmhr.info/tech/html2canvas/</guid>
       <description>&lt;h1 id=&#34;背景&#34;&gt;背景&lt;/h1&gt;
