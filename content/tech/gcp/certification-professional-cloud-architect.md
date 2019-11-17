@@ -1,7 +1,7 @@
 +++
-date = "2019-11-17T19:23:56+09:00"
+date = "2019-11-17T19:26:20+09:00"
 draft = false
-title = "GCP認定資格 Associate Cloud Engineer と Professional Cloud Architect を取得した感想"
+title = "GCP認定資格 Professional Cloud Architect を取得した感想"
 tags = ["gcp"]
 +++
 
