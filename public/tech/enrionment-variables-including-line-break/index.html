@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+  <head>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-1603242475624347",
+        enable_page_level_ads: true
+      });
+    </script>
+    <meta charset="utf-8">
+    <meta name="generator" content="Hugo 0.47.1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+
+    
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+
+    <link rel="stylesheet" href="/css/base.css">
+
+    <link rel="alternate" href="/index.xml" type="application/rss+xml" title="嵐の小舟より">
+    <title>Fargate で環境変数に改行コードを含む文字列を渡すときの注意点 - 嵐の小舟より</title>
+  </head>
+  <body>
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-92780964-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+    <div class="">
+      <header class="castaway-header-bar">
+        <nav>
+          <div class="nav-wrapper castaway-site-logo">
+            <div>
+              <a href="/" class="brand-logo right">
+                <i class="material-icons" style="margin-right: 5px;">rowing</i>
+                <span class="castaway-site-title">嵐の小舟より</span>
+              </a>
+            </div>
+          </div>
+        </nav>
+      </header>
+
+
+<section id="main">
+  <div class="row">
+    <div id="castaway-main" class="col s12 m12 l6 offset-l3">
+
+      <article itemscope itemtype="http://schema.org/Blog" class="card castaway-card">
+
+        <div class="card-title indigo darken-3 castaway-card-title">
+          <div class="card-content">
+            <div class="white-text" itemprop="headline">
+              Fargate で環境変数に改行コードを含む文字列を渡すときの注意点
+            </div>
+          </div>
+        </div>
+
+        <div class="card-content">
+          <div class="row">
+            <div class="castaway-date-published">
+              <span>公開日：</span>
+              <i class="material-icons" style="vertical-align: middle;">today</i>
+              <time itemprop="datePublished" datetime="2020-01-23">2020/01/23</time>
+              <span style="margin-left: 10px;"> タグ: </span>
+              
+                <a href="/tags/aws">
+                  <div class="tag-aws waves-effect waves-teal chip">
+                    aws
+                  </div>
+                </a>
+              
+                <a href="/tags/python">
+                  <div class="tag-python waves-effect waves-teal chip">
+                    python
+                  </div>
+                </a>
+              
+            </div>
+          </div>
+
+          <div class="castaway-card-content mdl-card__supporting-text mdl-color-text--grey-700">
+            <p>AWS の Fargate を使っていて、改行コードを含む文字列を環境変数にセットしたいとふと思った。</p>
+
+<p>もっと具体的に言えば CloudFront 用の 署名付き Cookie を生成するために
+プライベートキー(PEM)を渡したかった。
+PEM は以下のように改行を含む。</p>
+
+<pre><code>-----BEGIN RSA PRIVATE KEY-----
+XXX
+YYY
+-----END RSA PRIVATE KEY-----
+</code></pre>
+
+<p></p>
+
+<p>最初はこれを以下のような感じで Fargate の environments に渡せばいいか、と思って試した。</p>
+
+<pre><code>{
+  &quot;name&quot;: &quot;PRIVATE_KEY&quot;
+  &quot;value&quot;: &quot;-----BEGIN RSA PRIVATE KEY-----\nXXX\nYYY\n-----END RSA PRIVATE KEY-----&quot;
+}
+</code></pre>
+
+<p>これはプログラム側での扱いにちょっと注意が必要だった。</p>
+
+<p>この値をプログラム言語の文字列リテラルとして書くとか、
+シェルに書くなどすればエスケープシーケンスとして解釈され、
+<code>\</code>と<code>n</code>という二文字が <code>0x0A</code> というバイトに変換される。</p>
+
+<p>Fargate の環境変数に渡しただけでは変換が起こらないので、
+二文字のままである。
+つまり改行コードになっていない。</p>
+
+<p>今回、プログラム言語は Python を使っていたので、以下のように置換した。</p>
+
+<pre><code>os.environ.get(&quot;PRIVATE_KEY&quot;).replace(&quot;\\n&quot;, &quot;\n&quot;)
+</code></pre>
+
+<h1 id="pemキーを改行コードなしで渡せるか">PEMキーを改行コードなしで渡せるか？</h1>
+
+<p><code>XXXYYY</code>のように改行なしの文字列として渡せないかなー、と思ったが、
+少なくとも <code>pycrypto</code> の <code>Crypto.PublicKey.RSA.importKey</code> ではダメだった。
+原理的には、Base64 デコード後のバイト列が得られさえすればいいので、
+ライブラリに用意されている関数次第では何とかなりそうではある。</p>
+          </div>
+
+          
+          <ins class="adsbygoogle"
+            style="display:block"
+            data-ad-client="ca-pub-1603242475624347"
+            data-ad-slot="4367049913"
+            data-ad-format="link"></ins>
+          <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+          </script>
+        </div>
+
+        <div class="card-action castaway-card-footer">
+          <a class="btn waves-effect waves-light" href="/">サイトトップ</a>
+        </div>
+
+      </article>
+
+    </div>
+
+    </div>
+  </div>
+</section>
+
+
+</div>
+</body>
+</html>
+

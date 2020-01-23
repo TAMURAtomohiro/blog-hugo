@@ -1,5 +1,5 @@
 +++
-date = "2019-11-17T19:43:32+09:00"
+date = "2019-12-02T14:16:00+09:00"
 draft = false
 title = "html2canvas を使って見ているページのスクリーンショット画像を生成してみた"
 tags = ['JavaScript']
@@ -77,3 +77,6 @@ html2canvas(document.documentElement).then(canvas => {
 
 自分がグラフィックライブラリでの描画になじみがないこともあり、
 `canvas` にレンダリングする、というアプローチは面白いです。
+
+
+一時停止判定を末尾の点で行うよう修正

@@ -6,10 +6,31 @@
     <description>Recent content in Python on 嵐の小舟より</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <lastBuildDate>Sat, 13 Oct 2018 21:13:12 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 23 Jan 2020 21:27:28 +0900</lastBuildDate>
     
 	<atom:link href="https://tmrtmhr.info/tags/python/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Fargate で環境変数に改行コードを含む文字列を渡すときの注意点</title>
+      <link>https://tmrtmhr.info/tech/enrionment-variables-including-line-break/</link>
+      <pubDate>Thu, 23 Jan 2020 21:27:28 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/enrionment-variables-including-line-break/</guid>
+      <description>&lt;p&gt;AWS の Fargate を使っていて、改行コードを含む文字列を環境変数にセットしたいとふと思った。&lt;/p&gt;
+
+&lt;p&gt;もっと具体的に言えば CloudFront 用の 署名付き Cookie を生成するために
+プライベートキー(PEM)を渡したかった。
+PEM は以下のように改行を含む。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;-----BEGIN RSA PRIVATE KEY-----
+XXX
+YYY
+-----END RSA PRIVATE KEY-----
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>「作って動かすALife」の実行環境をセットアップしたときのエラー</title>
