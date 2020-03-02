@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://tmrtmhr.info/tech/gcp/export-logs/</loc>
+    <lastmod>2020-03-02T22:16:50+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://tmrtmhr.info/tech/enrionment-variables-including-line-break/</loc>
     <lastmod>2020-01-23T21:27:28+09:00</lastmod>
   </url>
@@ -230,7 +235,7 @@
   
   <url>
     <loc>https://tmrtmhr.info/tags/gcp/</loc>
-    <lastmod>2019-11-17T19:28:58+09:00</lastmod>
+    <lastmod>2020-03-02T22:16:50+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -306,7 +311,7 @@
   
   <url>
     <loc>https://tmrtmhr.info/tech/</loc>
-    <lastmod>2020-01-23T21:27:28+09:00</lastmod>
+    <lastmod>2020-03-02T22:16:50+09:00</lastmod>
     <priority>0</priority>
     <xhtml:link
                 rel="alternate"
@@ -344,7 +349,7 @@
   
   <url>
     <loc>https://tmrtmhr.info/</loc>
-    <lastmod>2020-01-23T21:27:28+09:00</lastmod>
+    <lastmod>2020-03-02T22:16:50+09:00</lastmod>
     <priority>0</priority>
     <xhtml:link
                 rel="alternate"

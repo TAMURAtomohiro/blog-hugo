@@ -6,10 +6,33 @@
     <description>Recent content in Teches on 嵐の小舟より</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <lastBuildDate>Thu, 23 Jan 2020 21:27:28 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 02 Mar 2020 22:16:50 +0900</lastBuildDate>
     
 	<atom:link href="https://tmrtmhr.info/tech/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>GCP の Logging で、シンクを設定していないログをエクスポートする</title>
+      <link>https://tmrtmhr.info/tech/gcp/export-logs/</link>
+      <pubDate>Mon, 02 Mar 2020 22:16:50 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/gcp/export-logs/</guid>
+      <description>&lt;p&gt;まだ今ほどコロナウィルスの影響がなかった新春の折。
+簡単にタスク分割して並列実行できそうなバッチ処理を、
+CloudRun を使ってHTTP APIを用意し、そこに投げまくることでさくさく実行する—という構成を試しました。&lt;/p&gt;
+
+&lt;p&gt;で、ログに色々情報を出しているので、そこから例えば XXX が何件あるか、みたいな集計などをやりたかった訳です。
+CloudRun では標準出力にログを出しておけば Stackdriver Logging に保存されるのでどうとでもなるだろう、
+という甘い目論見だった訳ですが、
+そう上手くはいかず、ちょっと焦ったのでそのメモです。&lt;/p&gt;
+
+&lt;p&gt;結論から言うとコマンドラインから検索条件を指定して出力できます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;gcloud logging read
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Fargate で環境変数に改行コードを含む文字列を渡すときの注意点</title>

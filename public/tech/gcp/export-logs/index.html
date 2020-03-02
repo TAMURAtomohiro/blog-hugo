@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+  <head>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-1603242475624347",
+        enable_page_level_ads: true
+      });
+    </script>
+    <meta charset="utf-8">
+    <meta name="generator" content="Hugo 0.47.1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+
+    
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+
+    <link rel="stylesheet" href="/css/base.css">
+
+    <link rel="alternate" href="/index.xml" type="application/rss+xml" title="嵐の小舟より">
+    <title>GCP の Logging で、シンクを設定していないログをエクスポートする - 嵐の小舟より</title>
+  </head>
+  <body>
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-92780964-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+    <div class="">
+      <header class="castaway-header-bar">
+        <nav>
+          <div class="nav-wrapper castaway-site-logo">
+            <div>
+              <a href="/" class="brand-logo right">
+                <i class="material-icons" style="margin-right: 5px;">rowing</i>
+                <span class="castaway-site-title">嵐の小舟より</span>
+              </a>
+            </div>
+          </div>
+        </nav>
+      </header>
+
+
+<section id="main">
+  <div class="row">
+    <div id="castaway-main" class="col s12 m12 l6 offset-l3">
+
+      <article itemscope itemtype="http://schema.org/Blog" class="card castaway-card">
+
+        <div class="card-title indigo darken-3 castaway-card-title">
+          <div class="card-content">
+            <div class="white-text" itemprop="headline">
+              GCP の Logging で、シンクを設定していないログをエクスポートする
+            </div>
+          </div>
+        </div>
+
+        <div class="card-content">
+          <div class="row">
+            <div class="castaway-date-published">
+              <span>公開日：</span>
+              <i class="material-icons" style="vertical-align: middle;">today</i>
+              <time itemprop="datePublished" datetime="2020-03-02">2020/03/02</time>
+              <span style="margin-left: 10px;"> タグ: </span>
+              
+                <a href="/tags/gcp">
+                  <div class="tag-gcp waves-effect waves-teal chip">
+                    gcp
+                  </div>
+                </a>
+              
+            </div>
+          </div>
+
+          <div class="castaway-card-content mdl-card__supporting-text mdl-color-text--grey-700">
+            <p>まだ今ほどコロナウィルスの影響がなかった新春の折。
+簡単にタスク分割して並列実行できそうなバッチ処理を、
+CloudRun を使ってHTTP APIを用意し、そこに投げまくることでさくさく実行する—という構成を試しました。</p>
+
+<p>で、ログに色々情報を出しているので、そこから例えば XXX が何件あるか、みたいな集計などをやりたかった訳です。
+CloudRun では標準出力にログを出しておけば Stackdriver Logging に保存されるのでどうとでもなるだろう、
+という甘い目論見だった訳ですが、
+そう上手くはいかず、ちょっと焦ったのでそのメモです。</p>
+
+<p>結論から言うとコマンドラインから検索条件を指定して出力できます。</p>
+
+<pre><code>gcloud logging read
+</code></pre>
+
+<p></p>
+
+<h1 id="基本的に-ログを長期保存するにはシンクを設定しておく必要がある">基本的に、ログを長期保存するにはシンクを設定しておく必要がある</h1>
+
+<p>まず、ウェブコンソールからエクスポートするべくログビューアに行って期間やら適当な文言やらで
+検索条件を指定すると、それにマッチしたものがブラウザ上で簡単に確認できます。
+便利！
+じゃあということで今この検索した条件にマッチするものをすべてエクスポートしたいんだけど、
+と画面を見渡してみて、燦然と輝く「ログをダウンロード」というのをクリックしてみる訳です。<sup class="footnote-ref" id="fnref:ref1"><a href="#fn:ref1">1</a></sup></p>
+
+<p>そうすると出ました。
+以下のようなダイアログが。</p>
+
+
+<figure>
+    
+        <img src="/img/export-logs/export-logs-dialog.png" alt="ログ出力ダイアログ" width="100%" />
+    
+    
+</figure>
+
+
+<p>え？</p>
+
+<blockquote>
+<p>読み込まれたログを直近のものから順に 100 件ダウンロードする</p>
+
+<p>現在ログビューアに読み込まれているログが最大 300 件ダウンロードされます。さらに多くのログをダウンロードする必要がある場合は、ログをエクスポートしてください。</p>
+</blockquote>
+
+<p>300件まで？</p>
+
+<p>マジかよ〜ログは1000万行以上あるんだよ〜え、どうしよう、シンクを設定してもう一回バッチ処理実行しなきゃいけないのかな&hellip;
+と最悪の事態が頭をかすめる中、
+必死で検索キーワードを Google に打ちこみます。
+日本語の情報がなかなか出てこないので英語のキーワードも入れてみたところようやく以下の記事が見つかりました。</p>
+
+<p><a href="https://stackoverflow.com/questions/45944704/how-to-export-previous-logs-in-stackdriver">How to export previous logs in Stackdriver</a></p>
+
+<p>「<code>gcloud logging read</code> でできる」だって！</p>
+
+<h1 id="gcloud-logging-read">gcloud logging read</h1>
+
+<p>たとえば以下のようなコマンドでログを取得できます。<sup class="footnote-ref" id="fnref:ref2"><a href="#fn:ref2">2</a></sup></p>
+
+<pre><code>gcloud \
+  --project ${PROJECT_ID} \
+   --format text \
+  logging read 'resource.type=&quot;cloud_run_revision&quot; resource.labels.service_name=&quot;xxx&quot; timestamp&gt;=&quot;2020-02-26T00:00:00.000Z&quot; &quot;SearchKeyword&quot;'
+</code></pre>
+
+<p>これで事なきを得てほっとひと安心、
+家に帰ってビールをあおりつつブログにしたためようと筆を取った次第です。</p>
+
+<p>どうも GCP を使っていると「それコマンドラインでしかできないよ」みたいなこと出てきますね。</p>
+
+<h1 id="まとめ">まとめ</h1>
+
+<p>ということで今回は Stackdriver Logging からシンクを設定していないログを出力する方法を試しました。
+ただし、この方法では直近30日間のログまでしか得られません。
+基本的にはシンクを設定しておき、条件にマッチするものを Cloud Storage や Pub/Sub、BigQuery へエクスポートしましょう。</p>
+
+<p>参考：<a href="https://cloud.google.com/logging/docs/export?hl=ja">ログのエクスポートの概要</a></p>
+<div class="footnotes">
+
+<hr />
+
+<ol>
+<li id="fn:ref1">筆者が試した時点の CLASSIC 版ログビューアによるもの。新しいログビューアではウェブコンソールからはシンクを設定する以外の方法は提供されていないっぽいです。
+ <a class="footnote-return" href="#fnref:ref1"><sup>[return]</sup></a></li>
+<li id="fn:ref2">クエリの構文はまったく調べてないですが、ウェブコンソール上で表示されているものを参考に渡したら通りました。<code>AND</code> とか不要なんですね。
+ <a class="footnote-return" href="#fnref:ref2"><sup>[return]</sup></a></li>
+</ol>
+</div>
+          </div>
+
+          
+          <ins class="adsbygoogle"
+            style="display:block"
+            data-ad-client="ca-pub-1603242475624347"
+            data-ad-slot="4367049913"
+            data-ad-format="link"></ins>
+          <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+          </script>
+        </div>
+
+        <div class="card-action castaway-card-footer">
+          <a class="btn waves-effect waves-light" href="/">サイトトップ</a>
+        </div>
+
+      </article>
+
+    </div>
+
+    </div>
+  </div>
+</section>
+
+
+</div>
+</body>
+</html>
+
