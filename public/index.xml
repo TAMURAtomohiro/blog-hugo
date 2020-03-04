@@ -6,10 +6,41 @@
     <description>Recent content on 嵐の小舟より</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <lastBuildDate>Thu, 05 Mar 2020 02:00:26 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 05 Mar 2020 02:02:00 +0900</lastBuildDate>
     
 	<atom:link href="https://tmrtmhr.info/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>html2canvas を使って見ているページのスクリーンショット画像を生成してみた</title>
+      <link>https://tmrtmhr.info/tech/html2canvas/</link>
+      <pubDate>Thu, 05 Mar 2020 02:02:00 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/html2canvas/</guid>
+      <description>&lt;h1 id=&#34;背景&#34;&gt;背景&lt;/h1&gt;
+
+&lt;p&gt;だんだんと秋も深くなり、周りではちらほら風邪をひく人も増えてきたそんな折。
+ウェブページをPDFとしてダウンロードできるようにしてほしい、という要望をいただきました。&lt;/p&gt;
+
+&lt;p&gt;いやそれはブラウザから印刷しようとしてPDFとして保存すれば&amp;hellip;とか、
+必要な部分だけスクリーンショットを撮れば&amp;hellip;など色々言ってはみましたが、
+使う側のITリテラシーの問題もあり、PDFの生成からは逃れられませんでした。&lt;/p&gt;
+
+&lt;p&gt;過去に似たような要望をいただいたときは、
+&lt;strong&gt;「サーバーサイドでブラウザを起動し、対象のウェブページを表示してPDFとして保存する」&lt;/strong&gt;
+というアプローチを取りました。
+たとえば &lt;a href=&#34;https://phantomjs.org/&#34;&gt;PhantomJS&lt;/a&gt; を使うとかですね。
+今なら Google Chrome のヘッドレスモードが良いと思います。&lt;/p&gt;
+
+&lt;p&gt;で、以前やったときからしばらく経っていたので改めて調べてみると、
+&lt;a href=&#34;https://html2canvas.hertzen.com/&#34;&gt;html2canvas&lt;/a&gt; という JavaScript ライブラリを見つけたので、
+ちょっと使ってみて生まれたのがこの記事です。&lt;/p&gt;
+
+&lt;p&gt;タイトルを「スクリーンショット画像を生成してみた」としてますが、
+厳密には「&lt;code&gt;canvas&lt;/code&gt;にレンダリングしてみた」という形ですね。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>APIキー認証のために Google Cloud Endpoints と Apigee を使ってみた</title>
@@ -75,37 +106,6 @@ XXX
 YYY
 -----END RSA PRIVATE KEY-----
 &lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>html2canvas を使って見ているページのスクリーンショット画像を生成してみた</title>
-      <link>https://tmrtmhr.info/tech/html2canvas/</link>
-      <pubDate>Mon, 02 Dec 2019 14:16:00 +0900</pubDate>
-      
-      <guid>https://tmrtmhr.info/tech/html2canvas/</guid>
-      <description>&lt;h1 id=&#34;背景&#34;&gt;背景&lt;/h1&gt;
-
-&lt;p&gt;だんだんと秋も深くなり、周りではちらほら風邪をひく人も増えてきたそんな折。
-ウェブページをPDFとしてダウンロードできるようにしてほしい、という要望をいただきました。&lt;/p&gt;
-
-&lt;p&gt;いやそれはブラウザから印刷しようとしてPDFとして保存すれば&amp;hellip;とか、
-必要な部分だけスクリーンショットを撮れば&amp;hellip;など色々言ってはみましたが、
-使う側のITリテラシーの問題もあり、PDFの生成からは逃れられませんでした。&lt;/p&gt;
-
-&lt;p&gt;過去に似たような要望をいただいたときは、
-&lt;strong&gt;「サーバーサイドでブラウザを起動し、対象のウェブページを表示してPDFとして保存する」&lt;/strong&gt;
-というアプローチを取りました。
-たとえば &lt;a href=&#34;https://phantomjs.org/&#34;&gt;PhantomJS&lt;/a&gt; を使うとかですね。
-今なら Google Chrome のヘッドレスモードが良いと思います。&lt;/p&gt;
-
-&lt;p&gt;で、以前やったときからしばらく経っていたので改めて調べてみると、
-&lt;a href=&#34;https://html2canvas.hertzen.com/&#34;&gt;html2canvas&lt;/a&gt; という JavaScript ライブラリを見つけたので、
-ちょっと使ってみて生まれたのがこの記事です。&lt;/p&gt;
-
-&lt;p&gt;タイトルを「スクリーンショット画像を生成してみた」としてますが、
-厳密には「&lt;code&gt;canvas&lt;/code&gt;にレンダリングしてみた」という形ですね。&lt;/p&gt;
 
 &lt;p&gt;&lt;/p&gt;</description>
     </item>
