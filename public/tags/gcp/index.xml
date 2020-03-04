@@ -6,10 +6,34 @@
     <description>Recent content in Gcp on 嵐の小舟より</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <lastBuildDate>Mon, 02 Mar 2020 22:16:50 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 05 Mar 2020 02:00:26 +0900</lastBuildDate>
     
 	<atom:link href="https://tmrtmhr.info/tags/gcp/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>APIキー認証のために Google Cloud Endpoints と Apigee を使ってみた</title>
+      <link>https://tmrtmhr.info/tech/gcp/apigee-and-cloudendpoints/</link>
+      <pubDate>Thu, 05 Mar 2020 02:00:26 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/gcp/apigee-and-cloudendpoints/</guid>
+      <description>&lt;p&gt;GCP上に構築したAPIに対し、APIキーでの認証機能を追加したかったので、
+Apigee と Cloud Endpoints を使ってみました。&lt;/p&gt;
+
+&lt;p&gt;今回の感想としては、以下のような理由で Cloud Endpoints を使うことにしました。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;支払いが GCP だけで完結する&lt;/li&gt;
+&lt;li&gt;APIキーの発行を GCP コンソールから行え、APIキーごとのリファラ制限・IP制限が行える
+&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&#34;要件&#34;&gt;要件&lt;/h1&gt;
+
+&lt;p&gt;まず、API サーバを GCP の Cloud Run に構築してありました。
+好き勝手に使われるのもまずいので、APIキーを要求し、
+できればAPIキーと合わせてIP制限などが欲しいところでした。&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>GCP の Logging で、シンクを設定していないログをエクスポートする</title>

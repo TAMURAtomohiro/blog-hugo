@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+  <head>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-1603242475624347",
+        enable_page_level_ads: true
+      });
+    </script>
+    <meta charset="utf-8">
+    <meta name="generator" content="Hugo 0.47.1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+
+    
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+
+    <link rel="stylesheet" href="/css/base.css">
+
+    <link rel="alternate" href="/index.xml" type="application/rss+xml" title="嵐の小舟より">
+    <title>APIキー認証のために Google Cloud Endpoints と Apigee を使ってみた - 嵐の小舟より</title>
+  </head>
+  <body>
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-92780964-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+    <div class="">
+      <header class="castaway-header-bar">
+        <nav>
+          <div class="nav-wrapper castaway-site-logo">
+            <div>
+              <a href="/" class="brand-logo right">
+                <i class="material-icons" style="margin-right: 5px;">rowing</i>
+                <span class="castaway-site-title">嵐の小舟より</span>
+              </a>
+            </div>
+          </div>
+        </nav>
+      </header>
+
+
+<section id="main">
+  <div class="row">
+    <div id="castaway-main" class="col s12 m12 l6 offset-l3">
+
+      <article itemscope itemtype="http://schema.org/Blog" class="card castaway-card">
+
+        <div class="card-title indigo darken-3 castaway-card-title">
+          <div class="card-content">
+            <div class="white-text" itemprop="headline">
+              APIキー認証のために Google Cloud Endpoints と Apigee を使ってみた
+            </div>
+          </div>
+        </div>
+
+        <div class="card-content">
+          <div class="row">
+            <div class="castaway-date-published">
+              <span>公開日：</span>
+              <i class="material-icons" style="vertical-align: middle;">today</i>
+              <time itemprop="datePublished" datetime="2020-03-05">2020/03/05</time>
+              <span style="margin-left: 10px;"> タグ: </span>
+              
+                <a href="/tags/gcp">
+                  <div class="tag-gcp waves-effect waves-teal chip">
+                    gcp
+                  </div>
+                </a>
+              
+            </div>
+          </div>
+
+          <div class="castaway-card-content mdl-card__supporting-text mdl-color-text--grey-700">
+            <p>GCP上に構築したAPIに対し、APIキーでの認証機能を追加したかったので、
+Apigee と Cloud Endpoints を使ってみました。</p>
+
+<p>今回の感想としては、以下のような理由で Cloud Endpoints を使うことにしました。</p>
+
+<ul>
+<li>支払いが GCP だけで完結する</li>
+<li>APIキーの発行を GCP コンソールから行え、APIキーごとのリファラ制限・IP制限が行える
+</li>
+</ul>
+
+<h1 id="要件">要件</h1>
+
+<p>まず、API サーバを GCP の Cloud Run に構築してありました。
+好き勝手に使われるのもまずいので、APIキーを要求し、
+できればAPIキーと合わせてIP制限などが欲しいところでした。</p>
+
+<p>自前で実装するのも手間ですし、
+AWS でいうと API Gateway のような API キーのチェックやレート制限ができるサービスがあるのは知っていたので、
+GCP だったらどうするのかなー、ということで Apigee と Cloud Endpoints を試してみることにしました。</p>
+
+<h1 id="apigee">Apigee</h1>
+
+<p>Apigee は2016年に Google が買収したサービスです。
+ですので、GCP に限ったサービスではなく、AWS でも Azure でもオンプレでも、
+実際にAPIリクエストを処理する場所は自由に指定できます。</p>
+
+<p>Apigee では XML を利用してルールを記述し、
+事前に用意されている機能を組み合わせて認証機能などを実現することができます。</p>
+
+<p>APIキーの認証をApigeeで処理することになりますが、
+バックエンドのAPIサーバが Apigee からのアクセスだけを許可するようにしないといけないので、
+今回は Apigee で JWT を生成してAPIサーバに渡してもらうことにしました。<sup class="footnote-ref" id="fnref:ref1"><a href="#fn:ref1">1</a></sup></p>
+
+<h2 id="apigee-での-apiキー要求と-jwt-生成">Apigee での APIキー要求と JWT 生成</h2>
+
+<p>今回実際に組んでみたルールは以下のようになります。</p>
+
+
+<figure>
+    
+        <img src="/img/apigee-and-cloudendpoints/1.png" alt="Apigeeの設定画面" width="100%" />
+    
+    
+</figure>
+
+
+<ul>
+<li>APIキーのチェック</li>
+</ul>
+
+<p>注：APIキーごとにリファラ制限やIP制限が可能かどうかは不明</p>
+
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;yes&quot;?&gt;
+&lt;VerifyAPIKey async=&quot;false&quot; continueOnError=&quot;false&quot; enabled=&quot;true&quot; name=&quot;verify-api-key&quot;&gt;
+    &lt;DisplayName&gt;Verify API Key&lt;/DisplayName&gt;
+    &lt;APIKey ref=&quot;request.header.x-api-key&quot;/&gt;
+&lt;/VerifyAPIKey&gt;
+</code></pre>
+
+<ul>
+<li>Apigee に設定したメタデータからJWT生成のためのキーを取り出す</li>
+</ul>
+
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;yes&quot;?&gt;
+&lt;KeyValueMapOperations async=&quot;false&quot; continueOnError=&quot;false&quot; enabled=&quot;true&quot; name=&quot;GetSecretKey&quot; mapIdentifier=&quot;secrets&quot;&gt;
+    &lt;DisplayName&gt;GetSecretKey&lt;/DisplayName&gt;
+    &lt;Properties/&gt;
+    &lt;ExclusiveCache&gt;false&lt;/ExclusiveCache&gt;
+    &lt;ExpiryTimeInSecs&gt;300&lt;/ExpiryTimeInSecs&gt;
+    &lt;Get assignTo=&quot;private.secretkey&quot; index=&quot;1&quot;&gt;
+        &lt;Key&gt;
+            &lt;Parameter&gt;secretkey&lt;/Parameter&gt;
+        &lt;/Key&gt;
+    &lt;/Get&gt;
+    &lt;Scope&gt;environment&lt;/Scope&gt;
+&lt;/KeyValueMapOperations&gt;
+</code></pre>
+
+<ul>
+<li>取り出したキーで JWT を生成( Issuer とかは自由に指定できます )</li>
+</ul>
+
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;yes&quot;?&gt;
+&lt;GenerateJWT async=&quot;false&quot; continueOnError=&quot;false&quot; enabled=&quot;true&quot; name=&quot;Generate-JWT&quot;&gt;
+    &lt;DisplayName&gt;Generate JWT&lt;/DisplayName&gt;
+    &lt;Algorithm&gt;HS256&lt;/Algorithm&gt;
+    &lt;SecretKey&gt;
+        &lt;Value ref=&quot;private.secretkey&quot;/&gt;
+    &lt;/SecretKey&gt;
+    &lt;Subject&gt;AuthToken&lt;/Subject&gt;
+    &lt;Issuer&gt;urn://api.endpoint&lt;/Issuer&gt;
+    &lt;Audience&gt;urn://api.backend&lt;/Audience&gt;
+    &lt;ExpiresIn&gt;1h&lt;/ExpiresIn&gt;
+    &lt;OutputVariable&gt;jwt&lt;/OutputVariable&gt;
+&lt;/GenerateJWT&gt;
+</code></pre>
+
+<ul>
+<li>JWT をリクエストヘッダに付加( <code>Authorization: Bearer ${JWT}</code> という形式)</li>
+</ul>
+
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;yes&quot;?&gt;
+&lt;AssignMessage async=&quot;false&quot; continueOnError=&quot;false&quot; enabled=&quot;true&quot; name=&quot;AddJWTHeader&quot;&gt;
+    &lt;DisplayName&gt;AddJWTHeader&lt;/DisplayName&gt;
+    &lt;Set&gt;
+        &lt;Headers&gt;
+            &lt;Header name=&quot;Authorization&quot;&gt;Bearer {jwt}&lt;/Header&gt;
+        &lt;/Headers&gt;
+    &lt;/Set&gt;
+    &lt;IgnoreUnresolvedVariables&gt;true&lt;/IgnoreUnresolvedVariables&gt;
+    &lt;AssignTo createNew=&quot;false&quot; transport=&quot;http&quot; type=&quot;request&quot;/&gt;
+&lt;/AssignMessage&gt;
+</code></pre>
+
+<p>と、ここまでで Apigee 上で発行した API キーを要求しつつ、
+認証が通ったものに対してリクエストヘッダの Authorization に JWT を追加して
+APIサーバに渡す、ということが実現できるので、
+APiサーバ側で JWT を検証し、
+JWTがないとか Issuer がおかしいとかを弾けばOKです。
+(JWT の期限 <code>ExpiresIn</code> が 1h(1時間)になってますが、実際は数秒とかで十分でしょう)</p>
+
+<p>また、上に貼ったスクリーンショットでは、レスポンスに対し CORS 対応のための
+Access-Control-Allow-Origin ヘッダなどを追加しています。</p>
+
+<h1 id="cloud-endpoints">Cloud Endpoints</h1>
+
+<p>Cloud Endpoints は GCP に統合されたサービスで、
+Apigee と同様に API キーのチェックや統計データの可視化などを提供します。
+収益化の機能はないです。</p>
+
+<p>Cloud Endpoints では、まず OpenAPI 使用に基いて API 定義を記述します。
+GCP 独自の拡張として、<code>x-google-backend</code> といった項目があり、
+実際に API リクエストを処理する GCP 内のサービス(Cloud Run や Cloud Functions)を指定できます。</p>
+
+<p>参考：<a href="https://cloud.google.com/endpoints/docs/openapi/architecture-overview?hl=ja">Cloud Endpoints のアーキテクチャの概要</a></p>
+
+<p>API キーのチェックなどには ESP (Extensible Service Proxy)というコンテナを利用します。
+ESP は Cloud Run にデプロイします。
+ESP を公開、APIサーバは非公開として、
+ESP に API サーバである Cloud Run の呼出し権限をつけるという構図です。
+<strong>GCP の権限管理の枠組みでアクセス制限ができる</strong>ので、今回のケースで Apigee にて必要だった JWT の生成が不要となりました。</p>
+
+<p>ESP を構築する手順についてはドキュメントがしっかり用意されているのでこれに従えばよいでしょう。</p>
+
+<p><a href="https://cloud.google.com/endpoints/docs/openapi/get-started-cloud-run?hl=ja">Cloud Run での Endpoints スタートガイド</a></p>
+
+<p>OpenAPI 定義の先頭部分を抜粋すると以下のようになります。
+<code>api-endpoint-xxx.a.run.app</code> が Cloud Run にデプロイした ESP、
+<code>https://xxx.a.run.app</code> が同じく Cloud Run にデプロイした API サーバ、という感じです。</p>
+
+<pre><code>swagger: '2.0'
+
+info:
+  version: &quot;0.0.1&quot;
+  title: xxx API
+  description: xxx API
+
+host: api-endpoint-xxx.a.run.app
+
+schemes:
+  - https
+produces:
+  - application/json
+x-google-backend:
+  address: &quot;https://xxx.a.run.app&quot;
+
+# 認証情報
+securityDefinitions:
+  keyAuth:
+    type: apiKey
+    name: key
+    in: query
+
+security:
+  - keyAuth: []
+
+paths:
+  ...
+</code></pre>
+
+<h2 id="cloud-endpoints-の素敵なところ">Cloud Endpoints の素敵なところ</h2>
+
+<p><a href="https://cloud.google.com/endpoints?hl=ja">Cloud Endpoints</a>の特長：APIキーに以下のような記述があります。</p>
+
+<blockquote>
+<p>Google Cloud Platform Console で API キーを生成し、すべての API 呼び出しで検証を行います。API を他のデベロッパーと共有すると、共有相手が独自のキーを生成できるようになります。</p>
+</blockquote>
+
+<p>これが意味するところは、Cloud Endpoints で作成した API に対し、
+<strong>他の GCP API と同様に「APIとサービス」で管理できる</strong>ということです。</p>
+
+<p><a href="https://cloud.google.com/endpoints/docs/quickstart-endpoints?hl=ja">Cloud Endpoints クイックスタート</a>にて
+&ldquo;Airport Codes&rdquo; というAPIを Cloud Endpoints に作りますが、
+これを有効化すると、</p>
+
+
+<figure>
+    
+        <img src="/img/apigee-and-cloudendpoints/4.png" alt="APIの有効化" width="100%" />
+    
+    
+</figure>
+
+
+<p>ダッシュボードなどにも現れますし、認証情報としてAPIキーを作成した際に、
+APIキーの制限として指定することもできます。</p>
+
+
+<figure>
+    
+        <img src="/img/apigee-and-cloudendpoints/2.png" alt="APIキーの制限" width="100%" />
+    
+    
+</figure>
+
+
+<p>フロントエンドから使う場合はリファラ制限をかけたAPIキー、
+バックエンドから使う場合はIP制限をかけたAPIキー、という具合にアクセス制限が実現できるので、非常に便利です。</p>
+
+<h1 id="まとめ">まとめ</h1>
+
+<p>今回は Apigee と Cloud Endpoints を使ってみました。
+2つとも、APIを運用する上で必要になる幅広いサービスを提供しており、
+片方にしかない機能(Apigeeで言えば収益化周り、Cloud Endpoins で言えば GCP との統合)もあるので、
+使いわけの参考になれば幸いです。</p>
+<div class="footnotes">
+
+<hr />
+
+<ol>
+<li id="fn:ref1">Apigee が使用している IPレンジ をまとめて許可するなどのアプローチも考えましたが、ぱっと見つからず&hellip;。
+ <a class="footnote-return" href="#fnref:ref1"><sup>[return]</sup></a></li>
+</ol>
+</div>
+          </div>
+
+          
+          <ins class="adsbygoogle"
+            style="display:block"
+            data-ad-client="ca-pub-1603242475624347"
+            data-ad-slot="4367049913"
+            data-ad-format="link"></ins>
+          <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+          </script>
+        </div>
+
+        <div class="card-action castaway-card-footer">
+          <a class="btn waves-effect waves-light" href="/">サイトトップ</a>
+        </div>
+
+      </article>
+
+    </div>
+
+    </div>
+  </div>
+</section>
+
+
+</div>
+</body>
+</html>
+
