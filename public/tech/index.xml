@@ -6,10 +6,38 @@
     <description>Recent content in Teches on 嵐の小舟より</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <lastBuildDate>Thu, 05 Mar 2020 02:02:00 +0900</lastBuildDate>
+    <lastBuildDate>Fri, 03 Apr 2020 01:05:00 +0900</lastBuildDate>
     
 	<atom:link href="https://tmrtmhr.info/tech/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Cloud Run からのアクセスを固定IPにする</title>
+      <link>https://tmrtmhr.info/tech/gcp/cloud-run-static-ip/</link>
+      <pubDate>Fri, 03 Apr 2020 01:05:00 +0900</pubDate>
+      
+      <guid>https://tmrtmhr.info/tech/gcp/cloud-run-static-ip/</guid>
+      <description>&lt;p&gt;Cloud Run から外部の HTTP API を呼ぶ機会があり、
+そのAPIの呼び出し制限のため、
+IP を固定したくなった際のメモです。&lt;/p&gt;
+
+&lt;p&gt;現状の Cloud Run では、たとえば Cloud NAT のようなゲートウェイを介するなどしてIPを固定する機能がないため、
+何かしら工夫する必要があります。
+(Cloud Functions では&lt;a href=&#34;https://cloud.google.com/functions/docs/networking/network-settings?hl=ja#associate-static-ip&#34;&gt;そういった機能が提供されている&lt;/a&gt;ので、
+将来的には CloudRun でも可能になるかもしれません)&lt;/p&gt;
+
+&lt;p&gt;概要は以下の通りです。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;固定IP の GCE インスタンスを作る&lt;/li&gt;
+&lt;li&gt;Cloud Run のコンテナ内で上の GCE インスタンスへの SSH ポートフォワーディング(トンネリング) を実行する&lt;/li&gt;
+&lt;li&gt;アプリケーションコードが上の SSH ポートフォワーディングを介してリクエストを送るよう設定する&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;参考： &lt;a href=&#34;https://ahmet.im/blog/cloud-run-static-ip/&#34;&gt;Cloud Run applications with static outgoing IPs&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>html2canvas を使って見ているページのスクリーンショット画像を生成してみた</title>

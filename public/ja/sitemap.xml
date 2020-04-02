@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://tmrtmhr.info/tech/gcp/cloud-run-static-ip/</loc>
+    <lastmod>2020-04-03T01:05:00+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://tmrtmhr.info/tech/html2canvas/</loc>
     <lastmod>2020-03-05T02:02:00+09:00</lastmod>
   </url>
@@ -240,7 +245,7 @@
   
   <url>
     <loc>https://tmrtmhr.info/tags/gcp/</loc>
-    <lastmod>2020-03-05T02:00:26+09:00</lastmod>
+    <lastmod>2020-04-03T01:05:00+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -316,7 +321,7 @@
   
   <url>
     <loc>https://tmrtmhr.info/tech/</loc>
-    <lastmod>2020-03-05T02:02:00+09:00</lastmod>
+    <lastmod>2020-04-03T01:05:00+09:00</lastmod>
     <priority>0</priority>
     <xhtml:link
                 rel="alternate"
@@ -354,7 +359,7 @@
   
   <url>
     <loc>https://tmrtmhr.info/</loc>
-    <lastmod>2020-03-05T02:02:00+09:00</lastmod>
+    <lastmod>2020-04-03T01:05:00+09:00</lastmod>
     <priority>0</priority>
     <xhtml:link
                 rel="alternate"
