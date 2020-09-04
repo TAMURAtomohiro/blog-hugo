@@ -9,7 +9,7 @@
       });
     </script>
     <meta charset="utf-8">
-    <meta name="generator" content="Hugo 0.47.1" />
+    <meta name="generator" content="Hugo 0.74.3" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -86,38 +86,29 @@ if (!doNotTrack) {
           </div>
 
           <div class="castaway-card-content mdl-card__supporting-text mdl-color-text--grey-700">
-            <p>API Gateway では統合リクエストのところで&rdquo;AWS サービス&rdquo;として設定することで
+            <p>API Gateway では統合リクエストのところで&quot;AWS サービス&quot;として設定することで
 S3 のデータを読み書きするようにできます。</p>
-
 <p>たとえば以下のように設定することで S3 オブジェクトを GET することができます。
 API Gateway のカスタムオーサライザ機能でのちのち認証を追加したりできるので、
 とりあえず間に API Gateway をはさんでおくと便利です。</p>
-
 <ul>
 <li>AWS サービス： S3</li>
 <li>AWS サブドメイン： バケット名</li>
 <li>HTTP メソッド： <code>GET</code></li>
 <li>パス上書き： <code>/path/to/resource</code></li>
 </ul>
-
 <p>ここで、バケット名にドット(<code>.</code>)を含む場合は注意が必要です。
 バケット名が <code>my.bucket.domain</code> のようになっていると、
 S3 へのアクセスの際に <code>https://my.bucket.domain.s3.amazonaws.com</code> というドメインが使われ、
 S3 側では <code>*.s3.amazonaws.com</code> という SSL 証明書を用いているため <code>my.bucket.domain</code> のような多段階のサブドメインにマッチせず、
 怒られます。</p>
-
 <p>そんなわけで、ドメイン名にドットを含む場合は以下のように設定する必要があります。</p>
-
 <ul>
 <li>AWS サブドメイン： 空欄</li>
 <li>パス上書き： <code>my.bucket.domain/path/to/resource</code></li>
 </ul>
-
 <p>個人的には、トラブルが起きがちなドット混じりのバケット名は避けようかな、という気持ちになってきました。</p>
-
 <p>参考：<a href="https://stackoverflow.com/questions/26744696/ssl-multilevel-subdomain-wildcard">SSL Multilevel Subdomain Wildcard</a></p>
-
-<p></p>
           </div>
 
           

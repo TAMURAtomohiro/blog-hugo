@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Bitbucket on 嵐の小舟より</title>
+    <title>bitbucket on 嵐の小舟より</title>
     <link>https://tmrtmhr.info/tags/bitbucket/</link>
-    <description>Recent content in Bitbucket on 嵐の小舟より</description>
+    <description>Recent content in bitbucket on 嵐の小舟より</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
     <lastBuildDate>Sat, 28 Oct 2017 15:01:39 +0900</lastBuildDate>
@@ -21,10 +21,7 @@
 デフォルトで &lt;code&gt;Chrome&lt;/code&gt; を使って Unit Test を動かすよう設定されていますが、
 BitBucket Pipelines の環境には Chrome がインストールされていないので、
 &lt;code&gt;PhantomJS&lt;/code&gt; で実行するよう修正する必要があります。&lt;/p&gt;
-
-&lt;p&gt;本記事はそのためのメモです。&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;本記事はそのためのメモです。&lt;/p&gt;</description>
     </item>
     
   </channel>

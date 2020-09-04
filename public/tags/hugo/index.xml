@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Hugo on 嵐の小舟より</title>
+    <title>hugo on 嵐の小舟より</title>
     <link>https://tmrtmhr.info/tags/hugo/</link>
-    <description>Recent content in Hugo on 嵐の小舟より</description>
+    <description>Recent content in hugo on 嵐の小舟より</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
     <lastBuildDate>Tue, 14 Mar 2017 17:15:21 +0900</lastBuildDate>
@@ -21,19 +21,14 @@
 CloudFront を利用して配信しています。
 CloudFront はキャッシュサーバとして働くので、
 何もしなければ TTL が切れるまでは古いコンテンツが表示されます。&lt;/p&gt;
-
 &lt;p&gt;単純にキャッシュ全削除という手もありますが、
 せっかくなので更新のあったファイルのみキャッシュを削除してみました。&lt;/p&gt;
-
 &lt;p&gt;やっていることは以下のような感じです。&lt;/p&gt;
-
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;git diff&lt;/code&gt; で更新のあったファイル一覧を取得&lt;/li&gt;
 &lt;li&gt;一覧を加工して AWS CLI 用の JSON ファイルを生成&lt;/li&gt;
 &lt;li&gt;AWS CLI の &lt;code&gt;aws cloudfront create-invalidation&lt;/code&gt; でキャッシュ削除&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;/ul&gt;</description>
     </item>
     
     <item>
@@ -43,10 +38,8 @@ CloudFront はキャッシュサーバとして働くので、
       
       <guid>https://tmrtmhr.info/tech/hugo-with-material-icon/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://gohugo.io/&#34;&gt;Hugo&lt;/a&gt; で任意の HTML を生成したい場合は &lt;a href=&#34;https://gohugo.io/extras/shortcodes/&#34;&gt;ShortCode&lt;/a&gt; を書くことになります。&lt;/p&gt;
-
 &lt;p&gt;本サイトでは使い道はさておきマテリアルアイコンを読み込んでいるので、
-ShortCode で使えるようにしてみました。
-&lt;/p&gt;</description>
+ShortCode で使えるようにしてみました。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -56,8 +49,7 @@ ShortCode で使えるようにしてみました。
       
       <guid>https://tmrtmhr.info/tech/static-site-generator-comparison/</guid>
       <description>&lt;p&gt;エンジニア界隈ではどうもブログを作る目的で静的サイトジェネレータというものが使われている、
-と聞いたため、せっかくなので使ってみることにしました。
-&lt;/p&gt;</description>
+と聞いたため、せっかくなので使ってみることにしました。&lt;/p&gt;</description>
     </item>
     
   </channel>

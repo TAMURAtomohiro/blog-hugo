@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Node.js on 嵐の小舟より</title>
+    <title>node.js on 嵐の小舟より</title>
     <link>https://tmrtmhr.info/tags/node.js/</link>
-    <description>Recent content in Node.js on 嵐の小舟より</description>
+    <description>Recent content in node.js on 嵐の小舟より</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
     <lastBuildDate>Tue, 11 Apr 2017 21:37:09 +0900</lastBuildDate>
@@ -20,11 +20,8 @@
       <description>&lt;p&gt;AWS DynamoDB では指定した IO 性能に応じて料金が発生するため、
 クエリなどで使用しないプロパティについては gzip 圧縮などを施してバイナリデータとして格納したほうが、
 必要な IO 性能が少なくなるためお得です(参考：&lt;a href=&#34;http://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/GuidelinesForItems.html#GuidelinesForItems.CompressingLargeAttributeValues&#34;&gt;大量の属性値を圧縮する&lt;/a&gt;)。&lt;/p&gt;
-
 &lt;p&gt;本記事は、AWS Lambda (Node.js 6.10) から DynamoDB のデータを取得し、
-展開する処理のメモです。&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+展開する処理のメモです。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -34,12 +31,9 @@
       
       <guid>https://tmrtmhr.info/tech/chrome-disable-infobars/</guid>
       <description>&lt;h1 id=&#34;結論&#34;&gt;結論&lt;/h1&gt;
-
 &lt;ul&gt;
 &lt;li&gt;Google Chrome の起動オプションに &lt;code&gt;--disable-infobars&lt;/code&gt; を渡す&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;/ul&gt;</description>
     </item>
     
     <item>
@@ -50,31 +44,23 @@
       <guid>https://tmrtmhr.info/tech/replace-a-part-of-json-with-command-output/</guid>
       <description>&lt;p&gt;AWS CLI によりコマンドラインから制御したりする際、リクエストパラメータとして JSON ファイルが必要になることがあります。
 &lt;a href=&#34;https://tmrtmhr.info/tech/aws/delete-updated-file-cache-on-cloudfront/&#34;&gt;CloudFront のキャッシュを削除したいとき&lt;/a&gt;なんかがそうです。&lt;/p&gt;
-
 &lt;p&gt;AWS CLI のコマンドごとに、リクエストJSONを生成する専用スクリプトを書くという手もありますが、
 シェル上でパイプやらリダイレクトやらを駆使していい感じに JSON を生成できるある程度汎用的なスクリプトにならんものか、
 という思いから試してみた結果をここに記します。
 どこかに既にあるものでしたらすみません。&lt;/p&gt;
-
 &lt;p&gt;コマンド引数は以下のようになっていて、JSON ファイルは標準入力から与えます。&lt;/p&gt;
-
 &lt;pre&gt;&lt;code&gt;filljson ${入力の型} ${キーパス} ${入力ファイル名}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;標準入出力で JSON をやりとりするので以下のようにパイプでつなげることで
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;標準入出力で JSON をやりとりするので以下のようにパイプでつなげることで
 中間ファイルを作ることなく最終的なリクエスト JSON が得られます。
 入力ファイル名のところには &lt;code&gt;bash&lt;/code&gt; や &lt;code&gt;zsh&lt;/code&gt; のプロセス置換機能を利用しています。
 プロセス置換機能を使うとプログラム側からは単にファイルパスが渡ってくるように見えるので、
 ファイルIOとして処理すればOKです。&lt;/p&gt;
-
 &lt;pre&gt;&lt;code&gt;cat json/cloudfront-invalidation.json |
   filljson int InvalidationBatch.Paths.Quantity &amp;lt;(git diff --ignore-all-space --diff-filter=M --name-only HEAD^ HEAD  public | wc -l) |
   filljson [string] InvalidationBatch.Paths.Items &amp;lt;(git diff --ignore-all-space --diff-filter=M --name-only HEAD^ HEAD  public | sed -e &#39;s/^public//g&#39;) |
   filljson string InvalidationBatch.CallerReference &amp;lt;(date +&amp;quot;osone3-%Y/%m/%d-%H:%k:%m&amp;quot; | tr -d &#39;\n&#39;) |
   jq . &amp;gt; request.json
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;/code&gt;&lt;/pre&gt;</description>
     </item>
     
   </channel>

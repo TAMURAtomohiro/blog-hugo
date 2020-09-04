@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Rxjs on 嵐の小舟より</title>
+    <title>rxjs on 嵐の小舟より</title>
     <link>https://tmrtmhr.info/tags/rxjs/</link>
-    <description>Recent content in Rxjs on 嵐の小舟より</description>
+    <description>Recent content in rxjs on 嵐の小舟より</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
     <lastBuildDate>Tue, 04 Apr 2017 17:24:23 +0900</lastBuildDate>
@@ -19,18 +19,13 @@
       <guid>https://tmrtmhr.info/tech/drag-and-drop-using-rxjs/</guid>
       <description>&lt;p&gt;HTML要素をドラッグアンドドロップ(以降 D&amp;amp;D)で移動させようと思ったときは、
 対象要素に対する &lt;code&gt;mousedown&lt;/code&gt;、&lt;code&gt;mousemove&lt;/code&gt;、&lt;code&gt;mouseup&lt;/code&gt; のイベントを使って実装するかと思います。&lt;/p&gt;
-
 &lt;p&gt;しかしながらウィンドウ外では対象要素の &lt;code&gt;mouseup&lt;/code&gt; を捕捉できないため、
 単純な実装ではウィンドウ外でD&amp;amp;Dをやめて戻った際、再度クリックなどして&lt;code&gt;mouseup&lt;/code&gt;が発生するまで要素が追従してしまいます。&lt;/p&gt;
-
 &lt;p&gt;本記事では以下の挙動を &lt;a href=&#34;https://github.com/ReactiveX/rxjs&#34;&gt;RxJS&lt;/a&gt; で実装してみた例です。&lt;/p&gt;
-
 &lt;ul&gt;
 &lt;li&gt;D&amp;amp;D 終了時は初期位置に移動する&lt;/li&gt;
 &lt;li&gt;ウィンドウ外で D&amp;amp;D 終了(&lt;code&gt;mouseup&lt;/code&gt;)を検知する&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;/ul&gt;</description>
     </item>
     
   </channel>

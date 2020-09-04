@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Web on 嵐の小舟より</title>
+    <title>web on 嵐の小舟より</title>
     <link>https://tmrtmhr.info/tags/web/</link>
-    <description>Recent content in Web on 嵐の小舟より</description>
+    <description>Recent content in web on 嵐の小舟より</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
     <lastBuildDate>Mon, 30 Nov 2015 14:20:55 +0900</lastBuildDate>
@@ -20,8 +20,7 @@
       <description>&lt;p&gt;Smashing Magazine の
 &lt;a href=&#34;http://www.smashingmagazine.com/2015/11/modern-static-website-generators-next-big-thing/&#34;&gt;Why Static Website Generators Are The Next Big Thing&lt;/a&gt;
 という記事を読んでの、自分の理解のためのメモです。
-直訳というわけでもなく、独自研究が含まれる恐れがあります。
-&lt;/p&gt;</description>
+直訳というわけでもなく、独自研究が含まれる恐れがあります。&lt;/p&gt;</description>
     </item>
     
   </channel>

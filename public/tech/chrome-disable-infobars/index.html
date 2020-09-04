@@ -9,7 +9,7 @@
       });
     </script>
     <meta charset="utf-8">
-    <meta name="generator" content="Hugo 0.47.1" />
+    <meta name="generator" content="Hugo 0.74.3" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -93,57 +93,35 @@ if (!doNotTrack) {
 
           <div class="castaway-card-content mdl-card__supporting-text mdl-color-text--grey-700">
             <h1 id="結論">結論</h1>
-
 <ul>
 <li>Google Chrome の起動オプションに <code>--disable-infobars</code> を渡す</li>
 </ul>
-
-<p></p>
-
 <h1 id="経緯">経緯</h1>
-
 <p>バージョン 57.0.2987.133(64-bit) あたりの Google Chrome と
 Selenium Chrome driver 2.28 でE2Eテストを実行すると
 &ldquo;Chrome is being controlled by automated test software&rdquo; とか
 &ldquo;Chrome は自動テスト ソフトウェアによって制御されています&rdquo; とかいう黄色い通知バーが出てくるようになりました。</p>
-
 <p>まあ画面キャプチャには入らないですし、出てくること自体はいいんですけれども、
 そのせいで失敗する E2E テストが出てきて、おいおい誰だよこんなコード書いたの、やろう、ぶっころしてやる、
 と込み上げてくる怒りを糧に調べた解決法をこの記事へ記す次第です。</p>
-
 <p>結局 Google Chrome の起動オプションに <code>--disable-infobars</code> を渡して表示しないようにしました。</p>
-
 <p>protorator を使用する場合は設定ファイルに以下のような内容があれば OK です。</p>
-
 <pre><code>capabilities: [
   chromeOptions: {
     args: ['disable-infobars'],
   },
 ]
-</code></pre>
-
-<h1 id="mac-で-google-chrome-に-自動テストが云々-の通知バーを出す方法">Mac で Google Chrome に&rdquo;自動テストが云々&rdquo;の通知バーを出す方法</h1>
-
+</code></pre><h1 id="mac-で-google-chrome-に自動テストが云々の通知バーを出す方法">Mac で Google Chrome に&quot;自動テストが云々&quot;の通知バーを出す方法</h1>
 <p>ターミナルで以下のように打つと起動している Chrome すべてに通知バーが出てきて嫌な気持ちになります。</p>
-
 <pre><code>/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --enable-automation
-</code></pre>
-
-<h1 id="通知バーが出ているときの-window-の高さ">通知バーが出ているときの window の高さ</h1>
-
+</code></pre><h1 id="通知バーが出ているときの-window-の高さ">通知バーが出ているときの window の高さ</h1>
 <p>以下のコードで高さを見てみると、通知バーの有無で 40px 違っていました。</p>
-
 <pre><code>angular.element(window).height()
-</code></pre>
-
-<h1 id="e2e-テスト失敗の原因">E2E テスト失敗の原因</h1>
-
+</code></pre><h1 id="e2e-テスト失敗の原因">E2E テスト失敗の原因</h1>
 <ul>
 <li>E2Eテストのコードがウィンドウの高さに強く依存していた(スクロール量がピクセル値でハードコーディングされている、など)</li>
 </ul>
-
 <p>参考：</p>
-
 <ul>
 <li><a href="http://sqa.stackexchange.com/questions/26051/chrome-driver-2-28-chrome-is-being-controlled-by-automated-test-software-notif">Chrome driver 2.28 “Chrome is being controlled by automated test software” notification .Can it be removed?</a></li>
 </ul>

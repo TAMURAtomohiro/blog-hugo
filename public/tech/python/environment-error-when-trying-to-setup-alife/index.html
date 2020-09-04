@@ -9,7 +9,7 @@
       });
     </script>
     <meta charset="utf-8">
-    <meta name="generator" content="Hugo 0.47.1" />
+    <meta name="generator" content="Hugo 0.74.3" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -87,45 +87,25 @@ if (!doNotTrack) {
 
           <div class="castaway-card-content mdl-card__supporting-text mdl-color-text--grey-700">
             <p>環境は以下の通り。</p>
-
 <ul>
 <li>macOS High Sierra (10.13.6)</li>
 <li>Homebrew でインストールした python 3系 (3.6.4)</li>
 </ul>
-
 <p>以下のようにライブラリをインストールしようとしたところ、</p>
-
 <pre><code>sudo pip install pyglet pymunk vispy keras tensorflow
-</code></pre>
-
-<p>以下のようなエラーが得られました。</p>
-
+</code></pre><p>以下のようなエラーが得られました。</p>
 <pre><code>Could not install packages due to an EnvironmentError: [Errno 1] Operation not permitted: '/bin/futurize'
-</code></pre>
-
-<p></p>
-
-<p>最近の Mac では <code>/bin</code> 以下にルート権限でもファイルが置けないようで、それに起因したエラーのようです。
+</code></pre><p>最近の Mac では <code>/bin</code> 以下にルート権限でもファイルが置けないようで、それに起因したエラーのようです。
 (参考：<a href="https://apple.srad.jp/story/15/09/30/1529213/">OS X 10.11ではrootでも/usrや/bin以下に書き込みできない</a>)</p>
-
 <p>ですので <code>/bin</code> 以下にファイルを置こうとするライブラリなら同様のエラーが発生します。
 実際、<code>pip install --upgrade pip</code> をしようとしても以下のように叱られたので、何か自分の環境がおかしいようです。</p>
-
 <pre><code>Could not install packages due to an EnvironmentError: [Errno 1] Operation not permitted: '/bin/pip'
-</code></pre>
-
-<p>対策としては <code>--user</code> オプションをつけてインストールすることです。</p>
-
+</code></pre><p>対策としては <code>--user</code> オプションをつけてインストールすることです。</p>
 <pre><code>pip install --user pyglet pymunk vispy keras tensorflow
-</code></pre>
-
-<p>これにより以下のような場所へファイルが配置されます。</p>
-
+</code></pre><p>これにより以下のような場所へファイルが配置されます。</p>
 <pre><code>$ which futurize
 /Users/username/Library/Python/3.6/bin/futurize
-</code></pre>
-
-<p>もし環境変数 PATH へ <code>/Users/username/Library/Python/3.6/bin</code> が追加されていないようであれば、追加しましょう。</p>
+</code></pre><p>もし環境変数 PATH へ <code>/Users/username/Library/Python/3.6/bin</code> が追加されていないようであれば、追加しましょう。</p>
           </div>
 
           

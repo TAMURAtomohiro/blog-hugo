@@ -9,7 +9,7 @@
       });
     </script>
     <meta charset="utf-8">
-    <meta name="generator" content="Hugo 0.47.1" />
+    <meta name="generator" content="Hugo 0.74.3" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -87,71 +87,42 @@ if (!doNotTrack) {
 
           <div class="castaway-card-content mdl-card__supporting-text mdl-color-text--grey-700">
             <p>たとえば Haskell では以下のようなデータ型を定義できます。</p>
-
 <pre><code>data Tree = Leaf | Branch Tree Tree
-</code></pre>
-
-<p>C言語で言えばタグ付き共用体(union)のような感じです。</p>
-
-<!-- ``` -->
-
-<!-- union Tree { -->
-
-<!--   struct Leaf { -->
-
-<!--     tag int; -->
-
-<!--   } leaf; -->
-
-<!--   struct Branch { -->
-
-<!--     tag int; -->
-
-<!--     left *Tree; -->
-
-<!--     right *Tree; -->
-
-<!--   } branch; -->
-
-<!-- } -->
-
-<!-- ``` -->
-
+</code></pre><p>C言語で言えばタグ付き共用体(union)のような感じです。</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>この記事は、こんな感じで木構造などを表現したい時
 Go 言語ではどうするのか？という点について調べてみたメモです。
 結論としては<code>type Tree interface{ ... }</code>を定義します。</p>
-
 <p><code>data Tree a</code> のように汎用的なコンテナを作る方法については言及しません。</p>
-
-<p></p>
-
 <h1 id="leaf-と-branch-に対して行いたい操作">Leaf と Branch に対して行いたい操作</h1>
-
 <p>ここでは<code>Tree</code>中の<code>Leaf</code>を数える<code>Count</code>という関数を考えてみます。
 Haskell だったらパターンマッチで分岐です。</p>
-
-<pre><code class="language-haskell">count :: Tree -&gt; Int
-count Leaf = 1
-count (Branch l r) = count l + count r
-</code></pre>
-
-<p>今Go言語で実現したいのは以下のような内容です。</p>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">count</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Tree</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Int</span>
+<span style="color:#a6e22e">count</span> <span style="color:#66d9ef">Leaf</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+<span style="color:#a6e22e">count</span> (<span style="color:#66d9ef">Branch</span> l r) <span style="color:#f92672">=</span> count l <span style="color:#f92672">+</span> count r
+</code></pre></div><p>今Go言語で実現したいのは以下のような内容です。</p>
 <ul>
 <li><code>Leaf</code>か<code>Branch</code>のどちらかのデータ構造を引数に取る</li>
 <li><code>Leaf</code>か<code>Branch</code>かによって処理を分岐する</li>
 </ul>
-
 <p>そこで登場するのが <code>interface</code> です。
 ここで<code>Leaf</code>と<code>Branch</code>は<code>count</code>という共通のインタフェースを持っているわけなので、
 そういうふうに書きます。</p>
-
 <p>そんなわけでコードは以下の通りです。</p>
-
-<script type="application/javascript" src="//gist.github.com/tmrtmhr/3134ee6b7201197471e33f98780e1285.js"></script>
+<script type="application/javascript" src="https://gist.github.com/tmrtmhr/3134ee6b7201197471e33f98780e1285.js"></script>
 
 <h1 id="まとめ">まとめ</h1>
-
 <p>ということでGo言語で木構造のような直和型のデータ構造を扱う小さな例を示しました。</p>
           </div>
 

@@ -9,7 +9,7 @@
       });
     </script>
     <meta charset="utf-8">
-    <meta name="generator" content="Hugo 0.47.1" />
+    <meta name="generator" content="Hugo 0.74.3" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -89,35 +89,21 @@ if (!doNotTrack) {
             <p>以下のようなコードで <code>interface{}</code> に対し数値を読み込んだ際、
 数値の型は <code>float64</code> になります。
 (参考: <a href="https://golang.org/pkg/encoding/json/#Unmarshal">公式ドキュメント</a>)</p>
-
 <pre><code>var got []interface{}
 json.Unmarshal([]byte(&quot;[1,2,null]&quot;, &amp;got)
-</code></pre>
-
-<p>しかし、これをテストするために比較対象のデータをリテラルとして用意すると、</p>
-
+</code></pre><p>しかし、これをテストするために比較対象のデータをリテラルとして用意すると、</p>
 <pre><code>want := []interface{}{1,2,nil}
-</code></pre>
-
-<p>定数のデフォルト型の宿命で数値の型が <code>int</code> になってしまうため、<code>reflect.DeepEqual</code> などの比較において失敗してしまいます。</p>
-
+</code></pre><p>定数のデフォルト型の宿命で数値の型が <code>int</code> になってしまうため、<code>reflect.DeepEqual</code> などの比較において失敗してしまいます。</p>
 <h1 id="解決策">解決策</h1>
-
 <p>解決策としては以下の2つかな、と考えており、(2)のほうは煩雑なので今のところ(1)でやっています。</p>
-
 <ol>
 <li>テストデータも <code>json.Unmarshal</code> で作る</li>
 <li>明示的に <code>float64(1)</code> として変換する</li>
 </ol>
-
-<p></p>
-
 <h1 id="コードの挙動確認">コードの挙動確認</h1>
-
 <p>以下でコードの挙動を確認できます。
 <a href="https://play.golang.org/p/7U2AtxLORC">The Go Playground</a></p>
-
-<script type="application/javascript" src="//gist.github.com/tmrtmhr/197cf8ed967cc97c0388464b315cfda0.js"></script>
+<script type="application/javascript" src="https://gist.github.com/tmrtmhr/197cf8ed967cc97c0388464b315cfda0.js"></script>
           </div>
 
           

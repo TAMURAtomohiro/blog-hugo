@@ -9,7 +9,7 @@
       });
     </script>
     <meta charset="utf-8">
-    <meta name="generator" content="Hugo 0.47.1" />
+    <meta name="generator" content="Hugo 0.74.3" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -88,21 +88,15 @@ if (!doNotTrack) {
           <div class="castaway-card-content mdl-card__supporting-text mdl-color-text--grey-700">
             <p>API Gateway にカスタムオーサライザを設定して新しいステージ作って……
 とやっていたときに &ldquo;502 Internal Server Error&rdquo; が出ました。</p>
-
 <p>こんな時はとりあえずログを見ましょう。</p>
-
 <ol>
 <li>ステージ選択 &gt; ログ のタブから Cloud Watch ログを有効にして実行ログを出力</li>
 <li>Cloud Watch のログから &ldquo;API-Gateway-Execution-Logs_xxx&rdquo; という名前のものを見る</li>
 </ol>
-
 <p>自分のケースでは、呼ぶ Lambda をステージ変数によって切り替えていましたが、
 新しいステージではこの変数が未設定だったことによりエラーとなっていました。</p>
-
 <p>まあこういうミスが起こりうるので諸々の作業はなるべく自動化しましょうという戒めとして
 ここにメモしておきます。</p>
-
-<p></p>
           </div>
 
           

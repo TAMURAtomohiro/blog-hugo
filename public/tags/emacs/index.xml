@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Emacs on 嵐の小舟より</title>
+    <title>emacs on 嵐の小舟より</title>
     <link>https://tmrtmhr.info/tags/emacs/</link>
-    <description>Recent content in Emacs on 嵐の小舟より</description>
+    <description>Recent content in emacs on 嵐の小舟より</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
     <lastBuildDate>Mon, 22 Feb 2016 16:16:21 +0900</lastBuildDate>
@@ -20,10 +20,8 @@
       <description>&lt;p&gt;学生時代からの習慣と宗教上の理由から普段使いのエディタは Emacs
 (ここでは &lt;a href=&#34;http://emacsformacosx.com/&#34;&gt;GNU Emacs for Mac OS X&lt;/a&gt;)
 です。&lt;/p&gt;
-
 &lt;p&gt;設定ファイルを除いて自分で Emacs Lisp を書いて機能を追加したことはこれまで無かったのですが、
-このたび必要にかられて追加いたしました。
-&lt;/p&gt;</description>
+このたび必要にかられて追加いたしました。&lt;/p&gt;</description>
     </item>
     
   </channel>

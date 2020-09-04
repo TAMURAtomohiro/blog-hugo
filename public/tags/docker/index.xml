@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Docker on 嵐の小舟より</title>
+    <title>docker on 嵐の小舟より</title>
     <link>https://tmrtmhr.info/tags/docker/</link>
-    <description>Recent content in Docker on 嵐の小舟より</description>
+    <description>Recent content in docker on 嵐の小舟より</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
     <lastBuildDate>Mon, 28 Aug 2017 17:17:00 +0900</lastBuildDate>
@@ -20,23 +20,16 @@
       <description>&lt;p&gt;しばらくぶりに ElasticSearch を触ることになったため、以前 Docker コンテナで作ってあった環境を見直してみました。
 すると ElasticSearch + Kibana の新バージョンとして 5.5.2 が出ていたので、
 せっかくなので更新するかとバージョンを上げてみたところ素直に動作しませんでした。&lt;/p&gt;
-
 &lt;p&gt;結論から言えば ElasticSearch + Kibana に起因するものではなく、
 &lt;code&gt;docker-compose.yml&lt;/code&gt; のコンテナ間ネットワークの設定を間違えたことが原因です。&lt;/p&gt;
-
 &lt;p&gt;結論としては以下のような感じです。&lt;/p&gt;
-
 &lt;ul&gt;
 &lt;li&gt;5.3.0 の頃にあった &lt;code&gt;links&lt;/code&gt; によるコンテナ間接続は不要&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;networks&lt;/code&gt; 指定により ElasticSearch と Kibana コンテナを同一ネットワークに置く&lt;/li&gt;
 &lt;/ul&gt;
-
 &lt;p&gt;公式ドキュメント(&lt;a href=&#34;https://www.elastic.co/guide/en/elasticsearch/reference/5.5/docker.html&#34;&gt;Install Elasticsearch with Docker&lt;/a&gt;)を見て
 ElasticSearch の設定だけを修正しても動かないので注意してください。&lt;/p&gt;
-
-&lt;p&gt;最終的な &lt;code&gt;docker-compose.yml&lt;/code&gt; については &lt;a href=&#34;http://christina04.hatenablog.com/entry/2017/04/12/013556&#34;&gt;docker-compose で Kibana 5.x を使う&lt;/a&gt; を参考にしました。&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;最終的な &lt;code&gt;docker-compose.yml&lt;/code&gt; については &lt;a href=&#34;http://christina04.hatenablog.com/entry/2017/04/12/013556&#34;&gt;docker-compose で Kibana 5.x を使う&lt;/a&gt; を参考にしました。&lt;/p&gt;</description>
     </item>
     
   </channel>

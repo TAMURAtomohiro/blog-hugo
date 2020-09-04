@@ -1,26 +1,10 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://tmrtmhr.info/en/tech/unity/add-exif-to-screenshot/</loc>
-    <lastmod>2018-02-18T19:52:44+09:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="ja"
-                href="https://tmrtmhr.info/tech/unity/add-exif-to-screenshot/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://tmrtmhr.info/en/tech/unity/add-exif-to-screenshot/"
-                />
-  </url>
-  
-  <url>
     <loc>https://tmrtmhr.info/en/tags/android/</loc>
     <lastmod>2018-02-18T19:52:44+09:00</lastmod>
-    <priority>0</priority>
     <xhtml:link
                 rel="alternate"
                 hreflang="ja"
@@ -34,9 +18,23 @@
   </url>
   
   <url>
+    <loc>https://tmrtmhr.info/en/</loc>
+    <lastmod>2018-02-18T19:52:44+09:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="ja"
+                href="https://tmrtmhr.info/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://tmrtmhr.info/en/"
+                />
+  </url>
+  
+  <url>
     <loc>https://tmrtmhr.info/en/tags/</loc>
     <lastmod>2018-02-18T19:52:44+09:00</lastmod>
-    <priority>0</priority>
     <xhtml:link
                 rel="alternate"
                 hreflang="ja"
@@ -52,7 +50,6 @@
   <url>
     <loc>https://tmrtmhr.info/en/tech/</loc>
     <lastmod>2018-02-18T19:52:44+09:00</lastmod>
-    <priority>0</priority>
     <xhtml:link
                 rel="alternate"
                 hreflang="ja"
@@ -68,7 +65,6 @@
   <url>
     <loc>https://tmrtmhr.info/en/tags/unity/</loc>
     <lastmod>2018-02-18T19:52:44+09:00</lastmod>
-    <priority>0</priority>
     <xhtml:link
                 rel="alternate"
                 hreflang="ja"
@@ -82,18 +78,17 @@
   </url>
   
   <url>
-    <loc>https://tmrtmhr.info/en/</loc>
+    <loc>https://tmrtmhr.info/en/tech/unity/add-exif-to-screenshot/</loc>
     <lastmod>2018-02-18T19:52:44+09:00</lastmod>
-    <priority>0</priority>
     <xhtml:link
                 rel="alternate"
                 hreflang="ja"
-                href="https://tmrtmhr.info/"
+                href="https://tmrtmhr.info/tech/unity/add-exif-to-screenshot/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://tmrtmhr.info/en/"
+                href="https://tmrtmhr.info/en/tech/unity/add-exif-to-screenshot/"
                 />
   </url>
   

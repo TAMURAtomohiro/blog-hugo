@@ -9,7 +9,7 @@
       });
     </script>
     <meta charset="utf-8">
-    <meta name="generator" content="Hugo 0.47.1" />
+    <meta name="generator" content="Hugo 0.74.3" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -89,37 +89,25 @@ if (!doNotTrack) {
             <p>しばらくぶりに ElasticSearch を触ることになったため、以前 Docker コンテナで作ってあった環境を見直してみました。
 すると ElasticSearch + Kibana の新バージョンとして 5.5.2 が出ていたので、
 せっかくなので更新するかとバージョンを上げてみたところ素直に動作しませんでした。</p>
-
 <p>結論から言えば ElasticSearch + Kibana に起因するものではなく、
 <code>docker-compose.yml</code> のコンテナ間ネットワークの設定を間違えたことが原因です。</p>
-
 <p>結論としては以下のような感じです。</p>
-
 <ul>
 <li>5.3.0 の頃にあった <code>links</code> によるコンテナ間接続は不要</li>
 <li><code>networks</code> 指定により ElasticSearch と Kibana コンテナを同一ネットワークに置く</li>
 </ul>
-
 <p>公式ドキュメント(<a href="https://www.elastic.co/guide/en/elasticsearch/reference/5.5/docker.html">Install Elasticsearch with Docker</a>)を見て
 ElasticSearch の設定だけを修正しても動かないので注意してください。</p>
-
 <p>最終的な <code>docker-compose.yml</code> については <a href="http://christina04.hatenablog.com/entry/2017/04/12/013556">docker-compose で Kibana 5.x を使う</a> を参考にしました。</p>
-
-<p></p>
-
 <p>5.3.0 の頃に使用していた <code>docker-compose.yml</code> では kibana コンテナに以下のように設定していました。</p>
-
 <pre><code>services:
   kibana:
     links:
       - elasticsearch
-</code></pre>
-
-<p>で、今回 5.5.2 に切り替えるにあたり、<a href="https://www.elastic.co/guide/en/elasticsearch/reference/5.5/docker.html">Install Elasticsearch with Docker</a>
+</code></pre><p>で、今回 5.5.2 に切り替えるにあたり、<a href="https://www.elastic.co/guide/en/elasticsearch/reference/5.5/docker.html">Install Elasticsearch with Docker</a>
 を参考にして「<strong>ElasticSearch コンテナ</strong>」の設定に以下のような記述を加えました。
 また、トップレベルにネットワーク設定を(よく理解しないまま)追加しました。
 (厳密に言うと他の設定も色々変わっていますが、今回のトラブルとは無関係なので割愛します。)</p>
-
 <pre><code>services:
   elasticsearch:
     networks:
@@ -127,34 +115,22 @@ ElasticSearch の設定だけを修正しても動かないので注意してく
 
 networks:
   esnet:
-</code></pre>
-
-<p>それで <code>docker-compose up</code> してみると起動しません。
+</code></pre><p>それで <code>docker-compose up</code> してみると起動しません。
 症状としては以下のようなログが出ており、どうも kibana から elasticsearch への接続ができていないようでした。</p>
-
 <pre><code>kibana_1         | {&quot;type&quot;:&quot;log&quot;,&quot;@timestamp&quot;:&quot;2017-08-28T06:45:01Z&quot;,&quot;tags&quot;:[&quot;warning&quot;,&quot;elasticsearch&quot;,&quot;admin&quot;],&quot;pid&quot;:7,&quot;message&quot;:&quot;Unable to revive connection: http://elasticsearch:9200/&quot;}
-</code></pre>
-
-<p>kibana コンテナの <code>/etc/hosts</code> や環境変数を確認すると <code>elasticsearch</code> の登録がありません。
+</code></pre><p>kibana コンテナの <code>/etc/hosts</code> や環境変数を確認すると <code>elasticsearch</code> の登録がありません。
 自分の理解は <code>links</code> に指定した内容がこのあたりに書き込まれることでコンテナ間のエイリアスによるアクセスができる、
 というところで止まっていたので、はて……？と混乱しました。</p>
-
 <p>で、そもそも <code>networks</code> って何ぞや、と <a href="http://docs.docker.jp/engine/userguide/networking/dockernetworks.html">Docker コンテナ・ネットワークの理解</a> を見て気づきました。
 上記の設定では ElasticSearch コンテナと Kibana コンテナが違うネットワークにいるため <code>elasticsearch</code> というドメイン名ではアクセスできないというわけです。</p>
-
 <p>正しい設定は以下のどちらかです。</p>
-
 <ul>
 <li>ElasticSearch と Kibana コンテナの両方で <code>networks</code> を指定する</li>
 <li>ElasticSearch と Kibana コンテナの両方で <code>networks</code> を指定せず、Kibana コンテナに <code>links</code> を設定する</li>
 </ul>
-
 <p>ただし、<code>links</code>は廃止予定のようなので、<code>networks</code>を指定するのが良いでしょう。</p>
-
 <p>じゃあユーザ定義ネットワークの外部からアクセスするにはどう設定するのかというところは未調査です。すみません。</p>
-
 <h2 id="参考">参考</h2>
-
 <ul>
 <li><a href="http://christina04.hatenablog.com/entry/2017/04/12/013556">docker-compose で Kibana 5.x を使う</a></li>
 <li><a href="http://docs.docker.jp/engine/userguide/networking/dockernetworks.html">Docker コンテナ・ネットワークの理解</a></li>

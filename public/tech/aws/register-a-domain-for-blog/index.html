@@ -9,7 +9,7 @@
       });
     </script>
     <meta charset="utf-8">
-    <meta name="generator" content="Hugo 0.47.1" />
+    <meta name="generator" content="Hugo 0.74.3" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -87,57 +87,40 @@ if (!doNotTrack) {
 
           <div class="castaway-card-content mdl-card__supporting-text mdl-color-text--grey-700">
             <p>せっかくなので本サイトのドメインを AWS Route53 で管理するようにした際のメモです。</p>
-
 <p>やったことは以下の通り。</p>
-
 <ul>
 <li><a href="https://aws.amazon.com/jp/route53/">Route 53</a> でドメインを取得</li>
 <li><a href="https://aws.amazon.com/jp/ses/">SES</a> で対象ドメインのメールアドレスにて受信</li>
 <li><a href="https://aws.amazon.com/jp/certificate-manager/">Certificate Manager</a> で対象ドメインのSSL証明書を取得</li>
 <li><a href="https://aws.amazon.com/jp/cloudfront/">CloudFront</a> に取得したSSL証明書を設定</li>
 </ul>
-
 <p>なお、今のところ CloudFront のオリジンサーバとしては <a href="https://aws.amazon.com/jp/s3/">S3</a> ではなく <a href="https://pages.github.com/">GitHub Pages</a> を使用しています。</p>
-
 <ul>
 <li>2018/01/08 追記:</li>
 </ul>
-
 <p>Certificate Manager で SSL証明書を取得する際、
 メールではなく DNS レコードによってドメイン所有を検証することが可能になっていました
 (<a href="https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-validate-dns.html">Use DNS to Validate Domain Ownership</a>)。
 なので SSL 証明書の取得の際には SES の設定が不要になっています。</p>
-
-<p></p>
-
 <h1 id="なぜ-aws-でドメインを取得したか">なぜ AWS でドメインを取得したか</h1>
-
 <p>ドメインの料金だけだと<a href="www.onamae.com">お名前.com</a>などのように Route 53 より安いところもあります。</p>
-
 <ul>
 <li>取得したドメインでのメール受信設定( MX レコードの登録)を SES がやってくれるため楽</li>
 <li>SSL証明書が無料かつ自動更新</li>
 </ul>
-
 <p>ということで、要するに設定や管理の手間を省くことを重視したためです。</p>
-
 <h1 id="route-53-におけるドメイン管理者情報の公開範囲について">Route 53 におけるドメイン管理者情報の公開範囲について</h1>
-
 <p>Route 53 でドメインを取得する際、管理者情報を隠すかどうかのチェックボックスがありますが、
 トップレベルドメインによって秘匿できる項目が異なります。
 (参考：<a href="http://dev.classmethod.jp/cloud/aws/route53-privacy-protection/">Route 53で管理するドメインでプライバシー保護できるWHOIS項目は、ドメインによって違うので注意</a> )</p>
-
 <p>本サイトのような<a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/registrar-tld-list.html#info">.info ドメイン</a> の場合は
 名前だけが公開されます。
 残りの項目はドメインレジストラである <a href="https://www.gandi.net/">Gandi</a> の情報に置換されます。</p>
-
 <h1 id="ドメイン取得時に登録するメールアドレスについて">ドメイン取得時に登録するメールアドレスについて</h1>
-
-<p>今回、ドメイン取得時に登録するメールアドレスについても該当ドメインを使用することにしました( a&#100;mi&#110;&#64;&#116;m&#114;tmhr.in&#102;o )。
+<p>今回、ドメイン取得時に登録するメールアドレスについても該当ドメインを使用することにしました( admin@tmrtmhr.info )。
 当然ながらドメイン取得申請の段階ではこのメールアドレスで受信することはできません。
 ドメインを申請すると Route 53 からメールが送信され、本文中の URL にアクセスすることで取得完了となりますが、
 期限に猶予があるため、その間に SES の設定を済ませることになります。</p>
-
 <p>Route 53 でドメイン申請 <i class="material-icons castaway-md-icon">
   arrow_forward
 </i>
@@ -145,32 +128,23 @@ if (!doNotTrack) {
   arrow_forward
 </i>
  Route 53 から送られてくるメール本文の URL にアクセス、という流れです。</p>
-
 <p>ここで、Certificate Manager での SSL 証明書取得を予定していて、かつドメインの管理者情報を秘匿している場合は注意が必要です。
 Certificate Manager でもドメイン認証のためにメールが発信されますが、宛先は以下のように固定されます。</p>
-
 <ol>
 <li><code>whois</code> で取得できる管理者メールアドレス</li>
 <li>ドメインに次の接頭辞をつけた 5 個のメールアドレス: <code>admin@</code>, <code>administrator@</code>,<code>hostmaster@</code>, <code>webmaster@</code>, <code>postmaster@</code></li>
 </ol>
-
 <p>管理者情報を秘匿した場合は <code>whois</code> で取得できるメールアドレスがドメインレジストラのものになりますので、
 (2)のアドレスのどれかを登録しておきます。</p>
-
 <h1 id="ses-でメールを受信するための-mx-レコードについて">SES でメールを受信するための MX レコードについて</h1>
-
 <p>たとえばオレゴンの場合、MX レコードとして <code>10 inbound-smtp.us-west-2.amazonaws.com</code> を登録します。</p>
-
 <h1 id="ses-で受信したメールに対するアクションについて">SES で受信したメールに対するアクションについて</h1>
-
 <p>認証のための URL がわかれば十分であり、
 Route 53 と Certificate Manager から送られる二通を読めればよいので、
 今回は単純に S3 へ保存しました。</p>
-
 <p>S3 側のバケットポリシーとして以下のように SES からのアクセスを許可しておく必要があります。
 <code>BUCKET-NAME</code> と <code>AWSACCOUNTID</code> を差し替えて設定しましょう。
 (参考: <a href="https://docs.aws.amazon.com/ja_jp/ses/latest/DeveloperGuide/receiving-email-permissions.html">Amazon SES に対する E メール受信に関するアクセス権限の付与</a></p>
-
 <pre><code>{
     &quot;Version&quot;: &quot;2012-10-17&quot;,
     &quot;Statement&quot;: [
@@ -190,31 +164,21 @@ Route 53 と Certificate Manager から送られる二通を読めればよい�
         }
     ]
 }
-</code></pre>
-
-<h1 id="ssl証明書を取得するリージョンについて">SSL証明書を取得するリージョンについて</h1>
-
+</code></pre><h1 id="ssl証明書を取得するリージョンについて">SSL証明書を取得するリージョンについて</h1>
 <p>Certificate Manager で取得した SSL 証明書は、取得したリージョンでのみ利用することができます。
 CloudFront はグローバルなサービスのため、Webコンソール上でリージョンを選択できませんが、
 便宜的に <code>US East(N. Virginia)</code> で設定するという扱いのためSSL 証明書もここで取得します。</p>
-
 <h1 id="料金について">料金について</h1>
-
 <p><a href="http://docs.aws.amazon.com/ja_jp/Route53/latest/DeveloperGuide/domain-transfer-to-route-53.html">ドメインの料金は AWS クレジットでは支払えない</a>ため、
 クレジットが残っていても料金が発生することに注意が必要です。</p>
-
 <h1 id="cloudfront-が持つキャッシュについて">CloudFront が持つキャッシュについて</h1>
-
 <p>デフォルトのままの設定だと TTL が 86400 秒となるので、GitHub Pages にデプロイしてから
 最大一日程度は古いコンテンツが表示されます。
 デプロイの際にスクリプトからキャッシュ削除リクエストを発行するようにすれば良いと思います。
 <a href="https://tmrtmhr.info/tech/aws/delete-updated-file-cache-on-cloudfront/">実装はこちら。</a></p>
-
-<!-- 詰まったところ -->
-
-<!-- CloudFront に Alternate CNAME 設定し忘れ -->
-
-<!-- http://blog.ybbo.net/2015/04/11/how-to-fix-error-of-error-the-request-could-not-be-satisfied-generated-by-cloudfront-cloudfront-on-aws-cloud-front/ -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
           </div>
 
           

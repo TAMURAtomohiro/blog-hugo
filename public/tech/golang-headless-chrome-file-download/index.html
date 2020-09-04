@@ -9,7 +9,7 @@
       });
     </script>
     <meta charset="utf-8">
-    <meta name="generator" content="Hugo 0.47.1" />
+    <meta name="generator" content="Hugo 0.74.3" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -89,41 +89,28 @@ if (!doNotTrack) {
             <p>世の中にはオープンなデータ(たとえば<a href="http://nlftp.mlit.go.jp/ksj/index.html">国土数値情報ダウンロードサービス</a>など、公的機関が公開しているデータ)が色々あるもので、
 せっかくだからダウンロードして活用を考えてみようとするのですが、
 コマンドラインから <code>curl</code> や <code>wget</code> で直接取得できるようになっていない場合もあります。</p>
-
 <p>Google Chrome には<a href="https://developers.google.com/web/updates/2017/04/headless-chrome?hl=ja">ヘッドレスモード</a>があり、
 ウェブページの操作自動化に利用できます。
 実際にブラウザで表示したときと同様に JavaScript を実行してくれるため、
 ボタンをクリックしたときに JavaScript の関数が実行されてファイルのダウンロードが始まる、
 といったページにも対応できます。</p>
-
 <p>しかしながらセキュリティ上の理由で、
 デフォルトではヘッドレスモードにおいてファイルをダウンロードできるようになっていません。</p>
-
 <p>本記事では Go 言語のライブラリ<a href="https://github.com/sclevine/agouti/">Agouti</a>を使ったときに
 ファイルダウンロードを許可するためのコードについて述べます。</p>
-
-<p></p>
-
 <h1 id="デフォルトでファイルのダウンロードができない理由">デフォルトでファイルのダウンロードができない理由</h1>
-
 <p><a href="https://bugs.chromium.org/p/chromium/issues/detail?id=696481">Issue 696481: Headless mode doesn&rsquo;t save file downloads</a></p>
-
 <p>のコメント1がその理由かと思いますが、</p>
-
 <blockquote>
 <p>We most likely want to this to be something you need to either control or enable via DevTools to avoid letting random websites drop files on your disk just because you&rsquo;re running in headless mode.</p>
 </blockquote>
-
 <p>ダウンロードの確認プロンプトなしにファイルをダウンロードできるようになっていると、
 悪意のあるページを開いた際、無限にファイルをダウンロードさせられる、
 といったことが考えられるため、
 デフォルトでは無効にしておき、明示的に有効化するようにしましょう、ということのようです(意訳)。</p>
-
 <h1 id="go言語で-chrome-ヘッドレスモードのファイルダウンロードを許可する方法">Go言語で Chrome ヘッドレスモードのファイルダウンロードを許可する方法</h1>
-
 <p>まず、ページを開くまでのコードが以下のような形です。
 (エラーハンドリングについては適当です)</p>
-
 <pre><code>	driver := agouti.ChromeDriver(
 		agouti.ChromeOptions(&quot;prefs&quot;, map[string]interface{}{
 			//	&quot;download.default_directory&quot;:         &quot;/tmp&quot;, // send_command の downloadPath で指定するため、ここは不要
@@ -147,11 +134,8 @@ if (!doNotTrack) {
 	if err != nil {
 		log.Printf(&quot;Failed to open page: %v&quot;, err)
 	}
-</code></pre>
-
-<p>開いたページから、セッションを取得し、
+</code></pre><p>開いたページから、セッションを取得し、
 ダウンロードを許可するためのコマンドを送信します。</p>
-
 <pre><code>	var result interface{}
 	params := map[string]interface{}{
 		&quot;cmd&quot;: &quot;Page.setDownloadBehavior&quot;,
@@ -164,12 +148,9 @@ if (!doNotTrack) {
 	if err := session.Send(&quot;POST&quot;, &quot;chromium/send_command&quot;, params, &amp;result); err != nil {
 		log.Printf(&quot;Failed to Send: %v&quot;, err)
 	}
-</code></pre>
-
-<p>あとはダウンロードリンクをクリックするなどでOKです。</p>
-
-<p>(参考: <a href="https://qiita.com/zkangaroo/items/1c4d4c11b06e7823e7fe">Headless Chromeでファイルをダウンロード</a>)
-<!-- [ChromeDriverのダウンロード](http://chromedriver.chromium.org/downloads) --></p>
+</code></pre><p>あとはダウンロードリンクをクリックするなどでOKです。</p>
+<p>(参考: <a href="https://qiita.com/zkangaroo/items/1c4d4c11b06e7823e7fe">Headless Chromeでファイルをダウンロード</a>)</p>
+<!-- raw HTML omitted -->
           </div>
 
           

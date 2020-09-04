@@ -9,7 +9,7 @@
       });
     </script>
     <meta charset="utf-8">
-    <meta name="generator" content="Hugo 0.47.1" />
+    <meta name="generator" content="Hugo 0.74.3" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -88,22 +88,15 @@ if (!doNotTrack) {
           <div class="castaway-card-content mdl-card__supporting-text mdl-color-text--grey-700">
             <p><a href="http://local.joelonsoftware.com/wiki/%E9%96%93%E9%81%95%E3%81%A3%E3%81%9F%E3%82%B3%E3%83%BC%E3%83%89%E3%81%AF%E9%96%93%E9%81%95%E3%81%A3%E3%81%A6%E8%A6%8B%E3%81%88%E3%82%8B%E3%82%88%E3%81%86%E3%81%AB%E3%81%99%E3%82%8B">間違ったコードは間違って見えるようにする</a>
 で説明されている「アプリケーションハンガリアン記法」とは、</p>
-
 <ul>
 <li>同じデータ型の変数を区別するために、内容を示す名前をつける</li>
 </ul>
-
 <p>というものです。
 先のページで挙げられている例では、行と列の最大値に <code>rowMax</code> <code>colMax</code> と名前をつけることで取り違えを防ぐ、といった感じです。
 これらはともに整数なので相互に代入できてしまいますが、バグなので、命名規則で気づきやすくする、という意図です。</p>
-
 <p>Go 言語では型に別名をつけることができ、コンパイル時の型チェックで違う型として扱われるため、取り違えを防ぐのに有効です。</p>
-
-<p></p>
-
 <p>例えば緯度・経度などはともに実数ですが、それぞれ別の型名を与えておくと型チェックを利用できてうれしいです。</p>
-
-<script type="application/javascript" src="//gist.github.com/tmrtmhr/ae1025314c09b102d43189e6232a1cd7.js"></script>
+<script type="application/javascript" src="https://gist.github.com/tmrtmhr/ae1025314c09b102d43189e6232a1cd7.js"></script>
           </div>
 
           

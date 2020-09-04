@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Javascript on 嵐の小舟より</title>
+    <title>javascript on 嵐の小舟より</title>
     <link>https://tmrtmhr.info/tags/javascript/</link>
-    <description>Recent content in Javascript on 嵐の小舟より</description>
+    <description>Recent content in javascript on 嵐の小舟より</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
     <lastBuildDate>Thu, 05 Mar 2020 02:02:00 +0900</lastBuildDate>
@@ -18,28 +18,21 @@
       
       <guid>https://tmrtmhr.info/tech/html2canvas/</guid>
       <description>&lt;h1 id=&#34;背景&#34;&gt;背景&lt;/h1&gt;
-
 &lt;p&gt;だんだんと秋も深くなり、周りではちらほら風邪をひく人も増えてきたそんな折。
 ウェブページをPDFとしてダウンロードできるようにしてほしい、という要望をいただきました。&lt;/p&gt;
-
 &lt;p&gt;いやそれはブラウザから印刷しようとしてPDFとして保存すれば&amp;hellip;とか、
 必要な部分だけスクリーンショットを撮れば&amp;hellip;など色々言ってはみましたが、
 使う側のITリテラシーの問題もあり、PDFの生成からは逃れられませんでした。&lt;/p&gt;
-
 &lt;p&gt;過去に似たような要望をいただいたときは、
 &lt;strong&gt;「サーバーサイドでブラウザを起動し、対象のウェブページを表示してPDFとして保存する」&lt;/strong&gt;
 というアプローチを取りました。
 たとえば &lt;a href=&#34;https://phantomjs.org/&#34;&gt;PhantomJS&lt;/a&gt; を使うとかですね。
 今なら Google Chrome のヘッドレスモードが良いと思います。&lt;/p&gt;
-
 &lt;p&gt;で、以前やったときからしばらく経っていたので改めて調べてみると、
 &lt;a href=&#34;https://html2canvas.hertzen.com/&#34;&gt;html2canvas&lt;/a&gt; という JavaScript ライブラリを見つけたので、
 ちょっと使ってみて生まれたのがこの記事です。&lt;/p&gt;
-
 &lt;p&gt;タイトルを「スクリーンショット画像を生成してみた」としてますが、
-厳密には「&lt;code&gt;canvas&lt;/code&gt;にレンダリングしてみた」という形ですね。&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+厳密には「&lt;code&gt;canvas&lt;/code&gt;にレンダリングしてみた」という形ですね。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -52,10 +45,7 @@
 デフォルトで &lt;code&gt;Chrome&lt;/code&gt; を使って Unit Test を動かすよう設定されていますが、
 BitBucket Pipelines の環境には Chrome がインストールされていないので、
 &lt;code&gt;PhantomJS&lt;/code&gt; で実行するよう修正する必要があります。&lt;/p&gt;
-
-&lt;p&gt;本記事はそのためのメモです。&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;本記事はそのためのメモです。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -66,25 +56,17 @@ BitBucket Pipelines の環境には Chrome がインストールされていな�
       <guid>https://tmrtmhr.info/tech/render-polygon-using-canvas/</guid>
       <description>&lt;p&gt;「プログラミング言語 Go」の練習問題に &lt;code&gt;sin(r) / r&lt;/code&gt; で表される面を描画するというものがあります(ここで、&lt;code&gt;r&lt;/code&gt;は原点からの距離)。
 SVGで描画するとこんな感じです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://tmrtmhr.info/img/surface-mono.svg&#34;&gt;&lt;/img&gt;&lt;/p&gt;
-
+&lt;p&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;/p&gt;
 &lt;p&gt;基本的には原点から離れるほど振幅が小さくなりますが、&lt;code&gt;r &amp;lt; 1&lt;/code&gt; の部分では大きくなるという図です。&lt;/p&gt;
-
 &lt;p&gt;SVGでは、要素が文書中に現れた順に描画され、領域が被っていれば上書きされます。
 ここではこれを利用して、奥側のポリゴンからSVG上に配置することで、手前の高くなっている部分が奥側を上書きするようにし、
 立体的に描画しています。&lt;/p&gt;
-
 &lt;p&gt;本記事は同じことを HTML5 の Canvas でやってみたサンプルです(&lt;code&gt;Fabric.js&lt;/code&gt;を利用してます)。&lt;/p&gt;
-
 &lt;p&gt;知見としては以下のような感じです。&lt;/p&gt;
-
 &lt;ul&gt;
 &lt;li&gt;1個ずつ &lt;code&gt;canvas.add&lt;/code&gt; すると重い&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;canvas.add.apply(canvas, polygons)&lt;/code&gt; のようにまとめて &lt;code&gt;apply&lt;/code&gt; で描画するときは配列の長さに注意するべし&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;/ul&gt;</description>
     </item>
     
     <item>
@@ -94,31 +76,19 @@ SVGで描画するとこんな感じです。&lt;/p&gt;
       
       <guid>https://tmrtmhr.info/tech/javascript-property-of-primitive-value/</guid>
       <description>&lt;p&gt;JavaScript では以下のように数値のプロパティを参照することはできません。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;0.foo
-// 構文エラー
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;変数に入れると構文上は正しいため参照できます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var x = 0;
-console.log(x.foo);
-// =&amp;gt; undefined
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;あるいは文字列の &lt;code&gt;length&lt;/code&gt; プロパティを参照することも。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;&amp;quot;bar&amp;quot;.length
-// =&amp;gt; 3
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;しかしながらプリミティブ値はオブジェクトではないため、プロパティもプロトタイプチェーンもありません。
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;foo&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;// 構文エラー
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;変数に入れると構文上は正しいため参照できます。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;;
+&lt;span style=&#34;color:#a6e22e&#34;&gt;console&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;log&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;foo&lt;/span&gt;);
+&lt;span style=&#34;color:#75715e&#34;&gt;// =&amp;gt; undefined
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;あるいは文字列の &lt;code&gt;length&lt;/code&gt; プロパティを参照することも。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;bar&amp;#34;&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;length&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;// =&amp;gt; 3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;しかしながらプリミティブ値はオブジェクトではないため、プロパティもプロトタイプチェーンもありません。
 ではプリミティブ値のプロパティにアクセスしようとしたときに何が起こるかというと、
 &lt;code&gt;Number&lt;/code&gt; などの対応するオブジェクトが生成されます。&lt;/p&gt;
-
-&lt;p&gt;本記事は、この挙動が言語仕様のどの部分で言及されているのかのメモです。&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;本記事は、この挙動が言語仕様のどの部分で言及されているのかのメモです。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -129,18 +99,13 @@ console.log(x.foo);
       <guid>https://tmrtmhr.info/tech/drag-and-drop-using-rxjs/</guid>
       <description>&lt;p&gt;HTML要素をドラッグアンドドロップ(以降 D&amp;amp;D)で移動させようと思ったときは、
 対象要素に対する &lt;code&gt;mousedown&lt;/code&gt;、&lt;code&gt;mousemove&lt;/code&gt;、&lt;code&gt;mouseup&lt;/code&gt; のイベントを使って実装するかと思います。&lt;/p&gt;
-
 &lt;p&gt;しかしながらウィンドウ外では対象要素の &lt;code&gt;mouseup&lt;/code&gt; を捕捉できないため、
 単純な実装ではウィンドウ外でD&amp;amp;Dをやめて戻った際、再度クリックなどして&lt;code&gt;mouseup&lt;/code&gt;が発生するまで要素が追従してしまいます。&lt;/p&gt;
-
 &lt;p&gt;本記事では以下の挙動を &lt;a href=&#34;https://github.com/ReactiveX/rxjs&#34;&gt;RxJS&lt;/a&gt; で実装してみた例です。&lt;/p&gt;
-
 &lt;ul&gt;
 &lt;li&gt;D&amp;amp;D 終了時は初期位置に移動する&lt;/li&gt;
 &lt;li&gt;ウィンドウ外で D&amp;amp;D 終了(&lt;code&gt;mouseup&lt;/code&gt;)を検知する&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;/ul&gt;</description>
     </item>
     
   </channel>

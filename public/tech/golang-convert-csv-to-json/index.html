@@ -9,7 +9,7 @@
       });
     </script>
     <meta charset="utf-8">
-    <meta name="generator" content="Hugo 0.47.1" />
+    <meta name="generator" content="Hugo 0.74.3" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -89,27 +89,18 @@ if (!doNotTrack) {
             <p>たまに、CSV データを JSON 形式に変換したくなることがあります。
 というのも、元データとしていただくのは大抵 Excel ファイルで、
 とりあえず CSV にエクスポートしただけでは使いにくいからです。</p>
-
 <p>それくらいWeb上のツールであるんじゃないの？
 とちょっと検索してみたところ、セルに改行を含むケースに対応しているものが見つからなかったので、
 <a href="https://github.com/tmrtmhr/csv2json">Go 言語で実装</a>してみました。</p>
-
 <p>環境を整えてある方なら以下のコマンドで実行ファイルをインストールできます。</p>
-
 <pre><code>go install github.com/tmrtmhr/csv2json
-</code></pre>
-
-<p>入力としては以下のようなものを想定しています。</p>
-
+</code></pre><p>入力としては以下のようなものを想定しています。</p>
 <pre><code>col1	col2	col3
 1	2	3
 4	&quot;5
 67&quot;	8
 9	10	11
-</code></pre>
-
-<p>出力は以下のようになります。ヘッダ行がキーになり、値はすべて文字列です。</p>
-
+</code></pre><p>出力は以下のようになります。ヘッダ行がキーになり、値はすべて文字列です。</p>
 <pre><code>[
   {
     &quot;col1&quot;: &quot;1&quot;,
@@ -127,15 +118,9 @@ if (!doNotTrack) {
     &quot;col3&quot;: &quot;11&quot;
   }
 ]
-</code></pre>
-
-<p></p>
-
-<h1 id="実装上の知見">実装上の知見</h1>
-
+</code></pre><h1 id="実装上の知見">実装上の知見</h1>
 <p>CSV の parse については標準パッケージ <code>encoding/csv</code> に任せられます。
 なので改行を含むセルなどについて自前での実装は不要です。</p>
-
 <p><code>encoding/csv</code>のCSVリーダでは区切り文字を<code>Comma</code>で指定できますが、ここには <code>rune</code> を設定する必要があります。
 コマンド引数<code>-delimiter=&quot;\t&quot;</code>で区切り文字を渡した場合、
 Go 上では <code>\</code> と <code>t</code> の二文字として得られるため、

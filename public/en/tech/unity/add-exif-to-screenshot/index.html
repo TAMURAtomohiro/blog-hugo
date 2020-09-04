@@ -9,7 +9,7 @@
       });
     </script>
     <meta charset="utf-8">
-    <meta name="generator" content="Hugo 0.47.1" />
+    <meta name="generator" content="Hugo 0.74.3" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -94,16 +94,11 @@ if (!doNotTrack) {
           <div class="castaway-card-content mdl-card__supporting-text mdl-color-text--grey-700">
             <p>at 2018-02, Unity has no Exif Library.
 and I can&rsquo;t find Unity Exif Assets.</p>
-
 <p>So, if we want to add Exif to screenshot image, we should call Android Library.
 (This article shows only how to handle Exif on Android/Unity.
 But I think that the same method can be used on iOS/Unity.)</p>
-
-<p></p>
-
 <p>We use <a href="https://docs.unity3d.com/560/Documentation/Manual/PluginsForAndroid.html">Android Helper Class</a>.
 Sample Code (Unity 5.6.5, C#) is following.</p>
-
 <pre><code>ExifLocation exifLocation = new ExifLocation(Input.location.lastData);
 AndroidJavaObject ex = new AndroidJavaObject(&quot;android.media.ExifInterface&quot;, path);
 ex.Call(&quot;setAttribute&quot;,&quot;GPSLatitudeRef&quot;, exifLocation.latitudeRef);
@@ -111,36 +106,21 @@ ex.Call(&quot;setAttribute&quot;,&quot;GPSLatitude&quot;, exifLocation.latitude)
 ex.Call(&quot;setAttribute&quot;,&quot;GPSLongitudeRef&quot;, exifLocation.longitudeRef);
 ex.Call(&quot;setAttribute&quot;,&quot;GPSLongitude&quot;,exifLocation.longitude);
 ex.Call(&quot;saveAttributes&quot;);
-</code></pre>
-
-<p><code>ExifLocation</code> is conversion logic, from <code>LocationInfo</code> to Exif format.
+</code></pre><p><code>ExifLocation</code> is conversion logic, from <code>LocationInfo</code> to Exif format.
 I&rsquo;ll present sample code later.
 <code>path</code> is image file path.</p>
-
 <p>We can get Android Object (&ldquo;android.media.ExifInterface&rdquo;) by following code.</p>
-
 <pre><code>AndroidJavaObject ex = new AndroidJavaObject(&quot;android.media.ExifInterface&quot;, path);
-</code></pre>
-
-<p>This object handle the image placed on the <code>path</code>.
+</code></pre><p>This object handle the image placed on the <code>path</code>.
 So we just use</p>
-
 <pre><code>ex.Call(&quot;setAttribute&quot;,...);
-</code></pre>
-
-<p>to set arbitrary attributes.
+</code></pre><p>to set arbitrary attributes.
 Finally, you write</p>
-
 <pre><code>ex.Call(&quot;saveAttributes&quot;);
-</code></pre>
-
-<p>and save it all.</p>
-
+</code></pre><p>and save it all.</p>
 <p>Exif attribute name (e.g. &ldquo;GPSLatitude&rdquo;) defined at ExifInterface class on Android ( static constant <code>TAG_GPS_LATITUDE</code> ),
 but you can pass it as C# String.</p>
-
 <p>Here is sample code (convesion logic to Exif format).</p>
-
 <pre><code>internal class ExifLocation {
     public String longitudeRef;
     public String longitude;

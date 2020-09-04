@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Python on 嵐の小舟より</title>
+    <title>python on 嵐の小舟より</title>
     <link>https://tmrtmhr.info/tags/python/</link>
-    <description>Recent content in Python on 嵐の小舟より</description>
+    <description>Recent content in python on 嵐の小舟より</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
     <lastBuildDate>Thu, 23 Jan 2020 21:27:28 +0900</lastBuildDate>
@@ -18,18 +18,14 @@
       
       <guid>https://tmrtmhr.info/tech/enrionment-variables-including-line-break/</guid>
       <description>&lt;p&gt;AWS の Fargate を使っていて、改行コードを含む文字列を環境変数にセットしたいとふと思った。&lt;/p&gt;
-
 &lt;p&gt;もっと具体的に言えば CloudFront 用の 署名付き Cookie を生成するために
 プライベートキー(PEM)を渡したかった。
 PEM は以下のように改行を含む。&lt;/p&gt;
-
 &lt;pre&gt;&lt;code&gt;-----BEGIN RSA PRIVATE KEY-----
 XXX
 YYY
 -----END RSA PRIVATE KEY-----
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;/code&gt;&lt;/pre&gt;</description>
     </item>
     
     <item>
@@ -39,23 +35,15 @@ YYY
       
       <guid>https://tmrtmhr.info/tech/python/environment-error-when-trying-to-setup-alife/</guid>
       <description>&lt;p&gt;環境は以下の通り。&lt;/p&gt;
-
 &lt;ul&gt;
 &lt;li&gt;macOS High Sierra (10.13.6)&lt;/li&gt;
 &lt;li&gt;Homebrew でインストールした python 3系 (3.6.4)&lt;/li&gt;
 &lt;/ul&gt;
-
 &lt;p&gt;以下のようにライブラリをインストールしようとしたところ、&lt;/p&gt;
-
 &lt;pre&gt;&lt;code&gt;sudo pip install pyglet pymunk vispy keras tensorflow
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;以下のようなエラーが得られました。&lt;/p&gt;
-
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;以下のようなエラーが得られました。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;Could not install packages due to an EnvironmentError: [Errno 1] Operation not permitted: &#39;/bin/futurize&#39;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;/code&gt;&lt;/pre&gt;</description>
     </item>
     
   </channel>

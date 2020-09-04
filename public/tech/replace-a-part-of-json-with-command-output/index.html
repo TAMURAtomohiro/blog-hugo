@@ -9,7 +9,7 @@
       });
     </script>
     <meta charset="utf-8">
-    <meta name="generator" content="Hugo 0.47.1" />
+    <meta name="generator" content="Hugo 0.74.3" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -106,58 +106,36 @@ if (!doNotTrack) {
           <div class="castaway-card-content mdl-card__supporting-text mdl-color-text--grey-700">
             <p>AWS CLI によりコマンドラインから制御したりする際、リクエストパラメータとして JSON ファイルが必要になることがあります。
 <a href="https://tmrtmhr.info/tech/aws/delete-updated-file-cache-on-cloudfront/">CloudFront のキャッシュを削除したいとき</a>なんかがそうです。</p>
-
 <p>AWS CLI のコマンドごとに、リクエストJSONを生成する専用スクリプトを書くという手もありますが、
 シェル上でパイプやらリダイレクトやらを駆使していい感じに JSON を生成できるある程度汎用的なスクリプトにならんものか、
 という思いから試してみた結果をここに記します。
 どこかに既にあるものでしたらすみません。</p>
-
 <p>コマンド引数は以下のようになっていて、JSON ファイルは標準入力から与えます。</p>
-
 <pre><code>filljson ${入力の型} ${キーパス} ${入力ファイル名}
-</code></pre>
-
-<p>標準入出力で JSON をやりとりするので以下のようにパイプでつなげることで
+</code></pre><p>標準入出力で JSON をやりとりするので以下のようにパイプでつなげることで
 中間ファイルを作ることなく最終的なリクエスト JSON が得られます。
 入力ファイル名のところには <code>bash</code> や <code>zsh</code> のプロセス置換機能を利用しています。
 プロセス置換機能を使うとプログラム側からは単にファイルパスが渡ってくるように見えるので、
 ファイルIOとして処理すればOKです。</p>
-
 <pre><code>cat json/cloudfront-invalidation.json |
   filljson int InvalidationBatch.Paths.Quantity &lt;(git diff --ignore-all-space --diff-filter=M --name-only HEAD^ HEAD  public | wc -l) |
   filljson [string] InvalidationBatch.Paths.Items &lt;(git diff --ignore-all-space --diff-filter=M --name-only HEAD^ HEAD  public | sed -e 's/^public//g') |
   filljson string InvalidationBatch.CallerReference &lt;(date +&quot;osone3-%Y/%m/%d-%H:%k:%m&quot; | tr -d '\n') |
   jq . &gt; request.json
-</code></pre>
-
-<p></p>
-
-<h1 id="プログラムの内容">プログラムの内容</h1>
-
+</code></pre><h1 id="プログラムの内容">プログラムの内容</h1>
 <p><a href="https://github.com/tmrtmhr/filljson">コードはここ</a>で、
 Go 言語で書いたので <code>go get github.com/tmrtmhr/filljson</code> でコマンドをインストールできます。
 リポジトリの <code>js/filljson.js</code> に node.js で実装したものもあります。</p>
-
 <p>どこかでエラーが出たら死にます(<code>os.Exit(1)</code>)。
 テストコードは少しだけ書きました。</p>
-
 <p>入力としては配列を想定しておらず、オブジェクトのみなので <code>map[string]interface{}</code> 型を <code>json.Unmarshal</code> に渡します。</p>
-
-<pre><code class="language-go">var jsonData map[string]interface{}
-err = json.Unmarshal(jsonStr, &amp;jsonData)
-</code></pre>
-
-<p>取り出した値が <code>interface{}</code> となっているので再度 <code>map[string]interface{}</code>として型アサーションをつけます。</p>
-
-<pre><code class="language-go">finger = finger[propName].(map[string]interface{})
-</code></pre>
-
-<p>参考：<a href="https://www.kaoriya.net/blog/2016/06/25/">golang は ゆるふわに JSON を扱えまぁす!</a></p>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">jsonData</span> <span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#66d9ef">interface</span>{}
+<span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">json</span>.<span style="color:#a6e22e">Unmarshal</span>(<span style="color:#a6e22e">jsonStr</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">jsonData</span>)
+</code></pre></div><p>取り出した値が <code>interface{}</code> となっているので再度 <code>map[string]interface{}</code>として型アサーションをつけます。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">finger</span> = <span style="color:#a6e22e">finger</span>[<span style="color:#a6e22e">propName</span>].(<span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#66d9ef">interface</span>{})
+</code></pre></div><p>参考：<a href="https://www.kaoriya.net/blog/2016/06/25/">golang は ゆるふわに JSON を扱えまぁす!</a></p>
 <h1 id="雑感">雑感</h1>
-
 <p>標準入出力は偉大です。</p>
-
 <p>GO言語的には特化した(たとえばCloudFront専用のJSON生成専用)コマンドを作ってきっちり型検査したほうが良さそうですが、
 まあこういう書き方もできるということで御参考いただければ幸いです。</p>
           </div>

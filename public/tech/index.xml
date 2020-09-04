@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Teches on 嵐の小舟より</title>
@@ -20,23 +20,17 @@
       <description>&lt;p&gt;Cloud Run から外部の HTTP API を呼ぶ機会があり、
 そのAPIの呼び出し制限のため、
 IP を固定したくなった際のメモです。&lt;/p&gt;
-
 &lt;p&gt;現状の Cloud Run では、たとえば Cloud NAT のようなゲートウェイを介するなどしてIPを固定する機能がないため、
 何かしら工夫する必要があります。
 (Cloud Functions では&lt;a href=&#34;https://cloud.google.com/functions/docs/networking/network-settings?hl=ja#associate-static-ip&#34;&gt;そういった機能が提供されている&lt;/a&gt;ので、
 将来的には CloudRun でも可能になるかもしれません)&lt;/p&gt;
-
 &lt;p&gt;概要は以下の通りです。&lt;/p&gt;
-
 &lt;ul&gt;
 &lt;li&gt;固定IP の GCE インスタンスを作る&lt;/li&gt;
 &lt;li&gt;Cloud Run のコンテナ内で上の GCE インスタンスへの SSH ポートフォワーディング(トンネリング) を実行する&lt;/li&gt;
 &lt;li&gt;アプリケーションコードが上の SSH ポートフォワーディングを介してリクエストを送るよう設定する&lt;/li&gt;
 &lt;/ul&gt;
-
-&lt;p&gt;参考： &lt;a href=&#34;https://ahmet.im/blog/cloud-run-static-ip/&#34;&gt;Cloud Run applications with static outgoing IPs&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;参考： &lt;a href=&#34;https://ahmet.im/blog/cloud-run-static-ip/&#34;&gt;Cloud Run applications with static outgoing IPs&lt;/a&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -46,28 +40,21 @@ IP を固定したくなった際のメモです。&lt;/p&gt;
       
       <guid>https://tmrtmhr.info/tech/html2canvas/</guid>
       <description>&lt;h1 id=&#34;背景&#34;&gt;背景&lt;/h1&gt;
-
 &lt;p&gt;だんだんと秋も深くなり、周りではちらほら風邪をひく人も増えてきたそんな折。
 ウェブページをPDFとしてダウンロードできるようにしてほしい、という要望をいただきました。&lt;/p&gt;
-
 &lt;p&gt;いやそれはブラウザから印刷しようとしてPDFとして保存すれば&amp;hellip;とか、
 必要な部分だけスクリーンショットを撮れば&amp;hellip;など色々言ってはみましたが、
 使う側のITリテラシーの問題もあり、PDFの生成からは逃れられませんでした。&lt;/p&gt;
-
 &lt;p&gt;過去に似たような要望をいただいたときは、
 &lt;strong&gt;「サーバーサイドでブラウザを起動し、対象のウェブページを表示してPDFとして保存する」&lt;/strong&gt;
 というアプローチを取りました。
 たとえば &lt;a href=&#34;https://phantomjs.org/&#34;&gt;PhantomJS&lt;/a&gt; を使うとかですね。
 今なら Google Chrome のヘッドレスモードが良いと思います。&lt;/p&gt;
-
 &lt;p&gt;で、以前やったときからしばらく経っていたので改めて調べてみると、
 &lt;a href=&#34;https://html2canvas.hertzen.com/&#34;&gt;html2canvas&lt;/a&gt; という JavaScript ライブラリを見つけたので、
 ちょっと使ってみて生まれたのがこの記事です。&lt;/p&gt;
-
 &lt;p&gt;タイトルを「スクリーンショット画像を生成してみた」としてますが、
-厳密には「&lt;code&gt;canvas&lt;/code&gt;にレンダリングしてみた」という形ですね。&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+厳密には「&lt;code&gt;canvas&lt;/code&gt;にレンダリングしてみた」という形ですね。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -78,20 +65,11 @@ IP を固定したくなった際のメモです。&lt;/p&gt;
       <guid>https://tmrtmhr.info/tech/gcp/apigee-and-cloudendpoints/</guid>
       <description>&lt;p&gt;GCP上に構築したAPIに対し、APIキーでの認証機能を追加したかったので、
 Apigee と Cloud Endpoints を使ってみました。&lt;/p&gt;
-
 &lt;p&gt;今回の感想としては、以下のような理由で Cloud Endpoints を使うことにしました。&lt;/p&gt;
-
 &lt;ul&gt;
 &lt;li&gt;支払いが GCP だけで完結する&lt;/li&gt;
-&lt;li&gt;APIキーの発行を GCP コンソールから行え、APIキーごとのリファラ制限・IP制限が行える
-&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&#34;要件&#34;&gt;要件&lt;/h1&gt;
-
-&lt;p&gt;まず、API サーバを GCP の Cloud Run に構築してありました。
-好き勝手に使われるのもまずいので、APIキーを要求し、
-できればAPIキーと合わせてIP制限などが欲しいところでした。&lt;/p&gt;</description>
+&lt;li&gt;APIキーの発行を GCP コンソールから行え、APIキーごとのリファラ制限・IP制限が行える&lt;/li&gt;
+&lt;/ul&gt;</description>
     </item>
     
     <item>
@@ -103,18 +81,13 @@ Apigee と Cloud Endpoints を使ってみました。&lt;/p&gt;
       <description>&lt;p&gt;まだ今ほどコロナウィルスの影響がなかった新春の折。
 簡単にタスク分割して並列実行できそうなバッチ処理を、
 CloudRun を使ってHTTP APIを用意し、そこに投げまくることでさくさく実行する—という構成を試しました。&lt;/p&gt;
-
 &lt;p&gt;で、ログに色々情報を出しているので、そこから例えば XXX が何件あるか、みたいな集計などをやりたかった訳です。
 CloudRun では標準出力にログを出しておけば Stackdriver Logging に保存されるのでどうとでもなるだろう、
 という甘い目論見だった訳ですが、
 そう上手くはいかず、ちょっと焦ったのでそのメモです。&lt;/p&gt;
-
 &lt;p&gt;結論から言うとコマンドラインから検索条件を指定して出力できます。&lt;/p&gt;
-
 &lt;pre&gt;&lt;code&gt;gcloud logging read
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;/code&gt;&lt;/pre&gt;</description>
     </item>
     
     <item>
@@ -124,18 +97,14 @@ CloudRun では標準出力にログを出しておけば Stackdriver Logging �
       
       <guid>https://tmrtmhr.info/tech/enrionment-variables-including-line-break/</guid>
       <description>&lt;p&gt;AWS の Fargate を使っていて、改行コードを含む文字列を環境変数にセットしたいとふと思った。&lt;/p&gt;
-
 &lt;p&gt;もっと具体的に言えば CloudFront 用の 署名付き Cookie を生成するために
 プライベートキー(PEM)を渡したかった。
 PEM は以下のように改行を含む。&lt;/p&gt;
-
 &lt;pre&gt;&lt;code&gt;-----BEGIN RSA PRIVATE KEY-----
 XXX
 YYY
 -----END RSA PRIVATE KEY-----
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;/code&gt;&lt;/pre&gt;</description>
     </item>
     
     <item>
@@ -150,18 +119,14 @@ Professional Cloud Architect を受験し、
 合格したので顛末を残しておこうと思います。
 有効期限が来たら再度試験を受けることになるため自分用のメモでもあります。
 Associate Cloud Engineer のほうは先んじて 2019 年 5 月に取得しております。&lt;/p&gt;
-
 &lt;p&gt;&lt;a href=&#34;https://cloud.google.com/certification/terms?hl=ja&#34;&gt;試験利用規約&lt;/a&gt;上、
 試験内容については開示できないので、以下のようなことを書きます。&lt;/p&gt;
-
 &lt;ul&gt;
 &lt;li&gt;準備として何をやったか&lt;/li&gt;
 &lt;li&gt;試験会場の雰囲気&lt;/li&gt;
 &lt;li&gt;知識がない問題に当たったとき考えたこと&lt;/li&gt;
 &lt;li&gt;感想&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;/ul&gt;</description>
     </item>
     
     <item>
@@ -173,20 +138,15 @@ Associate Cloud Engineer のほうは先んじて 2019 年 5 月に取得して�
       <description>&lt;p&gt;世の中にはオープンなデータ(たとえば&lt;a href=&#34;http://nlftp.mlit.go.jp/ksj/index.html&#34;&gt;国土数値情報ダウンロードサービス&lt;/a&gt;など、公的機関が公開しているデータ)が色々あるもので、
 せっかくだからダウンロードして活用を考えてみようとするのですが、
 コマンドラインから &lt;code&gt;curl&lt;/code&gt; や &lt;code&gt;wget&lt;/code&gt; で直接取得できるようになっていない場合もあります。&lt;/p&gt;
-
 &lt;p&gt;Google Chrome には&lt;a href=&#34;https://developers.google.com/web/updates/2017/04/headless-chrome?hl=ja&#34;&gt;ヘッドレスモード&lt;/a&gt;があり、
 ウェブページの操作自動化に利用できます。
 実際にブラウザで表示したときと同様に JavaScript を実行してくれるため、
 ボタンをクリックしたときに JavaScript の関数が実行されてファイルのダウンロードが始まる、
 といったページにも対応できます。&lt;/p&gt;
-
 &lt;p&gt;しかしながらセキュリティ上の理由で、
 デフォルトではヘッドレスモードにおいてファイルをダウンロードできるようになっていません。&lt;/p&gt;
-
 &lt;p&gt;本記事では Go 言語のライブラリ&lt;a href=&#34;https://github.com/sclevine/agouti/&#34;&gt;Agouti&lt;/a&gt;を使ったときに
-ファイルダウンロードを許可するためのコードについて述べます。&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+ファイルダウンロードを許可するためのコードについて述べます。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -196,23 +156,15 @@ Associate Cloud Engineer のほうは先んじて 2019 年 5 月に取得して�
       
       <guid>https://tmrtmhr.info/tech/python/environment-error-when-trying-to-setup-alife/</guid>
       <description>&lt;p&gt;環境は以下の通り。&lt;/p&gt;
-
 &lt;ul&gt;
 &lt;li&gt;macOS High Sierra (10.13.6)&lt;/li&gt;
 &lt;li&gt;Homebrew でインストールした python 3系 (3.6.4)&lt;/li&gt;
 &lt;/ul&gt;
-
 &lt;p&gt;以下のようにライブラリをインストールしようとしたところ、&lt;/p&gt;
-
 &lt;pre&gt;&lt;code&gt;sudo pip install pyglet pymunk vispy keras tensorflow
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;以下のようなエラーが得られました。&lt;/p&gt;
-
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;以下のようなエラーが得られました。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;Could not install packages due to an EnvironmentError: [Errno 1] Operation not permitted: &#39;/bin/futurize&#39;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;/code&gt;&lt;/pre&gt;</description>
     </item>
     
     <item>
@@ -224,20 +176,14 @@ Associate Cloud Engineer のほうは先んじて 2019 年 5 月に取得して�
       <description>&lt;p&gt;東京リージョンでAWSのマネージドコンテナサービス &lt;a href=&#34;https://aws.amazon.com/jp/fargate/pricing/&#34;&gt;Fargateの料金&lt;/a&gt;を見ると
 1 vCPU: $0.0632/h, 2GB メモリ: $0.0316/h で、合わせて $0.0948/h です。
 一方&lt;a href=&#34;https://aws.amazon.com/jp/lambda/pricing/&#34;&gt;Lambdaの料金&lt;/a&gt;は 2GB メモリ: $0.120024/h です。&lt;/p&gt;
-
 &lt;p&gt;あれ、なんか Fargate 安くないですか？&lt;/p&gt;
-
 &lt;p&gt;本記事はこの料金の違いがどういう理由によるものかの筆者の推測、
 および Lambda と Fargate の処理性能の比較について述べるものです。&lt;/p&gt;
-
 &lt;p&gt;結論をまず言うと以下のようになります。&lt;/p&gt;
-
 &lt;ul&gt;
 &lt;li&gt;1 vCPU 2GB の Fargate と 2GB の Lambda であれば Fargate のほうが速い&lt;/li&gt;
 &lt;li&gt;Fargate のほうが安いのはAPIサーバなどの用途で冗長性を持たせようとすると CPU を100%使えないから&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;/ul&gt;</description>
     </item>
     
     <item>
@@ -249,27 +195,18 @@ Associate Cloud Engineer のほうは先んじて 2019 年 5 月に取得して�
       <description>&lt;p&gt;たまに、CSV データを JSON 形式に変換したくなることがあります。
 というのも、元データとしていただくのは大抵 Excel ファイルで、
 とりあえず CSV にエクスポートしただけでは使いにくいからです。&lt;/p&gt;
-
 &lt;p&gt;それくらいWeb上のツールであるんじゃないの？
 とちょっと検索してみたところ、セルに改行を含むケースに対応しているものが見つからなかったので、
 &lt;a href=&#34;https://github.com/tmrtmhr/csv2json&#34;&gt;Go 言語で実装&lt;/a&gt;してみました。&lt;/p&gt;
-
 &lt;p&gt;環境を整えてある方なら以下のコマンドで実行ファイルをインストールできます。&lt;/p&gt;
-
 &lt;pre&gt;&lt;code&gt;go install github.com/tmrtmhr/csv2json
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;入力としては以下のようなものを想定しています。&lt;/p&gt;
-
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;入力としては以下のようなものを想定しています。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;col1	col2	col3
 1	2	3
 4	&amp;quot;5
 67&amp;quot;	8
 9	10	11
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;出力は以下のようになります。ヘッダ行がキーになり、値はすべて文字列です。&lt;/p&gt;
-
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;出力は以下のようになります。ヘッダ行がキーになり、値はすべて文字列です。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;[
   {
     &amp;quot;col1&amp;quot;: &amp;quot;1&amp;quot;,
@@ -287,9 +224,7 @@ Associate Cloud Engineer のほうは先んじて 2019 年 5 月に取得して�
     &amp;quot;col3&amp;quot;: &amp;quot;11&amp;quot;
   }
 ]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;/code&gt;&lt;/pre&gt;</description>
     </item>
     
     <item>
@@ -299,11 +234,8 @@ Associate Cloud Engineer のほうは先んじて 2019 年 5 月に取得して�
       
       <guid>https://tmrtmhr.info/tech/unity/add-exif-to-screenshot/</guid>
       <description>&lt;p&gt;2018-02 時点では Unity に Exif を扱えるライブラリがないようです。&lt;/p&gt;
-
 &lt;p&gt;なので Android ライブラリを呼び出して実装します。
-(iOS では試していないですが、同様のアプローチでいけるんじゃないでしょうか)&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+(iOS では試していないですが、同様のアプローチでいけるんじゃないでしょうか)&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -316,15 +248,10 @@ Associate Cloud Engineer のほうは先んじて 2019 年 5 月に取得して�
 500 エラーが返ってくるので CloudWatch のログを見てみると、
 S3 からは正常に取得できているようでしたが、
 最後に以下のようなエラーが出ていました。&lt;/p&gt;
-
 &lt;pre&gt;&lt;code&gt;Execution failed due to configuration error: Unable to base64 decode the body.
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;どうやら Base64 デコードをしようとして失敗しているようです。
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;どうやら Base64 デコードをしようとして失敗しているようです。
 結果的に AWS 統合から Lambda 統合に変えて S3 オブジェクトを取得するようにしたら直ったのですが、
-こういう挙動をする理由についての公式ドキュメントなどは見つけられていません。&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+こういう挙動をする理由についての公式ドキュメントなどは見つけられていません。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -333,38 +260,29 @@ S3 からは正常に取得できているようでしたが、
       <pubDate>Sat, 27 Jan 2018 17:27:31 +0900</pubDate>
       
       <guid>https://tmrtmhr.info/tech/aws/s3-ssl-error-on-api-gateway/</guid>
-      <description>&lt;p&gt;API Gateway では統合リクエストのところで&amp;rdquo;AWS サービス&amp;rdquo;として設定することで
+      <description>&lt;p&gt;API Gateway では統合リクエストのところで&amp;quot;AWS サービス&amp;quot;として設定することで
 S3 のデータを読み書きするようにできます。&lt;/p&gt;
-
 &lt;p&gt;たとえば以下のように設定することで S3 オブジェクトを GET することができます。
 API Gateway のカスタムオーサライザ機能でのちのち認証を追加したりできるので、
 とりあえず間に API Gateway をはさんでおくと便利です。&lt;/p&gt;
-
 &lt;ul&gt;
 &lt;li&gt;AWS サービス： S3&lt;/li&gt;
 &lt;li&gt;AWS サブドメイン： バケット名&lt;/li&gt;
 &lt;li&gt;HTTP メソッド： &lt;code&gt;GET&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;パス上書き： &lt;code&gt;/path/to/resource&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
-
 &lt;p&gt;ここで、バケット名にドット(&lt;code&gt;.&lt;/code&gt;)を含む場合は注意が必要です。
 バケット名が &lt;code&gt;my.bucket.domain&lt;/code&gt; のようになっていると、
 S3 へのアクセスの際に &lt;code&gt;https://my.bucket.domain.s3.amazonaws.com&lt;/code&gt; というドメインが使われ、
 S3 側では &lt;code&gt;*.s3.amazonaws.com&lt;/code&gt; という SSL 証明書を用いているため &lt;code&gt;my.bucket.domain&lt;/code&gt; のような多段階のサブドメインにマッチせず、
 怒られます。&lt;/p&gt;
-
 &lt;p&gt;そんなわけで、ドメイン名にドットを含む場合は以下のように設定する必要があります。&lt;/p&gt;
-
 &lt;ul&gt;
 &lt;li&gt;AWS サブドメイン： 空欄&lt;/li&gt;
 &lt;li&gt;パス上書き： &lt;code&gt;my.bucket.domain/path/to/resource&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
-
 &lt;p&gt;個人的には、トラブルが起きがちなドット混じりのバケット名は避けようかな、という気持ちになってきました。&lt;/p&gt;
-
-&lt;p&gt;参考：&lt;a href=&#34;https://stackoverflow.com/questions/26744696/ssl-multilevel-subdomain-wildcard&#34;&gt;SSL Multilevel Subdomain Wildcard&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;参考：&lt;a href=&#34;https://stackoverflow.com/questions/26744696/ssl-multilevel-subdomain-wildcard&#34;&gt;SSL Multilevel Subdomain Wildcard&lt;/a&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -375,21 +293,15 @@ S3 側では &lt;code&gt;*.s3.amazonaws.com&lt;/code&gt; という SSL 証明書
       <guid>https://tmrtmhr.info/tech/aws/502-error-on-api-gateway/</guid>
       <description>&lt;p&gt;API Gateway にカスタムオーサライザを設定して新しいステージ作って……
 とやっていたときに &amp;ldquo;502 Internal Server Error&amp;rdquo; が出ました。&lt;/p&gt;
-
 &lt;p&gt;こんな時はとりあえずログを見ましょう。&lt;/p&gt;
-
 &lt;ol&gt;
 &lt;li&gt;ステージ選択 &amp;gt; ログ のタブから Cloud Watch ログを有効にして実行ログを出力&lt;/li&gt;
 &lt;li&gt;Cloud Watch のログから &amp;ldquo;API-Gateway-Execution-Logs_xxx&amp;rdquo; という名前のものを見る&lt;/li&gt;
 &lt;/ol&gt;
-
 &lt;p&gt;自分のケースでは、呼ぶ Lambda をステージ変数によって切り替えていましたが、
 新しいステージではこの変数が未設定だったことによりエラーとなっていました。&lt;/p&gt;
-
 &lt;p&gt;まあこういうミスが起こりうるので諸々の作業はなるべく自動化しましょうという戒めとして
-ここにメモしておきます。&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+ここにメモしておきます。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -402,17 +314,12 @@ S3 側では &lt;code&gt;*.s3.amazonaws.com&lt;/code&gt; という SSL 証明書
 もっと言うと SAML2 のサービスプロバイダとして AuthResponse の検証を
 サーバレスでやってみよう、というところから出発して、
 まずは XML 文書の署名が検証できないことにはお話になりませんね、ということです。&lt;/p&gt;
-
 &lt;p&gt;本記事は以下のことをやるための手順メモです。&lt;/p&gt;
-
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://github.com/apex/apex&#34;&gt;apex&lt;/a&gt;、&lt;a href=&#34;https://github.com/apex/go-apex&#34;&gt;go-apex&lt;/a&gt;、&lt;a href=&#34;https://github.com/crewjam/go-xmlsec&#34;&gt;go-xmlsec&lt;/a&gt; を使って GO 言語でプログラムを書く&lt;/li&gt;
 &lt;li&gt;xmlsec を静的リンクしたバイナリを作る&lt;/li&gt;
 &lt;/ul&gt;
-
-&lt;p&gt;より一般的には、AWS Lambda の実行環境に入っていないネイティブライブラリを使いたい場合は静的リンクして持ち込む、という話です。&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;より一般的には、AWS Lambda の実行環境に入っていないネイティブライブラリを使いたい場合は静的リンクして持ち込む、という話です。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -424,24 +331,18 @@ S3 側では &lt;code&gt;*.s3.amazonaws.com&lt;/code&gt; という SSL 証明書
       <description>&lt;p&gt;発端は S3 バケット間を &lt;code&gt;sync&lt;/code&gt; したいという要件です。
 基本は日次実行ですが、アドホックな実行もサポートしたいので、
 コピー元の特定ファイルアップロードをトリガーに Lambda で &lt;code&gt;aws s3 sync&lt;/code&gt; できるとうれしいのです。&lt;/p&gt;
-
 &lt;p&gt;AWS Lambda の実行環境には AWS CLI が用意されていません。
 まあ外部プロセス呼び出しでコマンドを実行して……とかやろうとするためには
 実行環境に何のコマンドが入っているか気にかけなければいけなくなるので、
 自分たちの機能コードだけ持ちこめばいいという Lambda の思想にも反すると思います。
 コンテナも肥大化しますし。
 そんなわけで AWS Lambda の実行環境に AWS CLI が用意されることは将来的にも望み薄でしょう。&lt;/p&gt;
-
 &lt;p&gt;じゃあ SDK で実装するか……とざっと調べたところ AWS SDK には &lt;code&gt;s3 sync&lt;/code&gt; がありません(ないよね？)。
 したがって、差分だけアップロードするとか、コピー元で削除されているものはコピー先でも削除するなどの機能は、
 SDK を使って自分たちで再実装するなどしないといけません。&lt;/p&gt;
-
 &lt;p&gt;それはちょっとねぇ……というわけで紆余曲折あって作成した AWS Lambda 上で AWS CLI を実行できるパッケージ(&lt;a href=&#34;https://github.com/tmrtmhr/awscli-on-lambda&#34;&gt;awscli-on-lambda&lt;/a&gt;)を置いておきます。&lt;/p&gt;
-
 &lt;p&gt;注意点ですが、このパッケージは Lambda の実行環境が変更されることでいきなり動かなくなる可能性があります。
-たとえば、&lt;code&gt;aws&lt;/code&gt; コマンドが &lt;code&gt;/usr/bin/python&lt;/code&gt; を見に行くため、このへんを変更されるとアウトです。&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+たとえば、&lt;code&gt;aws&lt;/code&gt; コマンドが &lt;code&gt;/usr/bin/python&lt;/code&gt; を見に行くため、このへんを変更されるとアウトです。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -452,25 +353,18 @@ SDK を使って自分たちで再実装するなどしないといけません�
       <guid>https://tmrtmhr.info/tech/aws/single-page-application-on-s3/</guid>
       <description>&lt;p&gt;静的コンテンツについては S3 だけでサーブできます。
 ですので、たとえば&lt;a href=&#34;https://angular.io/&#34;&gt;Angular&lt;/a&gt;で作成したフロントエンドのコードは S3 に置けばいいよ、という話になります。&lt;/p&gt;
-
 &lt;p&gt;しかし Single Page Application の場合、表示内容とともに URL を書き換えます。
 なので &lt;code&gt;https://example.com/blog&lt;/code&gt; のような URL でページが表示されていたとしても、
 対応するファイルがないためブラウザリロードすると &lt;code&gt;404&lt;/code&gt; エラーになってしまいます。
 認証が必要で、別ページに callback URL を持って遷移して認証後に戻ってくる、みたいなケースでもこのことが問題になります。&lt;/p&gt;
-
 &lt;p&gt;調べてみると以下のやり方が良いようです。&lt;/p&gt;
-
 &lt;ul&gt;
 &lt;li&gt;CloudFront のカスタムエラーレスポンスで、S3 の &lt;code&gt;404&lt;/code&gt; エラーに対し &lt;code&gt;/index.html&lt;/code&gt; へ転送するよう設定する&lt;/li&gt;
 &lt;/ul&gt;
-
 &lt;p&gt;英語ですが、以下のブログにスクリーンショット付きで手順が載っていました。&lt;/p&gt;
-
 &lt;ul&gt;
 &lt;li&gt;参考：&lt;a href=&#34;https://keita.blog/2015/11/24/hosting-a-single-page-app-on-s3-with-proper-urls/&#34;&gt;Hosting a Single-Page App on S3, with proper URLs&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;/ul&gt;</description>
     </item>
     
     <item>
@@ -483,10 +377,7 @@ SDK を使って自分たちで再実装するなどしないといけません�
 デフォルトで &lt;code&gt;Chrome&lt;/code&gt; を使って Unit Test を動かすよう設定されていますが、
 BitBucket Pipelines の環境には Chrome がインストールされていないので、
 &lt;code&gt;PhantomJS&lt;/code&gt; で実行するよう修正する必要があります。&lt;/p&gt;
-
-&lt;p&gt;本記事はそのためのメモです。&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;本記事はそのためのメモです。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -498,23 +389,16 @@ BitBucket Pipelines の環境には Chrome がインストールされていな�
       <description>&lt;p&gt;しばらくぶりに ElasticSearch を触ることになったため、以前 Docker コンテナで作ってあった環境を見直してみました。
 すると ElasticSearch + Kibana の新バージョンとして 5.5.2 が出ていたので、
 せっかくなので更新するかとバージョンを上げてみたところ素直に動作しませんでした。&lt;/p&gt;
-
 &lt;p&gt;結論から言えば ElasticSearch + Kibana に起因するものではなく、
 &lt;code&gt;docker-compose.yml&lt;/code&gt; のコンテナ間ネットワークの設定を間違えたことが原因です。&lt;/p&gt;
-
 &lt;p&gt;結論としては以下のような感じです。&lt;/p&gt;
-
 &lt;ul&gt;
 &lt;li&gt;5.3.0 の頃にあった &lt;code&gt;links&lt;/code&gt; によるコンテナ間接続は不要&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;networks&lt;/code&gt; 指定により ElasticSearch と Kibana コンテナを同一ネットワークに置く&lt;/li&gt;
 &lt;/ul&gt;
-
 &lt;p&gt;公式ドキュメント(&lt;a href=&#34;https://www.elastic.co/guide/en/elasticsearch/reference/5.5/docker.html&#34;&gt;Install Elasticsearch with Docker&lt;/a&gt;)を見て
 ElasticSearch の設定だけを修正しても動かないので注意してください。&lt;/p&gt;
-
-&lt;p&gt;最終的な &lt;code&gt;docker-compose.yml&lt;/code&gt; については &lt;a href=&#34;http://christina04.hatenablog.com/entry/2017/04/12/013556&#34;&gt;docker-compose で Kibana 5.x を使う&lt;/a&gt; を参考にしました。&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;最終的な &lt;code&gt;docker-compose.yml&lt;/code&gt; については &lt;a href=&#34;http://christina04.hatenablog.com/entry/2017/04/12/013556&#34;&gt;docker-compose で Kibana 5.x を使う&lt;/a&gt; を参考にしました。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -525,25 +409,17 @@ ElasticSearch の設定だけを修正しても動かないので注意してく
       <guid>https://tmrtmhr.info/tech/render-polygon-using-canvas/</guid>
       <description>&lt;p&gt;「プログラミング言語 Go」の練習問題に &lt;code&gt;sin(r) / r&lt;/code&gt; で表される面を描画するというものがあります(ここで、&lt;code&gt;r&lt;/code&gt;は原点からの距離)。
 SVGで描画するとこんな感じです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://tmrtmhr.info/img/surface-mono.svg&#34;&gt;&lt;/img&gt;&lt;/p&gt;
-
+&lt;p&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;/p&gt;
 &lt;p&gt;基本的には原点から離れるほど振幅が小さくなりますが、&lt;code&gt;r &amp;lt; 1&lt;/code&gt; の部分では大きくなるという図です。&lt;/p&gt;
-
 &lt;p&gt;SVGでは、要素が文書中に現れた順に描画され、領域が被っていれば上書きされます。
 ここではこれを利用して、奥側のポリゴンからSVG上に配置することで、手前の高くなっている部分が奥側を上書きするようにし、
 立体的に描画しています。&lt;/p&gt;
-
 &lt;p&gt;本記事は同じことを HTML5 の Canvas でやってみたサンプルです(&lt;code&gt;Fabric.js&lt;/code&gt;を利用してます)。&lt;/p&gt;
-
 &lt;p&gt;知見としては以下のような感じです。&lt;/p&gt;
-
 &lt;ul&gt;
 &lt;li&gt;1個ずつ &lt;code&gt;canvas.add&lt;/code&gt; すると重い&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;canvas.add.apply(canvas, polygons)&lt;/code&gt; のようにまとめて &lt;code&gt;apply&lt;/code&gt; で描画するときは配列の長さに注意するべし&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;/ul&gt;</description>
     </item>
     
     <item>
@@ -555,28 +431,17 @@ SVGで描画するとこんな感じです。&lt;/p&gt;
       <description>&lt;p&gt;以下のようなコードで &lt;code&gt;interface{}&lt;/code&gt; に対し数値を読み込んだ際、
 数値の型は &lt;code&gt;float64&lt;/code&gt; になります。
 (参考: &lt;a href=&#34;https://golang.org/pkg/encoding/json/#Unmarshal&#34;&gt;公式ドキュメント&lt;/a&gt;)&lt;/p&gt;
-
 &lt;pre&gt;&lt;code&gt;var got []interface{}
 json.Unmarshal([]byte(&amp;quot;[1,2,null]&amp;quot;, &amp;amp;got)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;しかし、これをテストするために比較対象のデータをリテラルとして用意すると、&lt;/p&gt;
-
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;しかし、これをテストするために比較対象のデータをリテラルとして用意すると、&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;want := []interface{}{1,2,nil}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;定数のデフォルト型の宿命で数値の型が &lt;code&gt;int&lt;/code&gt; になってしまうため、&lt;code&gt;reflect.DeepEqual&lt;/code&gt; などの比較において失敗してしまいます。&lt;/p&gt;
-
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;定数のデフォルト型の宿命で数値の型が &lt;code&gt;int&lt;/code&gt; になってしまうため、&lt;code&gt;reflect.DeepEqual&lt;/code&gt; などの比較において失敗してしまいます。&lt;/p&gt;
 &lt;h1 id=&#34;解決策&#34;&gt;解決策&lt;/h1&gt;
-
 &lt;p&gt;解決策としては以下の2つかな、と考えており、(2)のほうは煩雑なので今のところ(1)でやっています。&lt;/p&gt;
-
 &lt;ol&gt;
 &lt;li&gt;テストデータも &lt;code&gt;json.Unmarshal&lt;/code&gt; で作る&lt;/li&gt;
 &lt;li&gt;明示的に &lt;code&gt;float64(1)&lt;/code&gt; として変換する&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;/ol&gt;</description>
     </item>
     
     <item>
@@ -586,31 +451,19 @@ json.Unmarshal([]byte(&amp;quot;[1,2,null]&amp;quot;, &amp;amp;got)
       
       <guid>https://tmrtmhr.info/tech/javascript-property-of-primitive-value/</guid>
       <description>&lt;p&gt;JavaScript では以下のように数値のプロパティを参照することはできません。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;0.foo
-// 構文エラー
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;変数に入れると構文上は正しいため参照できます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var x = 0;
-console.log(x.foo);
-// =&amp;gt; undefined
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;あるいは文字列の &lt;code&gt;length&lt;/code&gt; プロパティを参照することも。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;&amp;quot;bar&amp;quot;.length
-// =&amp;gt; 3
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;しかしながらプリミティブ値はオブジェクトではないため、プロパティもプロトタイプチェーンもありません。
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;foo&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;// 構文エラー
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;変数に入れると構文上は正しいため参照できます。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;;
+&lt;span style=&#34;color:#a6e22e&#34;&gt;console&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;log&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;foo&lt;/span&gt;);
+&lt;span style=&#34;color:#75715e&#34;&gt;// =&amp;gt; undefined
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;あるいは文字列の &lt;code&gt;length&lt;/code&gt; プロパティを参照することも。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;bar&amp;#34;&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;length&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;// =&amp;gt; 3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;しかしながらプリミティブ値はオブジェクトではないため、プロパティもプロトタイプチェーンもありません。
 ではプリミティブ値のプロパティにアクセスしようとしたときに何が起こるかというと、
 &lt;code&gt;Number&lt;/code&gt; などの対応するオブジェクトが生成されます。&lt;/p&gt;
-
-&lt;p&gt;本記事は、この挙動が言語仕様のどの部分で言及されているのかのメモです。&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;本記事は、この挙動が言語仕様のどの部分で言及されているのかのメモです。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -622,11 +475,8 @@ console.log(x.foo);
       <description>&lt;p&gt;AWS DynamoDB では指定した IO 性能に応じて料金が発生するため、
 クエリなどで使用しないプロパティについては gzip 圧縮などを施してバイナリデータとして格納したほうが、
 必要な IO 性能が少なくなるためお得です(参考：&lt;a href=&#34;http://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/GuidelinesForItems.html#GuidelinesForItems.CompressingLargeAttributeValues&#34;&gt;大量の属性値を圧縮する&lt;/a&gt;)。&lt;/p&gt;
-
 &lt;p&gt;本記事は、AWS Lambda (Node.js 6.10) から DynamoDB のデータを取得し、
-展開する処理のメモです。&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+展開する処理のメモです。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -636,12 +486,9 @@ console.log(x.foo);
       
       <guid>https://tmrtmhr.info/tech/chrome-disable-infobars/</guid>
       <description>&lt;h1 id=&#34;結論&#34;&gt;結論&lt;/h1&gt;
-
 &lt;ul&gt;
 &lt;li&gt;Google Chrome の起動オプションに &lt;code&gt;--disable-infobars&lt;/code&gt; を渡す&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;/ul&gt;</description>
     </item>
     
     <item>
@@ -652,18 +499,13 @@ console.log(x.foo);
       <guid>https://tmrtmhr.info/tech/drag-and-drop-using-rxjs/</guid>
       <description>&lt;p&gt;HTML要素をドラッグアンドドロップ(以降 D&amp;amp;D)で移動させようと思ったときは、
 対象要素に対する &lt;code&gt;mousedown&lt;/code&gt;、&lt;code&gt;mousemove&lt;/code&gt;、&lt;code&gt;mouseup&lt;/code&gt; のイベントを使って実装するかと思います。&lt;/p&gt;
-
 &lt;p&gt;しかしながらウィンドウ外では対象要素の &lt;code&gt;mouseup&lt;/code&gt; を捕捉できないため、
 単純な実装ではウィンドウ外でD&amp;amp;Dをやめて戻った際、再度クリックなどして&lt;code&gt;mouseup&lt;/code&gt;が発生するまで要素が追従してしまいます。&lt;/p&gt;
-
 &lt;p&gt;本記事では以下の挙動を &lt;a href=&#34;https://github.com/ReactiveX/rxjs&#34;&gt;RxJS&lt;/a&gt; で実装してみた例です。&lt;/p&gt;
-
 &lt;ul&gt;
 &lt;li&gt;D&amp;amp;D 終了時は初期位置に移動する&lt;/li&gt;
 &lt;li&gt;ウィンドウ外で D&amp;amp;D 終了(&lt;code&gt;mouseup&lt;/code&gt;)を検知する&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;/ul&gt;</description>
     </item>
     
     <item>
@@ -674,18 +516,13 @@ console.log(x.foo);
       <guid>https://tmrtmhr.info/tech/golang-hungarian-notation/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;http://local.joelonsoftware.com/wiki/%E9%96%93%E9%81%95%E3%81%A3%E3%81%9F%E3%82%B3%E3%83%BC%E3%83%89%E3%81%AF%E9%96%93%E9%81%95%E3%81%A3%E3%81%A6%E8%A6%8B%E3%81%88%E3%82%8B%E3%82%88%E3%81%86%E3%81%AB%E3%81%99%E3%82%8B&#34;&gt;間違ったコードは間違って見えるようにする&lt;/a&gt;
 で説明されている「アプリケーションハンガリアン記法」とは、&lt;/p&gt;
-
 &lt;ul&gt;
 &lt;li&gt;同じデータ型の変数を区別するために、内容を示す名前をつける&lt;/li&gt;
 &lt;/ul&gt;
-
 &lt;p&gt;というものです。
 先のページで挙げられている例では、行と列の最大値に &lt;code&gt;rowMax&lt;/code&gt; &lt;code&gt;colMax&lt;/code&gt; と名前をつけることで取り違えを防ぐ、といった感じです。
 これらはともに整数なので相互に代入できてしまいますが、バグなので、命名規則で気づきやすくする、という意図です。&lt;/p&gt;
-
-&lt;p&gt;Go 言語では型に別名をつけることができ、コンパイル時の型チェックで違う型として扱われるため、取り違えを防ぐのに有効です。&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;Go 言語では型に別名をつけることができ、コンパイル時の型チェックで違う型として扱われるため、取り違えを防ぐのに有効です。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -695,43 +532,32 @@ console.log(x.foo);
       
       <guid>https://tmrtmhr.info/tech/why-does-golang-not-have-exceptions/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;http://golang.jp/go_faq#exceptions&#34;&gt;Go言語 FAQ&lt;/a&gt;より引用すると&lt;/p&gt;
-
 &lt;blockquote&gt;
 &lt;p&gt;例外(exception)がない理由は?&lt;/p&gt;
-
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
 &lt;p&gt;我々は、処理構造を制御するためのtry-catch-finally形式の例外処理機構によって、コードが入り組んでしまうと考えています。&lt;/p&gt;
 &lt;/blockquote&gt;
-
 &lt;p&gt;とのことです。&lt;/p&gt;
-
 &lt;p&gt;うーん、これだけじゃよく分かりません。&lt;/p&gt;
-
 &lt;p&gt;知りたいのは、&lt;/p&gt;
-
 &lt;ul&gt;
 &lt;li&gt;「例外機構が有用な場面」についてGo言語ではどのように対処するのか？
 はたしてGo言語の他の機能を組み合わせることでカバーできるのか？&lt;/li&gt;
 &lt;li&gt;「例外機構ではコードが入り組んでしまう」というのはどういうことを指しているのか？&lt;/li&gt;
 &lt;/ul&gt;
-
 &lt;p&gt;自分の探し方が悪かったら申し訳ないですが、
 講演やら Effective Go やらでこういったことに言及している部分を見つけられなかったので、
 調べた内容と自分の推測をまとめてみます。&lt;/p&gt;
-
 &lt;p&gt;結論としては&lt;/p&gt;
-
 &lt;ul&gt;
 &lt;li&gt;例外機構が欲しい場面は Go 言語の他の機能でカバーできそう&lt;/li&gt;
 &lt;li&gt;例外機構によるエラー返却では、関数の出口が増えるため制御フローが複雑になる&lt;/li&gt;
 &lt;li&gt;エラー値返却の手段としての例外機構は、並行プログラムにそぐわない&lt;/li&gt;
 &lt;/ul&gt;
-
 &lt;p&gt;ということです。&lt;/p&gt;
-
 &lt;p&gt;Go言語の他の機能というのは多値返却、&lt;code&gt;goto&lt;/code&gt;、&lt;code&gt;defer&lt;/code&gt;、&lt;code&gt;panic&lt;/code&gt;、&lt;code&gt;recover&lt;/code&gt; です。
-具体的にエラーハンドリングのコードがどうなるかについては別の記事にまとめたいです。&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+具体的にエラーハンドリングのコードがどうなるかについては別の記事にまとめたいです。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -741,43 +567,24 @@ console.log(x.foo);
       
       <guid>https://tmrtmhr.info/tech/sum-type-in-golang/</guid>
       <description>&lt;p&gt;たとえば Haskell では以下のようなデータ型を定義できます。&lt;/p&gt;
-
 &lt;pre&gt;&lt;code&gt;data Tree = Leaf | Branch Tree Tree
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;C言語で言えばタグ付き共用体(union)のような感じです。&lt;/p&gt;
-
-&lt;!-- ``` --&gt;
-
-&lt;!-- union Tree { --&gt;
-
-&lt;!--   struct Leaf { --&gt;
-
-&lt;!--     tag int; --&gt;
-
-&lt;!--   } leaf; --&gt;
-
-&lt;!--   struct Branch { --&gt;
-
-&lt;!--     tag int; --&gt;
-
-&lt;!--     left *Tree; --&gt;
-
-&lt;!--     right *Tree; --&gt;
-
-&lt;!--   } branch; --&gt;
-
-&lt;!-- } --&gt;
-
-&lt;!-- ``` --&gt;
-
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;C言語で言えばタグ付き共用体(union)のような感じです。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;
 &lt;p&gt;この記事は、こんな感じで木構造などを表現したい時
 Go 言語ではどうするのか？という点について調べてみたメモです。
 結論としては&lt;code&gt;type Tree interface{ ... }&lt;/code&gt;を定義します。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;data Tree a&lt;/code&gt; のように汎用的なコンテナを作る方法については言及しません。&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;&lt;code&gt;data Tree a&lt;/code&gt; のように汎用的なコンテナを作る方法については言及しません。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -788,31 +595,23 @@ Go 言語ではどうするのか？という点について調べてみたメ�
       <guid>https://tmrtmhr.info/tech/replace-a-part-of-json-with-command-output/</guid>
       <description>&lt;p&gt;AWS CLI によりコマンドラインから制御したりする際、リクエストパラメータとして JSON ファイルが必要になることがあります。
 &lt;a href=&#34;https://tmrtmhr.info/tech/aws/delete-updated-file-cache-on-cloudfront/&#34;&gt;CloudFront のキャッシュを削除したいとき&lt;/a&gt;なんかがそうです。&lt;/p&gt;
-
 &lt;p&gt;AWS CLI のコマンドごとに、リクエストJSONを生成する専用スクリプトを書くという手もありますが、
 シェル上でパイプやらリダイレクトやらを駆使していい感じに JSON を生成できるある程度汎用的なスクリプトにならんものか、
 という思いから試してみた結果をここに記します。
 どこかに既にあるものでしたらすみません。&lt;/p&gt;
-
 &lt;p&gt;コマンド引数は以下のようになっていて、JSON ファイルは標準入力から与えます。&lt;/p&gt;
-
 &lt;pre&gt;&lt;code&gt;filljson ${入力の型} ${キーパス} ${入力ファイル名}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;標準入出力で JSON をやりとりするので以下のようにパイプでつなげることで
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;標準入出力で JSON をやりとりするので以下のようにパイプでつなげることで
 中間ファイルを作ることなく最終的なリクエスト JSON が得られます。
 入力ファイル名のところには &lt;code&gt;bash&lt;/code&gt; や &lt;code&gt;zsh&lt;/code&gt; のプロセス置換機能を利用しています。
 プロセス置換機能を使うとプログラム側からは単にファイルパスが渡ってくるように見えるので、
 ファイルIOとして処理すればOKです。&lt;/p&gt;
-
 &lt;pre&gt;&lt;code&gt;cat json/cloudfront-invalidation.json |
   filljson int InvalidationBatch.Paths.Quantity &amp;lt;(git diff --ignore-all-space --diff-filter=M --name-only HEAD^ HEAD  public | wc -l) |
   filljson [string] InvalidationBatch.Paths.Items &amp;lt;(git diff --ignore-all-space --diff-filter=M --name-only HEAD^ HEAD  public | sed -e &#39;s/^public//g&#39;) |
   filljson string InvalidationBatch.CallerReference &amp;lt;(date +&amp;quot;osone3-%Y/%m/%d-%H:%k:%m&amp;quot; | tr -d &#39;\n&#39;) |
   jq . &amp;gt; request.json
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;/code&gt;&lt;/pre&gt;</description>
     </item>
     
     <item>
@@ -825,19 +624,14 @@ Go 言語ではどうするのか？という点について調べてみたメ�
 CloudFront を利用して配信しています。
 CloudFront はキャッシュサーバとして働くので、
 何もしなければ TTL が切れるまでは古いコンテンツが表示されます。&lt;/p&gt;
-
 &lt;p&gt;単純にキャッシュ全削除という手もありますが、
 せっかくなので更新のあったファイルのみキャッシュを削除してみました。&lt;/p&gt;
-
 &lt;p&gt;やっていることは以下のような感じです。&lt;/p&gt;
-
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;git diff&lt;/code&gt; で更新のあったファイル一覧を取得&lt;/li&gt;
 &lt;li&gt;一覧を加工して AWS CLI 用の JSON ファイルを生成&lt;/li&gt;
 &lt;li&gt;AWS CLI の &lt;code&gt;aws cloudfront create-invalidation&lt;/code&gt; でキャッシュ削除&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;/ul&gt;</description>
     </item>
     
     <item>
@@ -847,28 +641,21 @@ CloudFront はキャッシュサーバとして働くので、
       
       <guid>https://tmrtmhr.info/tech/aws/register-a-domain-for-blog/</guid>
       <description>&lt;p&gt;せっかくなので本サイトのドメインを AWS Route53 で管理するようにした際のメモです。&lt;/p&gt;
-
 &lt;p&gt;やったことは以下の通り。&lt;/p&gt;
-
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://aws.amazon.com/jp/route53/&#34;&gt;Route 53&lt;/a&gt; でドメインを取得&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://aws.amazon.com/jp/ses/&#34;&gt;SES&lt;/a&gt; で対象ドメインのメールアドレスにて受信&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://aws.amazon.com/jp/certificate-manager/&#34;&gt;Certificate Manager&lt;/a&gt; で対象ドメインのSSL証明書を取得&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://aws.amazon.com/jp/cloudfront/&#34;&gt;CloudFront&lt;/a&gt; に取得したSSL証明書を設定&lt;/li&gt;
 &lt;/ul&gt;
-
 &lt;p&gt;なお、今のところ CloudFront のオリジンサーバとしては &lt;a href=&#34;https://aws.amazon.com/jp/s3/&#34;&gt;S3&lt;/a&gt; ではなく &lt;a href=&#34;https://pages.github.com/&#34;&gt;GitHub Pages&lt;/a&gt; を使用しています。&lt;/p&gt;
-
 &lt;ul&gt;
 &lt;li&gt;2018/01/08 追記:&lt;/li&gt;
 &lt;/ul&gt;
-
 &lt;p&gt;Certificate Manager で SSL証明書を取得する際、
 メールではなく DNS レコードによってドメイン所有を検証することが可能になっていました
 (&lt;a href=&#34;https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-validate-dns.html&#34;&gt;Use DNS to Validate Domain Ownership&lt;/a&gt;)。
-なので SSL 証明書の取得の際には SES の設定が不要になっています。&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+なので SSL 証明書の取得の際には SES の設定が不要になっています。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -878,10 +665,8 @@ CloudFront はキャッシュサーバとして働くので、
       
       <guid>https://tmrtmhr.info/tech/hugo-with-material-icon/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://gohugo.io/&#34;&gt;Hugo&lt;/a&gt; で任意の HTML を生成したい場合は &lt;a href=&#34;https://gohugo.io/extras/shortcodes/&#34;&gt;ShortCode&lt;/a&gt; を書くことになります。&lt;/p&gt;
-
 &lt;p&gt;本サイトでは使い道はさておきマテリアルアイコンを読み込んでいるので、
-ShortCode で使えるようにしてみました。
-&lt;/p&gt;</description>
+ShortCode で使えるようにしてみました。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -893,10 +678,8 @@ ShortCode で使えるようにしてみました。
       <description>&lt;p&gt;学生時代からの習慣と宗教上の理由から普段使いのエディタは Emacs
 (ここでは &lt;a href=&#34;http://emacsformacosx.com/&#34;&gt;GNU Emacs for Mac OS X&lt;/a&gt;)
 です。&lt;/p&gt;
-
 &lt;p&gt;設定ファイルを除いて自分で Emacs Lisp を書いて機能を追加したことはこれまで無かったのですが、
-このたび必要にかられて追加いたしました。
-&lt;/p&gt;</description>
+このたび必要にかられて追加いたしました。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -908,11 +691,9 @@ ShortCode で使えるようにしてみました。
       <description>&lt;p&gt;&lt;a href=&#34;https://angular.io/&#34;&gt;Angular2&lt;/a&gt;が
 &lt;a href=&#34;http://angularjs.blogspot.jp/2015/12/angular-2-beta.html&#34;&gt;昨年12月に Beta リリース&lt;/a&gt;されたため、
 色々触りながら調べています。&lt;/p&gt;
-
 &lt;p&gt;Angular2 の設計ドキュメントのひとつ(&lt;a href=&#34;https://docs.google.com/document/d/1kpuR512G1b0D8egl9245OHaG0cFh0ST0ekhD_g8sxtI/edit#heading=h.ptbnyo3pqsmq&#34;&gt;Data Binding with Web Components&lt;/a&gt;)
 を見かけ、Web Components との併用を考慮しているようだったので、
-使い方を調べてみることにしました。
-&lt;/p&gt;</description>
+使い方を調べてみることにしました。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -922,8 +703,7 @@ ShortCode で使えるようにしてみました。
       
       <guid>https://tmrtmhr.info/tech/static-site-generator-comparison/</guid>
       <description>&lt;p&gt;エンジニア界隈ではどうもブログを作る目的で静的サイトジェネレータというものが使われている、
-と聞いたため、せっかくなので使ってみることにしました。
-&lt;/p&gt;</description>
+と聞いたため、せっかくなので使ってみることにしました。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -935,8 +715,7 @@ ShortCode で使えるようにしてみました。
       <description>&lt;p&gt;Smashing Magazine の
 &lt;a href=&#34;http://www.smashingmagazine.com/2015/11/modern-static-website-generators-next-big-thing/&#34;&gt;Why Static Website Generators Are The Next Big Thing&lt;/a&gt;
 という記事を読んでの、自分の理解のためのメモです。
-直訳というわけでもなく、独自研究が含まれる恐れがあります。
-&lt;/p&gt;</description>
+直訳というわけでもなく、独自研究が含まれる恐れがあります。&lt;/p&gt;</description>
     </item>
     
   </channel>

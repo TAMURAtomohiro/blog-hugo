@@ -9,7 +9,7 @@
       });
     </script>
     <meta charset="utf-8">
-    <meta name="generator" content="Hugo 0.47.1" />
+    <meta name="generator" content="Hugo 0.74.3" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -94,58 +94,40 @@ if (!doNotTrack) {
           <div class="castaway-card-content mdl-card__supporting-text mdl-color-text--grey-700">
             <p>HTML要素をドラッグアンドドロップ(以降 D&amp;D)で移動させようと思ったときは、
 対象要素に対する <code>mousedown</code>、<code>mousemove</code>、<code>mouseup</code> のイベントを使って実装するかと思います。</p>
-
 <p>しかしながらウィンドウ外では対象要素の <code>mouseup</code> を捕捉できないため、
 単純な実装ではウィンドウ外でD&amp;Dをやめて戻った際、再度クリックなどして<code>mouseup</code>が発生するまで要素が追従してしまいます。</p>
-
 <p>本記事では以下の挙動を <a href="https://github.com/ReactiveX/rxjs">RxJS</a> で実装してみた例です。</p>
-
 <ul>
 <li>D&amp;D 終了時は初期位置に移動する</li>
 <li>ウィンドウ外で D&amp;D 終了(<code>mouseup</code>)を検知する</li>
 </ul>
-
-<p></p>
-
 <p>とりあえず触ってみてください。Google Chrome 57.0.2987.133 (64-bit) でしか動作確認してません。</p>
-
-<script src="https://code.jquery.com/jquery-3.2.0.min.js"
-  integrity="sha256-JAW99MJVpJBGcbzEuXk4Az05s/XyDdBomFqNlM3ic+I="
-  crossorigin="anonymous"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/rxjs/5.5.10/Rx.min.js"></script>
-<script type="text/javascript" src="/js/drag-and-drop.js"></script>
-
-<div id="dnd-container" style="position: relative; width: 512px; height:64px;">
-<div id="dnd-target" class="z-depth-2" style="width:32px; height: 32px; background-color: blue; position:absolute; top: 16px; left: 240px; z-index: 999;"></div>
-</div>
-
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p><a href="https://liginc.co.jp/web/js/151272">「RxJS」初心者入門 – JavaScriptの非同期処理の常識を変えるライブラリ</a>
 にあるコードとほぼ同じですが、終了条件のストリームを <code>mouseup</code> だけでなく <code>$(window)</code> の <code>mouseup</code> からも作っています。</p>
-
-<pre><code class="language-javascript">  // 終了条件を表すストリーム
-  var terminateDndStream = Rx.Observable.merge(
-    mouseUpStream,
-    Rx.Observable.fromEvent($(window), 'mouseup')
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">  <span style="color:#75715e">// 終了条件を表すストリーム
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">terminateDndStream</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">Rx</span>.<span style="color:#a6e22e">Observable</span>.<span style="color:#a6e22e">merge</span>(
+    <span style="color:#a6e22e">mouseUpStream</span>,
+    <span style="color:#a6e22e">Rx</span>.<span style="color:#a6e22e">Observable</span>.<span style="color:#a6e22e">fromEvent</span>(<span style="color:#a6e22e">$</span>(window), <span style="color:#e6db74">&#39;mouseup&#39;</span>)
   );
-</code></pre>
-
-<p>今回用いた技術的なポイントは以下の通りです。</p>
-
+</code></pre></div><p>今回用いた技術的なポイントは以下の通りです。</p>
 <ul>
 <li><code>window</code> 内でドラッグを開始した場合、ウィンドウ外での <code>mouseup</code> や <code>mousemove</code> を捕捉できる</li>
 <li>イベントストリームをマージして OR 条件を表現する</li>
 </ul>
-
 <p>参考：</p>
-
 <ul>
 <li><a href="https://liginc.co.jp/web/js/151272">「RxJS」初心者入門 – JavaScriptの非同期処理の常識を変えるライブラリ</a></li>
 <li><a href="http://qiita.com/tyfkda/items/228934160b0951a8e732">マウスをウィンドウ外で離されてもイベントを受け取る</a></li>
 <li><a href="http://stackoverflow.com/questions/14912515/how-to-detect-a-mouseup-event-outside-the-window">How to detect a MouseUp event outside the window?</a></li>
 </ul>
-
 <p>Gist も貼っておきます。
-<script type="application/javascript" src="//gist.github.com/tmrtmhr/d02aaa74e54a6fa684137ae8d4d8b16e.js"></script></p>
+<script type="application/javascript" src="https://gist.github.com/tmrtmhr/d02aaa74e54a6fa684137ae8d4d8b16e.js"></script>
+</p>
           </div>
 
           

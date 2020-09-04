@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Go on 嵐の小舟より</title>
+    <title>go on 嵐の小舟より</title>
     <link>https://tmrtmhr.info/tags/go/</link>
-    <description>Recent content in Go on 嵐の小舟より</description>
+    <description>Recent content in go on 嵐の小舟より</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
     <lastBuildDate>Mon, 08 Apr 2019 16:31:35 +0900</lastBuildDate>
@@ -20,20 +20,15 @@
       <description>&lt;p&gt;世の中にはオープンなデータ(たとえば&lt;a href=&#34;http://nlftp.mlit.go.jp/ksj/index.html&#34;&gt;国土数値情報ダウンロードサービス&lt;/a&gt;など、公的機関が公開しているデータ)が色々あるもので、
 せっかくだからダウンロードして活用を考えてみようとするのですが、
 コマンドラインから &lt;code&gt;curl&lt;/code&gt; や &lt;code&gt;wget&lt;/code&gt; で直接取得できるようになっていない場合もあります。&lt;/p&gt;
-
 &lt;p&gt;Google Chrome には&lt;a href=&#34;https://developers.google.com/web/updates/2017/04/headless-chrome?hl=ja&#34;&gt;ヘッドレスモード&lt;/a&gt;があり、
 ウェブページの操作自動化に利用できます。
 実際にブラウザで表示したときと同様に JavaScript を実行してくれるため、
 ボタンをクリックしたときに JavaScript の関数が実行されてファイルのダウンロードが始まる、
 といったページにも対応できます。&lt;/p&gt;
-
 &lt;p&gt;しかしながらセキュリティ上の理由で、
 デフォルトではヘッドレスモードにおいてファイルをダウンロードできるようになっていません。&lt;/p&gt;
-
 &lt;p&gt;本記事では Go 言語のライブラリ&lt;a href=&#34;https://github.com/sclevine/agouti/&#34;&gt;Agouti&lt;/a&gt;を使ったときに
-ファイルダウンロードを許可するためのコードについて述べます。&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+ファイルダウンロードを許可するためのコードについて述べます。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -45,27 +40,18 @@
       <description>&lt;p&gt;たまに、CSV データを JSON 形式に変換したくなることがあります。
 というのも、元データとしていただくのは大抵 Excel ファイルで、
 とりあえず CSV にエクスポートしただけでは使いにくいからです。&lt;/p&gt;
-
 &lt;p&gt;それくらいWeb上のツールであるんじゃないの？
 とちょっと検索してみたところ、セルに改行を含むケースに対応しているものが見つからなかったので、
 &lt;a href=&#34;https://github.com/tmrtmhr/csv2json&#34;&gt;Go 言語で実装&lt;/a&gt;してみました。&lt;/p&gt;
-
 &lt;p&gt;環境を整えてある方なら以下のコマンドで実行ファイルをインストールできます。&lt;/p&gt;
-
 &lt;pre&gt;&lt;code&gt;go install github.com/tmrtmhr/csv2json
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;入力としては以下のようなものを想定しています。&lt;/p&gt;
-
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;入力としては以下のようなものを想定しています。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;col1	col2	col3
 1	2	3
 4	&amp;quot;5
 67&amp;quot;	8
 9	10	11
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;出力は以下のようになります。ヘッダ行がキーになり、値はすべて文字列です。&lt;/p&gt;
-
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;出力は以下のようになります。ヘッダ行がキーになり、値はすべて文字列です。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;[
   {
     &amp;quot;col1&amp;quot;: &amp;quot;1&amp;quot;,
@@ -83,9 +69,7 @@
     &amp;quot;col3&amp;quot;: &amp;quot;11&amp;quot;
   }
 ]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;/code&gt;&lt;/pre&gt;</description>
     </item>
     
     <item>
@@ -98,17 +82,12 @@
 もっと言うと SAML2 のサービスプロバイダとして AuthResponse の検証を
 サーバレスでやってみよう、というところから出発して、
 まずは XML 文書の署名が検証できないことにはお話になりませんね、ということです。&lt;/p&gt;
-
 &lt;p&gt;本記事は以下のことをやるための手順メモです。&lt;/p&gt;
-
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://github.com/apex/apex&#34;&gt;apex&lt;/a&gt;、&lt;a href=&#34;https://github.com/apex/go-apex&#34;&gt;go-apex&lt;/a&gt;、&lt;a href=&#34;https://github.com/crewjam/go-xmlsec&#34;&gt;go-xmlsec&lt;/a&gt; を使って GO 言語でプログラムを書く&lt;/li&gt;
 &lt;li&gt;xmlsec を静的リンクしたバイナリを作る&lt;/li&gt;
 &lt;/ul&gt;
-
-&lt;p&gt;より一般的には、AWS Lambda の実行環境に入っていないネイティブライブラリを使いたい場合は静的リンクして持ち込む、という話です。&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;より一般的には、AWS Lambda の実行環境に入っていないネイティブライブラリを使いたい場合は静的リンクして持ち込む、という話です。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -120,28 +99,17 @@
       <description>&lt;p&gt;以下のようなコードで &lt;code&gt;interface{}&lt;/code&gt; に対し数値を読み込んだ際、
 数値の型は &lt;code&gt;float64&lt;/code&gt; になります。
 (参考: &lt;a href=&#34;https://golang.org/pkg/encoding/json/#Unmarshal&#34;&gt;公式ドキュメント&lt;/a&gt;)&lt;/p&gt;
-
 &lt;pre&gt;&lt;code&gt;var got []interface{}
 json.Unmarshal([]byte(&amp;quot;[1,2,null]&amp;quot;, &amp;amp;got)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;しかし、これをテストするために比較対象のデータをリテラルとして用意すると、&lt;/p&gt;
-
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;しかし、これをテストするために比較対象のデータをリテラルとして用意すると、&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;want := []interface{}{1,2,nil}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;定数のデフォルト型の宿命で数値の型が &lt;code&gt;int&lt;/code&gt; になってしまうため、&lt;code&gt;reflect.DeepEqual&lt;/code&gt; などの比較において失敗してしまいます。&lt;/p&gt;
-
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;定数のデフォルト型の宿命で数値の型が &lt;code&gt;int&lt;/code&gt; になってしまうため、&lt;code&gt;reflect.DeepEqual&lt;/code&gt; などの比較において失敗してしまいます。&lt;/p&gt;
 &lt;h1 id=&#34;解決策&#34;&gt;解決策&lt;/h1&gt;
-
 &lt;p&gt;解決策としては以下の2つかな、と考えており、(2)のほうは煩雑なので今のところ(1)でやっています。&lt;/p&gt;
-
 &lt;ol&gt;
 &lt;li&gt;テストデータも &lt;code&gt;json.Unmarshal&lt;/code&gt; で作る&lt;/li&gt;
 &lt;li&gt;明示的に &lt;code&gt;float64(1)&lt;/code&gt; として変換する&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;/ol&gt;</description>
     </item>
     
     <item>
@@ -152,18 +120,13 @@ json.Unmarshal([]byte(&amp;quot;[1,2,null]&amp;quot;, &amp;amp;got)
       <guid>https://tmrtmhr.info/tech/golang-hungarian-notation/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;http://local.joelonsoftware.com/wiki/%E9%96%93%E9%81%95%E3%81%A3%E3%81%9F%E3%82%B3%E3%83%BC%E3%83%89%E3%81%AF%E9%96%93%E9%81%95%E3%81%A3%E3%81%A6%E8%A6%8B%E3%81%88%E3%82%8B%E3%82%88%E3%81%86%E3%81%AB%E3%81%99%E3%82%8B&#34;&gt;間違ったコードは間違って見えるようにする&lt;/a&gt;
 で説明されている「アプリケーションハンガリアン記法」とは、&lt;/p&gt;
-
 &lt;ul&gt;
 &lt;li&gt;同じデータ型の変数を区別するために、内容を示す名前をつける&lt;/li&gt;
 &lt;/ul&gt;
-
 &lt;p&gt;というものです。
 先のページで挙げられている例では、行と列の最大値に &lt;code&gt;rowMax&lt;/code&gt; &lt;code&gt;colMax&lt;/code&gt; と名前をつけることで取り違えを防ぐ、といった感じです。
 これらはともに整数なので相互に代入できてしまいますが、バグなので、命名規則で気づきやすくする、という意図です。&lt;/p&gt;
-
-&lt;p&gt;Go 言語では型に別名をつけることができ、コンパイル時の型チェックで違う型として扱われるため、取り違えを防ぐのに有効です。&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;Go 言語では型に別名をつけることができ、コンパイル時の型チェックで違う型として扱われるため、取り違えを防ぐのに有効です。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -173,43 +136,32 @@ json.Unmarshal([]byte(&amp;quot;[1,2,null]&amp;quot;, &amp;amp;got)
       
       <guid>https://tmrtmhr.info/tech/why-does-golang-not-have-exceptions/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;http://golang.jp/go_faq#exceptions&#34;&gt;Go言語 FAQ&lt;/a&gt;より引用すると&lt;/p&gt;
-
 &lt;blockquote&gt;
 &lt;p&gt;例外(exception)がない理由は?&lt;/p&gt;
-
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
 &lt;p&gt;我々は、処理構造を制御するためのtry-catch-finally形式の例外処理機構によって、コードが入り組んでしまうと考えています。&lt;/p&gt;
 &lt;/blockquote&gt;
-
 &lt;p&gt;とのことです。&lt;/p&gt;
-
 &lt;p&gt;うーん、これだけじゃよく分かりません。&lt;/p&gt;
-
 &lt;p&gt;知りたいのは、&lt;/p&gt;
-
 &lt;ul&gt;
 &lt;li&gt;「例外機構が有用な場面」についてGo言語ではどのように対処するのか？
 はたしてGo言語の他の機能を組み合わせることでカバーできるのか？&lt;/li&gt;
 &lt;li&gt;「例外機構ではコードが入り組んでしまう」というのはどういうことを指しているのか？&lt;/li&gt;
 &lt;/ul&gt;
-
 &lt;p&gt;自分の探し方が悪かったら申し訳ないですが、
 講演やら Effective Go やらでこういったことに言及している部分を見つけられなかったので、
 調べた内容と自分の推測をまとめてみます。&lt;/p&gt;
-
 &lt;p&gt;結論としては&lt;/p&gt;
-
 &lt;ul&gt;
 &lt;li&gt;例外機構が欲しい場面は Go 言語の他の機能でカバーできそう&lt;/li&gt;
 &lt;li&gt;例外機構によるエラー返却では、関数の出口が増えるため制御フローが複雑になる&lt;/li&gt;
 &lt;li&gt;エラー値返却の手段としての例外機構は、並行プログラムにそぐわない&lt;/li&gt;
 &lt;/ul&gt;
-
 &lt;p&gt;ということです。&lt;/p&gt;
-
 &lt;p&gt;Go言語の他の機能というのは多値返却、&lt;code&gt;goto&lt;/code&gt;、&lt;code&gt;defer&lt;/code&gt;、&lt;code&gt;panic&lt;/code&gt;、&lt;code&gt;recover&lt;/code&gt; です。
-具体的にエラーハンドリングのコードがどうなるかについては別の記事にまとめたいです。&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+具体的にエラーハンドリングのコードがどうなるかについては別の記事にまとめたいです。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -219,43 +171,24 @@ json.Unmarshal([]byte(&amp;quot;[1,2,null]&amp;quot;, &amp;amp;got)
       
       <guid>https://tmrtmhr.info/tech/sum-type-in-golang/</guid>
       <description>&lt;p&gt;たとえば Haskell では以下のようなデータ型を定義できます。&lt;/p&gt;
-
 &lt;pre&gt;&lt;code&gt;data Tree = Leaf | Branch Tree Tree
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;C言語で言えばタグ付き共用体(union)のような感じです。&lt;/p&gt;
-
-&lt;!-- ``` --&gt;
-
-&lt;!-- union Tree { --&gt;
-
-&lt;!--   struct Leaf { --&gt;
-
-&lt;!--     tag int; --&gt;
-
-&lt;!--   } leaf; --&gt;
-
-&lt;!--   struct Branch { --&gt;
-
-&lt;!--     tag int; --&gt;
-
-&lt;!--     left *Tree; --&gt;
-
-&lt;!--     right *Tree; --&gt;
-
-&lt;!--   } branch; --&gt;
-
-&lt;!-- } --&gt;
-
-&lt;!-- ``` --&gt;
-
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;C言語で言えばタグ付き共用体(union)のような感じです。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;
 &lt;p&gt;この記事は、こんな感じで木構造などを表現したい時
 Go 言語ではどうするのか？という点について調べてみたメモです。
 結論としては&lt;code&gt;type Tree interface{ ... }&lt;/code&gt;を定義します。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;data Tree a&lt;/code&gt; のように汎用的なコンテナを作る方法については言及しません。&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;&lt;code&gt;data Tree a&lt;/code&gt; のように汎用的なコンテナを作る方法については言及しません。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -266,31 +199,23 @@ Go 言語ではどうするのか？という点について調べてみたメ�
       <guid>https://tmrtmhr.info/tech/replace-a-part-of-json-with-command-output/</guid>
       <description>&lt;p&gt;AWS CLI によりコマンドラインから制御したりする際、リクエストパラメータとして JSON ファイルが必要になることがあります。
 &lt;a href=&#34;https://tmrtmhr.info/tech/aws/delete-updated-file-cache-on-cloudfront/&#34;&gt;CloudFront のキャッシュを削除したいとき&lt;/a&gt;なんかがそうです。&lt;/p&gt;
-
 &lt;p&gt;AWS CLI のコマンドごとに、リクエストJSONを生成する専用スクリプトを書くという手もありますが、
 シェル上でパイプやらリダイレクトやらを駆使していい感じに JSON を生成できるある程度汎用的なスクリプトにならんものか、
 という思いから試してみた結果をここに記します。
 どこかに既にあるものでしたらすみません。&lt;/p&gt;
-
 &lt;p&gt;コマンド引数は以下のようになっていて、JSON ファイルは標準入力から与えます。&lt;/p&gt;
-
 &lt;pre&gt;&lt;code&gt;filljson ${入力の型} ${キーパス} ${入力ファイル名}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;標準入出力で JSON をやりとりするので以下のようにパイプでつなげることで
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;標準入出力で JSON をやりとりするので以下のようにパイプでつなげることで
 中間ファイルを作ることなく最終的なリクエスト JSON が得られます。
 入力ファイル名のところには &lt;code&gt;bash&lt;/code&gt; や &lt;code&gt;zsh&lt;/code&gt; のプロセス置換機能を利用しています。
 プロセス置換機能を使うとプログラム側からは単にファイルパスが渡ってくるように見えるので、
 ファイルIOとして処理すればOKです。&lt;/p&gt;
-
 &lt;pre&gt;&lt;code&gt;cat json/cloudfront-invalidation.json |
   filljson int InvalidationBatch.Paths.Quantity &amp;lt;(git diff --ignore-all-space --diff-filter=M --name-only HEAD^ HEAD  public | wc -l) |
   filljson [string] InvalidationBatch.Paths.Items &amp;lt;(git diff --ignore-all-space --diff-filter=M --name-only HEAD^ HEAD  public | sed -e &#39;s/^public//g&#39;) |
   filljson string InvalidationBatch.CallerReference &amp;lt;(date +&amp;quot;osone3-%Y/%m/%d-%H:%k:%m&amp;quot; | tr -d &#39;\n&#39;) |
   jq . &amp;gt; request.json
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;/code&gt;&lt;/pre&gt;</description>
     </item>
     
   </channel>

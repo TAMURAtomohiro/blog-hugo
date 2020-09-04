@@ -9,7 +9,7 @@
       });
     </script>
     <meta charset="utf-8">
-    <meta name="generator" content="Hugo 0.47.1" />
+    <meta name="generator" content="Hugo 0.74.3" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -93,41 +93,24 @@ if (!doNotTrack) {
 
           <div class="castaway-card-content mdl-card__supporting-text mdl-color-text--grey-700">
             <p>2018-02 時点では Unity に Exif を扱えるライブラリがないようです。</p>
-
 <p>なので Android ライブラリを呼び出して実装します。
 (iOS では試していないですが、同様のアプローチでいけるんじゃないでしょうか)</p>
-
-<p></p>
-
 <p>Android での Exif 情報読み書きについては以下の記事を参考にしました。</p>
-
 <ul>
 <li><a href="http://mussyu1204.myhome.cx/wordpress/it/?p=161">Android開発 | 画像のExif属性に位置情報や撮影日時を保存する方法</a></li>
 </ul>
-
-<!-- そもそもの発端は、 -->
-
-<!-- 2018/03/01 に安らかに眠ることになった Google の Tango を触っていたときに、 -->
-
-<!-- スクリプトから保存した AR 表示スクリーンショットに位置情報をつけたい、というものでした。 -->
-
-<!-- 自分は Unity もスマホアプリ開発も素人でしたので、 -->
-
-<!-- まあそれくらいライブラリあるんじゃないの？と軽い気持ちで調べ始めたのです。 -->
-
-<!-- しかしながらいくら調べてみても Unity での Asset や C# のライブラリが見つからず、 -->
-
-<!-- これは Exif の規格調べて自前でバイト列いじらないといけないのか？ -->
-
-<!-- と悲嘆に暮れていました。 -->
-
-<!-- そんな矢先、天(Google 検索)から一筋の光明が差したのです。 -->
-
-<!-- それが Android ネイティブライブラリ呼び出しでした。 -->
-
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>今回のケースでは<a href="https://docs.unity3d.com/ja/540/Manual/PluginsForAndroid.html">Android ヘルパークラス</a>を利用します。
 コード例(Unity 5.6.5, C#)は以下の通りです。</p>
-
 <pre><code>ExifLocation exifLocation = new ExifLocation(gps.Location);
 AndroidJavaObject ex = new AndroidJavaObject(&quot;android.media.ExifInterface&quot;, path);
 ex.Call(&quot;setAttribute&quot;,&quot;GPSLatitudeRef&quot;, exifLocation.latitudeRef);
@@ -135,35 +118,20 @@ ex.Call(&quot;setAttribute&quot;,&quot;GPSLatitude&quot;, exifLocation.latitude)
 ex.Call(&quot;setAttribute&quot;,&quot;GPSLongitudeRef&quot;, exifLocation.longitudeRef);
 ex.Call(&quot;setAttribute&quot;,&quot;GPSLongitude&quot;,exifLocation.longitude);
 ex.Call(&quot;saveAttributes&quot;);
-</code></pre>
-
-<p>ここで、<code>gps.Location</code> は Unity で取得できる GPS 情報(<code>Input.location.lastData</code>) です。
+</code></pre><p>ここで、<code>gps.Location</code> は Unity で取得できる GPS 情報(<code>Input.location.lastData</code>) です。
 また、<code>ExifLocation</code> はExif形式への変換ロジックです。
 これについては後ろのほうにサンプル実装を置いておきます。</p>
-
 <p>まず、</p>
-
 <pre><code>AndroidJavaObject ex = new AndroidJavaObject(&quot;android.media.ExifInterface&quot;, path);
-</code></pre>
-
-<p>として、<code>path</code>にあるJPG画像を扱う ExifInterface オブジェクトを作ります。
+</code></pre><p>として、<code>path</code>にあるJPG画像を扱う ExifInterface オブジェクトを作ります。
 あとは</p>
-
 <pre><code>ex.Call(&quot;setAttribute&quot;,...);
-</code></pre>
-
-<p>として属性を追加し、最後に</p>
-
+</code></pre><p>として属性を追加し、最後に</p>
 <pre><code>ex.Call(&quot;saveAttributes&quot;);
-</code></pre>
-
-<p>で保存して完了です。</p>
-
+</code></pre><p>で保存して完了です。</p>
 <p><code>GPSLatitude</code> などの Exif 属性名は、Android の ExifInterface クラスで <code>TAG_GPS_LATITUDE</code> というスタティックな定数として定義されていますが、
 C# の文字列として直接渡してもOKです。</p>
-
 <p>最後に Exif 形式への変換ロジックについてサンプル実装を置いておきます。</p>
-
 <pre><code>internal class ExifLocation {
     public String longitudeRef;
     public String longitude;

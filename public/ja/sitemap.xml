@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
@@ -8,7 +8,62 @@
   </url>
   
   <url>
+    <loc>https://tmrtmhr.info/tags/gcp/</loc>
+    <lastmod>2020-04-03T01:05:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tmrtmhr.info/tags/</loc>
+    <lastmod>2020-04-03T01:05:00+09:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://tmrtmhr.info/en/tags/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="ja"
+                href="https://tmrtmhr.info/tags/"
+                />
+  </url>
+  
+  <url>
+    <loc>https://tmrtmhr.info/tech/</loc>
+    <lastmod>2020-04-03T01:05:00+09:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://tmrtmhr.info/en/tech/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="ja"
+                href="https://tmrtmhr.info/tech/"
+                />
+  </url>
+  
+  <url>
+    <loc>https://tmrtmhr.info/</loc>
+    <lastmod>2020-04-03T01:05:00+09:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://tmrtmhr.info/en/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="ja"
+                href="https://tmrtmhr.info/"
+                />
+  </url>
+  
+  <url>
     <loc>https://tmrtmhr.info/tech/html2canvas/</loc>
+    <lastmod>2020-03-05T02:02:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tmrtmhr.info/tags/javascript/</loc>
     <lastmod>2020-03-05T02:02:00+09:00</lastmod>
   </url>
   
@@ -23,13 +78,28 @@
   </url>
   
   <url>
+    <loc>https://tmrtmhr.info/tags/aws/</loc>
+    <lastmod>2020-01-23T21:27:28+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://tmrtmhr.info/tech/enrionment-variables-including-line-break/</loc>
+    <lastmod>2020-01-23T21:27:28+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tmrtmhr.info/tags/python/</loc>
     <lastmod>2020-01-23T21:27:28+09:00</lastmod>
   </url>
   
   <url>
     <loc>https://tmrtmhr.info/tech/gcp/certification-professional-cloud-architect/</loc>
     <lastmod>2019-11-17T19:28:58+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tmrtmhr.info/tags/go/</loc>
+    <lastmod>2019-04-08T16:31:35+09:00</lastmod>
   </url>
   
   <url>
@@ -53,8 +123,48 @@
   </url>
   
   <url>
+    <loc>https://tmrtmhr.info/tags/misc/</loc>
+    <lastmod>2018-03-07T20:38:41+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tmrtmhr.info/misc/</loc>
+    <lastmod>2018-03-07T20:38:41+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://tmrtmhr.info/tech/golang-convert-csv-to-json/</loc>
     <lastmod>2018-03-02T16:27:29+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tmrtmhr.info/tags/android/</loc>
+    <lastmod>2018-02-18T19:54:05+09:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://tmrtmhr.info/en/tags/android/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="ja"
+                href="https://tmrtmhr.info/tags/android/"
+                />
+  </url>
+  
+  <url>
+    <loc>https://tmrtmhr.info/tags/unity/</loc>
+    <lastmod>2018-02-18T19:54:05+09:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://tmrtmhr.info/en/tags/unity/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="ja"
+                href="https://tmrtmhr.info/tags/unity/"
+                />
   </url>
   
   <url>
@@ -98,13 +208,28 @@
   </url>
   
   <url>
+    <loc>https://tmrtmhr.info/tags/angular/</loc>
+    <lastmod>2017-11-09T10:07:21+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://tmrtmhr.info/tech/aws/single-page-application-on-s3/</loc>
     <lastmod>2017-11-09T10:07:21+09:00</lastmod>
   </url>
   
   <url>
+    <loc>https://tmrtmhr.info/tags/bitbucket/</loc>
+    <lastmod>2017-10-28T15:01:39+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://tmrtmhr.info/tech/run-angular-ut-on-bitbucket-pipelines/</loc>
     <lastmod>2017-10-28T15:01:39+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tmrtmhr.info/tags/docker/</loc>
+    <lastmod>2017-08-28T17:17:00+09:00</lastmod>
   </url>
   
   <url>
@@ -133,12 +258,22 @@
   </url>
   
   <url>
+    <loc>https://tmrtmhr.info/tags/node.js/</loc>
+    <lastmod>2017-04-11T21:37:09+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://tmrtmhr.info/tech/chrome-disable-infobars/</loc>
     <lastmod>2017-04-06T19:44:06+09:00</lastmod>
   </url>
   
   <url>
     <loc>https://tmrtmhr.info/tech/drag-and-drop-using-rxjs/</loc>
+    <lastmod>2017-04-04T17:24:23+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tmrtmhr.info/tags/rxjs/</loc>
     <lastmod>2017-04-04T17:24:23+09:00</lastmod>
   </url>
   
@@ -163,7 +298,17 @@
   </url>
   
   <url>
+    <loc>https://tmrtmhr.info/tags/shell-script/</loc>
+    <lastmod>2017-03-14T18:04:09+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://tmrtmhr.info/tech/aws/delete-updated-file-cache-on-cloudfront/</loc>
+    <lastmod>2017-03-14T17:15:21+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tmrtmhr.info/tags/hugo/</loc>
     <lastmod>2017-03-14T17:15:21+09:00</lastmod>
   </url>
   
@@ -175,6 +320,11 @@
   <url>
     <loc>https://tmrtmhr.info/tech/hugo-with-material-icon/</loc>
     <lastmod>2017-03-08T08:52:50+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tmrtmhr.info/tags/emacs/</loc>
+    <lastmod>2016-02-22T16:16:21+09:00</lastmod>
   </url>
   
   <url>
@@ -193,184 +343,13 @@
   </url>
   
   <url>
-    <loc>https://tmrtmhr.info/tech/why-static-website-generators-are-the-next-big-thing/</loc>
-    <lastmod>2015-11-30T14:20:55+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://tmrtmhr.info/tags/android/</loc>
-    <lastmod>2018-02-18T19:54:05+09:00</lastmod>
-    <priority>0</priority>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://tmrtmhr.info/en/tags/android/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="ja"
-                href="https://tmrtmhr.info/tags/android/"
-                />
-  </url>
-  
-  <url>
-    <loc>https://tmrtmhr.info/tags/angular/</loc>
-    <lastmod>2017-11-09T10:07:21+09:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://tmrtmhr.info/tags/aws/</loc>
-    <lastmod>2020-01-23T21:27:28+09:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://tmrtmhr.info/tags/bitbucket/</loc>
-    <lastmod>2017-10-28T15:01:39+09:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://tmrtmhr.info/tags/docker/</loc>
-    <lastmod>2017-08-28T17:17:00+09:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://tmrtmhr.info/tags/emacs/</loc>
-    <lastmod>2016-02-22T16:16:21+09:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://tmrtmhr.info/tags/gcp/</loc>
-    <lastmod>2020-04-03T01:05:00+09:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://tmrtmhr.info/tags/go/</loc>
-    <lastmod>2019-04-08T16:31:35+09:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://tmrtmhr.info/tags/hugo/</loc>
-    <lastmod>2017-03-14T17:15:21+09:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://tmrtmhr.info/tags/javascript/</loc>
-    <lastmod>2020-03-05T02:02:00+09:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://tmrtmhr.info/tags/misc/</loc>
-    <lastmod>2018-03-07T20:38:41+09:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://tmrtmhr.info/misc/</loc>
-    <lastmod>2018-03-07T20:38:41+09:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://tmrtmhr.info/tags/node.js/</loc>
-    <lastmod>2017-04-11T21:37:09+09:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://tmrtmhr.info/tags/python/</loc>
-    <lastmod>2020-01-23T21:27:28+09:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://tmrtmhr.info/tags/rxjs/</loc>
-    <lastmod>2017-04-04T17:24:23+09:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://tmrtmhr.info/tags/shell-script/</loc>
-    <lastmod>2017-03-14T18:04:09+09:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://tmrtmhr.info/tags/</loc>
-    <lastmod>2018-02-18T19:54:05+09:00</lastmod>
-    <priority>0</priority>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://tmrtmhr.info/en/tags/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="ja"
-                href="https://tmrtmhr.info/tags/"
-                />
-  </url>
-  
-  <url>
-    <loc>https://tmrtmhr.info/tech/</loc>
-    <lastmod>2020-04-03T01:05:00+09:00</lastmod>
-    <priority>0</priority>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://tmrtmhr.info/en/tech/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="ja"
-                href="https://tmrtmhr.info/tech/"
-                />
-  </url>
-  
-  <url>
-    <loc>https://tmrtmhr.info/tags/unity/</loc>
-    <lastmod>2018-02-18T19:54:05+09:00</lastmod>
-    <priority>0</priority>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://tmrtmhr.info/en/tags/unity/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="ja"
-                href="https://tmrtmhr.info/tags/unity/"
-                />
-  </url>
-  
-  <url>
     <loc>https://tmrtmhr.info/tags/web/</loc>
     <lastmod>2015-11-30T14:20:55+09:00</lastmod>
-    <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://tmrtmhr.info/</loc>
-    <lastmod>2020-04-03T01:05:00+09:00</lastmod>
-    <priority>0</priority>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://tmrtmhr.info/en/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="ja"
-                href="https://tmrtmhr.info/"
-                />
+    <loc>https://tmrtmhr.info/tech/why-static-website-generators-are-the-next-big-thing/</loc>
+    <lastmod>2015-11-30T14:20:55+09:00</lastmod>
   </url>
   
 </urlset>

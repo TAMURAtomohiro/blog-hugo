@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Angular on 嵐の小舟より</title>
+    <title>angular on 嵐の小舟より</title>
     <link>https://tmrtmhr.info/tags/angular/</link>
-    <description>Recent content in Angular on 嵐の小舟より</description>
+    <description>Recent content in angular on 嵐の小舟より</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
     <lastBuildDate>Thu, 09 Nov 2017 10:07:21 +0900</lastBuildDate>
@@ -19,25 +19,18 @@
       <guid>https://tmrtmhr.info/tech/aws/single-page-application-on-s3/</guid>
       <description>&lt;p&gt;静的コンテンツについては S3 だけでサーブできます。
 ですので、たとえば&lt;a href=&#34;https://angular.io/&#34;&gt;Angular&lt;/a&gt;で作成したフロントエンドのコードは S3 に置けばいいよ、という話になります。&lt;/p&gt;
-
 &lt;p&gt;しかし Single Page Application の場合、表示内容とともに URL を書き換えます。
 なので &lt;code&gt;https://example.com/blog&lt;/code&gt; のような URL でページが表示されていたとしても、
 対応するファイルがないためブラウザリロードすると &lt;code&gt;404&lt;/code&gt; エラーになってしまいます。
 認証が必要で、別ページに callback URL を持って遷移して認証後に戻ってくる、みたいなケースでもこのことが問題になります。&lt;/p&gt;
-
 &lt;p&gt;調べてみると以下のやり方が良いようです。&lt;/p&gt;
-
 &lt;ul&gt;
 &lt;li&gt;CloudFront のカスタムエラーレスポンスで、S3 の &lt;code&gt;404&lt;/code&gt; エラーに対し &lt;code&gt;/index.html&lt;/code&gt; へ転送するよう設定する&lt;/li&gt;
 &lt;/ul&gt;
-
 &lt;p&gt;英語ですが、以下のブログにスクリーンショット付きで手順が載っていました。&lt;/p&gt;
-
 &lt;ul&gt;
 &lt;li&gt;参考：&lt;a href=&#34;https://keita.blog/2015/11/24/hosting-a-single-page-app-on-s3-with-proper-urls/&#34;&gt;Hosting a Single-Page App on S3, with proper URLs&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;/ul&gt;</description>
     </item>
     
     <item>
@@ -50,10 +43,7 @@
 デフォルトで &lt;code&gt;Chrome&lt;/code&gt; を使って Unit Test を動かすよう設定されていますが、
 BitBucket Pipelines の環境には Chrome がインストールされていないので、
 &lt;code&gt;PhantomJS&lt;/code&gt; で実行するよう修正する必要があります。&lt;/p&gt;
-
-&lt;p&gt;本記事はそのためのメモです。&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;本記事はそのためのメモです。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -63,12 +53,9 @@ BitBucket Pipelines の環境には Chrome がインストールされていな�
       
       <guid>https://tmrtmhr.info/tech/chrome-disable-infobars/</guid>
       <description>&lt;h1 id=&#34;結論&#34;&gt;結論&lt;/h1&gt;
-
 &lt;ul&gt;
 &lt;li&gt;Google Chrome の起動オプションに &lt;code&gt;--disable-infobars&lt;/code&gt; を渡す&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;/ul&gt;</description>
     </item>
     
   </channel>

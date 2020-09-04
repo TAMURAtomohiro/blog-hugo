@@ -9,7 +9,7 @@
       });
     </script>
     <meta charset="utf-8">
-    <meta name="generator" content="Hugo 0.47.1" />
+    <meta name="generator" content="Hugo 0.74.3" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -87,53 +87,37 @@ if (!doNotTrack) {
 
           <div class="castaway-card-content mdl-card__supporting-text mdl-color-text--grey-700">
             <p>JavaScript では以下のように数値のプロパティを参照することはできません。</p>
-
-<pre><code class="language-javascript">0.foo
-// 構文エラー
-</code></pre>
-
-<p>変数に入れると構文上は正しいため参照できます。</p>
-
-<pre><code class="language-javascript">var x = 0;
-console.log(x.foo);
-// =&gt; undefined
-</code></pre>
-
-<p>あるいは文字列の <code>length</code> プロパティを参照することも。</p>
-
-<pre><code class="language-javascript">&quot;bar&quot;.length
-// =&gt; 3
-</code></pre>
-
-<p>しかしながらプリミティブ値はオブジェクトではないため、プロパティもプロトタイプチェーンもありません。
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#ae81ff">0.</span><span style="color:#a6e22e">foo</span>
+<span style="color:#75715e">// 構文エラー
+</span></code></pre></div><p>変数に入れると構文上は正しいため参照できます。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">x</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+<span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#a6e22e">x</span>.<span style="color:#a6e22e">foo</span>);
+<span style="color:#75715e">// =&gt; undefined
+</span></code></pre></div><p>あるいは文字列の <code>length</code> プロパティを参照することも。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#e6db74">&#34;bar&#34;</span>.<span style="color:#a6e22e">length</span>
+<span style="color:#75715e">// =&gt; 3
+</span></code></pre></div><p>しかしながらプリミティブ値はオブジェクトではないため、プロパティもプロトタイプチェーンもありません。
 ではプリミティブ値のプロパティにアクセスしようとしたときに何が起こるかというと、
 <code>Number</code> などの対応するオブジェクトが生成されます。</p>
-
 <p>本記事は、この挙動が言語仕様のどの部分で言及されているのかのメモです。</p>
-
-<p></p>
-
 <h1 id="プリミティブ値のプロパティ参照をするときの挙動">プリミティブ値のプロパティ参照をするときの挙動</h1>
-
 <p><a href="http://www.ecma-international.org/ecma-262/6.0/index.html#sec-getvalue">ECMAScript 2015言語仕様 6.2.3.1節 GetValue(V)</a>
 の以下の部分です。</p>
-
 <blockquote>
 <p>If HasPrimitiveBase(V) is true, then</p>
-
+</blockquote>
+<blockquote>
 <p>Assert: In this case, base will never be null or undefined.</p>
-
+</blockquote>
+<blockquote>
 <p>Let base be ToObject(base).</p>
 </blockquote>
-
 <p>ということで言語仕様としてプリミティブ値のプロパティ参照はエラーじゃないと分かり安心しました。
 夜もぐっすり眠れそうです(納期が近くなければ)。</p>
-
 <p>ただし、ここで生成されたオブジェクトはその場限りのものなので、
 <strong>プリミティブ値がオブジェクトのように扱えるわけではない</strong>ことには注意が必要です。
 具体的には以下のように数値のプロパティに対して代入をしたとしても、
 その結果が残りません。</p>
-
 <pre><code>var x = 0;
 x.foo = 1;
 console.log(x.foo);

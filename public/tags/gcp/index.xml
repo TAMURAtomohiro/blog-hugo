@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Gcp on 嵐の小舟より</title>
+    <title>gcp on 嵐の小舟より</title>
     <link>https://tmrtmhr.info/tags/gcp/</link>
-    <description>Recent content in Gcp on 嵐の小舟より</description>
+    <description>Recent content in gcp on 嵐の小舟より</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
     <lastBuildDate>Fri, 03 Apr 2020 01:05:00 +0900</lastBuildDate>
@@ -20,23 +20,17 @@
       <description>&lt;p&gt;Cloud Run から外部の HTTP API を呼ぶ機会があり、
 そのAPIの呼び出し制限のため、
 IP を固定したくなった際のメモです。&lt;/p&gt;
-
 &lt;p&gt;現状の Cloud Run では、たとえば Cloud NAT のようなゲートウェイを介するなどしてIPを固定する機能がないため、
 何かしら工夫する必要があります。
 (Cloud Functions では&lt;a href=&#34;https://cloud.google.com/functions/docs/networking/network-settings?hl=ja#associate-static-ip&#34;&gt;そういった機能が提供されている&lt;/a&gt;ので、
 将来的には CloudRun でも可能になるかもしれません)&lt;/p&gt;
-
 &lt;p&gt;概要は以下の通りです。&lt;/p&gt;
-
 &lt;ul&gt;
 &lt;li&gt;固定IP の GCE インスタンスを作る&lt;/li&gt;
 &lt;li&gt;Cloud Run のコンテナ内で上の GCE インスタンスへの SSH ポートフォワーディング(トンネリング) を実行する&lt;/li&gt;
 &lt;li&gt;アプリケーションコードが上の SSH ポートフォワーディングを介してリクエストを送るよう設定する&lt;/li&gt;
 &lt;/ul&gt;
-
-&lt;p&gt;参考： &lt;a href=&#34;https://ahmet.im/blog/cloud-run-static-ip/&#34;&gt;Cloud Run applications with static outgoing IPs&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;参考： &lt;a href=&#34;https://ahmet.im/blog/cloud-run-static-ip/&#34;&gt;Cloud Run applications with static outgoing IPs&lt;/a&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -47,20 +41,11 @@ IP を固定したくなった際のメモです。&lt;/p&gt;
       <guid>https://tmrtmhr.info/tech/gcp/apigee-and-cloudendpoints/</guid>
       <description>&lt;p&gt;GCP上に構築したAPIに対し、APIキーでの認証機能を追加したかったので、
 Apigee と Cloud Endpoints を使ってみました。&lt;/p&gt;
-
 &lt;p&gt;今回の感想としては、以下のような理由で Cloud Endpoints を使うことにしました。&lt;/p&gt;
-
 &lt;ul&gt;
 &lt;li&gt;支払いが GCP だけで完結する&lt;/li&gt;
-&lt;li&gt;APIキーの発行を GCP コンソールから行え、APIキーごとのリファラ制限・IP制限が行える
-&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&#34;要件&#34;&gt;要件&lt;/h1&gt;
-
-&lt;p&gt;まず、API サーバを GCP の Cloud Run に構築してありました。
-好き勝手に使われるのもまずいので、APIキーを要求し、
-できればAPIキーと合わせてIP制限などが欲しいところでした。&lt;/p&gt;</description>
+&lt;li&gt;APIキーの発行を GCP コンソールから行え、APIキーごとのリファラ制限・IP制限が行える&lt;/li&gt;
+&lt;/ul&gt;</description>
     </item>
     
     <item>
@@ -72,18 +57,13 @@ Apigee と Cloud Endpoints を使ってみました。&lt;/p&gt;
       <description>&lt;p&gt;まだ今ほどコロナウィルスの影響がなかった新春の折。
 簡単にタスク分割して並列実行できそうなバッチ処理を、
 CloudRun を使ってHTTP APIを用意し、そこに投げまくることでさくさく実行する—という構成を試しました。&lt;/p&gt;
-
 &lt;p&gt;で、ログに色々情報を出しているので、そこから例えば XXX が何件あるか、みたいな集計などをやりたかった訳です。
 CloudRun では標準出力にログを出しておけば Stackdriver Logging に保存されるのでどうとでもなるだろう、
 という甘い目論見だった訳ですが、
 そう上手くはいかず、ちょっと焦ったのでそのメモです。&lt;/p&gt;
-
 &lt;p&gt;結論から言うとコマンドラインから検索条件を指定して出力できます。&lt;/p&gt;
-
 &lt;pre&gt;&lt;code&gt;gcloud logging read
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;/code&gt;&lt;/pre&gt;</description>
     </item>
     
     <item>
@@ -98,18 +78,14 @@ Professional Cloud Architect を受験し、
 合格したので顛末を残しておこうと思います。
 有効期限が来たら再度試験を受けることになるため自分用のメモでもあります。
 Associate Cloud Engineer のほうは先んじて 2019 年 5 月に取得しております。&lt;/p&gt;
-
 &lt;p&gt;&lt;a href=&#34;https://cloud.google.com/certification/terms?hl=ja&#34;&gt;試験利用規約&lt;/a&gt;上、
 試験内容については開示できないので、以下のようなことを書きます。&lt;/p&gt;
-
 &lt;ul&gt;
 &lt;li&gt;準備として何をやったか&lt;/li&gt;
 &lt;li&gt;試験会場の雰囲気&lt;/li&gt;
 &lt;li&gt;知識がない問題に当たったとき考えたこと&lt;/li&gt;
 &lt;li&gt;感想&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;/ul&gt;</description>
     </item>
     
   </channel>
