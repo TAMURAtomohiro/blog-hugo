@@ -5,6 +5,8 @@ date = "2016-02-22T16:06:53+09:00"
 +++
 <!--more-->
 
+# uvicorn で uds と workers が併用不可だった
+
 # 「オープンワールド」という言葉について
 
 https://ja.wikipedia.org/wiki/%E3%82%AA%E3%83%BC%E3%83%97%E3%83%B3%E3%83%AF%E3%83%BC%E3%83%AB%E3%83%89
